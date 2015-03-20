@@ -15,7 +15,7 @@ from email.mime.multipart import MIMEMultipart
 smpt_host = your host
 smpt_port = your host port
 user = user
-pass = your pass
+your_pass = your pass
 
 sensorPin = 16
 baseDir = '/tmp/'
@@ -70,7 +70,7 @@ def recordVideo():
 		rename(videoFile, mpegVideo)
 		camera.stop_recording()
 		camera.stop_preview()
-		sendMail(user, pass, mpegVideo)
+		sendMail(user, your_pass, mpegVideo)
 
 while True:
 	time.sleep(.1)
