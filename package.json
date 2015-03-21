@@ -1,0 +1,19 @@
+{
+  "name": "pi-camera",
+  "version": "1.0.0",
+  "description": "A pi camera capture program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joseph-jja/pi-camera.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joseph-jja/pi-camera/issues"
+  },
+  "homepage": "https://github.com/joseph-jja/pi-camera"
+}
