@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/joseph-jja/pi-camera/issues"
   },
-  "homepage": "https://github.com/joseph-jja/pi-camera"
+  "homepage": "https://github.com/joseph-jja/pi-camera",
+  "dependencies": {
+    "rpi-gpio": "^0.5.1"
+  }
 }
