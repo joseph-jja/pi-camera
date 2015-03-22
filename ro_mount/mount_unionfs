@@ -8,7 +8,7 @@ else
    if [ ${DIR} = "/var" ]; then
        /bin/mount -t tmpfs -o size=150m ramdisk ${DIR}_rw
    else 
-       /bin/mount -t tmpfs -o size=50m ramdisk ${DIR}_rw
+       /bin/mount -t tmpfs -o size=24m ramdisk ${DIR}_rw
    fi
    /usr/bin/unionfs-fuse -o cow,allow_other,suid,dev,nonempty ${DIR}_rw=RW:/orig/${DIR}=RO ${DIR}
 fi
