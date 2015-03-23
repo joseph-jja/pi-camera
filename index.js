@@ -3,14 +3,19 @@ var Gpio = require('onoff').Gpio,
   fs = require('fs'),
   pir = new Gpio(sensorPin, 'in', 'both'), 
   mailer = require('./mailer'), 
-  isRec = false;
+  isRec = false, 
+  mailOptions;
 
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
-mail.setupTransport(JSON.parse(fs.readFileSync("config.json")));
+mailOptions = JSON.parse(fs.readFileSync("config.json"));
+
+mail.setupTransport(mailOption.email);
 
 pir.watch(function(err, value) {
-  var cmd, exec, videoPath, mpegPath;
+  var cmd, exec, 
+    videoPath, mpegPath
+    timestamp;
   if (err) {
     exit();
   }
@@ -19,9 +24,11 @@ pir.watch(function(err, value) {
     console.log('capturing video.. ');
 
     isRec = true;
-
+    
+    timestamp = new Date();
+    
     exec = require('child_process').exec;
-    videoPath = '/tmp/video_' + Date.now() + '.h264';
+    videoPath = '/tmp/video_' + timestamp.getDay() + "_" + timestamp.getHours() + '.h264';
     mpegPath = videoPath.replace('.h264', '.mpeg');
 
     // we don't want a preview, we want video 800x600 because we are emailing
@@ -33,7 +40,7 @@ pir.watch(function(err, value) {
       console.log('Video Saved @ : ', videoPath);
       // rename file to be named mpeg
       fs.rename(videoPath, mpegPath, function(err) {
-        mailer.sendEmail(mpegPath);
+        mailer.sendEmail(mailOptions.user, mpegPath);
         isRec = false;
       });
     });
