@@ -25,7 +25,7 @@ Sendmail.on("start", function(data) {
 });
 
 Sendmail.on("end", function(data) {
-    var x;
+    var x, fname;
     if(data.error) {
         console.log("An error has occured: " + data.error);
     } else {
@@ -33,6 +33,9 @@ Sendmail.on("end", function(data) {
         console.log("Email status: " + data.info);
 
         // remove sent video
+        fname = videoList[data.filename];
+        fs.unlink(fname, function(err) { console.log("Error removing file: " + err); });
+ 
         videoList[data.filename] = undefined;
 
         // find next message to send
