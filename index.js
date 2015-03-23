@@ -38,11 +38,8 @@ Sendmail.on( "end", function ( data )
         console.log( "Email status: " + data.info );
 
         // remove sent video
+        // in a perfect world we would be we cant here :( 
         fname = videoList[ data.filename ];
-        fs.unlink( fname, function ( err )
-        {
-            console.log( "Error removing file: " + err );
-        } );
 
         videoList[ data.filename ] = undefined;
 
@@ -77,7 +74,7 @@ function watchCB( err, value )
         timestamp = new Date();
 
         exec = require( 'child_process' ).exec;
-        videoPath = '/tmp/video_' + timestamp.getDay() + "_" + timestamp.getHours() + '.h264';
+        videoPath = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds() + '.h264';
         mpegPath = videoPath.replace( '.h264', '.mpeg' );
 
         // we don't want a preview, we want video 800x600 because we are emailing
