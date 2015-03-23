@@ -19,4 +19,6 @@ fi
 
 echo 3 > /proc/sys/vm/drop_caches
 
+/bin/sh /home/pi/pi-camera/pi-camera.sh start
+
 exit 0
