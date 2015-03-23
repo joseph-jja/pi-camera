@@ -13,7 +13,9 @@ args = process.argv;
 // we want sync here because it is starting up and don't want to mail anyway!
 mailOptions = JSON.parse(fs.readFileSync(args[2]));
 
-mailer.setupTransport(mailOptions.email);
+mailer.setupTransport(mailOptions.email.host, 
+    mailOptions.email.port, mailOptions.email.user, 
+    mailOptions.email.pass);
 
 function watchCB(err, value) {
   var cmd, exec, 
