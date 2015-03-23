@@ -1,10 +1,10 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          pi-camera
-# Required-Start:    forever
-# Required-Stop:
-# Default-Start:     S
-# Default-Stop:
+# Provides:          pi-camera.sh
+# Required-Start:    $syslog
+# Required-Stop:     $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
 # Short-Description: Runs the pi camera video capture software.
 # Description:       Nodejs program to capture video and send email.
 ### END INIT INFO
@@ -24,7 +24,7 @@ APP_ERR_LOG=/var/log/pi-camera.error.log
 PID_FILE=/var/run/forever.pid
 
 # sudo
-SUDO=/usr/bin/sudo
+SUDO=/usr/bin/sudo 
 
 # code home
 BASE_CODE=/home/pi/pi-camera
