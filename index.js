@@ -3,8 +3,11 @@ var Gpio = require('onoff').Gpio,
   fs = require('fs'),
   pir = new Gpio(sensorPin, 'in', 'both'), 
   mailer = require('./mailer'), 
+  args, 
   isRec = false, 
   mailOptions;
+
+args = process.argv;
 
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
@@ -20,6 +23,7 @@ pir.watch(function(err, value) {
   if (err) {
     exit();
   }
+
   if (value == 1 && !isRec) {
 
     console.log('capturing video.. ');
