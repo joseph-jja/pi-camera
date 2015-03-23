@@ -13,42 +13,36 @@
 # Nodejs program to capture video and send email.
 #
 
-PATH=/sbin:/bin:/usr/local/bin
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 . /lib/init/vars.sh
 
 FOREVER_ROOT=/tmp
 export FOREVER_ROOT
 
-# should setup full path to forever binary
+# setup full path to binary files
 FOREVER_BIN=/usr/local/bin/forever
+SUDO=/usr/bin/sudo 
+
+# forever setup
 FOREVER_LOG=/var/log/forever.log
 APP_LOG=/var/log/pi-camera.log
 APP_ERR_LOG=/var/log/pi-camera.error.log
 PID_FILE=/var/run/forever.pid
+LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
+#FOREVER_OPTS="$LOG_FILES --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
+FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
 
-# sudo
-SUDO=/usr/bin/sudo 
-
-# code home
+# pi camera code setup
 BASE_CODE=/home/pi/pi-camera
-
-# startup file
-#PI_CAMERA_JS=$BASE_CODE/index.js
 PI_CAMERA_JS=index.js
 CONFIG=/home/pi/config.json
 
-# log files 
-LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
-
-# forever options
-FOREVER_OPTS="$LOG_FILES --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
-
 start_program () {
-    $SUDO $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
+    cd $BASE_CODE && $FOREVER_BIN --uid "root" start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
 }
 
 stop_program () {
-    $SUDO $FOREVER_BIN stop $PI_CAMERA_JS
+    cd $BASE_CODE && $FOREVER_BIN --uid "root" stop $PI_CAMERA_JS
 }
 
 do_status () {
