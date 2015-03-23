@@ -1,4 +1,4 @@
-
+install nodejs and forever
 
 # use this command to flush buffers 
 echo 3 > /proc/sys/vm/drop_caches
