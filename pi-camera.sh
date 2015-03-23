@@ -13,7 +13,7 @@
 # Nodejs program to capture video and send email.
 #
 
-PATH=/sbin:/bin
+PATH=/sbin:/bin:/usr/local/bin
 . /lib/init/vars.sh
 . /lib/init/tmpfs.sh
 
@@ -27,7 +27,7 @@ KERNEL="$(uname -s)"
 . /lib/init/mount-functions.sh
 
 # should setup full path to forever binary
-FOREVER_BIN=forever
+FOREVER_BIN=/usr/local/bin/forever
 FOREVER_LOG=/var/log/forever.log
 APP_LOG=/var/log/pi-camera.log
 PID_FILE=/var/run/forever.pid
