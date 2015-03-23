@@ -2,7 +2,7 @@ var Gpio = require( 'onoff' ).Gpio,
     Mailer = require( './mailer' ),
     winston = require( 'winston' ),
     fs = require( 'fs' ),
-    os = require('os'),
+    os = require( 'os' ),
     Leds = require( "./leds" ),
     spawn = require( 'child_process' ).spawn,
     utilities = require( "./utilities" ),
@@ -89,35 +89,36 @@ function watchCB( err, value ) {
         cmd = spawn( 'raspivid', vidArgs );
         ffmpegCmd = spawn( 'avconv', convArgs );
         winston.log( "info", "Video command: " + cmd + os.EOL + "Video converted command: " + ffmpegCmd );
-        
+
         // video pipe 
         cmd.stdout.on( 'data', function ( data ) {
-            ffmpegCmd.stdin.write(data);
-        });
+            ffmpegCmd.stdin.write( data );
+        } );
 
         cmd.stderr.on( 'data', function ( data ) {
             winston.log( "error", "Video command error: " + data );
-        });
-        
+        } );
+
         cmd.on( 'close', function ( code ) {
             // turn recording flag off ASAP
             isRec = false;
             winston.log( "info", "Video command exited with: " + code );
-        });
-        
-        ffmpegCmd.stderr.on('data', function(data) {
+        } );
+
+        ffmpegCmd.stderr.on( 'data', function ( data ) {
             winston.log( "error", "Video converted command error: " + data );
-        });
-          
-         ffmpegCmd.on( 'close', function ( code ) {
-            winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + ffmpegCmd );" 
-            
+        } );
+
+        ffmpegCmd.on( 'close', function ( code ) {
+            winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + ffmpegCmd );
+            " 
+
             // send the video
             Sendmail.sendEmail( options.user, mpegPath );
-                        
+
             // unlink the video now that it is converted
             utilities.safeUnlink( videoPath );
-        });   
+        } );
     }
 }
 pir.watch( watchCB );
