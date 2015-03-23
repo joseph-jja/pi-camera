@@ -52,7 +52,7 @@ Sendmail.on( "end", function ( data ) {
 } );
 
 function watchCB( err, value ) {
-    var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode, 
+    var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode,
         vidArgs;
 
     if ( err ) {
@@ -68,11 +68,11 @@ function watchCB( err, value ) {
         isRec = true;
 
         timestamp = new Date();
-        videPathBase = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds(); 
+        videPathBase = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds();
         videoPath = videPathBase + '.h264';
         mpegPath = videPathBase + '.mp4';
-        
-       // brightness  
+
+        // brightness  
         nightMode = '60';
         if ( timestamp.getHours() > 18 || timestamp.getHours() < 6 ) {
             nightMode = '70';
@@ -82,26 +82,26 @@ function watchCB( err, value ) {
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
         winston.log( "info", "Video command: " + cmd );
-        vidArgs = ['-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime];
-        cmd = spawn('raspivid', vidArgs);
+        vidArgs = [ '-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime ];
+        cmd = spawn( 'raspivid', vidArgs );
         cmd.on( 'close', function ( code ) {
             // turn recording flag off ASAP
             isRec = false;
-            setTimeout( function() {
-              // output is in stdout
-              winston.log( "info", 'Video saved: ', videoPath );
-              // convert video to be smaller
-              ffmpegCmd = spawn( 'avconv', [ '-r', '20', '-i', videoPath, '-r', '15', mpegPath]);
-              ffmpegCmd.on( 'close', function ( code ) {
-                setTimeout( function() {
-                  winston.log( "info", "Video converted: " + ffmpegCmd );
-                  // send the video
-                  Sendmail.sendEmail( options.user, mpegPath );
-                  // unlink the video now that it is converted
-                  utilities.safeUnlink( videoPath );
-                }, 0);
-              } );
-            }, 0);
+            setTimeout( function () {
+                // output is in stdout
+                winston.log( "info", 'Video saved: ', videoPath );
+                // convert video to be smaller
+                ffmpegCmd = spawn( 'avconv', [ '-r', '20', '-i', videoPath, '-r', '15', mpegPath ] );
+                ffmpegCmd.on( 'close', function ( code ) {
+                    setTimeout( function () {
+                        winston.log( "info", "Video converted: " + ffmpegCmd );
+                        // send the video
+                        Sendmail.sendEmail( options.user, mpegPath );
+                        // unlink the video now that it is converted
+                        utilities.safeUnlink( videoPath );
+                    }, 0 );
+                } );
+            }, 0 );
         } );
     }
 }

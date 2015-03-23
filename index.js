@@ -67,10 +67,10 @@ function watchCB( err, value ) {
         isRec = true;
 
         timestamp = new Date();
-        videPathBase = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds(); 
+        videPathBase = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds();
         videoPath = videPathBase + '.h264';
         mpegPath = videPathBase + '.mp4';
-        
+
         // brightness  
         nightMode = '-br 60';
         if ( timestamp.getHours() > 18 || timestamp.getHours() < 6 ) {
