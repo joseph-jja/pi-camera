@@ -48,11 +48,11 @@ LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
 FOREVER_OPTS="$LOG_FILES --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 start_program () {
-    $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
+    /usr/bin/sudo $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
 }
 
 stop_program () {
-    $FOREVER_BIN stop $PI_CAMERA_JS
+    /usr/bin/sudo $FOREVER_BIN stop $PI_CAMERA_JS
 }
 
 case "$1" in
