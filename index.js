@@ -5,6 +5,7 @@ var Gpio = require('onoff').Gpio,
     Mailer = require('./mailer'),
     args, videoList = {},
     isRec = false,
+    _ = require("underscore"),
     mailOptions, Sendmail,
 
     args = process.argv;
@@ -70,7 +71,7 @@ function watchCB(err, value) {
             // rename file to be named mpeg
             fs.rename(videoPath, mpegPath, function(err) {
                 // no videos pending to be sent 
-                if(videoList.length <= 0) {
+                if(_.isEmpty(videoList)) {
                     // mail first one
                     Sendmail.sendEmail(mailOptions.user, mpegPath);
                 }
