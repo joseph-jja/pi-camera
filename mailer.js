@@ -1,50 +1,58 @@
-var nodemailer = require('nodemailer'),
-    transporter, util = require("util"),
-    events = require("events"),
+var nodemailer = require( 'nodemailer' ),
+    transporter, util = require( "util" ),
+    events = require( "events" ),
     timerId;
 
-function Mailer() {
-    events.EventEmitter.call(this);
+function Mailer()
+{
+    events.EventEmitter.call( this );
 }
 
-util.inherits(Mailer, events.EventEmitter);
+util.inherits( Mailer, events.EventEmitter );
 
 Mailer.prototype.waitTime = 10000;
 
-Mailer.prototype.setupTransport = function(host, port, user, pass) {
+Mailer.prototype.setupTransport = function ( host, port, user, pass )
+{
     var options = {
         secure: false,
         host: host,
         port: port,
-        auth: {
+        auth:
+        {
             user: user,
             pass: pass
         }
     };
-    transporter = nodemailer.createTransport(options);
+    transporter = nodemailer.createTransport( options );
 }
 
-Mailer.prototype.sendEmail = function(user, file) {
+Mailer.prototype.sendEmail = function ( user, file )
+{
     var mailOptions, self = this;
 
-    if (timerId) {
+    if ( timerId )
+    {
         return;
     }
-    this.emit("start", {
+    this.emit( "start",
+    {
         "filename": file,
         "msg": "Sending an Email.."
-    });
+    } );
 
-    timerId = setTimeout(function() {
-        clearTimeout(timerId);
+    timerId = setTimeout( function ()
+    {
+        clearTimeout( timerId );
         timerId = null;
-    }, this.waitTime);
+    }, this.waitTime );
 
-    console.log('Sending an Email..');
-    this.emit("timerSet", {
+    console.log( 'Sending an Email..' );
+    this.emit( "timerSet",
+    {
         "filename": file,
         "time": this.waitTime
-    });
+    } );
 
     mailOptions = {
         from: user,
@@ -53,25 +61,32 @@ Mailer.prototype.sendEmail = function(user, file) {
         text: 'Motion detected. '
     };
 
-    if (file) {
-        mailOptions.attachments = [{
+    if ( file )
+    {
+        mailOptions.attachments = [
+        {
             path: file
-        }];
+        } ];
     }
 
     //console.log('DEBUG -- Sendig an Email..' + transporter.sendMail);
-    transporter.sendMail(mailOptions, function(error, info) {
-        if (error) {
-            console.log("An error occured: " + error);
-        } else {
-            console.log('Message sent: ' + info.response);
+    transporter.sendMail( mailOptions, function ( error, info )
+    {
+        if ( error )
+        {
+            console.log( "An error occured: " + error );
         }
-        self.emit("end", {
+        else
+        {
+            console.log( 'Message sent: ' + info.response );
+        }
+        self.emit( "end",
+        {
             "error": error,
             "info": info,
             "filename": file
-        });
-    });
+        } );
+    } );
 };
 
 module.exports = Mailer;
