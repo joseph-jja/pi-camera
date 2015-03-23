@@ -26,7 +26,7 @@ Sendmail.on("start", function(data) {
 
 Sendmail.on("end", function(data) {
     var x, fname;
-    if(data.error) {
+    if (data.error) {
         console.log("An error has occured: " + data.error);
     } else {
         // message has been sent
@@ -34,13 +34,15 @@ Sendmail.on("end", function(data) {
 
         // remove sent video
         fname = videoList[data.filename];
-        fs.unlink(fname, function(err) { console.log("Error removing file: " + err); });
- 
+        fs.unlink(fname, function(err) {
+            console.log("Error removing file: " + err);
+        });
+
         videoList[data.filename] = undefined;
 
         // find next message to send
-        for(x in videoList) {
-            if(videoList[x] && videoList[x].status === 'unsent') {
+        for (x in videoList) {
+            if (videoList[x] && videoList[x].status === 'unsent') {
                 Sendmail.sendEmail(mailOptions.user, videoList[x]);
                 break;
             }
@@ -51,11 +53,11 @@ Sendmail.on("end", function(data) {
 function watchCB(err, value) {
     var cmd, exec, videoPath, mpegPath, timestamp;
 
-    if(err) {
+    if (err) {
         exit();
     }
 
-    if(value == 1 && !isRec) {
+    if (value == 1 && !isRec) {
 
         console.log('capturing video.. ');
 
@@ -77,7 +79,7 @@ function watchCB(err, value) {
             // rename file to be named mpeg
             fs.rename(videoPath, mpegPath, function(err) {
                 // no videos pending to be sent 
-                if(_.isEmpty(videoList)) {
+                if (_.isEmpty(videoList)) {
                     // mail first one
                     Sendmail.sendEmail(mailOptions.user, mpegPath);
                 }
