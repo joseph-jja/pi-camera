@@ -10,7 +10,7 @@ var Gpio = require('onoff').Gpio,
 mail.setupTransport(JSON.parse(fs.readFileSync("config.json")));
 
 pir.watch(function(err, value) {
-  var exec, videoPath;
+  var cmd, exec, videoPath;
   if (err) {
     exit();
   }
@@ -23,7 +23,10 @@ pir.watch(function(err, value) {
     exec = require('child_process').exec;
     videoPath = '/tmp/video_' + Date.now() + '.h264';
 
-    var cmd = 'raspivid -o ' + videoPath + ' -t 10000';
+    // we don't want a preview, we want video 800x600 because we are emailing
+    // we want exposure to auto for when it is dark 
+    // fps we want low also for email
+    cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t 10000';
     exec(cmd, function(error, stdout, stderr) {
       // output is in stdout
       console.log('Video Saved @ : ', videoPath);
