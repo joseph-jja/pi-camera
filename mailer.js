@@ -65,7 +65,5 @@ Mailer.prototype.sendEmail = function(user, file) {
   });
 };
 
-module.exports = {
-  Mailer: Mailer
-};
+module.exports = Mailer; 
 
