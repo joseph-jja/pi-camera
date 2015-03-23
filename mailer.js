@@ -26,21 +26,23 @@ function sendEmail(user, file) {
     timerId = null;
   }, 10000);
 
-  console.log('Sendig an Email..');
+  console.log('Sending an Email..');
 
   mailOptions = {
-    from: 'Video Cam ' + user,
+    from: user,
     to: user,
     subject: 'Motion Detected',
-    text: 'Motion detected. ' + Date(),
+    text: 'Motion detected. ' + new Date().toString(),
     attachments: [{
       path: file
     }]
   };
 
+  //console.log('DEBUG -- Sendig an Email..' + transporter.sendMail);
   transporter.sendMail(mailOptions, function(error, info) {
+    console.log('DEBUG -- Sending an Email..');
     if (error) {
-      console.log(error);
+      console.log("An error occured: " + error);
     } else {
       console.log('Message sent: ' + info.response);
     }
