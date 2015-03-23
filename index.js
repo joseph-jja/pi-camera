@@ -1,28 +1,33 @@
 var Gpio = require('onoff').Gpio,
-  buzzer = new Gpio(18, 'out'),
-  pir = new Gpio(17, 'in', 'both'), 
-  mailer = require('./mailer');
+  sensorPin = 16,
+  fs = require('fs'),
+  pir = new Gpio(sensorPin, 'in', 'both'), 
+  mailer = require('./mailer'), 
+  isRec = false;
 
-var isRec = false;
+// read the config for the node mailer from the fs
+// we want sync here because it is starting up and don't want to mail anyway!
+mail.setupTransport(JSON.parse(fs.readFileSync("config.json")));
 
 pir.watch(function(err, value) {
-  if (err) exit();
-  buzzer.writeSync(value);
-  console.log('Intruder detected..');
+  var exec, videoPath;
+  if (err) {
+    exit();
+  }
   if (value == 1 && !isRec) {
 
     console.log('capturing video.. ');
 
     isRec = true;
 
-    var exec = require('child_process').exec;
-    var video_path = './video/video' + Date.now() + '.h264';
+    exec = require('child_process').exec;
+    videoPath = './video/video' + Date.now() + '.h264';
 
-    var cmd = 'raspivid -o ' + video_path + ' -t 10000';
+    var cmd = 'raspivid -o ' + videoPath + ' -t 10000';
     exec(cmd, function(error, stdout, stderr) {
       // output is in stdout
-      console.log('Video Saved @ : ', video_path);
-      mailer.sendEmail(video_path);
+      console.log('Video Saved @ : ', videoPath);
+      mailer.sendEmail(videoPath);
 
       isRec = false;
     });
