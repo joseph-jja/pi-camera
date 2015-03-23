@@ -36,7 +36,7 @@ function sendEmail(user, file) {
   };
 
   if ( file ) {
-    mailOptions.attachments: [{
+    mailOptions.attachments = [{
       path: file
     }];
   }
