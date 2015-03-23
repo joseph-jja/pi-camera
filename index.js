@@ -16,6 +16,7 @@ pir.watch(function(err, value) {
   var cmd, exec, 
     videoPath, mpegPath
     timestamp;
+    
   if (err) {
     exit();
   }
@@ -44,7 +45,6 @@ pir.watch(function(err, value) {
         isRec = false;
       });
     });
-
   }
 });
 
