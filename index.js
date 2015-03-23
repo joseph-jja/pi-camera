@@ -1,5 +1,5 @@
 var Gpio = require('onoff').Gpio,
-  sensorPin = 16,
+  sensorPin = 23,
   fs = require('fs'),
   pir = new Gpio(sensorPin, 'in', 'both'), 
   mailer = require('./mailer'), 
@@ -15,9 +15,9 @@ mailOptions = JSON.parse(fs.readFileSync(args[2]));
 
 mailer.setupTransport(mailOptions.email);
 
-pir.watch(function(err, value) {
+function watchCB(err, value) {
   var cmd, exec, 
-    videoPath, mpegPath
+    videoPath, mpegPath,
     timestamp;
     
   if (err) {
@@ -50,7 +50,8 @@ pir.watch(function(err, value) {
       });
     });
   }
-});
+}
+pir.watch(watchCB);
 
 console.log('Pi Bot deployed successfully!');
 console.log('Guarding...');
