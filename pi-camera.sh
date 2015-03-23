@@ -36,7 +36,8 @@ PID_FILE=/var/run/forever.pid
 BASE_CODE=/home/pi/pi-camera
 
 # startup file
-PI_CAMERA_JS=$BASE_CODE/index.js
+#PI_CAMERA_JS=$BASE_CODE/index.js
+PI_CAMERA_JS=index.js
 CONFIG=/home/pi/config.json
 
 # forever options
