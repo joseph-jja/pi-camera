@@ -1,7 +1,9 @@
 var Gpio = require( 'onoff' ).Gpio,
     sensorPin = 23,
+    ledPin = 24,
     fs = require( 'fs' ),
     pir = new Gpio( sensorPin, 'in', 'both' ),
+    led = new Gpio( ledPin, 'out' ),
     Mailer = require( './mailer' ),
     args, videoList = {},
     isRec = false,
@@ -20,22 +22,18 @@ Sendmail.waitTime = 10000;
 
 Sendmail.setupTransport( mailOptions.email.host, mailOptions.email.port, mailOptions.email.auth.user, mailOptions.email.auth.pass );
 
-Sendmail.on( "start", function ( data )
-{
+Sendmail.on( "start", function ( data ) {
     videoList[ data.filename ] = {
         status: 'sending'
     };
 } );
 
-Sendmail.on( "end", function ( data )
-{
+Sendmail.on( "end", function ( data ) {
     var x, fname;
-    if ( data.error )
-    {
+    if ( data.error ) {
         console.log( "An error has occured: " + data.error );
     }
-    else
-    {
+    else {
         // message has been sent
         console.log( "Email status: " + data.info );
 
@@ -46,10 +44,8 @@ Sendmail.on( "end", function ( data )
         videoList[ data.filename ] = undefined;
 
         // find next message to send
-        for ( x in videoList )
-        {
-            if ( videoList[ x ] && videoList[ x ].status === 'unsent' )
-            {
+        for ( x in videoList ) {
+            if ( videoList[ x ] && videoList[ x ].status === 'unsent' ) {
                 Sendmail.sendEmail( mailOptions.user, videoList[ x ] );
                 break;
             }
@@ -57,18 +53,25 @@ Sendmail.on( "end", function ( data )
     }
 } );
 
-function watchCB( err, value )
-{
+function watchCB( err, value ) {
     var cmd, exec, videoPath, mpegPath, timestamp;
 
-    if ( err )
-    {
+    if ( err ) {
         exit();
     }
 
-    if ( value == 1 && !isRec )
-    {
+    if ( value === 1 ) {
+        led.write( 1, function ( err ) {
+            console.log( "On " + err );
+        } );
+    }
+    else {
+        led.write( 0, function ( err ) {
+            console.log( "Off " + err );
+        } );
+    }
 
+    if ( value === 1 && !isRec ) {
         console.log( 'capturing video.. ' );
 
         isRec = true;
@@ -83,17 +86,14 @@ function watchCB( err, value )
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
         cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t ' + Sendmail.waitTime;
-        console.log("Video command: " + cmd);
-        exec( cmd, function ( error, stdout, stderr )
-        {
+        console.log( "Video command: " + cmd );
+        exec( cmd, function ( error, stdout, stderr ) {
             // output is in stdout
             console.log( 'Video saved: ', videoPath );
             // rename file to be named mpeg
-            fs.rename( videoPath, mpegPath, function ( err )
-            {
+            fs.rename( videoPath, mpegPath, function ( err ) {
                 // no videos pending to be sent 
-                if ( _.isEmpty( videoList ) )
-                {
+                if ( _.isEmpty( videoList ) ) {
                     // mail first one
                     Sendmail.sendEmail( mailOptions.user, mpegPath );
                 }
@@ -110,8 +110,15 @@ pir.watch( watchCB );
 console.log( 'Pi Bot deployed successfully!' );
 console.log( 'Guarding...' );
 
-function exit()
-{
+process.on( 'SIGINT', exit );
+
+function exit(code) {
+
+    if ( code ) {
+        console.log( "Exiting on code: " + code );
+    }
     pir.unexport();
+    led.writeSync( 0 );
+    led.unexport();
     process.exit();
 }

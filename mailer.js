@@ -3,8 +3,7 @@ var nodemailer = require( 'nodemailer' ),
     events = require( "events" ),
     timerId;
 
-function Mailer()
-{
+function Mailer() {
     events.EventEmitter.call( this );
 }
 
@@ -12,14 +11,12 @@ util.inherits( Mailer, events.EventEmitter );
 
 Mailer.prototype.waitTime = 10000;
 
-Mailer.prototype.setupTransport = function ( host, port, user, pass )
-{
+Mailer.prototype.setupTransport = function ( host, port, user, pass ) {
     var options = {
         secure: false,
         host: host,
         port: port,
-        auth:
-        {
+        auth: {
             user: user,
             pass: pass
         }
@@ -27,29 +24,24 @@ Mailer.prototype.setupTransport = function ( host, port, user, pass )
     transporter = nodemailer.createTransport( options );
 }
 
-Mailer.prototype.sendEmail = function ( user, file )
-{
+Mailer.prototype.sendEmail = function ( user, file ) {
     var mailOptions, self = this;
 
-    if ( timerId )
-    {
+    if ( timerId ) {
         return;
     }
-    this.emit( "start",
-    {
+    this.emit( "start", {
         "filename": file,
         "msg": "Sending an Email.."
     } );
 
-    timerId = setTimeout( function ()
-    {
+    timerId = setTimeout( function () {
         clearTimeout( timerId );
         timerId = null;
     }, this.waitTime );
 
     console.log( 'Sending an Email..' );
-    this.emit( "timerSet",
-    {
+    this.emit( "timerSet", {
         "filename": file,
         "time": this.waitTime
     } );
@@ -61,27 +53,21 @@ Mailer.prototype.sendEmail = function ( user, file )
         text: 'Motion detected. '
     };
 
-    if ( file )
-    {
-        mailOptions.attachments = [
-        {
+    if ( file ) {
+        mailOptions.attachments = [ {
             path: file
         } ];
     }
 
     //console.log('DEBUG -- Sendig an Email..' + transporter.sendMail);
-    transporter.sendMail( mailOptions, function ( error, info )
-    {
-        if ( error )
-        {
+    transporter.sendMail( mailOptions, function ( error, info ) {
+        if ( error ) {
             console.log( "An error occured: " + error );
         }
-        else
-        {
+        else {
             console.log( 'Message sent: ' + info.response );
         }
-        self.emit( "end",
-        {
+        self.emit( "end", {
             "error": error,
             "info": info,
             "filename": file

@@ -1,19 +1,13 @@
-module.exports = function ( grunt )
-{
+module.exports = function ( grunt ) {
 
-    grunt.initConfig(
-    {
+    grunt.initConfig( {
 
-        "jsbeautifier":
-        {
-            "default":
-            {
+        "jsbeautifier": {
+            "default": {
                 src: [ "**/*.js", "!node_modules/**/**.js" ],
-                options:
-                {
-                    js:
-                    {
-                        braceStyle: "expand",
+                options: {
+                    js: {
+                        braceStyle: "end-expand",
                         breakChainedMethods: false,
                         e4x: false,
                         evalCode: false,
