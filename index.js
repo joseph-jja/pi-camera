@@ -21,7 +21,7 @@ pir.watch(function(err, value) {
     isRec = true;
 
     exec = require('child_process').exec;
-    videoPath = './video/video' + Date.now() + '.h264';
+    videoPath = '/tmp/video_' + Date.now() + '.h264';
 
     var cmd = 'raspivid -o ' + videoPath + ' -t 10000';
     exec(cmd, function(error, stdout, stderr) {
