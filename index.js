@@ -39,7 +39,6 @@ console.log('Pi Bot deployed successfully!');
 console.log('Guarding...');
 
 function exit() {
-  buzzer.unexport();
   pir.unexport();
   process.exit();
 }
