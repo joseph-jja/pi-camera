@@ -10,7 +10,7 @@ var Gpio = require('onoff').Gpio,
 mail.setupTransport(JSON.parse(fs.readFileSync("config.json")));
 
 pir.watch(function(err, value) {
-  var cmd, exec, videoPath;
+  var cmd, exec, videoPath, mpegPath;
   if (err) {
     exit();
   }
@@ -22,6 +22,7 @@ pir.watch(function(err, value) {
 
     exec = require('child_process').exec;
     videoPath = '/tmp/video_' + Date.now() + '.h264';
+    mpegPath = videoPath.replace('.h264', '.mpeg');
 
     // we don't want a preview, we want video 800x600 because we are emailing
     // we want exposure to auto for when it is dark 
@@ -30,9 +31,11 @@ pir.watch(function(err, value) {
     exec(cmd, function(error, stdout, stderr) {
       // output is in stdout
       console.log('Video Saved @ : ', videoPath);
-      mailer.sendEmail(videoPath);
-
-      isRec = false;
+      // rename file to be named mpeg
+      fs.rename(videoPath, mpegPath, function(err) {
+        mailer.sendEmail(mpegPath);
+        isRec = false;
+      });
     });
 
   }
