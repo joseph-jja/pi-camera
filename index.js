@@ -30,15 +30,18 @@ Sendmail.on("end", function(data) {
         console.log("An error has occured: " + data.error);
     } else {
         // message has been sent
-        console.log("Email status: " + info);
+        console.log("Email status: " + data.info);
+
+        // remove sent video
+        videoList[data.filename] = undefined;
+
         // find next message to send
         for(x in videoList) {
-            if(videList[x] && videoList[x].status === 'unsent') {
-                Sendmail.sendEmail(mailOptions.user, videList[x]);
+            if(videoList[x] && videoList[x].status === 'unsent') {
+                Sendmail.sendEmail(mailOptions.user, videoList[x]);
                 break;
             }
         }
-        videoList[data.filename] = undefined;
     }
 });
 
