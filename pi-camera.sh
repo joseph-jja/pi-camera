@@ -50,7 +50,7 @@ do_status () {
 }
 
 case "$1" in
-  start|"")
+  start)
 	start_program
 	;;
   restart|reload|force-reload)
