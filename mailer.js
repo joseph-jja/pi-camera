@@ -1,19 +1,21 @@
 var nodemailer = require('nodemailer'), 
-  
+  smtpTransport = require('nodemailer-smtp-transport'),
   transporter, 
   timerId;
 
 function setupTransport(host, port, user, pass) {
-  transporter = nodemailer.createTransport({
+  var options = {
     host: host,
     port: port,
     auth: {
       user: user,
       pass: pass
     }
-  });
+  };
+  transporter = nodemailer.createTransport(smtpTransport(options));
+}
   
-function sendEmail(user, smtphost, port, file) {
+function sendEmail(user, file) {
   var mailOptions;
   if (timerId) {
     return;
