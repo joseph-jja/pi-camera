@@ -2,3 +2,7 @@
 
 # use this command to flush buffers 
 echo 3 > /proc/sys/vm/drop_caches
+
+sudo swapoff -a
+sudo update-rc.d -f dphys-swapfile remove
+sudo rm /var/swap
