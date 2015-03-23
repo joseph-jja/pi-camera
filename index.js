@@ -14,8 +14,9 @@ args = process.argv;
 mailOptions = JSON.parse(fs.readFileSync(args[2]));
 
 mailer.setupTransport(mailOptions.email.host, 
-    mailOptions.email.port, mailOptions.email.user, 
-    mailOptions.email.pass);
+    mailOptions.email.port, 
+    mailOptions.email.auth.user, 
+    mailOptions.email.auth.pass);
 
 function watchCB(err, value) {
   var cmd, exec, 

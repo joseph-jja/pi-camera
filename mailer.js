@@ -1,10 +1,10 @@
 var nodemailer = require('nodemailer'), 
-  smtpTransport = require('nodemailer-smtp-transport'),
   transporter, 
   timerId;
 
 function setupTransport(host, port, user, pass) {
   var options = {
+    secure: false,
     host: host,
     port: port,
     auth: {
@@ -12,7 +12,7 @@ function setupTransport(host, port, user, pass) {
       pass: pass
     }
   };
-  transporter = nodemailer.createTransport(smtpTransport(options));
+  transporter = nodemailer.createTransport(options);
 }
   
 function sendEmail(user, file) {
@@ -32,11 +32,14 @@ function sendEmail(user, file) {
     from: user,
     to: user,
     subject: 'Motion Detected',
-    text: 'Motion detected. ' + new Date().toString(),
-    attachments: [{
-      path: file
-    }]
+    text: 'Motion detected. '
   };
+
+  if ( file ) {
+    mailOptions.attachments: [{
+      path: file
+    }];
+  }
 
   //console.log('DEBUG -- Sendig an Email..' + transporter.sendMail);
   transporter.sendMail(mailOptions, function(error, info) {
