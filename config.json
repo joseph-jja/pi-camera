@@ -1,0 +1,11 @@
+{      
+    "email": {
+           host: gmail.com,
+           port: 25,
+           auth: {
+                user: "login id",
+                pass: password"
+           }
+      },
+      user: motion@somehost.com" 
+}
