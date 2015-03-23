@@ -1,6 +1,7 @@
 var Gpio = require('onoff').Gpio,
   buzzer = new Gpio(18, 'out'),
-  pir = new Gpio(17, 'in', 'both');
+  pir = new Gpio(17, 'in', 'both'), 
+  mailer = require('./mailer');
 
 var isRec = false;
 
@@ -21,7 +22,7 @@ pir.watch(function(err, value) {
     exec(cmd, function(error, stdout, stderr) {
       // output is in stdout
       console.log('Video Saved @ : ', video_path);
-      require('./mailer').sendEmail(video_path);
+      mailer.sendEmail(video_path);
 
       isRec = false;
     });
