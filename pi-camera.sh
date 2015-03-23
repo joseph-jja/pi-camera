@@ -30,6 +30,7 @@ KERNEL="$(uname -s)"
 FOREVER_BIN=/usr/local/bin/forever
 FOREVER_LOG=/var/log/forever.log
 APP_LOG=/var/log/pi-camera.log
+APP_ERR_LOG=/var/log/pi-camera.error.log
 PID_FILE=/var/run/forever.pid
 
 # code home
@@ -40,11 +41,14 @@ BASE_CODE=/home/pi/pi-camera
 PI_CAMERA_JS=index.js
 CONFIG=/home/pi/config.json
 
+# log files 
+LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
+
 # forever options
-FOREVER_OPTS="-l $FOREVER_LOG -o $APP_LOG -e $APP_LOG --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE"
+FOREVER_OPTS="$LOG_FILES --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 start_program () {
-    $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS
+    $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
 }
 
 stop_program () {
