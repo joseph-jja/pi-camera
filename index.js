@@ -11,10 +11,10 @@ var Gpio = require( 'onoff' ).Gpio,
     mailOptions, Sendmail,
 
     args = process.argv;
-    
-    if ( mailOptions.useLight ) {
-        led = new Gpio( ledPin, 'out' );
-    }
+
+if ( mailOptions.useLight ) {
+    led = new Gpio( ledPin, 'out' );
+}
 
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
@@ -64,18 +64,18 @@ function watchCB( err, value ) {
         exit();
     }
 
-if ( mailOptions.useLight ) {
-    if ( value === 1 ) {
-        led.write( 1, function ( err ) {
-            console.log( "On " + err );
-        } );
+    if ( mailOptions.useLight ) {
+        if ( value === 1 ) {
+            led.write( 1, function ( err ) {
+                console.log( "On " + err );
+            } );
+        }
+        else {
+            led.write( 0, function ( err ) {
+                console.log( "Off " + err );
+            } );
+        }
     }
-    else {
-        led.write( 0, function ( err ) {
-            console.log( "Off " + err );
-        } );
-    }
-}
     if ( value === 1 && !isRec ) {
         console.log( 'capturing video.. ' );
 
@@ -117,15 +117,15 @@ console.log( 'Guarding...' );
 
 process.on( 'SIGINT', exit );
 
-function exit(code) {
+function exit( code ) {
 
     if ( code ) {
         console.log( "Exiting on code: " + code );
     }
     pir.unexport();
     if ( mailOptions.useLight ) {
-    led.writeSync( 0 );
-    led.unexport();
+        led.writeSync( 0 );
+        led.unexport();
     }
     process.exit();
 }
