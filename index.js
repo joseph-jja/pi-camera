@@ -11,7 +11,7 @@ args = process.argv;
 
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
-mailOptions = JSON.parse(fs.readFileSync("config.json"));
+mailOptions = JSON.parse(fs.readFileSync(args[2]));
 
 mailer.setupTransport(mailOptions.email);
 
