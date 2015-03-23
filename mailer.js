@@ -10,7 +10,7 @@ var transporter = nodemailer.createTransport({
 
 var timerId;
 
-module.exports.sendEmail = function(user, password, smtphost, port, file) {
+function sendEmail(user, password, smtphost, port, file) {
   if (timerId) return;
 
   timerId = setTimeout(function() {
@@ -37,4 +37,9 @@ module.exports.sendEmail = function(user, password, smtphost, port, file) {
       console.log('Message sent: ' + info.response);
     }
   });
-}
+};
+
+module.exports = {
+  sendEmail: sendEmail
+};
+
