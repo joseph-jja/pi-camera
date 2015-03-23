@@ -25,7 +25,7 @@ Mailer.prototype.setupTransport = function(host, port, user, pass) {
 }
 
 Mailer.prototype.sendEmail = function(user, file) {
-    var mailOptions;
+    var mailOptions, self = this;
 
     if (timerId) {
         return;
@@ -66,7 +66,7 @@ Mailer.prototype.sendEmail = function(user, file) {
         } else {
             console.log('Message sent: ' + info.response);
         }
-        this.emit("end", {
+        self.emit("end", {
             "error": error,
             "info": info,
             "filename": file
