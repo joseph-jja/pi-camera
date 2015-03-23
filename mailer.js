@@ -1,18 +1,24 @@
-var nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer'), 
+  
+  transporter, 
+  timerId;
 
-var transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  auth: {
-    user: 'pi.intruder.alert@gmail.com',
-    pass: '******'
+function setupTransport(host, port, user, pass) {
+  transporter = nodemailer.createTransport({
+    host: host,
+    port: port,
+    auth: {
+      user: user,
+      pass: pass
+    }
+  });
+  
+function sendEmail(user, smtphost, port, file) {
+  var mailOptions;
+  if (timerId) {
+    return;
   }
-});
-
-var timerId;
-
-function sendEmail(user, password, smtphost, port, file) {
-  if (timerId) return;
-
+  
   timerId = setTimeout(function() {
     clearTimeout(timerId);
     timerId = null;
@@ -20,11 +26,11 @@ function sendEmail(user, password, smtphost, port, file) {
 
   console.log('Sendig an Email..');
 
-  var mailOptions = {
-    from: 'Pi Bot <pi.intruder.alert@gmail.com>',
-    to: 'arvind.ravulavaru@gmail.com',
-    subject: '[Pi Bot] Intruder Detected',
-    html: '<b>Mr. Arvind</b>,<br/><br/>We have detected an intruder. Please check the video attached. <br/><br/> Intruder Detected At : ' + Date() + ' <br/><br/>Love,<br/><i>Pi Bot</i>',
+  mailOptions = {
+    from: 'Video Cam ' + user,
+    to: user,
+    subject: 'Motion Detected',
+    text: 'Motion detected. ' + Date(),
     attachments: [{
       path: file
     }]
@@ -40,6 +46,7 @@ function sendEmail(user, password, smtphost, port, file) {
 };
 
 module.exports = {
+  setupTransport: setupTransport,
   sendEmail: sendEmail
 };
 
