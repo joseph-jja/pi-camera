@@ -13,7 +13,7 @@ args = process.argv;
 // we want sync here because it is starting up and don't want to mail anyway!
 mailOptions = JSON.parse(fs.readFileSync("config.json"));
 
-mailer.setupTransport(mailOption.email);
+mailer.setupTransport(mailOptions.email);
 
 pir.watch(function(err, value) {
   var cmd, exec, 
