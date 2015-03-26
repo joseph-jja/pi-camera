@@ -18,7 +18,7 @@ function setupTransport(host, port, user, pass) {
   
 function sendEmail(user, file) {
   var mailOptions;
-  
+  isSending = true;
   if (timerId) {
     return;
   }
@@ -51,11 +51,13 @@ function sendEmail(user, file) {
     } else {
       console.log('Message sent: ' + info.response);
     }
+    isSending = false;
   });
 };
 
 module.exports = {
   setupTransport: setupTransport,
-  sendEmail: sendEmail
+  sendEmail: sendEmail, 
+  isSending: isSending
 };
 
