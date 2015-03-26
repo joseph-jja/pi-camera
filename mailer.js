@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer'), 
   transporter, 
-  isSending = false;
+  isSending = false,
   timerId;
 
 function setupTransport(host, port, user, pass) {
@@ -18,6 +18,7 @@ function setupTransport(host, port, user, pass) {
   
 function sendEmail(user, file) {
   var mailOptions;
+  
   if (timerId) {
     return;
   }
