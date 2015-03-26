@@ -2,11 +2,12 @@ var Gpio = require('onoff').Gpio,
   sensorPin = 23,
   fs = require('fs'),
   pir = new Gpio(sensorPin, 'in', 'both'), 
-  mailer = require('./mailer'), 
+  Mailer = require('./mailer'), 
   args, 
-  videoList = [],
+  videoList = {},
   isRec = false, 
-  mailOptions;
+  mailOptions, 
+  Sendmail, 
 
 args = process.argv;
 
@@ -14,7 +15,9 @@ args = process.argv;
 // we want sync here because it is starting up and don't want to mail anyway!
 mailOptions = JSON.parse(fs.readFileSync(args[2]));
 
-mailer.setupTransport(mailOptions.email.host, 
+Sendmail = new Mailer();
+
+Sendmail.setupTransport(mailOptions.email.host, 
     mailOptions.email.port, 
     mailOptions.email.auth.user, 
     mailOptions.email.auth.pass);
@@ -49,8 +52,13 @@ function watchCB(err, value) {
       console.log('Video Saved @ : ', videoPath);
       // rename file to be named mpeg
       fs.rename(videoPath, mpegPath, function(err) {
-        videoList.push({ video: mpegPath: sent:false} );
-        mailer.sendEmail(mailOptions.user, mpegPath);
+        videoList[ mpegPath ] = false;
+        Sendmail.on("end", function(data) {
+          if ( ! data.error ) {
+            videoList[ mpegPath ] = true;
+          }
+        });
+        Sendmail.sendEmail(mailOptions.user, mpegPath);
         isRec = false;
       });
     });
