@@ -1,9 +1,18 @@
 var nodemailer = require('nodemailer'), 
   transporter, 
-  isSending = false,
+  util = require("util"),
+  events = require("events"),
   timerId;
 
-function setupTransport(host, port, user, pass) {
+function Mailer() {
+  events.EventEmitter.call(this);
+}
+
+util.inherits(Mailer, events.EventEmitter);
+
+Mailer.prototype.waitTime = 10000;
+
+Mailer.prototype.setupTransport = function(host, port, user, pass) {
   var options = {
     secure: false,
     host: host,
@@ -16,19 +25,21 @@ function setupTransport(host, port, user, pass) {
   transporter = nodemailer.createTransport(options);
 }
   
-function sendEmail(user, file) {
+Mailer.prototype.sendEmail = function(user, file) {
   var mailOptions;
-  isSending = true;
+  
   if (timerId) {
     return;
   }
+  this.emit("start", { "filename": file, "msg": "Sending an Email.." } );
   
   timerId = setTimeout(function() {
     clearTimeout(timerId);
     timerId = null;
-  }, 10000);
+  }, this.waitTime);
 
   console.log('Sending an Email..');
+  this.emit("timerSet", { "filename": file, "time": this.waitTime } );
 
   mailOptions = {
     from: user,
@@ -45,19 +56,16 @@ function sendEmail(user, file) {
 
   //console.log('DEBUG -- Sendig an Email..' + transporter.sendMail);
   transporter.sendMail(mailOptions, function(error, info) {
-    console.log('DEBUG -- Sending an Email..');
     if (error) {
       console.log("An error occured: " + error);
     } else {
       console.log('Message sent: ' + info.response);
     }
-    isSending = false;
+    this.emit("end", { "error": error, "info": info } );
   });
 };
 
 module.exports = {
-  setupTransport: setupTransport,
-  sendEmail: sendEmail, 
-  isSending: isSending
+  Mailer: Mailer
 };
 
