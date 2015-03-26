@@ -4,6 +4,7 @@ var Gpio = require('onoff').Gpio,
   pir = new Gpio(sensorPin, 'in', 'both'), 
   mailer = require('./mailer'), 
   args, 
+  videoList = [],
   isRec = false, 
   mailOptions;
 
@@ -48,11 +49,12 @@ function watchCB(err, value) {
       console.log('Video Saved @ : ', videoPath);
       // rename file to be named mpeg
       fs.rename(videoPath, mpegPath, function(err) {
+        videoList.push({ video: mpegPath: sent:false} );
         mailer.sendEmail(mailOptions.user, mpegPath);
         isRec = false;
       });
     });
-  }
+  } 
 }
 pir.watch(watchCB);
 
