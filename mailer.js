@@ -61,7 +61,7 @@ Mailer.prototype.sendEmail = function(user, file) {
     } else {
       console.log('Message sent: ' + info.response);
     }
-    this.emit("end", { "error": error, "info": info } );
+    this.emit("end", { "error": error, "info": info, "filename": file } );
   });
 };
 
