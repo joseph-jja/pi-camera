@@ -22,6 +22,15 @@ Sendmail.setupTransport(mailOptions.email.host,
     mailOptions.email.auth.user, 
     mailOptions.email.auth.pass);
 
+Sendmail.on("end", function(data) {
+  if ( data.error ) {
+    console.log( "An error has occured: " + data.error );
+  } else {
+    console.log( "Email status: " + info );
+    videoList[ data.filename ] = true;
+  }
+});
+
 function watchCB(err, value) {
   var cmd, exec, 
     videoPath, mpegPath,
@@ -53,11 +62,6 @@ function watchCB(err, value) {
       // rename file to be named mpeg
       fs.rename(videoPath, mpegPath, function(err) {
         videoList[ mpegPath ] = false;
-        Sendmail.on("end", function(data) {
-          if ( ! data.error ) {
-            videoList[ mpegPath ] = true;
-          }
-        });
         Sendmail.sendEmail(mailOptions.user, mpegPath);
         isRec = false;
       });
