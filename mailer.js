@@ -27,7 +27,7 @@ Mailer.prototype.setupTransport = function(host, port, user, pass) {
 Mailer.prototype.sendEmail = function(user, file) {
     var mailOptions;
 
-    if(timerId) {
+    if (timerId) {
         return;
     }
     this.emit("start", {
@@ -53,7 +53,7 @@ Mailer.prototype.sendEmail = function(user, file) {
         text: 'Motion detected. '
     };
 
-    if(file) {
+    if (file) {
         mailOptions.attachments = [{
             path: file
         }];
@@ -61,7 +61,7 @@ Mailer.prototype.sendEmail = function(user, file) {
 
     //console.log('DEBUG -- Sendig an Email..' + transporter.sendMail);
     transporter.sendMail(mailOptions, function(error, info) {
-        if(error) {
+        if (error) {
             console.log("An error occured: " + error);
         } else {
             console.log('Message sent: ' + info.response);
