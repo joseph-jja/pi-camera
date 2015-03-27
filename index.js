@@ -22,12 +22,25 @@ Sendmail.setupTransport(mailOptions.email.host,
     mailOptions.email.auth.user, 
     mailOptions.email.auth.pass);
 
+Sendmail.on("start", function(data) {
+  videoList[ data.filename ] = { status: 'sending' };
+});
+
 Sendmail.on("end", function(data) {
+  var x;
   if ( data.error ) {
     console.log( "An error has occured: " + data.error );
   } else {
+    // message has been sent
     console.log( "Email status: " + info );
-    videoList[ data.filename ] = true;
+    // find next message to send
+    for ( x in videoList ) { 
+      if ( videList[x] && videoList[x].status === 'unsent' ) {
+        Sendmail.sendEmail(mailOptions.user, videList[x]);
+        break;
+      } 
+    }
+    videoList[ data.filename ] = undefined;
   }
 });
 
@@ -61,8 +74,12 @@ function watchCB(err, value) {
       console.log('Video Saved @ : ', videoPath);
       // rename file to be named mpeg
       fs.rename(videoPath, mpegPath, function(err) {
-        videoList[ mpegPath ] = false;
-        Sendmail.sendEmail(mailOptions.user, mpegPath);
+        // no videos pending to be sent 
+        if ( videoList.length <= 0) {
+          // mail first one
+          Sendmail.sendEmail(mailOptions.user, mpegPath);
+        }
+        videoList[ mpegPath ] = { status: 'unsent' };
         isRec = false;
       });
     });
