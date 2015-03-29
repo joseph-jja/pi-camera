@@ -29,7 +29,8 @@ KERNEL="$(uname -s)"
 # should setup full path to forever binary
 FOREVER_BIN=forever
 FOREVER_LOG=/var/log/forever.log
-FOREVER_OPTS="-l $FOREVER_LOG -o $FOREVER_LOG -e $FOREVER_LOG"
+APP_LOG=/var/log/pi-camera.log
+PID_FILE=/var/run/forever.pid
 
 # code home
 BASE_CODE=/home/pi/pi-camera
@@ -37,6 +38,9 @@ BASE_CODE=/home/pi/pi-camera
 # startup file
 PI_CAMERA_JS=$BASE_CODE/index.js
 CONFIG=/home/pi/config.json
+
+# forever options
+FOREVER_OPTS="-l $FOREVER_LOG -o $APP_LOG -e $APP_LOG --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE"
 
 start_program () {
     $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS
