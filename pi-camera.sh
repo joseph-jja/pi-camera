@@ -26,12 +26,21 @@ KERNEL="$(uname -s)"
 . /lib/lsb/init-functions
 . /lib/init/mount-functions.sh
 
+# should setup full path to forever binary
+FOREVER_BIN=forever
+
+# code home
+BASE_CODE=/home/pi/pi-camera
+
+# startup file
+PI_CAMERA_JS=$BASE_CODE/index.js
+
 start_program () {
-    
+    $FOREVER_BIN start $PI_CAMERA_JS
 }
 
 stop_program () {
-    
+    $FOREVER_BIN stop $PI_CAMERA_JS
 }
 
 case "$1" in
