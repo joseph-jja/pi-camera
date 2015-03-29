@@ -83,10 +83,11 @@ function watchCB( err, value )
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
         cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t ' + Sendmail.waitTime;
+        console.log("Video command: " + cmd);
         exec( cmd, function ( error, stdout, stderr )
         {
             // output is in stdout
-            console.log( 'Video Saved @ : ', videoPath );
+            console.log( 'Video saved: ', videoPath );
             // rename file to be named mpeg
             fs.rename( videoPath, mpegPath, function ( err )
             {
