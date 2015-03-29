@@ -16,6 +16,8 @@ mailOptions = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 
 Sendmail = new Mailer();
 
+Sendmail.waitTime = 10000;
+
 Sendmail.setupTransport( mailOptions.email.host, mailOptions.email.port, mailOptions.email.auth.user, mailOptions.email.auth.pass );
 
 Sendmail.on( "start", function ( data )
@@ -80,7 +82,7 @@ function watchCB( err, value )
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
-        cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t 10000';
+        cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t ' + Sendmail.waitTime;
         exec( cmd, function ( error, stdout, stderr )
         {
             // output is in stdout
