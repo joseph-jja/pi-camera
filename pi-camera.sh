@@ -23,6 +23,9 @@ APP_LOG=/var/log/pi-camera.log
 APP_ERR_LOG=/var/log/pi-camera.error.log
 PID_FILE=/var/run/forever.pid
 
+# sudo
+SUDO=/usr/bin/sudo
+
 # code home
 BASE_CODE=/home/pi/pi-camera
 
@@ -38,11 +41,11 @@ LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
 FOREVER_OPTS="$LOG_FILES --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 start_program () {
-    /usr/bin/sudo $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
+    $SUDO $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
 }
 
 stop_program () {
-    /usr/bin/sudo $FOREVER_BIN stop $PI_CAMERA_JS
+    $SUDO $FOREVER_BIN stop $PI_CAMERA_JS
 }
 
 do_status () {
