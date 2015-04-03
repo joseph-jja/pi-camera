@@ -15,16 +15,6 @@
 
 PATH=/sbin:/bin:/usr/local/bin
 . /lib/init/vars.sh
-. /lib/init/tmpfs.sh
-
-TTYGRP=5
-TTYMODE=620
-[ -f /etc/default/devpts ] && . /etc/default/devpts
-
-KERNEL="$(uname -s)"
-
-. /lib/lsb/init-functions
-. /lib/init/mount-functions.sh
 
 # should setup full path to forever binary
 FOREVER_BIN=/usr/local/bin/forever
@@ -55,6 +45,10 @@ stop_program () {
     /usr/bin/sudo $FOREVER_BIN stop $PI_CAMERA_JS
 }
 
+do_status () {
+    /usr/bin/sudo $FOREVER_BIN list
+}
+
 case "$1" in
   start|"")
 	start_program
@@ -66,8 +60,11 @@ case "$1" in
   stop)
 	stop_program
 	;;
+  status)
+  	do_status
+  	;;
   *)
-	echo "Usage: pi-camera.sh [start|stop]" >&2
+	echo "Usage: pi-camera.sh [start|stop|status]" >&2
 	exit 3
 	;;
 esac
