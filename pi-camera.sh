@@ -26,9 +26,8 @@ FOREVER_BIN=/usr/local/bin/forever
 FOREVER_LOG=/var/log/forever.log
 APP_LOG=/var/log/pi-camera.log
 APP_ERR_LOG=/var/log/pi-camera.error.log
-PID_FILE=/var/run/forever.pid
 LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
-#FOREVER_OPTS="$LOG_FILES --sourceDir $BASE_CODE --workingDir $BASE_CODE --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
+PID_FILE=/var/run/forever.pid
 FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 # pi camera code setup
@@ -45,7 +44,7 @@ stop_program () {
 }
 
 do_status () {
-    /usr/bin/sudo $FOREVER_BIN list
+    cd $BASE_CODE && $FOREVER_BIN --uid "root" list
 }
 
 case "$1" in
