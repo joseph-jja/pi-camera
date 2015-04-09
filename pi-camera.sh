@@ -21,7 +21,6 @@ export FOREVER_ROOT
 
 # setup full path to binary files
 FOREVER_BIN=/usr/local/bin/forever
-SUDO=/usr/bin/sudo 
 
 # forever setup
 FOREVER_LOG=/var/log/forever.log
