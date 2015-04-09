@@ -18,7 +18,7 @@ mailOptions = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 
 Sendmail = new Mailer();
 
-Sendmail.waitTime = 10000;
+Sendmail.waitTime = 5000;
 
 Sendmail.setupTransport( mailOptions.email.host, mailOptions.email.port, mailOptions.email.auth.user, mailOptions.email.auth.pass );
 
