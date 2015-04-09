@@ -1,8 +1,8 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          pi-camera.sh
-# Required-Start:    $syslog
-# Required-Stop:     $syslog
+# Required-Start:    
+# Required-Stop:     
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Runs the pi camera video capture software.
