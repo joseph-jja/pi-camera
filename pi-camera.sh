@@ -16,6 +16,9 @@
 PATH=/sbin:/bin:/usr/local/bin
 . /lib/init/vars.sh
 
+FOREVER_ROOT=/tmp
+export FOREVER_ROOT
+
 # should setup full path to forever binary
 FOREVER_BIN=/usr/local/bin/forever
 FOREVER_LOG=/var/log/forever.log
