@@ -1,8 +1,8 @@
 #! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          pi-camera.sh
-# Required-Start:    
-# Required-Stop:     
+# Required-Start:    $local_fs $network $syslog $time $remote_fs
+# Required-Stop:     $local_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Runs the pi camera video capture software.
