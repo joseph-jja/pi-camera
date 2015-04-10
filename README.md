@@ -20,4 +20,5 @@ This is a simple code couple of scripts for making a motion detection camera cap
   - sudo swapoff -a
   - sudo update-rc.d -f dphys-swapfile remove
   - sudo rm /var/swap
+
 ## NOTE: This code was originally taken from pi_videoEMailIntruder.  The email code was cleaned up and made into a module.  
