@@ -45,18 +45,16 @@ Sendmail.on( "end", function ( data ) {
         if ( data.filename ) {
             // remove sent video
             // in a perfect world we would be we cant here :( 
-            fname = videoList[ data.filename ];
-            if ( fname ) {
-                try {
-                    fs.unlink( fname, function ( err ) {
-                        if ( err ) {
-                            console.log( err );
-                        }
-                    } );
-                } catch ( e ) {
-                    console.log( "ERROR: + e" );
-                }
-            }            
+            fname = data.filename;
+            try {
+                fs.unlink( fname, function ( err ) {
+                    if ( err ) {
+                        console.log( err );
+                    }
+                } );
+            } catch ( e ) {
+                console.log( "ERROR: + e" );
+            }
             videoList[ data.filename ] = undefined;
         }
         
