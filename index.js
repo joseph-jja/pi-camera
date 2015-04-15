@@ -1,29 +1,36 @@
 var Gpio = require( 'onoff' ).Gpio,
+    Mailer = require( './mailer' ),
+    fs = require( 'fs' ),
+    Leds = require( "leds" ),
+    utilities = require( "utilities" ), 
+    _ = require( "underscore" ),
+    // constants
     sensorPin = 23,
     ledPin = 24,
-    fs = require( 'fs' ),
-    pir = new Gpio( sensorPin, 'in', 'both' ),
-    Leds = require( "leds" ), led,
-    Mailer = require( './mailer' ),
-    args, videoList = {},
+    // module variables
+    pir,
+    led,
+    args, 
+    videoList = {},
     isRec = false,
-    _ = require( "underscore" ),
-    mailOptions, Sendmail,
-    utilities = require( "utilities" );
-    
-    args = process.argv;
+    options, 
+    Sendmail;
+
+// command line arguments    
+args = process.argv;
 
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
-mailOptions = JSON.parse( fs.readFileSync( args[ 2 ] ) );
+options = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 
-led = new Leds(mailOptions.useLight, ledPin);
+pir = new Gpio( sensorPin, 'in', 'both' ),
+led = new Leds(options.useLight, ledPin);
 
 Sendmail = new Mailer();
 
 Sendmail.waitTime = 5000;
 
-Sendmail.setupTransport( mailOptions.email.host, mailOptions.email.port, mailOptions.email.auth.user, mailOptions.email.auth.pass );
+Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass );
 
 Sendmail.on( "start", function ( data ) {
     videoList[ data.filename ] = {
@@ -52,7 +59,7 @@ Sendmail.on( "end", function ( data ) {
         // find next message to send
         for ( x in videoList ) {
             if ( videoList[ x ] && videoList[ x ].status === 'unsent' ) {
-                Sendmail.sendEmail( mailOptions.user, videoList[ x ].filename );
+                Sendmail.sendEmail( options.user, videoList[ x ].filename );
                 break;
             }
         }
@@ -92,7 +99,7 @@ function watchCB( err, value ) {
                 // no videos pending to be sent 
                 if ( _.isEmpty( videoList ) ) {
                     // mail first one
-                    Sendmail.sendEmail( mailOptions.user, mpegPath );
+                    Sendmail.sendEmail( options.user, mpegPath );
                 }
                 videoList[ mpegPath ] = {
                     filename: mpegPath,
