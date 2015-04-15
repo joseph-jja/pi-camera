@@ -12,13 +12,13 @@ var Gpio = require( 'onoff' ).Gpio,
 
     args = process.argv;
 
-if ( mailOptions.useLight ) {
-    led = new Gpio( ledPin, 'out' );
-}
-
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
 mailOptions = JSON.parse( fs.readFileSync( args[ 2 ] ) );
+
+if ( mailOptions.useLight ) {
+    led = new Gpio( ledPin, 'out' );
+}
 
 Sendmail = new Mailer();
 
