@@ -9,7 +9,8 @@ var Gpio = require( 'onoff' ).Gpio,
     isRec = false,
     _ = require( "underscore" ),
     mailOptions, Sendmail,
-
+    utilities = require( "utilities" );
+    
     args = process.argv;
 
 // read the config for the node mailer from the fs
@@ -46,15 +47,7 @@ Sendmail.on( "end", function ( data ) {
             // remove sent video
             // in a perfect world we would be we cant here :( 
             fname = data.filename;
-            try {
-                fs.unlink( fname, function ( err ) {
-                    if ( err ) {
-                        console.log( err );
-                    }
-                } );
-            } catch ( e ) {
-                console.log( "ERROR: + e" );
-            }
+            utilities.safeUnlink(fname);
             videoList[ data.filename ] = undefined;
         }
         
