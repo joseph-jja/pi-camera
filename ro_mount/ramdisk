@@ -1,3 +1,4 @@
+# mkfs -t ext2 -q /dev/ram1 8192
 # mkfs -q /dev/ram1 8192
 # mkdir -p /ramcache
 # mount /dev/ram1 /ramcache
