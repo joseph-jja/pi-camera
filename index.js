@@ -54,7 +54,7 @@ Sendmail.on( "end", function ( data ) {
             } catch ( e ) {
 
             }
-        }, 10000 );
+        }, 120000 );
 
         videoList[ data.filename ] = undefined;
 
