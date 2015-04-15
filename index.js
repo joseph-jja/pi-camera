@@ -3,7 +3,7 @@ var Gpio = require( 'onoff' ).Gpio,
     ledPin = 24,
     fs = require( 'fs' ),
     pir = new Gpio( sensorPin, 'in', 'both' ),
-    led,
+    Leds = require( "leds" ), led,
     Mailer = require( './mailer' ),
     args, videoList = {},
     isRec = false,
@@ -17,9 +17,7 @@ var Gpio = require( 'onoff' ).Gpio,
 // we want sync here because it is starting up and don't want to mail anyway!
 mailOptions = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 
-if ( mailOptions.useLight ) {
-    led = new Gpio( ledPin, 'out' );
-}
+led = new Leds(mailOptions.useLight, ledPin);
 
 Sendmail = new Mailer();
 
@@ -68,17 +66,8 @@ function watchCB( err, value ) {
         exit();
     }
 
-    if ( mailOptions.useLight ) {
-        if ( value === 1 ) {
-            led.write( 1, function ( err ) {
-                console.log( "On " + err );
-            } );
-        } else {
-            led.write( 0, function ( err ) {
-                console.log( "Off " + err );
-            } );
-        }
-    }
+    led.changeState(value);
+
     if ( value === 1 && !isRec ) {
         console.log( 'capturing video.. ' );
 
@@ -127,9 +116,7 @@ function exit( code ) {
         console.log( "Exiting on code: " + code );
     }
     pir.unexport();
-    if ( mailOptions.useLight ) {
-        led.writeSync( 0 );
-        led.unexport();
-    }
+    led.cleanup(value);
+
     process.exit();
 }
