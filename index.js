@@ -38,30 +38,32 @@ Sendmail.on( "end", function ( data ) {
         console.log( "An error has occured: " + data.error );
     } else {
         // message has been sent
-        console.log( "Email status: " + data.info );
-
-        // remove sent video
-        // in a perfect world we would be we cant here :( 
-        fname = videoList[ data.filename ];
-
-        setTimeout( function () {
-            try {
-                fs.unlink( fname, function ( err ) {
-                    if ( err ) {
-                        console.log( err );
-                    }
-                } );
-            } catch ( e ) {
-
-            }
-        }, 120000 );
-
-        videoList[ data.filename ] = undefined;
-
+        if ( data.info ) { 
+            console.log( "Email status: " + JSON.stringify( data.info ) );
+        }
+        
+        if ( data.filename ) {
+            // remove sent video
+            // in a perfect world we would be we cant here :( 
+            fname = videoList[ data.filename ];
+            if ( fname ) {
+                try {
+                    fs.unlink( fname, function ( err ) {
+                        if ( err ) {
+                            console.log( err );
+                        }
+                    } );
+                } catch ( e ) {
+                    console.log( "ERROR: + e" );
+                }
+            }            
+            videoList[ data.filename ] = undefined;
+        }
+        
         // find next message to send
         for ( x in videoList ) {
             if ( videoList[ x ] && videoList[ x ].status === 'unsent' ) {
-                Sendmail.sendEmail( mailOptions.user, videoList[ x ] );
+                Sendmail.sendEmail( mailOptions.user, videoList[ x ].filename );
                 break;
             }
         }
@@ -113,6 +115,7 @@ function watchCB( err, value ) {
                     Sendmail.sendEmail( mailOptions.user, mpegPath );
                 }
                 videoList[ mpegPath ] = {
+                    filename: mpegPath,
                     status: 'unsent'
                 };
                 isRec = false;
