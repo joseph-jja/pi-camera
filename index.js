@@ -44,6 +44,18 @@ Sendmail.on( "end", function ( data ) {
         // in a perfect world we would be we cant here :( 
         fname = videoList[ data.filename ];
 
+        setTimeout( function () {
+            try {
+                fs.unlink( fname, function ( err ) {
+                    if ( err ) {
+                        console.log( err );
+                    }
+                } );
+            } catch ( e ) {
+
+            }
+        }, 10000 );
+
         videoList[ data.filename ] = undefined;
 
         // find next message to send
