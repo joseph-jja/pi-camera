@@ -36,8 +36,7 @@ Sendmail.on( "end", function ( data ) {
     var x, fname;
     if ( data.error ) {
         console.log( "An error has occured: " + data.error );
-    }
-    else {
+    } else {
         // message has been sent
         console.log( "Email status: " + data.info );
 
@@ -69,8 +68,7 @@ function watchCB( err, value ) {
             led.write( 1, function ( err ) {
                 console.log( "On " + err );
             } );
-        }
-        else {
+        } else {
             led.write( 0, function ( err ) {
                 console.log( "Off " + err );
             } );

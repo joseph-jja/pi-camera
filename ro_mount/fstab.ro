@@ -1,0 +1,7 @@
+proc            /proc           proc    defaults          0       0
+/dev/mmcblk0p1  /boot           vfat    ro          0       2
+/dev/mmcblk0p2  /               ext4    ro,noatime  0       1
+# a swapfile is not a swap partition, so no using swapon|off from here on, use  dphys-swapfile swap[on|off]  for that
+mount_unionfs   /etc            fuse    defaults          0       0
+mount_unionfs   /var            fuse    defaults          0       0
+tmpfs            /tmp            tmpfs   defaults,noatime,nosuid,nodev,noexec,mode=1777,size=48M          0       0

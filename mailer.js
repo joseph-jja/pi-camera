@@ -63,8 +63,7 @@ Mailer.prototype.sendEmail = function ( user, file ) {
     transporter.sendMail( mailOptions, function ( error, info ) {
         if ( error ) {
             console.log( "An error occured: " + error );
-        }
-        else {
+        } else {
             console.log( 'Message sent: ' + info.response );
         }
         self.emit( "end", {

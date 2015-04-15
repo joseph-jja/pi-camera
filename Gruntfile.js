@@ -7,7 +7,7 @@ module.exports = function ( grunt ) {
                 src: [ "**/*.js", "!node_modules/**/**.js" ],
                 options: {
                     js: {
-                        braceStyle: "end-expand",
+                        braceStyle: "collapse",
                         breakChainedMethods: false,
                         e4x: false,
                         evalCode: false,
