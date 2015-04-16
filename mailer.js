@@ -25,7 +25,7 @@ Mailer.prototype.setupTransport = function ( host, port, user, pass ) {
 }
 
 Mailer.prototype.sendEmail = function ( user, file ) {
-    var mailOptions, self = this;
+    var mailOptions, self = this, timenow;
 
     if ( timerId ) {
         return;
@@ -46,11 +46,12 @@ Mailer.prototype.sendEmail = function ( user, file ) {
         "time": this.waitTime
     } );
 
+    timenow = new Date().toString();
     mailOptions = {
         from: user,
         to: user,
         subject: 'Motion Detected',
-        text: 'Motion detected. '
+        text: 'Motion detected. ' + timenow
     };
 
     if ( file ) {
