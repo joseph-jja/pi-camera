@@ -23,8 +23,8 @@ args = process.argv;
 // we want sync here because it is starting up and don't want to mail anyway!
 options = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 
-pir = new Gpio( sensorPin, 'in', 'both' ),
-    led = new Leds( options.useLight, ledPin );
+pir = new Gpio( sensorPin, 'in', 'both' );
+led = new Leds( ( typeof options.useLight !== 'undefined' ), ledPin );
 
 Sendmail = new Mailer();
 
@@ -73,6 +73,7 @@ function watchCB( err, value ) {
         exit();
     }
 
+    console.log( 'PIR state: ' + value );
     led.changeState( value );
 
     if ( value === 1 && !isRec ) {

@@ -8,7 +8,9 @@ function safeUnlink( filename ) {
             fs.unlink( filename, function ( err ) {
                 if ( err ) {
                     console.log( err );
+                    return;
                 }
+                console.log( "Unlinked : " + filename );
             } );
         } catch ( e ) {
             console.log( "ERROR: + e" );
