@@ -46,12 +46,12 @@ Mailer.prototype.sendEmail = function ( user, file ) {
         "time": this.waitTime
     } );
 
-    timenow = new Date().toString();
+    timenow = new Date();
     mailOptions = {
         from: user,
         to: user,
-        subject: 'Motion Detected',
-        text: 'Motion detected. ' + timenow
+        subject: 'Motion Detected ' + timenow.toDateString(),
+        text: 'Motion detected at ' + timenow.toString()
     };
 
     if ( file ) {
