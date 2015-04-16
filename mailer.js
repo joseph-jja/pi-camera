@@ -66,6 +66,7 @@ Mailer.prototype.sendEmail = function ( user, file ) {
         } else {
             console.log( 'Message sent: ' + info.response );
         }
+        clearTimeout( timerId );
         self.emit( "end", {
             "error": error,
             "info": info,
