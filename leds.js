@@ -1,19 +1,19 @@
-var led, 
-  Gpio = require( 'onoff' ).Gpio,;
+var led,
+    Gpio = require( 'onoff' ).Gpio;
 
 
-function Leds(enabled, ledPin) {
-  
-  this.enabled = enabled;
-  if ( enabled ) {
-    led = new Gpio( ledPin, 'out' );
-  }
-  
+function Leds( enabled, ledPin ) {
+
+    this.enabled = enabled;
+    if ( enabled ) {
+        led = new Gpio( ledPin, 'out' );
+    }
+
 }
 
-Leds.prototype.changeState = function(value) {
-  
-  if ( this.enabled ) {
+Leds.prototype.changeState = function ( value ) {
+
+    if ( this.enabled ) {
         if ( value === 1 ) {
             led.write( 1, function ( err ) {
                 console.log( "On " + err );
@@ -26,9 +26,9 @@ Leds.prototype.changeState = function(value) {
     }
 }
 
-Leds.prototype.cleanup = function() {
+Leds.prototype.cleanup = function () {
 
-  if ( this.enabled ) {
+    if ( this.enabled ) {
         led.writeSync( 0 );
         led.unexport();
     }

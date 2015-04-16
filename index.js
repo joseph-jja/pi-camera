@@ -1,8 +1,8 @@
 var Gpio = require( 'onoff' ).Gpio,
     Mailer = require( './mailer' ),
     fs = require( 'fs' ),
-    Leds = require( "leds" ),
-    utilities = require( "utilities" ), 
+    Leds = require( "./leds" ),
+    utilities = require( "./utilities" ),
     _ = require( "underscore" ),
     // constants
     sensorPin = 23,
@@ -10,10 +10,10 @@ var Gpio = require( 'onoff' ).Gpio,
     // module variables
     pir,
     led,
-    args, 
+    args,
     videoList = {},
     isRec = false,
-    options, 
+    options,
     Sendmail;
 
 // command line arguments    
@@ -24,7 +24,7 @@ args = process.argv;
 options = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 
 pir = new Gpio( sensorPin, 'in', 'both' ),
-led = new Leds(options.useLight, ledPin);
+    led = new Leds( options.useLight, ledPin );
 
 Sendmail = new Mailer();
 
@@ -44,18 +44,18 @@ Sendmail.on( "end", function ( data ) {
         console.log( "An error has occured: " + data.error );
     } else {
         // message has been sent
-        if ( data.info ) { 
+        if ( data.info ) {
             console.log( "Email status: " + JSON.stringify( data.info ) );
         }
-        
+
         if ( data.filename ) {
             // remove sent video
             // in a perfect world we would be we cant here :( 
             fname = data.filename;
-            utilities.safeUnlink(fname);
+            utilities.safeUnlink( fname );
             videoList[ data.filename ] = undefined;
         }
-        
+
         // find next message to send
         for ( x in videoList ) {
             if ( videoList[ x ] && videoList[ x ].status === 'unsent' ) {
@@ -73,7 +73,7 @@ function watchCB( err, value ) {
         exit();
     }
 
-    led.changeState(value);
+    led.changeState( value );
 
     if ( value === 1 && !isRec ) {
         console.log( 'capturing video.. ' );
@@ -123,7 +123,7 @@ function exit( code ) {
         console.log( "Exiting on code: " + code );
     }
     pir.unexport();
-    led.cleanup(value);
+    led.cleanup();
 
     process.exit();
 }
