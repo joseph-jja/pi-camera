@@ -1,7 +1,6 @@
 var nodemailer = require( 'nodemailer' ),
     transporter, util = require( "util" ),
-    events = require( "events" ),
-    timerId;
+    events = require( "events" );
 
 function Mailer() {
     events.EventEmitter.call( this );
@@ -28,18 +27,10 @@ Mailer.prototype.sendEmail = function ( user, file ) {
     var mailOptions, self = this,
         timenow;
 
-    if ( timerId ) {
-        return;
-    }
     this.emit( "start", {
         "filename": file,
         "msg": "Sending an Email.."
     } );
-
-    timerId = setTimeout( function () {
-        clearTimeout( timerId );
-        timerId = null;
-    }, this.waitTime );
 
     console.log( 'Sending an Email..' );
     this.emit( "timerSet", {
@@ -67,9 +58,6 @@ Mailer.prototype.sendEmail = function ( user, file ) {
             console.log( "An error occured: " + error );
         } else {
             console.log( 'Message sent: ' + info.response );
-        }
-        if ( timerId ) {
-            clearTimeout( timerId );
         }
         self.emit( "end", {
             "error": error,
