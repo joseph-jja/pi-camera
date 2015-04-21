@@ -2,6 +2,7 @@ var Gpio = require( 'onoff' ).Gpio,
     Mailer = require( './mailer' ),
     fs = require( 'fs' ),
     Leds = require( "./leds" ),
+    exec = require( 'child_process' ).exec,
     utilities = require( "./utilities" ),
     _ = require( "underscore" ),
     // constants
@@ -67,7 +68,7 @@ Sendmail.on( "end", function ( data ) {
 } );
 
 function watchCB( err, value ) {
-    var cmd, exec, videoPath, mpegPath, timestamp;
+    var cmd, ffmpegCmd, videoPath, mpegPath, timestamp;
 
     if ( err ) {
         exit();
@@ -83,20 +84,20 @@ function watchCB( err, value ) {
 
         timestamp = new Date();
 
-        exec = require( 'child_process' ).exec;
         videoPath = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds() + '.h264';
-        mpegPath = videoPath.replace( '.h264', '.mpeg' );
+        mpegPath = videoPath.replace( '.h264', '.avi' );
 
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
         cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t ' + Sendmail.waitTime;
+        ffmpegCmd = 'ffmpeg -i ' + videoPath + ' ' + mpegPath;
         console.log( "Video command: " + cmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // output is in stdout
             console.log( 'Video saved: ', videoPath );
-            // rename file to be named mpeg
-            fs.rename( videoPath, mpegPath, function ( err ) {
+            // convert to avi to be smaller
+            exec( ffmpegCmd, function ( error, stdout, stderr ) {
                 // no videos pending to be sent 
                 if ( _.isEmpty( videoList ) ) {
                     // mail first one
@@ -107,6 +108,9 @@ function watchCB( err, value ) {
                     status: 'unsent'
                 };
                 isRec = false;
+                fs.unlink(videoPath, function ( error ) {
+                   console.log( 'Video unlinked: ', videoPath );
+                } );
             } );
         } );
     }
