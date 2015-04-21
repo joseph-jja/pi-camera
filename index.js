@@ -77,8 +77,8 @@ function watchCB( err, value ) {
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
-        cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t ' + waitTime;
-        ffmpegCmd = 'ffmpeg -i ' + videoPath + ' ' + mpegPath;
+        cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
+        ffmpegCmd = 'ffmpeg -r 20 -vcodec copy -f avi -i ' + videoPath + ' ' + mpegPath;
         console.log( "Video command: " + cmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // output is in stdout
