@@ -9,10 +9,10 @@ var Gpio = require( 'onoff' ).Gpio,
     sensorPin = 23,
     ledPin = 24,
     // module variables
+    waitTime = 5000,
     pir,
     led,
     args,
-    videoList = {},
     isRec = false,
     options,
     Sendmail;
@@ -29,14 +29,10 @@ led = new Leds( ( typeof options.useLight !== 'undefined' ), ledPin );
 
 Sendmail = new Mailer();
 
-Sendmail.waitTime = 5000;
-
 Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass );
 
 Sendmail.on( "start", function ( data ) {
-    videoList[ data.filename ] = {
-        status: 'sending'
-    };
+    console.log( "Sending " + JSON.stringify( data ) );
 } );
 
 Sendmail.on( "end", function ( data ) {
@@ -54,15 +50,6 @@ Sendmail.on( "end", function ( data ) {
             // in a perfect world we would be we cant here :( 
             fname = data.filename;
             utilities.safeUnlink( fname );
-            videoList[ data.filename ] = undefined;
-        }
-
-        // find next message to send
-        for ( x in videoList ) {
-            if ( videoList[ x ] && videoList[ x ].status === 'unsent' ) {
-                Sendmail.sendEmail( options.user, videoList[ x ].filename );
-                break;
-            }
         }
     }
 } );
@@ -90,7 +77,7 @@ function watchCB( err, value ) {
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
-        cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t ' + Sendmail.waitTime;
+        cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 15 -o ' + videoPath + ' -t ' + waitTime;
         ffmpegCmd = 'ffmpeg -i ' + videoPath + ' ' + mpegPath;
         console.log( "Video command: " + cmd );
         exec( cmd, function ( error, stdout, stderr ) {
@@ -98,19 +85,10 @@ function watchCB( err, value ) {
             console.log( 'Video saved: ', videoPath );
             // convert to avi to be smaller
             exec( ffmpegCmd, function ( error, stdout, stderr ) {
-                // no videos pending to be sent 
-                if ( _.isEmpty( videoList ) ) {
-                    // mail first one
-                    Sendmail.sendEmail( options.user, mpegPath );
-                }
-                videoList[ mpegPath ] = {
-                    filename: mpegPath,
-                    status: 'unsent'
-                };
+                // send the video
+                Sendmail.sendEmail( options.user, mpegPath );
                 isRec = false;
-                fs.unlink(videoPath, function ( error ) {
-                   console.log( 'Video unlinked: ', videoPath );
-                } );
+                utilities.safeUnlink( videoPath );
             } );
         } );
     }

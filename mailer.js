@@ -8,8 +8,6 @@ function Mailer() {
 
 util.inherits( Mailer, events.EventEmitter );
 
-Mailer.prototype.waitTime = 10000;
-
 Mailer.prototype.setupTransport = function ( host, port, user, pass ) {
     var options = {
         secure: false,
@@ -33,12 +31,12 @@ Mailer.prototype.sendEmail = function ( user, file ) {
     } );
 
     console.log( 'Sending an Email..' );
+    timenow = new Date();
     this.emit( "timerSet", {
         "filename": file,
-        "time": this.waitTime
+        "time": timenow.toDateString()
     } );
 
-    timenow = new Date();
     mailOptions = {
         from: user,
         to: user,
