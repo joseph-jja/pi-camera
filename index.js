@@ -1,5 +1,6 @@
 var Gpio = require( 'onoff' ).Gpio,
     Mailer = require( './mailer' ),
+    winston = require( 'winston' ),
     fs = require( 'fs' ),
     Leds = require( "./leds" ),
     exec = require( 'child_process' ).exec,
@@ -32,17 +33,17 @@ Sendmail = new Mailer();
 Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass );
 
 Sendmail.on( "start", function ( data ) {
-    console.log( "Sending " + JSON.stringify( data ) );
+    winston.log( "info", "Sending " + JSON.stringify( data ) );
 } );
 
 Sendmail.on( "end", function ( data ) {
     var x, fname;
     if ( data.error ) {
-        console.log( "An error has occured: " + data.error );
+        winston.log( "info", "An error has occured: " + data.error );
     } else {
         // message has been sent
         if ( data.info ) {
-            console.log( "Email status: " + JSON.stringify( data.info ) );
+            winston.log( "info", "Email status: " + JSON.stringify( data.info ) );
         }
 
         if ( data.filename ) {
@@ -61,11 +62,11 @@ function watchCB( err, value ) {
         exit();
     }
 
-    console.log( 'PIR state: ' + value );
+    winston.log( "info", 'PIR state: ' + value );
     led.changeState( value );
 
     if ( value === 1 && !isRec ) {
-        console.log( 'capturing video.. ' );
+        winston.log( "info", 'capturing video.. ' );
 
         isRec = true;
 
@@ -79,10 +80,10 @@ function watchCB( err, value ) {
         // fps we want low also for email
         cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
         ffmpegCmd = 'ffmpeg -r 20 -i ' + videoPath + ' ' + mpegPath;
-        console.log( "Video command: " + cmd );
+        winston.log( "info", "Video command: " + cmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // output is in stdout
-            console.log( 'Video saved: ', videoPath );
+            winston.log( "info", 'Video saved: ', videoPath );
             // convert video to be smaller
             exec( ffmpegCmd, function ( error, stdout, stderr ) {
                 // send the video
@@ -95,15 +96,15 @@ function watchCB( err, value ) {
 }
 pir.watch( watchCB );
 
-console.log( 'Pi Bot deployed successfully!' );
-console.log( 'Guarding...' );
+winston.log( "info", 'Pi Bot deployed successfully!' );
+winston.log( "info", 'Guarding...' );
 
 process.on( 'SIGINT', exit );
 
 function exit( code ) {
 
     if ( code ) {
-        console.log( "Exiting on code: " + code );
+        winston.log( "info", "Exiting on code: " + code );
     }
     pir.unexport();
     led.cleanup();

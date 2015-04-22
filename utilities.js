@@ -1,4 +1,5 @@
-var fs = require( "fs" );
+var fs = require( "fs" ),
+    winston = require( "winston" );
 
 function safeUnlink( filename ) {
     if ( filename ) {
@@ -7,13 +8,13 @@ function safeUnlink( filename ) {
         try {
             fs.unlink( filename, function ( err ) {
                 if ( err ) {
-                    console.log( err );
+                    winston.log( "error", err );
                     return;
                 }
-                console.log( "Unlinked : " + filename );
+                winston.log( "info", "Unlinked : " + filename );
             } );
         } catch ( e ) {
-            console.log( "ERROR: + e" );
+            winston.log( "error", "ERROR: + e" );
         }
     }
 }

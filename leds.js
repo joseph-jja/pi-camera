@@ -1,4 +1,4 @@
-var led,
+var led, winston = require( "winston" ),
     Gpio = require( 'onoff' ).Gpio;
 
 
@@ -16,11 +16,11 @@ Leds.prototype.changeState = function ( value ) {
     if ( this.enabled ) {
         if ( value === 1 ) {
             led.write( 1, function ( err ) {
-                console.log( "On " + err );
+                winston.log( "info", "On " + err );
             } );
         } else {
             led.write( 0, function ( err ) {
-                console.log( "Off " + err );
+                winston.log( "info", "Off " + err );
             } );
         }
     }
