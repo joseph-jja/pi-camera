@@ -10,7 +10,7 @@ var Gpio = require( 'onoff' ).Gpio,
     sensorPin = 23,
     ledPin = 24,
     // module variables
-    waitTime = 10000,
+    waitTime = 5000,
     pir,
     led,
     args,
@@ -79,7 +79,7 @@ function watchCB( err, value ) {
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
         cmd = 'raspivid -n --exposure auto -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
-        ffmpegCmd = 'ffmpeg -r 20 -i ' + videoPath + ' ' + mpegPath;
+        ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
         winston.log( "info", "Video command: " + cmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // output is in stdout
