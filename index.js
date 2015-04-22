@@ -26,7 +26,7 @@ args = process.argv;
 options = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 
 pir = new Gpio( sensorPin, 'in', 'both' );
-led = new Leds( ( typeof options.useLight !== 'undefined' ), ledPin );
+led = new Leds( ( typeof options.useLight !== 'undefined' && options.useLight ), ledPin );
 
 Sendmail = new Mailer();
 
