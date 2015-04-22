@@ -86,6 +86,7 @@ function watchCB( err, value ) {
             winston.log( "info", 'Video saved: ', videoPath );
             // convert video to be smaller
             exec( ffmpegCmd, function ( error, stdout, stderr ) {
+                winston.log( "info", "Video converted: " + ffmpegCmd );
                 // send the video
                 Sendmail.sendEmail( options.user, mpegPath );
                 isRec = false;
