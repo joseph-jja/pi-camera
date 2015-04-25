@@ -37,26 +37,22 @@ Sendmail.on( "start", function ( data ) {
 } );
 
 Sendmail.on( "end", function ( data ) {
-    var x, fname;
+    var fname;
     if ( data.error ) {
         winston.log( "info", "An error has occured: " + data.error );
-    } else {
-        // message has been sent
-        if ( data.info ) {
-            winston.log( "info", "Email status: " + JSON.stringify( data.info ) );
-        }
-
-        if ( data.filename ) {
-            // remove sent video
-            // in a perfect world we would be we cant here :( 
-            fname = data.filename;
-            utilities.safeUnlink( fname );
-        }
+    } else if ( data.info ) {
+        winston.log( "info", "Email status: " + JSON.stringify( data.info ) );
+    }
+    if ( data.filename ) {
+        // remove sent video
+        // in a perfect world we would be we cant here :( 
+        fname = data.filename;
+        utilities.safeUnlink( fname );
     }
 } );
 
 function watchCB( err, value ) {
-    var cmd, ffmpegCmd, videoPath, mpegPath, timestamp;
+    var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp;
 
     if ( err ) {
         exit();
@@ -71,9 +67,9 @@ function watchCB( err, value ) {
         isRec = true;
 
         timestamp = new Date();
-
-        videoPath = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds() + '.h264';
-        mpegPath = videoPath.replace( '.h264', '.mp4' );
+        videPathBase = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds(); 
+        videoPath = videPathBase + '.h264';
+        mpegPath = videPathBase + '.mp4';
 
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
