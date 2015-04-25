@@ -33,10 +33,6 @@ Mailer.prototype.sendEmail = function ( user, file ) {
 
     winston.log( "info", 'Sending an Email..' );
     timenow = new Date();
-    this.emit( "timerSet", {
-        "filename": file,
-        "time": timenow.toDateString()
-    } );
 
     mailOptions = {
         from: user,
