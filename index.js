@@ -73,7 +73,7 @@ function watchCB( err, value ) {
         
         nightMode = 'auto';
         if ( timestamp.getHours() > 18 || timestamp.getHours() < 6 ) {
-            nightMode = 'night';
+        //    nightMode = 'night';
         }
 
         // we don't want a preview, we want video 800x600 because we are emailing
