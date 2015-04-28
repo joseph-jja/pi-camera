@@ -83,6 +83,8 @@ function watchCB( err, value ) {
         ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
         winston.log( "info", "Video command: " + cmd );
         exec( cmd, function ( error, stdout, stderr ) {
+            // turn recording flag off ASAP
+            isRec = false;
             // output is in stdout
             winston.log( "info", 'Video saved: ', videoPath );
             // convert video to be smaller
@@ -90,7 +92,7 @@ function watchCB( err, value ) {
                 winston.log( "info", "Video converted: " + ffmpegCmd );
                 // send the video
                 Sendmail.sendEmail( options.user, mpegPath );
-                isRec = false;
+                // unlink the video now that it is converted
                 utilities.safeUnlink( videoPath );
             } );
         } );
