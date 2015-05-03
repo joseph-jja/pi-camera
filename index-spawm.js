@@ -71,18 +71,17 @@ function watchCB( err, value ) {
         videoPath = videPathBase + '.h264';
         mpegPath = videPathBase + '.mp4';
         
-        nightMode = 'auto';
+       // brightness  
+        nightMode = '60';
         if ( timestamp.getHours() > 18 || timestamp.getHours() < 6 ) {
-        //    nightMode = 'night';
+            nightMode = '70';
         }
 
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
-        //cmd = 'raspivid -n -ISO 800 --exposure ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
-        //ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
         winston.log( "info", "Video command: " + cmd );
-        cmd = spawn('raspivid', ['-n', '-ISO', '800', '--exposure', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime]);
+        cmd = spawn('raspivid', ['-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime]);
         cmd.on( 'close', function ( code ) {
             // turn recording flag off ASAP
             isRec = false;
