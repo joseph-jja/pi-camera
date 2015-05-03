@@ -1,4 +1,5 @@
 var fs = require( "fs" ),
+    request = require("request"),
     winston = require( "winston" );
 
 function safeUnlink( filename ) {
@@ -19,6 +20,18 @@ function safeUnlink( filename ) {
     }
 }
 
+// cm signature function (error, response, body) 
+function getSunriseSunset(lat, long, cb) {
+    var url, today = new Date(), dateString;
+    
+    // yyyymmdd
+    dateString = today.getFullYear() + "" ;
+    url = 'http://api.sunrise-sunset.org/json?'lat=' + lat + '&lng=' + long + '&date=' + dateString;
+    
+    request(url, cb);
+}
+
 module.exports = {
-    safeUnlink: safeUnlink
+    safeUnlink: safeUnlink, 
+    getSunriseSunset: getSunriseSunset
 };
