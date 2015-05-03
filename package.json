@@ -21,7 +21,7 @@
     "onoff": "^1.0.2",
     "underscore": "^1.8.2",
     "winston": "^1.0.0",
-    "request": "^2.55.1"
+    "request": "^2.55.0"
   },
   "devDependencies": {
     "grunt-jsbeautifier": "^0.2.10",

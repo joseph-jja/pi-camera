@@ -26,7 +26,7 @@ function getSunriseSunset(lat, long, cb) {
     
     // yyyymmdd
     dateString = today.getFullYear() + "" ;
-    url = 'http://api.sunrise-sunset.org/json?'lat=' + lat + '&lng=' + long + '&date=' + dateString;
+    url = 'http://api.sunrise-sunset.org/json?lat=' + lat + '&lng=' + long + '&date=' + dateString;
     
     request(url, cb);
 }
