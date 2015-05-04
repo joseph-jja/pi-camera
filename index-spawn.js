@@ -52,7 +52,8 @@ Sendmail.on( "end", function ( data ) {
 } );
 
 function watchCB( err, value ) {
-    var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode;
+    var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode, 
+        vidArgs;
 
     if ( err ) {
         exit();
@@ -81,7 +82,8 @@ function watchCB( err, value ) {
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
         winston.log( "info", "Video command: " + cmd );
-        cmd = spawn('raspivid', ['-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime]);
+        vidArgs = ['-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime];
+        cmd = spawn('raspivid', vidArgs);
         cmd.on( 'close', function ( code ) {
             // turn recording flag off ASAP
             isRec = false;
