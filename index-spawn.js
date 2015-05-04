@@ -2,6 +2,7 @@ var Gpio = require( 'onoff' ).Gpio,
     Mailer = require( './mailer' ),
     winston = require( 'winston' ),
     fs = require( 'fs' ),
+    os = require('os'),
     Leds = require( "./leds" ),
     spawn = require( 'child_process' ).spawn,
     utilities = require( "./utilities" ),
@@ -53,7 +54,7 @@ Sendmail.on( "end", function ( data ) {
 
 function watchCB( err, value ) {
     var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode,
-        vidArgs;
+        vidArgs, convArgs;
 
     if ( err ) {
         exit();
@@ -81,28 +82,42 @@ function watchCB( err, value ) {
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
-        winston.log( "info", "Video command: " + cmd );
+        // set video path to - to represent standard in or out
+        videoPath = '-';
         vidArgs = [ '-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime ];
+        convArgs = [ '-r', '20', '-i', videoPath, '-r', '15', mpegPath ];
         cmd = spawn( 'raspivid', vidArgs );
+        ffmpegCmd = spawn( 'avconv', convArgs );
+        winston.log( "info", "Video command: " + cmd + os.EOL + "Video converted command: " + ffmpegCmd );
+        
+        // video pipe 
+        cmd.stdout.on( 'data', function ( data ) {
+            ffmpegCmd.stdin.write(data);
+        });
+
+        cmd.stderr.on( 'data', function ( data ) {
+            winston.log( "error", "Video command error: " + data );
+        });
+        
         cmd.on( 'close', function ( code ) {
             // turn recording flag off ASAP
             isRec = false;
-            setTimeout( function () {
-                // output is in stdout
-                winston.log( "info", 'Video saved: ', videoPath );
-                // convert video to be smaller
-                ffmpegCmd = spawn( 'avconv', [ '-r', '20', '-i', videoPath, '-r', '15', mpegPath ] );
-                ffmpegCmd.on( 'close', function ( code ) {
-                    setTimeout( function () {
-                        winston.log( "info", "Video converted: " + ffmpegCmd );
-                        // send the video
-                        Sendmail.sendEmail( options.user, mpegPath );
-                        // unlink the video now that it is converted
-                        utilities.safeUnlink( videoPath );
-                    }, 0 );
-                } );
-            }, 0 );
-        } );
+            winston.log( "info", "Video command exited with: " + code );
+        });
+        
+        ffmpegCmd.stderr.on('data', function(data) {
+            winston.log( "error", "Video converted command error: " + data );
+        });
+          
+         ffmpegCmd.on( 'close', function ( code ) {
+            winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + ffmpegCmd );" 
+            
+            // send the video
+            Sendmail.sendEmail( options.user, mpegPath );
+                        
+            // unlink the video now that it is converted
+            utilities.safeUnlink( videoPath );
+        });   
     }
 }
 pir.watch( watchCB );
