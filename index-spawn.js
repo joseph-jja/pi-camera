@@ -110,6 +110,7 @@ function watchCB( err, value ) {
         } );
 
         cmd.on( 'close', function ( code ) {
+            ffmpegCmd.stdin.end();
             // turn recording flag off ASAP
             isRec = false;
             winston.log( "info", "Video command exited with: " + code );
