@@ -116,13 +116,17 @@ function watchCB( err, value ) {
         } );
 
         ffmpegCmd.on( 'close', function ( code ) {
-            winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + ffmpegCmd );
+            winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + mpegPath);
 
+            file stream.on('finish,', function() {
             // send the video
             Sendmail.sendEmail( options.user, mpegPath );
 
             // unlink the video now that it is converted
             utilities.safeUnlink( videoPath );
+            });
+
+            filestream.end();
         } );
     }
 }
