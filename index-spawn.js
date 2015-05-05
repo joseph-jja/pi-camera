@@ -88,7 +88,7 @@ function watchCB( err, value ) {
         convArgs = [ '-r', '20', '-i', videoPath, '-r', '15', mpegPath ];
         cmd = spawn( 'raspivid', vidArgs );
         ffmpegCmd = spawn( 'avconv', convArgs );
-        winston.log( "info", "Video command: " + cmd + os.EOL + "Video converted command: " + ffmpegCmd );
+        winston.log( "info", "Video command raspivid: " + JSON.stringify(vidArgs) + os.EOL + "Video converted command avconv: " + JSON.stringify(convArgs) );
 
         // video pipe 
         cmd.stdout.on( 'data', function ( data ) {
@@ -111,7 +111,6 @@ function watchCB( err, value ) {
 
         ffmpegCmd.on( 'close', function ( code ) {
             winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + ffmpegCmd );
-            " 
 
             // send the video
             Sendmail.sendEmail( options.user, mpegPath );
