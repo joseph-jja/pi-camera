@@ -85,7 +85,7 @@ function watchCB( err, value ) {
         // set video path to - to represent standard in or out
         videoPath = '-';
         vidArgs = [ '-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime ];
-        convArgs = [ '-r', '20', '-i', videoPath, '-r', '15', mpegPath ];
+        convArgs = [ '-r', '20', '-i', videoPath, '-r', '15', '-' ];   mpegPath ];
         cmd = spawn( 'raspivid', vidArgs );
         ffmpegCmd = spawn( 'avconv', convArgs );
         winston.log( "info", "Video command raspivid: " + JSON.stringify(vidArgs) + os.EOL + "Video converted command avconv: " + JSON.stringify(convArgs) );
@@ -105,6 +105,10 @@ function watchCB( err, value ) {
             // turn recording flag off ASAP
             isRec = false;
             winston.log( "info", "Video command exited with: " + code );
+        } );
+ 
+        ffmpegCmd.stdout.on( 'data', function( data ) {
+           filestream.write( data );
         } );
 
         ffmpegCmd.stderr.on( 'data', function ( data ) {
