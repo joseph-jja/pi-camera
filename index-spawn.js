@@ -91,7 +91,7 @@ function watchCB( err, value ) {
         winston.log( "info", "Video command raspivid: " + JSON.stringify( vidArgs ) + os.EOL + "Video converted command avconv: " + JSON.stringify( convArgs ) );
 
         // write the file
-        filestream = fs.createWritabeStream( mpegPath );
+        filestream = fs.createWriteStream( mpegPath );
         filestream.on( 'finish,', function () {
             // send the video
             Sendmail.sendEmail( options.user, mpegPath );
