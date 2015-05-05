@@ -54,7 +54,7 @@ Sendmail.on( "end", function ( data ) {
 
 function watchCB( err, value ) {
     var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode,
-        vidArgs, convArgs;
+        vidArgs, convArgs, filestream;
 
     if ( err ) {
         exit();
@@ -89,6 +89,8 @@ function watchCB( err, value ) {
         cmd = spawn( 'raspivid', vidArgs );
         ffmpegCmd = spawn( 'avconv', convArgs );
         winston.log( "info", "Video command raspivid: " + JSON.stringify(vidArgs) + os.EOL + "Video converted command avconv: " + JSON.stringify(convArgs) );
+
+        filestream = fs.createWritabeStream(mpegPath);
 
         // video pipe 
         cmd.stdout.on( 'data', function ( data ) {
