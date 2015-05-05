@@ -85,14 +85,22 @@ function watchCB( err, value ) {
         // set video path to - to represent standard in or out
         videoPath = '-';
         vidArgs = [ '-n', '-ISO', '800', '--exposure', 'auto', '-br', nightMode, '-w', '800', '-h', '600', '-fps', '20', '-o', videoPath, '-t', waitTime ];
-        convArgs = [ '-r', '20', '-i', videoPath, '-r', '15', '-' ];   mpegPath ];
+        convArgs = [ '-r', '20', '-i', videoPath, '-r', '15', '-' ]; // mpegPath ];
         cmd = spawn( 'raspivid', vidArgs );
         ffmpegCmd = spawn( 'avconv', convArgs );
-        winston.log( "info", "Video command raspivid: " + JSON.stringify(vidArgs) + os.EOL + "Video converted command avconv: " + JSON.stringify(convArgs) );
+        winston.log( "info", "Video command raspivid: " + JSON.stringify( vidArgs ) + os.EOL + "Video converted command avconv: " + JSON.stringify( convArgs ) );
 
-        filestream = fs.createWritabeStream(mpegPath);
+        // write the file
+        filestream = fs.createWritabeStream( mpegPath );
+        filestream.on( 'finish,', function () {
+            // send the video
+            Sendmail.sendEmail( options.user, mpegPath );
 
-        // video pipe 
+            // unlink the video now that it is converted
+            utilities.safeUnlink( videoPath );
+        } );
+
+        // video command 
         cmd.stdout.on( 'data', function ( data ) {
             ffmpegCmd.stdin.write( data );
         } );
@@ -106,9 +114,10 @@ function watchCB( err, value ) {
             isRec = false;
             winston.log( "info", "Video command exited with: " + code );
         } );
- 
-        ffmpegCmd.stdout.on( 'data', function( data ) {
-           filestream.write( data );
+
+        // convert video command 
+        ffmpegCmd.stdout.on( 'data', function ( data ) {
+            filestream.write( data );
         } );
 
         ffmpegCmd.stderr.on( 'data', function ( data ) {
@@ -116,15 +125,7 @@ function watchCB( err, value ) {
         } );
 
         ffmpegCmd.on( 'close', function ( code ) {
-            winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + mpegPath);
-
-            file stream.on('finish,', function() {
-            // send the video
-            Sendmail.sendEmail( options.user, mpegPath );
-
-            // unlink the video now that it is converted
-            utilities.safeUnlink( videoPath );
-            });
+            winston.log( "info", "Video converted command exited with: " + code + os.EOL + " Video converted: " + mpegPath );
 
             filestream.end();
         } );
