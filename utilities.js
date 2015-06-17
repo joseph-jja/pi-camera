@@ -2,8 +2,9 @@ var fs = require( "fs" ),
     request = require( "request" ),
     winston = require( "winston" ),
     sunData = {
-        "sunrise": "6:30:11 AM",
-        "sunset": "6:30:11 PM"
+        "sunrise":"12:47:15 PM",
+        "sunset":"3:33:44 AM", 
+        "offset" = 7;
     };
 
 function safeUnlink( filename ) {
@@ -42,6 +43,7 @@ function getSunriseSunset( lat, long, callback ) {
             data = JSON.parse( body );
             sunData.sunrise = data.results.sunrise;
             sunData.sunset = data.results.sunset;
+            sunData.offset = offset;
         }
         callback( sunData );
     } );
