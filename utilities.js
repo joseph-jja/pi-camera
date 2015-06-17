@@ -1,7 +1,10 @@
 var fs = require( "fs" ),
     request = require( "request" ),
-    winston = require( "winston" ), 
-    sunData = { "sunrise":"8:27:55 PM","sunset":"11:14:31 AM" };
+    winston = require( "winston" ),
+    sunData = {
+        "sunrise": "8:27:55 PM",
+        "sunset": "11:14:31 AM"
+    };
 
 function safeUnlink( filename ) {
     if ( filename ) {
@@ -31,14 +34,14 @@ function getSunriseSunset( lat, long, callback ) {
     dateString = today.getFullYear() + "";
     url = 'http://api.sunrise-sunset.org/json?lat=' + lat + '&lng=' + long + '&date=' + dateString;
 
-    request( url, function(req, res) {
+    request( url, function ( req, res ) {
         var data, body = res.body;
         if ( body ) {
-            data = JSON.parse(body);
-            sunData.sunrise= data.results.sunrise;
-            sunData.sunset= data.results.sunset;
+            data = JSON.parse( body );
+            sunData.sunrise = data.results.sunrise;
+            sunData.sunset = data.results.sunset;
         }
-        callback(sunData);
+        callback( sunData );
     } );
 }
 
