@@ -22,9 +22,8 @@ function safeUnlink( filename ) {
 }
 
 // cm signature function (error, response, body) 
-// callback takes 2 arguments request and response
-// in the response body is where the json data will be
-function updateSunriseSunset( lat, long ) {
+// callback get sunData argument
+function getSunriseSunset( lat, long, callback ) {
     var url, today = new Date(),
         dateString;
 
@@ -39,10 +38,11 @@ function updateSunriseSunset( lat, long ) {
             sunData.sunrise= data.results.sunrise;
             sunData.sunset= data.results.sunset;
         }
+        callback(sunData);
     } );
 }
 
 module.exports = {
     safeUnlink: safeUnlink,
-    updateSunriseSunset: updateSunriseSunset
+    getSunriseSunset: getSunriseSunset
 };
