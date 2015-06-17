@@ -27,12 +27,11 @@ function safeUnlink( filename ) {
 // cm signature function (error, response, body) 
 // callback get sunData argument
 function getSunriseSunset( lat, long, callback ) {
-    var url, today = new Date(),
-        dateString;
+    var url;
 
     // yyyymmdd
     dateString = today.getFullYear() + "";
-    url = 'http://api.sunrise-sunset.org/json?lat=' + lat + '&lng=' + long + '&date=' + dateString;
+    url = 'http://api.sunrise-sunset.org/json?lat=' + lat + '&lng=' + long + '&date=today';
 
     request( url, function ( req, res ) {
         var data, body = res.body;
