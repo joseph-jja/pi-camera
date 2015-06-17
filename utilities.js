@@ -1,6 +1,7 @@
 var fs = require( "fs" ),
     request = require( "request" ),
-    winston = require( "winston" );
+    winston = require( "winston" ), 
+    sunData = { "sunrise":"8:27:55 PM","sunset":"11:14:31 AM" };
 
 function safeUnlink( filename ) {
     if ( filename ) {
@@ -23,7 +24,7 @@ function safeUnlink( filename ) {
 // cm signature function (error, response, body) 
 // callback takes 2 arguments request and response
 // in the response body is where the json data will be
-function getSunriseSunset( lat, long, cb ) {
+function updateSunriseSunset( lat, long ) {
     var url, today = new Date(),
         dateString;
 
@@ -31,10 +32,17 @@ function getSunriseSunset( lat, long, cb ) {
     dateString = today.getFullYear() + "";
     url = 'http://api.sunrise-sunset.org/json?lat=' + lat + '&lng=' + long + '&date=' + dateString;
 
-    request( url, cb );
+    request( url, function(req, res) {
+        var data, body = res.body;
+        if ( body ) {
+            data = JSON.parse(body);
+            sunData.sunrise= data.results.sunrise;
+            sunData.sunset= data.results.sunset;
+        }
+    } );
 }
 
 module.exports = {
     safeUnlink: safeUnlink,
-    getSunriseSunset: getSunriseSunset
+    updateSunriseSunset: updateSunriseSunset
 };
