@@ -21,6 +21,8 @@ function safeUnlink( filename ) {
 }
 
 // cm signature function (error, response, body) 
+// callback takes 2 arguments request and response
+// in the response body is where the json data will be
 function getSunriseSunset( lat, long, cb ) {
     var url, today = new Date(),
         dateString;
