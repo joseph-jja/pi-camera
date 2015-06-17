@@ -52,6 +52,7 @@ Sendmail.on( "end", function ( data ) {
     }
 } );
 
+// lat long "37.772972", "-122.4431297"
 sunData = utilities.getDefaultSunriseSunset();
 sunData.sunriseHour = sunData.sunrise.substring( 0, sunData.sunrise.indexOf( ":" ) );
 sunData.sunsetHour = sunData.sunset.substring( 0, sunData.sunset.indexOf( ":" ) );
