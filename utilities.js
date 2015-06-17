@@ -4,7 +4,7 @@ var fs = require( "fs" ),
     sunData = {
         "sunrise":"12:47:15 PM",
         "sunset":"3:33:44 AM", 
-        "offset" = 7;
+        "offset" = 7
     };
 
 function safeUnlink( filename ) {
