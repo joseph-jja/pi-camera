@@ -27,7 +27,10 @@ function safeUnlink( filename ) {
 // cm signature function (error, response, body) 
 // callback get sunData argument
 function getSunriseSunset( lat, long, callback ) {
-    var url;
+    var url, now = new Date(), offset;
+
+    // offset in hours
+    offset = now.getTimezoneOffset() / 60;
 
     // yyyymmdd
     dateString = today.getFullYear() + "";
