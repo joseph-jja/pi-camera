@@ -45,7 +45,12 @@ function getSunriseSunset( lat, long, callback ) {
     } );
 }
 
+function getDefaultSunriseSunset() {
+    return sunData;
+}
+
 module.exports = {
     safeUnlink: safeUnlink,
-    getSunriseSunset: getSunriseSunset
+    getSunriseSunset: getSunriseSunset, 
+    getDefaultSunriseSunset: getDefaultSunriseSunset
 };
