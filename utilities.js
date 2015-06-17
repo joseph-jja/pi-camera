@@ -51,6 +51,6 @@ function getDefaultSunriseSunset() {
 
 module.exports = {
     safeUnlink: safeUnlink,
-    getSunriseSunset: getSunriseSunset, 
+    getSunriseSunset: getSunriseSunset,
     getDefaultSunriseSunset: getDefaultSunriseSunset
 };
