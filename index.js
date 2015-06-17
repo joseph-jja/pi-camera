@@ -16,7 +16,8 @@ var Gpio = require( 'onoff' ).Gpio,
     args,
     isRec = false,
     options,
-    Sendmail;
+    Sendmail. 
+    sunData;
 
 // command line arguments    
 args = process.argv;
@@ -50,6 +51,10 @@ Sendmail.on( "end", function ( data ) {
         utilities.safeUnlink( fname );
     }
 } );
+
+sunData = utilities.getDefaultSunriseSunset();
+sunData.sunriseHour = sunData.sunrise.substring(0, sunData.sunrise.indexOf(":"));
+sunData.sunsetHour = sunData.sunset.substring(0, sunData.sunset.indexOf(":"));
 
 function watchCB( err, value ) {
     var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode;
