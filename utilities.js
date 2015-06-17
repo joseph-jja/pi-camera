@@ -2,8 +2,8 @@ var fs = require( "fs" ),
     request = require( "request" ),
     winston = require( "winston" ),
     sunData = {
-        "sunrise": "8:27:55 PM",
-        "sunset": "11:14:31 AM"
+        "sunrise": "6:30:11 AM",
+        "sunset": "6:30:11 PM"
     };
 
 function safeUnlink( filename ) {
