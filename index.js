@@ -10,7 +10,7 @@ var Gpio = require( 'onoff' ).Gpio,
     sensorPin = 23,
     ledPin = 24,
     // module variables
-    waitTime = 10000,
+    waitTime = 7500,
     pir,
     led,
     args,
