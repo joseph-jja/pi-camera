@@ -10,14 +10,14 @@ var Gpio = require( 'onoff' ).Gpio,
     sensorPin = 23,
     ledPin = 24,
     // module variables
-    waitTime = 5000,
+    waitTime = 7000,
     pir,
     led,
     args,
     isRec = false,
     options,
-    Sendmail.
-sunData;
+    Sendmail,
+    sunData;
 
 // command line arguments    
 args = process.argv;
