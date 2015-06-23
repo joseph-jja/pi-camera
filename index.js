@@ -88,7 +88,8 @@ function watchCB( err, value ) {
         // fps we want low also for email
         cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
         ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
-        winston.log( "info", "Video command: " + cmd );
+        winston.log( "info", "Video record command: " + cmd );
+        winston.log( "info", "Video convert command: " + ffmpegCmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // turn recording flag off ASAP
             isRec = false;
@@ -96,7 +97,6 @@ function watchCB( err, value ) {
             winston.log( "info", 'Video saved: ', videoPath );
             // convert video to be smaller
             exec( ffmpegCmd, function ( error, stdout, stderr ) {
-                winston.log( "info", "Video converted: " + ffmpegCmd );
                 // send the video
                 Sendmail.sendEmail( options.user, mpegPath );
                 // unlink the video now that it is converted
