@@ -118,7 +118,7 @@ listener = messenger.createListener( options.listenPort );
 listener.on( options.listenMessage, function ( m, data ) {
     doSend = !doSend;
     winston.log( "info", data );
-    m.reply("Thanks for the data! " + doSend);
+    m.reply( "Thanks for the data! " + doSend );
 } );
 
 winston.log( "info", 'Pi Bot deployed successfully!' );
