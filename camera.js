@@ -115,9 +115,10 @@ function watchCB( err, value ) {
 pir.watch( watchCB );
 
 listener = messenger.createListener( options.listenPort );
-listener.on( options.listenMesage, function ( m, data ) {
+listener.on( options.listenMessage, function ( m, data ) {
     doSend = !doSend;
     winston.log( "info", data );
+    m.reply("Thanks for the data! " + doSend);
 } );
 
 winston.log( "info", 'Pi Bot deployed successfully!' );
