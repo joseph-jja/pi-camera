@@ -8,6 +8,7 @@ This is a simple code couple of scripts for making a motion detection camera cap
 - clone this repo 
 - create a config.json for the mail 
 - if you are like me, you'll want a read only filesystem to save your sd card in case of power outage or just to reduce wear, so execute the following commands
+  - sudo apt-get install unionfs-fuse
   - cd /home/pi/pi-camera
   - cp ro_mount/cmdline.txt /boot
   - mkdir /orig
