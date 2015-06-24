@@ -25,3 +25,7 @@ This is a simple code couple of scripts for making a motion detection camera cap
   - sudo rm /var/swap
 
 ## NOTE: This code was originally taken from pi_videoEMailIntruder.  The email code was cleaned up and made into a module.  
+
+## To swich from read only to read and write you may need to use fuser
+### sudo fuser -c /etc
+### then sudo kill -9 <pids>
