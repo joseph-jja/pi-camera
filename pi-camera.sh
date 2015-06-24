@@ -32,7 +32,7 @@ FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 50
 
 # pi camera code setup
 BASE_CODE=/home/pi/pi-camera
-PI_CAMERA_JS=index.js
+PI_CAMERA_JS=camera.js
 CONFIG=/home/pi/config.json
 
 start_program () {

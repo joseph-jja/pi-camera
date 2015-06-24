@@ -15,9 +15,12 @@ var Gpio = require( 'onoff' ).Gpio,
     led,
     args,
     isRec = false,
+    doSend = true,
     options,
     Sendmail,
-    sunData;
+    sunData,
+    listener,
+    messenger = require( "messenger" );
 
 // command line arguments    
 args = process.argv;
@@ -98,7 +101,11 @@ function watchCB( err, value ) {
             // convert video to be smaller
             exec( ffmpegCmd, function ( error, stdout, stderr ) {
                 // send the video
-                Sendmail.sendEmail( options.user, mpegPath );
+                if ( doSend ) {
+                    Sendmail.sendEmail( options.user, mpegPath );
+                } else {
+                    utilities.safeUnlink( mpegPath );
+                }
                 // unlink the video now that it is converted
                 utilities.safeUnlink( videoPath );
             } );
@@ -106,6 +113,12 @@ function watchCB( err, value ) {
     }
 }
 pir.watch( watchCB );
+
+listener = messenger.createListener( options.listenPort );
+listener.on( options.listenMesage, function ( m, data ) {
+    doSend = !doSend;
+    winston.log( "info", data );
+} );
 
 winston.log( "info", 'Pi Bot deployed successfully!' );
 winston.log( "info", 'Guarding...' );
