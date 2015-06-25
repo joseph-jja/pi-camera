@@ -13,3 +13,13 @@ sudo dpkg --purge rsyslog
 
 sudo insserv -r alsa-utils # if you don't need alsa stuff (sound output)
 sudo insserv -r fake-hwclock # probably already removed at this point..
+
+# make these tmpfs?
+#rm -rf /var/lib/dhcp/
+#ln -s /tmp /var/lib/dhcp
+
+#You can consider adding more symlinks from some /var subdirectories, especially run,spool and lock
+#rm -rf /var/run /var/spool /var/lock
+#ln -s /tmp /var/run 
+#ln -s /tmp /var/spool
+#ln -s /tmp /var/lock
