@@ -120,7 +120,7 @@ listener.on( options.listenMessage, function ( m, data ) {
         doSend = !doSend;
     }
     //winston.log( "debug", data.changeMode + " " + doSend );
-    winston.log( "info", "Current mode of recording " + doSend );
+    winston.log( "info", "Current mode of notification " + doSend );
     // always reply with status
     m.reply( options.replyMessage + doSend );
 } );
