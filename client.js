@@ -14,6 +14,6 @@ setTimeout( function () {
     }, function () {
         console.log( "Done! " + JSON.stringify( arguments ) );
         // client does not exit :(
-        process.abort();
+        process.exit(0);
     } );
 }, 2000 );
