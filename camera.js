@@ -10,7 +10,7 @@ var Gpio = require( 'onoff' ).Gpio,
     sensorPin = 23,
     ledPin = 24,
     // module variables
-    waitTime = 7500,
+    waitTime = 10000,
     pir,
     led,
     args,
@@ -116,9 +116,13 @@ pir.watch( watchCB );
 
 listener = messenger.createListener( options.listenPort );
 listener.on( options.listenMessage, function ( m, data ) {
-    doSend = !doSend;
-    winston.log( "info", data );
-    m.reply( "Thanks for the data! " + doSend );
+    if ( data.changeMode === options.changeModeKey ) {
+        doSend = !doSend;
+    }
+    //winston.log( "debug", data.changeMode + " " + doSend );
+    winston.log( "info", "Current mode of recording " + doSend );
+    // always reply with status
+    m.reply( options.replyMessage + doSend );
 } );
 
 winston.log( "info", 'Pi Bot deployed successfully!' );

@@ -10,7 +10,7 @@ config = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 client = messenger.createSpeaker( config.listenPort );
 setTimeout( function () {
     client.send( config.listenMessage, {
-        changeMode: 'please'
+        changeMode: config.changeModeKey
     }, function () {
         console.log( "Done! " + JSON.stringify( arguments ) );
         // client does not exit :(
