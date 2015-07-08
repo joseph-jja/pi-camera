@@ -116,13 +116,15 @@ pir.watch( watchCB );
 
 listener = messenger.createListener( options.listenPort );
 listener.on( options.listenMessage, function ( m, data ) {
+    var response = {};
     if ( data.changeMode === options.changeModeKey ) {
         doSend = !doSend;
     }
     //winston.log( "debug", data.changeMode + " " + doSend );
     winston.log( "info", "Current mode of notification " + doSend );
     // always reply with status
-    m.reply( options.replyMessage + doSend );
+    response[ options.replyMessage ] = doSend;
+    m.reply( response );
 } );
 
 winston.log( "info", 'Pi Bot deployed successfully!' );
