@@ -7,7 +7,7 @@ var express = require( 'express' ),
     app = express();
 
 app.engine( '.hbs', exphbs( {
-    defaultLayout: 'single',
+    defaultLayout: 'baseLayout',
     extname: '.hbs'
 } ) );
 app.set( 'view engine', '.hbs' );
@@ -28,8 +28,8 @@ app.get( '/', function ( req, res ) {
             result += err;
         }
         result = result.replace("Done!", "");
-        result = result.replace(/\ /g, "");
-        res.send( '<html><body><pre>' + result + '</pre></body></html>' );
+        result = result.replace(/\ /g, "").toLowerCase();
+        res.render('index', JSON.parse(result));
     } );
 } );
 
