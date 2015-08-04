@@ -4,13 +4,18 @@ var express = require( 'express' ),
     winston = require( 'winston' ),
     exec = require( "child_process" ).exec,
     exphbs = require( 'express-handlebars' ),
-    app = express();
+    app = express(),
+    fs = require( "fs" ),
+    config;
 
 app.engine( '.hbs', exphbs( {
     defaultLayout: 'baseLayout',
     extname: '.hbs'
 } ) );
 app.set( 'view engine', '.hbs' );
+
+// read config
+config = JSON.parse( fs.readFileSync( args[ 3 ] ) );
 
 // respond with "hello world" when a GET request is made to the homepage
 app.get( '/', function ( req, res ) {
@@ -27,9 +32,11 @@ app.get( '/', function ( req, res ) {
         if ( err ) {
             result += err;
         }
-        result = result.replace("Done!", "");
-        result = result.replace(/\ /g, "").toLowerCase();
-        res.render('index', JSON.parse(result));
+        result = result.replace( "Done!", "" );
+        result = JSON.parse( result );
+        res.render( 'index', {
+            "currentState": result[ config.replyMessage ]
+        } );
     } );
 } );
 
