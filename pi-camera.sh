@@ -35,8 +35,18 @@ BASE_CODE=/home/pi/pi-camera
 PI_CAMERA_JS=camera.js
 CONFIG=/home/pi/config.json
 
+# client condig
+WEB_APP=server.js
+CLIENT=client.js
+WEB_PID_FILE=/var/run/forever.pid
+WEB_APP_LOG=/var/log/pi-server.log
+WEB_APP_ERR_LOG=/var/log/pi-server.error.log
+WEB_LOG_FILES="-a -l $FOREVER_LOG -o $WEB_APP_LOG -e $WEB_APP_ERR_LOG "
+FOREVER_WEB_OPTS="$WEB_LOG_FILES --pidFile $WEB_PID_FILE --spinSleepTime 1000 --minUptime 500"
+
 start_program () {
     cd $BASE_CODE && $FOREVER_BIN --uid "root" start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
+    #cd $BASE_CODE && $FOREVER_BIN --uid "root" start $FOREVER_WEB_OPTS $WEB_APP $CLIENT $CONFIG
 }
 
 stop_program () {
