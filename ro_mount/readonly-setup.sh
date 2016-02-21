@@ -2,9 +2,9 @@
 
 # taken from http://k3a.me/how-to-make-raspberrypi-truly-read-only-reliable-and-trouble-free/
 
-sumo dphys-swapfile swapoff
-sumo dphys-swapfile uninstall
-sumo update-rc.d dphys-swapfile disable
+sudo dphys-swapfile swapoff
+sudo dphys-swapfile uninstall
+sudo update-rc.d dphys-swapfile disable
 
 #sudo  apt-get remove --purge wolfram-engine triggerhappy cron anacron logrotate dbus dphys-swapfile xserver-common lightdm fake-hwclock
 sudo  apt-get remove --purge wolfram-engine triggerhappy dphys-swapfile xserver-common lightdm fake-hwclock
