@@ -45,16 +45,17 @@ WEB_LOG_FILES="-a -l $FOREVER_LOG -o $WEB_APP_LOG -e $WEB_APP_ERR_LOG "
 FOREVER_WEB_OPTS="$WEB_LOG_FILES --pidFile $WEB_PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 start_program () {
-    cd $BASE_CODE && $FOREVER_BIN --uid "root" start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
-    #cd $BASE_CODE && $FOREVER_BIN --uid "root" start $FOREVER_WEB_OPTS $WEB_APP $CLIENT $CONFIG
+    cd $BASE_CODE && $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
+    cd $BASE_CODE && $FOREVER_BIN start $FOREVER_WEB_OPTS $WEB_APP $CLIENT $CONFIG
 }
 
 stop_program () {
-    cd $BASE_CODE && $FOREVER_BIN --uid "root" stop $PI_CAMERA_JS
+    cd $BASE_CODE && $FOREVER_BIN stop $PI_CAMERA_JS
+    cd $BASE_CODE && $FOREVER_BIN stop $WEB_APP
 }
 
 do_status () {
-    cd $BASE_CODE && $FOREVER_BIN --uid "root" list
+    cd $BASE_CODE && $FOREVER_BIN list
 }
 
 case "$1" in
