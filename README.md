@@ -31,5 +31,6 @@ This is a simple code couple of scripts for making a motion detection camera cap
 ### then sudo kill -9 <pids>
 
 # you will need to generate ssl keys to do ssl
-- openssl genrsa -des3 -out private.pem 2048
-- openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+- openssl req -newkey rsa:2048 -nodes -keyout domain.key -out domain.csr
+== pass in you info for -subj "/C=US/ST=New York/L=Brooklyn/O=Example Brooklyn Company/CN=examplebrooklyn.com"
+
