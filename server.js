@@ -11,6 +11,7 @@ var express = require( 'express' ),
     http = require( 'http' ),
     fs = require( "fs" ),
     clientCode,
+    options = {},
     clientConfig,
     config;
 
