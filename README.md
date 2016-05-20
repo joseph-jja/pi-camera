@@ -29,3 +29,7 @@ This is a simple code couple of scripts for making a motion detection camera cap
 ## To swich from read only to read and write you may need to use fuser
 ### sudo fuser -c /etc
 ### then sudo kill -9 <pids>
+
+# you will need to generate ssl keys to do ssl
+- openssl genrsa -des3 -out private.pem 2048
+- openssl rsa -in private.pem -outform PEM -pubout -out public.pem
