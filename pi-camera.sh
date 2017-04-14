@@ -19,8 +19,12 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 FOREVER_ROOT=/tmp
 export FOREVER_ROOT
 
+NODE_HOME=/usr/local/node-v6.10.2-linux-armv6l
+export NODE_HOME
+export PATH=$NODE_HOME/bin:$PATH
+
 # setup full path to binary files
-FOREVER_BIN=/usr/local/bin/forever
+FOREVER_BIN=$NODE_HOME/bin/forever
 
 # forever setup
 FOREVER_LOG=/var/log/forever.log
