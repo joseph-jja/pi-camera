@@ -1,10 +1,10 @@
 var client,
-    fs = require( "fs" ),
+    fs = require( 'fs' ),
     config, args,
     msg = {
-        changeMode: "status"
+        changeMode: 'status'
     },
-    messenger = require( "messenger" );
+    messenger = require( 'messenger; );
 
 // get args and read config 
 args = process.argv;
@@ -19,7 +19,7 @@ if ( args[ 3 ] ) {
 }
 setTimeout( function () {
     client.send( config.listenMessage, msg, function ( resp ) {
-        console.log( "Done! " + JSON.stringify( resp ) );
+        console.log( 'Done! ' + JSON.stringify( resp ) );
         // client does not exit :(
         process.exit( 0 );
     } );
