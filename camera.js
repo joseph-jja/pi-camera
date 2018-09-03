@@ -22,6 +22,8 @@ var Gpio = require( 'onoff' ).Gpio,
     listener,
     messenger = require( 'messenger' );
 
+winston.level = 'info';
+
 // command line arguments    
 args = process.argv;
 
@@ -37,15 +39,15 @@ Sendmail = new Mailer();
 Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass );
 
 Sendmail.on( 'start', function ( data ) {
-    winston.log( 'info', 'Sending ' + JSON.stringify( data ) );
+    winston.info( 'Sending ' + JSON.stringify( data ) );
 } );
 
 Sendmail.on( 'end', function ( data ) {
     var fname;
     if ( data.error ) {
-        winston.log( 'info', 'An error has occured: ' + data.error );
+        winston.info( 'An error has occured: ' + data.error );
     } else if ( data.info ) {
-        winston.log( 'info', 'Email status: ' + JSON.stringify( data.info ) );
+        winston.info( 'Email status: ' + JSON.stringify( data.info ) );
     }
     if ( data.filename ) {
         // remove sent video
@@ -57,27 +59,27 @@ Sendmail.on( 'end', function ( data ) {
 
 // lat long '37.772972', '-122.4431297'
 sunData = utilities.getDefaultSunriseSunset();
-sunData.sunriseHour = sunData.sunrise.substring( 0, sunData.sunrise.indexOf( ":" ) );
-sunData.sunsetHour = sunData.sunset.substring( 0, sunData.sunset.indexOf( ":" ) );
+sunData.sunriseHour = sunData.sunrise.substring( 0, sunData.sunrise.indexOf( ':' ) );
+sunData.sunsetHour = sunData.sunset.substring( 0, sunData.sunset.indexOf( ':' ) );
 
 function watchCB( err, value ) {
     var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode;
 
     if ( err ) {
-        winston.info(err);
+        winston.info( err );
         return;
     }
 
-    winston.log( "info", 'PIR state: ' + value );
+    winston.info( 'PIR state: ' + value );
     led.changeState( value );
 
     if ( value === 1 && !isRec ) {
-        winston.log( 'info', 'capturing video.. ' );
+        winston.info( 'capturing video.. ' );
 
         isRec = true;
 
         timestamp = new Date();
-        videPathBase = '/tmp/video_' + timestamp.getHours() + "_" + timestamp.getMinutes() + "_" + timestamp.getSeconds();
+        videPathBase = '/tmp/video_' + timestamp.getHours() + '_' + timestamp.getMinutes() + '_' + timestamp.getSeconds();
         videoPath = videPathBase + '.h264';
         mpegPath = videPathBase + '.mp4';
 
@@ -92,13 +94,13 @@ function watchCB( err, value ) {
         // fps we want low also for email
         cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
         ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
-        winston.log( 'info', 'Video record command: ' + cmd );
-        winston.log( 'info', 'Video convert command: ' + ffmpegCmd );
+        winston.debug( 'Video record command: ' + cmd );
+        winston.debug( 'Video convert command: ' + ffmpegCmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // turn recording flag off ASAP
             isRec = false;
             // output is in stdout
-            winston.log( "info", 'Video saved: ', videoPath );
+            winston.debug( 'Video saved: ', videoPath );
             // convert video to be smaller
             exec( ffmpegCmd, function ( error, stdout, stderr ) {
                 // send the video
@@ -121,22 +123,22 @@ listener.on( options.listenMessage, function ( m, data ) {
     if ( data.changeMode === options.changeModeKey ) {
         doSend = !doSend;
     }
-    //winston.log( "debug", data.changeMode + " " + doSend );
-    winston.log( "info", "Current mode of notification " + doSend );
+    winston.debug( data.changeMode + ' ' + doSend );
+    winston.info( 'Current mode of notification ' + doSend );
     // always reply with status
     response[ options.replyMessage ] = doSend;
     m.reply( response );
 } );
 
-winston.log( "info", 'Pi Bot deployed successfully!' );
-winston.log( "info", 'Guarding...' );
+winston.info( 'Pi Bot deployed successfully!' );
+winston.info( 'Guarding...' );
 
 process.on( 'SIGINT', exit );
 
 function exit( code ) {
 
     if ( code ) {
-        winston.log( "info", "Exiting on code: " + code );
+        winston.info( 'Exiting on code: ' + code );
     }
     pir.unexport();
     led.cleanup();
