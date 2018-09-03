@@ -2,10 +2,10 @@ var Gpio = require( 'onoff' ).Gpio,
     Mailer = require( './mailer' ),
     winston = require( 'winston' ),
     fs = require( 'fs' ),
-    Leds = require( "./leds" ),
+    Leds = require( './leds' ),
     exec = require( 'child_process' ).exec,
-    utilities = require( "./utilities" ),
-    _ = require( "underscore" ),
+    utilities = require( './utilities' ),
+    _ = require( 'underscore' ),
     // constants
     sensorPin = 23,
     ledPin = 24,
@@ -20,7 +20,7 @@ var Gpio = require( 'onoff' ).Gpio,
     Sendmail,
     sunData,
     listener,
-    messenger = require( "messenger" );
+    messenger = require( 'messenger' );
 
 // command line arguments    
 args = process.argv;
@@ -36,16 +36,16 @@ Sendmail = new Mailer();
 
 Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass );
 
-Sendmail.on( "start", function ( data ) {
-    winston.log( "info", "Sending " + JSON.stringify( data ) );
+Sendmail.on( 'start', function ( data ) {
+    winston.log( 'info', 'Sending ' + JSON.stringify( data ) );
 } );
 
-Sendmail.on( "end", function ( data ) {
+Sendmail.on( 'end', function ( data ) {
     var fname;
     if ( data.error ) {
-        winston.log( "info", "An error has occured: " + data.error );
+        winston.log( 'info', 'An error has occured: ' + data.error );
     } else if ( data.info ) {
-        winston.log( "info", "Email status: " + JSON.stringify( data.info ) );
+        winston.log( 'info', 'Email status: ' + JSON.stringify( data.info ) );
     }
     if ( data.filename ) {
         // remove sent video
@@ -55,7 +55,7 @@ Sendmail.on( "end", function ( data ) {
     }
 } );
 
-// lat long "37.772972", "-122.4431297"
+// lat long '37.772972', '-122.4431297'
 sunData = utilities.getDefaultSunriseSunset();
 sunData.sunriseHour = sunData.sunrise.substring( 0, sunData.sunrise.indexOf( ":" ) );
 sunData.sunsetHour = sunData.sunset.substring( 0, sunData.sunset.indexOf( ":" ) );
@@ -64,14 +64,15 @@ function watchCB( err, value ) {
     var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode;
 
     if ( err ) {
-        exit();
+        winston.info(err);
+        return;
     }
 
     winston.log( "info", 'PIR state: ' + value );
     led.changeState( value );
 
     if ( value === 1 && !isRec ) {
-        winston.log( "info", 'capturing video.. ' );
+        winston.log( 'info', 'capturing video.. ' );
 
         isRec = true;
 
@@ -91,8 +92,8 @@ function watchCB( err, value ) {
         // fps we want low also for email
         cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
         ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
-        winston.log( "info", "Video record command: " + cmd );
-        winston.log( "info", "Video convert command: " + ffmpegCmd );
+        winston.log( 'info', 'Video record command: ' + cmd );
+        winston.log( 'info', 'Video convert command: ' + ffmpegCmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // turn recording flag off ASAP
             isRec = false;
