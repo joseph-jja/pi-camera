@@ -1,4 +1,5 @@
 var express = require( 'express' ),
+    baseDir = process.cwd(),
     server,
     secureServer,
     args = process.argv,
@@ -34,6 +35,11 @@ clientCode = args[ 2 ];
 clientConfig = args[ 3 ];
 config = JSON.parse( fs.readFileSync( clientConfig ) );
 
+const sslOptions = { 
+    key: fs.readFileSync(`${baseDir}/keys/domain.key`),
+    cert: fs.readFileSync(`${baseDir}/keys/domain.csr`)
+}
+
 function sendResponse( res, toggle ) {
     var result, cmd;
     cmd = "node " + clientCode + " " + clientConfig;
@@ -52,6 +58,7 @@ function sendResponse( res, toggle ) {
             result += err;
         }
         if ( result ) {
+            winston.debug(result);
             result = result.replace( "Done!", "" );
             result = JSON.parse( result );
             res.render( 'index', {
@@ -83,5 +90,6 @@ app.post( '/update', function ( req, res ) {
 server = http.createServer( app );
 server.listen( 5000 );
 winston.log( 'info', "Listening on port 5000, not secure!" );
-//secureServer = https.createServer(options, app);
-//secureServer.listen(5443);
+//secureServer = https.createServer(sslOptions, app);
+//secureServer.listen(5000);
+//winston.log( 'info', "Listening on port 5000, secure-ish!" );
