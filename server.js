@@ -1,7 +1,5 @@
 var express = require( 'express' ),
     baseDir = process.cwd(),
-    server,
-    secureServer,
     args = process.argv,
     bodyParser = require( 'body-parser' ),
     winston = require( 'winston' ),
@@ -10,11 +8,7 @@ var express = require( 'express' ),
     app = express(),
     https = require( 'https' ),
     http = require( 'http' ),
-    fs = require( "fs" ),
-    clientCode,
-    options = {},
-    clientConfig,
-    config;
+    fs = require( "fs" );
 
 app.engine( '.hbs', exphbs( {
     defaultLayout: 'baseLayout',
@@ -31,14 +25,9 @@ app.use( bodyParser.urlencoded( {
 } ) );
 
 // read config
-clientCode = args[ 2 ];
-clientConfig = args[ 3 ];
-config = JSON.parse( fs.readFileSync( clientConfig ) );
-
-const sslOptions = { 
-    key: fs.readFileSync(`${baseDir}/keys/domain.key`),
-    cert: fs.readFileSync(`${baseDir}/keys/domain.csr`)
-}
+const clientCode = args[ 2 ];
+const clientConfig = args[ 3 ];
+const config = JSON.parse( fs.readFileSync( clientConfig ) );
 
 function sendResponse( res, toggle ) {
     var result, cmd;
@@ -87,9 +76,16 @@ app.post( '/update', function ( req, res ) {
     sendResponse( res, updateKey );
 } );
 
-server = http.createServer( app );
-server.listen( 5000 );
-winston.log( 'info', "Listening on port 5000, not secure!" );
-//secureServer = https.createServer(sslOptions, app);
-//secureServer.listen(5000);
-//winston.log( 'info', "Listening on port 5000, secure-ish!" );
+const sslOptions = { 
+    key: fs.readFileSync(`${baseDir}/keys/domain.key`).toString(),
+    cert: fs.readFileSync(`${baseDir}/keys/domain.csr`).toString()
+}
+
+const secureServer = https.createServer(sslOptions, app);
+secureServer.listen(5443);
+winston.log( 'info', "Listening on port 5443, secure-ish!" );
+
+//const server = http.createServer( app );
+//server.listen( 5000 );
+//winston.log( 'info', "Listening on port 5000, not secure!" );
+
