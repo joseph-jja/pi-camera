@@ -4,7 +4,7 @@ var client,
     msg = {
         changeMode: 'status'
     },
-    messenger = require( 'messenger; );
+    messenger = require( 'messenger' );
 
 // get args and read config 
 args = process.argv;
