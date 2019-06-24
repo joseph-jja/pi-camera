@@ -1,9 +1,11 @@
 from time import sleep
 from picamera import PiCamera
+from io import BytesIO
 
 camera = PiCamera()
 camera.resolution = (3280, 2464)
+camera.start_preview()
+sleep(2)
 
-while True
-    sleep(.1)
-    camera.capture('/tmp/space.jpg')
+# continuous capture
+camera.capture(my_stream, 'jpeg')
