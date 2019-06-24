@@ -2,6 +2,21 @@
 camera = PiCamera()    
 num=0
 default_framerate = camera.framerate
+
+# menu to be printed on terminal
+def print_menu():
+    println("Options:")
+    println("    p to start preview")
+    println("    s to stop preview")
+    println("    1 to capture single image")
+    println("    5 to capture 5 images")
+    println("    n for night mode")
+    println("    d to reset to normal mode")
+    println("    h for high res image")
+    println("    m for medium res image")
+    println("    l for low res image")
+    println("    q quit")
+
 while True:
     print('\n' * 50)
     print_menu()
