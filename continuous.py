@@ -25,9 +25,23 @@ while True:
             sleep(1)
         camera.stop_preview()    
     elif choice == "n":
-        camera.resolution = (3240,2464)
+        # Set a framerate of 1/6fps, then set shutter
+        # speed to 6s and ISO to 800
+        # night mode
+        camera.framerate = Fraction(1, 6)
+        camera.shutter_speed = 6000000
+        camera.exposure_mode = 'off'
+        camera.iso = 800
+        # Give the camera a good long time to measure AWB
+        # (you may wish to use fixed AWB instead)
+        sleep(10)
     elif choice == "d":
-        camera.resolution = (3240,2464)
+        # regular mode
+        camera.framerate = default_framerate
+        camera.shutter_speed
+        camera.exposure_mode = 'auto'
+        camera.iso = 0
+        sleep(10)
     elif choice == "h":
         camera.resolution = (3240,2464)
     elif choice == "m":
@@ -37,12 +51,3 @@ while True:
     elif choice == "q":
         break
 
-# Set a framerate of 1/6fps, then set shutter
-# speed to 6s and ISO to 800
-#    camera.framerate = Fraction(1, 6)
-#    camera.shutter_speed = 6000000
-#    camera.exposure_mode = 'off'
-#    camera.iso = 800
-# Give the camera a good long time to measure AWB
-# (you may wish to use fixed AWB instead)
-# sleep(10)
