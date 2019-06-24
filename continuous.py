@@ -2,6 +2,9 @@ from time import sleep
 from picamera import PiCamera
 from io import BytesIO
 
+# memmory stream 
+my_stream = BytesIO()
+
 camera = PiCamera()
 camera.resolution = (3280, 2464)
 camera.start_preview()
