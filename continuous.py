@@ -5,17 +5,17 @@ default_framerate = camera.framerate
 
 # menu to be printed on terminal
 def print_menu():
-    println("Options:")
-    println("    p to start preview")
-    println("    s to stop preview")
-    println("    1 to capture single image")
-    println("    5 to capture 5 images")
-    println("    n for night mode")
-    println("    d to reset to normal mode")
-    println("    h for high res image")
-    println("    m for medium res image")
-    println("    l for low res image")
-    println("    q quit")
+    print("Options:")
+    print("    p to start preview")
+    print("    s to stop preview")
+    print("    1 to capture single image")
+    print("    5 to capture 5 images")
+    print("    n for night mode")
+    print("    d to reset to normal mode")
+    print("    h for high res image")
+    print("    m for medium res image")
+    print("    l for low res image")
+    print("    q quit")
 
 while True:
     print('\n' * 50)
