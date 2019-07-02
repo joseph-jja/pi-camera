@@ -1,4 +1,6 @@
 # taken from https://www.instructables.com/id/Raspberry-Pi-Astro-Cam/
+from picamera import PiCamera 
+
 camera = PiCamera()    
 num=0
 default_framerate = camera.framerate
