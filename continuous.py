@@ -2,6 +2,8 @@
 from picamera import PiCamera 
 
 camera = PiCamera()    
+camera.resolution = (3240,2464)
+
 num=0
 default_framerate = camera.framerate
 
