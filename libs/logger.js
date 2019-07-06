@@ -15,7 +15,15 @@ const MONTH_SHORT_NAMES = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Au
 function printTimestamp() {
     const now = new Date();
 
-    let hours = now.getHours();
+    let hours = now.getHours(),
+        ampm = 'am';
+    if ( hours === 0 ) {
+        hours = 12;
+        ampm = 'am';
+    } else if ( hours > 12 ) {
+        hours = hours - 12;
+        ampm = 'pm';
+    }
 
     const minutes = now.getMinutes(),
         seconds = now.getSeconds(),
@@ -24,7 +32,7 @@ function printTimestamp() {
     const weekday = WEEKDAY_SHORT_NAMES[ now.getDay() ],
         month = MONTH_SHORT_NAMES[ now.getMonth() ];
 
-    return `${weekday} ${month} ${now.getDate()} ${now.getFullYear()} ${hours}:${minutes}:${seconds},${milli}`;
+    return `${weekday} ${month} ${now.getDate()} ${now.getFullYear()} ${hours}:${minutes}:${seconds},${milli} ${ampm}`;
 }
 
 function createLogger( filename ) {
