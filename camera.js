@@ -35,7 +35,7 @@ pir = new Gpio( sensorPin, 'in', 'both' );
 led = new Leds( ( typeof options.useLight !== 'undefined' && options.useLight ), ledPin );
 
 const isSecure = options.email.secure || false;
-const secure = { 
+const secure = {
     secure: isSecure
 };
 
