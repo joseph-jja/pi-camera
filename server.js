@@ -1,21 +1,16 @@
-var express = require( 'express' ),
+const express = require( 'express' ),
     baseDir = process.cwd(),
     args = process.argv,
     bodyParser = require( 'body-parser' ),
     winston = require( 'winston' ),
     exec = require( "child_process" ).exec,
-    exphbs = require( 'express-handlebars' ),
     app = express(),
     https = require( 'https' ),
     http = require( 'http' ),
+    util = require( 'util' ),
     fs = require( "fs" );
 
-app.engine( '.hbs', exphbs( {
-    defaultLayout: 'baseLayout',
-    extname: '.hbs'
-} ) );
-
-app.set( 'view engine', '.hbs' );
+const readFile = util.promisify( fs.readFile );
 
 // for parsing application/json
 app.use( bodyParser.json() );
@@ -29,14 +24,26 @@ const clientCode = args[ 2 ];
 const clientConfig = args[ 3 ];
 const config = JSON.parse( fs.readFileSync( clientConfig ) );
 
-function sendResponse( res, toggle ) {
-    var result, cmd;
+let baseLayout,
+    indexPg;
+
+async function sendResponse( res, toggle ) {
+    let result, cmd;
     cmd = "node " + clientCode + " " + clientConfig;
     if ( typeof toggle !== 'undefined' ) {
         cmd = cmd + " " + toggle;
     }
+
+    let pgs;
+    if ( !baseLayout || !indexPg ) {
+        baseLayout = await readFile( `${baseDir}/views/layouts/baseLayout.hbs` );
+        indexPg = await readFile( `${baseDir}/views/index.hbs` );
+        baseLayout = baseLayout.toString();
+        indexPg = indexPg.toString();
+    }
+
     result = exec( cmd, function ( err, stdout, stderr ) {
-        var result = '';
+        let result = '';
         if ( stdout ) {
             result += stdout;
         }
@@ -46,18 +53,25 @@ function sendResponse( res, toggle ) {
         if ( err ) {
             result += err;
         }
+
+        let pageData = '';
         if ( result ) {
-            winston.debug(result);
+            winston.debug( result );
             result = result.replace( "Done!", "" );
             result = JSON.parse( result );
-            res.render( 'index', {
-                "currentState": result[ config.replyMessage ]
-            } );
+            if ( result[ config.replyMessage ] ) {
+                pageData = indexPg.replace( '{{currentState}}', 'Disabled' );
+                pageData = pageData.replace( '{{nextState}}', 'Enable' );
+            } else {
+                pageData = indexPg.replace( '{{currentState}}', 'Enabled' );
+                pageData = pageData.replace( '{{nextState}}', 'Disable' );
+            }
         } else {
-            res.render( 'index', {
-                "currentState": "error"
-            } );
+            pageData = indexPg.replace( '{{currentState}}', '' );
+            pageData = pageData.replace( '{{nextState}}', 'error' );
         }
+
+        res.send( baseLayout.replace( '{{{ body }}}', pageData ) );
     } );
 }
 
@@ -68,7 +82,7 @@ app.get( '/', function ( req, res ) {
 
 // deal wtih a post
 app.post( '/update', function ( req, res ) {
-    var updateKey;
+    let updateKey;
     winston.log( 'info', "Key = " + req.body.changeModeKey );
     if ( req.body.changeModeKey && req.body.changeModeKey == config.changeModeKey ) {
         updateKey = req.body.changeModeKey;
@@ -76,16 +90,17 @@ app.post( '/update', function ( req, res ) {
     sendResponse( res, updateKey );
 } );
 
-const sslOptions = { 
-    key: fs.readFileSync(`${baseDir}/keys/domain.key`).toString(),
-    cert: fs.readFileSync(`${baseDir}/keys/domain.csr`).toString()
+const sslOptions = {
+    key: fs.readFileSync( `${baseDir}/keys/domain.key` ).toString(),
+    cert: fs.readFileSync( `${baseDir}/keys/domain.csr` ).toString()
 }
 
-const secureServer = https.createServer(sslOptions, app);
-secureServer.listen(5443);
+const secureServer = https.createServer( sslOptions, app );
+secureServer.listen( 5443 );
 winston.log( 'info', "Listening on port 5443, secure-ish!" );
 
-//const server = http.createServer( app );
-//server.listen( 5000 );
-//winston.log( 'info', "Listening on port 5000, not secure!" );
-
+/*
+const server = http.createServer( app );
+server.listen( 5000 );
+winston.log( 'info', "Listening on port 5000, not secure!" );
+*/
