@@ -34,9 +34,13 @@ options = JSON.parse( fs.readFileSync( args[ 2 ] ) );
 pir = new Gpio( sensorPin, 'in', 'both' );
 led = new Leds( ( typeof options.useLight !== 'undefined' && options.useLight ), ledPin );
 
-Sendmail = new Mailer();
+const isSecure = options.email.secure || false;
+const secure = { 
+    secure: isSecure
+};
 
-Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass );
+Sendmail = new Mailer();
+Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass, secure );
 
 Sendmail.on( 'start', function ( data ) {
     winston.info( 'Sending ' + JSON.stringify( data ) );
