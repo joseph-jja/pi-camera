@@ -1,5 +1,6 @@
-var nodemailer = require( 'nodemailer' ),
-    winston = require( "winston" ),
+const nodemailer = require( 'nodemailer' ),
+    baseDir = process.cwd(),
+    logger = require( `${baseDir}/libs/logger` ),
     transporter, util = require( "util" ),
     events = require( "events" );
 
@@ -31,7 +32,7 @@ Mailer.prototype.sendEmail = function ( user, file, opts = {} ) {
         "msg": "Sending an Email.."
     } );
 
-    winston.log( "info", 'Sending an Email..' );
+    logger.info( 'Sending an Email..' );
     timenow = new Date();
 
     const subject = opts.subject || 'Motion Detected ' + timenow.toDateString(),
@@ -50,12 +51,12 @@ Mailer.prototype.sendEmail = function ( user, file, opts = {} ) {
         } ];
     }
 
-    winston.log( "debug", 'DEBUG -- Sendig an Email..' + transporter.sendMail );
+    logger.debug( 'DEBUG -- Sendig an Email..' + transporter.sendMail );
     transporter.sendMail( mailOptions, function ( error, info ) {
         if ( error ) {
-            winston.log( "error", "An error occured: " + error );
+            logger.error( "An error occured: " + error );
         } else {
-            winston.log( "info", 'Message sent: ' + info.response );
+            logger.info( 'Message sent: ' + info.response );
         }
         self.emit( "end", {
             "error": error,

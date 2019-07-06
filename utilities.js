@@ -1,6 +1,7 @@
-var fs = require( "fs" ),
+const fs = require( "fs" ),
+    baseDir = process.cwd(),
     request = require( "request" ),
-    winston = require( "winston" ),
+    logger = require( `${baseDir}/libs/logger` ),
     sunData = {
         "sunrise": "5:47:15 AM",
         "sunset": "7:33:44 PM"
@@ -13,13 +14,13 @@ function safeUnlink( filename ) {
         try {
             fs.unlink( filename, function ( err ) {
                 if ( err ) {
-                    winston.log( "error", err );
+                    logger.error( err );
                     return;
                 }
-                winston.log( "info", "Unlinked : " + filename );
+                logger.info( "Unlinked : " + filename );
             } );
         } catch ( e ) {
-            winston.log( "error", "ERROR: + e" );
+            logger.error( "ERROR: + e" );
         }
     }
 }

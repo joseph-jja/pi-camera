@@ -1,6 +1,7 @@
 var Gpio = require( 'onoff' ).Gpio,
     Mailer = require( './mailer' ),
-    winston = require( 'winston' ),
+    baseDir = process.cwd(),
+    logger = require( `${baseDir}/libs/logger` ),
     fs = require( 'fs' ),
     Leds = require( './leds' ),
     exec = require( 'child_process' ).exec,
@@ -22,8 +23,6 @@ var Gpio = require( 'onoff' ).Gpio,
     listener,
     messenger = require( 'messenger' );
 
-winston.level = 'info';
-
 // command line arguments    
 args = process.argv;
 
@@ -43,15 +42,15 @@ Sendmail = new Mailer();
 Sendmail.setupTransport( options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass, secure );
 
 Sendmail.on( 'start', function ( data ) {
-    winston.info( 'Sending ' + JSON.stringify( data ) );
+    logger.info( 'Sending ' + JSON.stringify( data ) );
 } );
 
 Sendmail.on( 'end', function ( data ) {
     var fname;
     if ( data.error ) {
-        winston.info( 'An error has occured: ' + data.error );
+        logger.info( 'An error has occured: ' + data.error );
     } else if ( data.info ) {
-        winston.info( 'Email status: ' + JSON.stringify( data.info ) );
+        logger.info( 'Email status: ' + JSON.stringify( data.info ) );
     }
     if ( data.filename ) {
         // remove sent video
@@ -70,15 +69,15 @@ function watchCB( err, value ) {
     var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode;
 
     if ( err ) {
-        winston.info( err );
+        logger.info( err );
         return;
     }
 
-    winston.info( 'PIR state: ' + value );
+    logger.info( 'PIR state: ' + value );
     led.changeState( value );
 
     if ( value === 1 && !isRec ) {
-        winston.info( 'capturing video.. ' );
+        logger.info( 'capturing video.. ' );
 
         isRec = true;
 
@@ -98,13 +97,13 @@ function watchCB( err, value ) {
         // fps we want low also for email
         cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
         ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
-        winston.debug( 'Video record command: ' + cmd );
-        winston.debug( 'Video convert command: ' + ffmpegCmd );
+        logger.debug( 'Video record command: ' + cmd );
+        logger.debug( 'Video convert command: ' + ffmpegCmd );
         exec( cmd, function ( error, stdout, stderr ) {
             // turn recording flag off ASAP
             isRec = false;
             // output is in stdout
-            winston.debug( 'Video saved: ', videoPath );
+            logger.debug( 'Video saved: ', videoPath );
             // convert video to be smaller
             exec( ffmpegCmd, function ( error, stdout, stderr ) {
                 // send the video
@@ -127,22 +126,22 @@ listener.on( options.listenMessage, function ( m, data ) {
     if ( data.changeMode === options.changeModeKey ) {
         doSend = !doSend;
     }
-    winston.debug( data.changeMode + ' ' + doSend );
-    winston.info( 'Current mode of notification ' + doSend );
+    logger.debug( data.changeMode + ' ' + doSend );
+    logger.info( 'Current mode of notification ' + doSend );
     // always reply with status
     response[ options.replyMessage ] = doSend;
     m.reply( response );
 } );
 
-winston.info( 'Pi Bot deployed successfully!' );
-winston.info( 'Guarding...' );
+logger.info( 'Pi Bot deployed successfully!' );
+logger.info( 'Guarding...' );
 
 process.on( 'SIGINT', exit );
 
 function exit( code ) {
 
     if ( code ) {
-        winston.info( 'Exiting on code: ' + code );
+        logger.info( 'Exiting on code: ' + code );
     }
     pir.unexport();
     led.cleanup();

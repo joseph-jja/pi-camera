@@ -2,7 +2,7 @@ const express = require( 'express' ),
     baseDir = process.cwd(),
     args = process.argv,
     bodyParser = require( 'body-parser' ),
-    winston = require( 'winston' ),
+    logger = require( `${baseDir}/libs/logger` ),
     exec = require( "child_process" ).exec,
     app = express(),
     https = require( 'https' ),
@@ -56,7 +56,7 @@ async function sendResponse( res, toggle ) {
 
         let pageData = '';
         if ( result ) {
-            winston.debug( result );
+            logger.debug( result );
             result = result.replace( "Done!", "" );
             result = JSON.parse( result );
             if ( result[ config.replyMessage ] ) {
@@ -83,7 +83,7 @@ app.get( '/', function ( req, res ) {
 // deal wtih a post
 app.post( '/update', function ( req, res ) {
     let updateKey;
-    winston.log( 'info', "Key = " + req.body.changeModeKey );
+    logger.info( "Key = " + req.body.changeModeKey );
     if ( req.body.changeModeKey && req.body.changeModeKey == config.changeModeKey ) {
         updateKey = req.body.changeModeKey;
     }
@@ -97,10 +97,10 @@ const sslOptions = {
 
 const secureServer = https.createServer( sslOptions, app );
 secureServer.listen( 5443 );
-winston.log( 'info', "Listening on port 5443, secure-ish!" );
+logger.info( "Listening on port 5443, secure-ish!" );
 
 /*
 const server = http.createServer( app );
 server.listen( 5000 );
-winston.log( 'info', "Listening on port 5000, not secure!" );
+logger.info( "Listening on port 5000, not secure!" );
 */
