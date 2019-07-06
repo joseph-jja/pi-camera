@@ -3,7 +3,7 @@ This is a simple code couple of scripts for making a motion detection camera cap
 
 ## to install
 - install nodejs and forever
-  - node 0.12.x is what is being used right now
+  - node 8.x or later
 - install ffmpeg for avconv
 - clone this repo 
 - create a config.json for the mail 
