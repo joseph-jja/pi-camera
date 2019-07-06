@@ -7,6 +7,9 @@
                 "pass": "password"
            }
       },
+      "secure": false,
+      "subject": "something something",
+      "text": "message text something",
       "listenMessage": "string message",
       "listenPort": 8234,
       "changeModeKey": "some key",
