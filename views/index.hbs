@@ -3,11 +3,7 @@
     <form action="/update" method="post">
     <input type="text" name="changeModeKey" maxlength="50" size="50">
     <button type="submit">
-        {{#if currentState}} 
-            Disable   
-        {{else}}
-            Enable   
-        {{/if}}
+        {{nextState}}
     </button>
     </form>
 </div>
