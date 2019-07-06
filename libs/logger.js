@@ -15,19 +15,24 @@ const MONTH_SHORT_NAMES = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Au
 function printTimestamp() {
     const now = new Date();
 
+    // get hours and convert to string
     let hours = now.getHours(),
         ampm = 'am';
     if ( hours === 0 ) {
-        hours = 12;
+        hours = '12';
         ampm = 'am';
     } else if ( hours > 12 ) {
-        hours = hours - 12;
+        hours = `${hours - 12}`;
         ampm = 'pm';
+    } else {
+        hours = `${hours}`;
     }
 
-    const minutes = now.getMinutes(),
-        seconds = now.getSeconds(),
-        milli = now.getMilliseconds();
+    hours = hours.padStart( 2, '0' );
+
+    const minutes = `${now.getMinutes()}`.padStart( 2, '0' ),
+        seconds = `${now.getSeconds()}`.padStart( 2, '0' ),
+        milli = `${now.getMilliseconds()}`.padStart( 3, '0' );
 
     const weekday = WEEKDAY_SHORT_NAMES[ now.getDay() ],
         month = MONTH_SHORT_NAMES[ now.getMonth() ];
