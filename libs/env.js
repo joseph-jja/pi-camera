@@ -6,17 +6,17 @@
 // unfortunately JSON.parse() can throw an exception
 // for example if export LOG_LEVEL=debug then debug is passed to JSON.parse() instead of "debug"
 // so then it blows up, however if 2e6 is passed to JSON.parse() it returns the correct 2000000
-function getEnvVar( propName, defValue ) {
+function getEnvVar(propName, defValue) {
     var result = false;
-    if ( process.env[ propName ] ) {
-        result = process.env[ propName ];
-    } else if ( defValue ) {
+    if (process.env[propName]) {
+        result = process.env[propName];
+    } else if (defValue) {
         result = defValue;
     }
-    if ( typeof result === 'string' ) {
+    if (typeof result === 'string') {
         try {
-            result = JSON.parse( result );
-        } catch ( e ) {
+            result = JSON.parse(result);
+        } catch (e) {
             // throw away
         }
     }
