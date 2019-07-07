@@ -1,11 +1,11 @@
 const path = require('path'),
     winston = require('winston');
 
-const baseDir = process.cwd();
+const baseDir = __dirname;
 
 const {
     getEnvVar
-} = require(`${baseDir}/libs/env`);
+} = require(`${baseDir}/env`);
 
 const LOG_LEVEL = getEnvVar('LOG_LEVEL', 'info');
 
