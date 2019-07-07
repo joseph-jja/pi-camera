@@ -1,5 +1,5 @@
 const fs = require("fs"),
-    baseDir = process.cwd(),
+    baseDir = __dirname,
     request = require("request"),
     logger = require(`${baseDir}/libs/logger`)(__filename),
     sunData = {

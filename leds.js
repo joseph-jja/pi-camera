@@ -1,5 +1,5 @@
 var led,
-    baseDir = process.cwd(),
+    baseDir = __dirname,
     logger = require(`${baseDir}/libs/logger`)(__filename),
     Gpio = require('onoff').Gpio;
 

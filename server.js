@@ -1,5 +1,5 @@
 const express = require('express'),
-    baseDir = process.cwd(),
+    baseDir = __dirname,
     args = process.argv,
     bodyParser = require('body-parser'),
     logger = require(`${baseDir}/libs/logger`)(__filename),

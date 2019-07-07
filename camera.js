@@ -1,6 +1,6 @@
 var Gpio = require('onoff').Gpio,
+    baseDir = __dirname,
     Mailer = require('./mailer'),
-    baseDir = process.cwd(),
     logger = require(`${baseDir}/libs/logger`)(__filename),
     fs = require('fs'),
     Leds = require('./leds'),

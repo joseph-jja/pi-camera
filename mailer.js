@@ -1,8 +1,10 @@
 const nodemailer = require('nodemailer'),
-    baseDir = process.cwd(),
+    baseDir = __dirname,
     logger = require(`${baseDir}/libs/logger`)(__filename),
-    transporter, util = require("util"),
+    util = require("util"),
     events = require("events");
+
+let transporter; 
 
 function Mailer() {
     events.EventEmitter.call(this);
