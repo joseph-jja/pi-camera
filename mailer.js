@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer'),
     util = require("util"),
     events = require("events");
 
-let transporter; 
+let transporter;
 
 function Mailer() {
     events.EventEmitter.call(this);

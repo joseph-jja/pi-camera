@@ -26,5 +26,7 @@
     "underscore": "^1.8.2",
     "winston": "3.2.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "js-beautify": "^1.10.0"
+  }
 }

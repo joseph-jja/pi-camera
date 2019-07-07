@@ -44,17 +44,7 @@ function createLogger(filename) {
     const logFormat = winston.format.combine(
         winston.format.splat(),
         winston.format.printf(info => {
-            return `
-    $ {
-        printTimestamp()
-    } - $ {
-        path.basename( filename )
-    } - $ {
-        info.level
-    }: $ {
-        info.message
-    }
-    `;
+            return `${printTimestamp()} - ${path.basename(filename)} - ${info.level}: ${info.message}`;
         })
     );
 
