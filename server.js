@@ -58,8 +58,10 @@ async function sendResponse(res, toggle) {
         if (result) {
             logger.debug(result);
             result = result.replace("Done!", "");
-            result = JSON.parse(result);
-            if (result[config.replyMessage]) {
+            try {
+                result = JSON.parse(result);
+            } catch (e) {}
+            if (result && result[config.replyMessage]) {
                 pageData = indexPg.replace('{{currentState}}', 'Disabled');
                 pageData = pageData.replace('{{nextState}}', 'Enable');
             } else {

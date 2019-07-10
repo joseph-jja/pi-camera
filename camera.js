@@ -127,7 +127,8 @@ listener.on(options.listenMessage, function(m, data) {
         doSend = !doSend;
     }
     logger.debug(data.changeMode + ' ' + doSend);
-    logger.info('Current mode of notification ' + doSend);
+    //logger.info('Current mode of notification ' + doSend);
+    logger.info('Current mode of notification --- ');
     // always reply with status
     response[options.replyMessage] = doSend;
     m.reply(response);
