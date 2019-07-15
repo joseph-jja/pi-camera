@@ -1,44 +1,39 @@
-var Gpio = require('onoff').Gpio,
-    baseDir = __dirname,
-    Mailer = require('./mailer'),
-    logger = require(`${baseDir}/libs/logger`)(__filename),
-    fs = require('fs'),
-    Leds = require('./leds'),
+const fs = require('fs'),
     exec = require('child_process').exec,
-    utilities = require('./utilities'),
+    Gpio = require('onoff').Gpio,
     _ = require('underscore'),
-    // constants
-    sensorPin = 23,
+    messenger = require('messenger'),
+    baseDir = __dirname,
+    logger = require(`${baseDir}/libs/logger`)(__filename),
+    Mailer = require(`${baseDir}/mailer`),
+    Leds = require(`${baseDir}/leds`),
+    utilities = require(`${baseDir}/utilities`);
+
+// constants
+const sensorPin = 23,
     ledPin = 24,
     // module variables
-    waitTime = 10000,
-    pir,
-    led,
-    args,
-    isRec = false,
-    doSend = true,
-    options,
-    Sendmail,
-    sunData,
-    listener,
-    messenger = require('messenger');
+    waitTime = 10000;
+
+let isRec = false,
+    doSend = true;
 
 // command line arguments    
-args = process.argv;
+let args = process.argv;
 
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
-options = JSON.parse(fs.readFileSync(args[2]));
+let options = JSON.parse(fs.readFileSync(args[2]));
 
-pir = new Gpio(sensorPin, 'in', 'both');
-led = new Leds((typeof options.useLight !== 'undefined' && options.useLight), ledPin);
+let pir = new Gpio(sensorPin, 'in', 'both');
+let led = new Leds((typeof options.useLight !== 'undefined' && options.useLight), ledPin);
 
 const isSecure = options.email.secure || false;
 const secure = {
     secure: isSecure
 };
 
-Sendmail = new Mailer();
+const Sendmail = new Mailer();
 Sendmail.setupTransport(options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass, secure);
 
 Sendmail.on('start', function(data) {
@@ -46,7 +41,6 @@ Sendmail.on('start', function(data) {
 });
 
 Sendmail.on('end', function(data) {
-    var fname;
     if (data.error) {
         logger.info('An error has occured: ' + data.error);
     } else if (data.info) {
@@ -55,19 +49,18 @@ Sendmail.on('end', function(data) {
     if (data.filename) {
         // remove sent video
         // in a perfect world we would be we cant here :( 
-        fname = data.filename;
+        const fname = data.filename;
         utilities.safeUnlink(fname);
     }
 });
 
 // lat long '37.772972', '-122.4431297'
-sunData = utilities.getDefaultSunriseSunset();
+const sunData = utilities.getDefaultSunriseSunset();
 sunData.sunriseHour = sunData.sunrise.substring(0, sunData.sunrise.indexOf(':'));
 sunData.sunsetHour = sunData.sunset.substring(0, sunData.sunset.indexOf(':'));
 
 function watchCB(err, value) {
-    var cmd, ffmpegCmd, videoPathBase, videoPath, mpegPath, timestamp, nightMode;
-
+    
     if (err) {
         logger.info(err);
         return;
@@ -81,13 +74,13 @@ function watchCB(err, value) {
 
         isRec = true;
 
-        timestamp = new Date();
-        videPathBase = '/tmp/video_' + timestamp.getHours() + '_' + timestamp.getMinutes() + '_' + timestamp.getSeconds();
-        videoPath = videPathBase + '.h264';
-        mpegPath = videPathBase + '.mp4';
+        const timestamp = new Date();
+        const videPathBase = '/tmp/video_' + timestamp.getHours() + '_' + timestamp.getMinutes() + '_' + timestamp.getSeconds();
+        const videoPath = videPathBase + '.h264';
+        const mpegPath = videPathBase + '.mp4';
 
         // brightness  
-        nightMode = '-br 60';
+        let nightMode = '-br 60';
         if (timestamp.getHours() > 18 || timestamp.getHours() < 6) {
             nightMode = '-br 70';
         }
@@ -95,8 +88,8 @@ function watchCB(err, value) {
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark 
         // fps we want low also for email
-        cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
-        ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
+        const cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
+        const ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
         logger.debug('Video record command: ' + cmd);
         logger.debug('Video convert command: ' + ffmpegCmd);
         exec(cmd, function(error, stdout, stderr) {
@@ -120,7 +113,7 @@ function watchCB(err, value) {
 }
 pir.watch(watchCB);
 
-listener = messenger.createListener(options.listenPort);
+const listener = messenger.createListener(options.listenPort);
 listener.on(options.listenMessage, function(m, data) {
     var response = {};
     if (data.changeMode === options.changeModeKey) {
