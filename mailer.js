@@ -13,15 +13,14 @@ function Mailer() {
 util.inherits(Mailer, events.EventEmitter);
 
 Mailer.prototype.setupTransport = function(host, port, user, pass, opts = {}) {
-    var options = {
-        secure: opts.secure || false,
+    const options = Object.assign({}, {
         host: host,
         port: port,
         auth: {
             user: user,
             pass: pass
         }
-    };
+    }, opts);
     transporter = nodemailer.createTransport(options);
 }
 
