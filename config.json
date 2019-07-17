@@ -1,5 +1,6 @@
 {      
-    "email": {
+      "user": "motion@somehost.com", 
+      "email": {
            "host": "gmail.com",
            "port": 25,
            "auth": {
@@ -7,13 +8,16 @@
                 "pass": "password"
            }
       },
-      "secure": false,
+      "secure": {
+           "tls": {
+                "cyphers": "SSLv3"   
+           }
+      },
       "subject": "something something",
       "text": "message text something",
       "listenMessage": "string message",
       "listenPort": 8234,
       "changeModeKey": "some key",
       "replyMessage": "some other message key",
-      "userLight": false,
-      "user": "motion@somehost.com" 
+      "userLight": false 
 }
