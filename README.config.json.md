@@ -1,4 +1,5 @@
 This is the config json object that this takes
+ ```
     {      
         "user": "motion@somehost.com", 
         "email": {
@@ -22,7 +23,7 @@ This is the config json object that this takes
         "replyMessage": "some other message key",
         "userLight": false 
     }
-    
+```    
 The user field who you are sending the email to and from. This is usually going to be the same as email.auth.user.
 This is because it currently expects the sending user to be the receiving user.  
 The email.auth.pass is the email password.
