@@ -28,13 +28,8 @@ let options = JSON.parse(fs.readFileSync(args[2]));
 let pir = new Gpio(sensorPin, 'in', 'both');
 let led = new Leds((typeof options.useLight !== 'undefined' && options.useLight), ledPin);
 
-const isSecure = options.email.secure || false;
-const secure = {
-    secure: isSecure
-};
-
 const Sendmail = new Mailer();
-Sendmail.setupTransport(options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass, secure);
+Sendmail.setupTransport(options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass, options.secure);
 
 Sendmail.on('start', function(data) {
     logger.info('Sending ' + JSON.stringify(data));
