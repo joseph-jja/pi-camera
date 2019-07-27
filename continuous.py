@@ -1,5 +1,6 @@
 # taken from https://www.instructables.com/id/Raspberry-Pi-Astro-Cam/
 from picamera import PiCamera 
+from time import sleep 
 
 camera = PiCamera()    
 camera.resolution = (3240,2464)
