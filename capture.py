@@ -3,12 +3,6 @@ import RPi.GPIO as GPIO
 import time
 import picamera
 
-def motion_detected():
-    # Randomly return True (like a fake motion detection routine)
-    GPIO.input(11)
-if i==0:
-    return random.randint(0, 10) == 0
-
 # camera setup
 camera = picamera.PiCamera()
 stream = picamera.PiCameraCircularIO(camera, seconds=5)
