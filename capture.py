@@ -21,5 +21,6 @@ try:
             # stream to disk
             camera.wait_recording(15)
             stream.copy_to(videoPath)
+            print videoPath
 finally:
     camera.stop_recording()
