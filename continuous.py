@@ -32,19 +32,18 @@ while True:
         camera.stop_preview()
     elif choice == "1":
         camera.start_preview()
-        sleep(1)
+        sleep(2)
         camera.capture('/tmp/Image#%s.jpg' % num)
         num = num + 1;
         camera.stop_preview()
     elif choice == "5":
         camera.start_preview()
-        sleep(1)
-        for i in range(5):
-            camera.capture('/tmp/Imageseries#%s.jpg' % num)
-            num = num + 1
-            sleep(1)
+        sleep(2)
+        camera.capture_continuous('/tmp/Image{counter:03d}.jpg'):
+            sleep(5)
         camera.stop_preview()    
     elif choice == "n":
+        #camera.start_preview()
         # Set a framerate of 1/6fps, then set shutter
         # speed to 6s and ISO to 800
         # night mode
@@ -55,6 +54,7 @@ while True:
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
         sleep(10)
+        #camera.stop_preview()
     elif choice == "d":
         # regular mode
         camera.framerate = default_framerate
