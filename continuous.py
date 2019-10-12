@@ -1,6 +1,7 @@
 # taken from https://www.instructables.com/id/Raspberry-Pi-Astro-Cam/
 from picamera import PiCamera 
 from time import sleep 
+from fractions import Fraction 
 
 camera = PiCamera()    
 camera.resolution = (3240,2464)
@@ -39,8 +40,8 @@ while True:
     elif choice == "5":
         camera.start_preview()
         sleep(2)
-        camera.capture_continuous('/tmp/Image{counter:03d}.jpg'):
-            sleep(5)
+        camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
+        sleep(5)
         camera.stop_preview()    
     elif choice == "n":
         #camera.start_preview()
