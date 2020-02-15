@@ -27,6 +27,6 @@
     "winston": "3.2.1"
   },
   "devDependencies": {
-    "js-beautify": "^1.10.2"
+    "js-beautify": "^1.10.3"
   }
 }
