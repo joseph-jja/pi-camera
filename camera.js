@@ -7,7 +7,7 @@ const fs = require('fs'),
     logger = require(`${baseDir}/libs/logger`)(__filename),
     Mailer = require(`${baseDir}/mailer`),
     Leds = require(`${baseDir}/leds`),
-    utilities = require(`${baseDir}/utilities`);
+    utilities = require(`${baseDir}/libs/utilities`);
 
 // constants
 const sensorPin = 23,
