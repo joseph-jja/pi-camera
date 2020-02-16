@@ -1,16 +1,16 @@
 const nodemailer = require('nodemailer'),
     baseDir = __dirname,
     logger = require(`${baseDir}/libs/logger`)(__filename),
-    util = require("util"),
     events = require("events");
 
 let transporter;
 
-function Mailer() {
-    events.EventEmitter.call(this);
-}
+class Mailer extends events.EventEmitter {
 
-util.inherits(Mailer, events.EventEmitter);
+    constructor() {
+        super();
+    }
+}
 
 Mailer.prototype.setupTransport = function(host, port, user, pass, opts = {}) {
     const options = Object.assign({}, {
