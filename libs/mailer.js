@@ -25,8 +25,7 @@ Mailer.prototype.setupTransport = function(host, port, user, pass, opts = {}) {
 }
 
 Mailer.prototype.sendEmail = function(user, file, opts = {}) {
-    var mailOptions, self = this,
-        timenow;
+    const self = this;
 
     this.emit("start", {
         "filename": file,
@@ -34,12 +33,12 @@ Mailer.prototype.sendEmail = function(user, file, opts = {}) {
     });
 
     logger.info('Sending an Email..');
-    timenow = new Date();
+    const timenow = new Date();
 
     const subject = opts.subject || 'Motion Detected ' + timenow.toDateString(),
         msgText = opts.msg || 'Motion detected at ' + timenow.toString();
 
-    mailOptions = {
+    const mailOptions = {
         from: user,
         to: user,
         subject: subject,
