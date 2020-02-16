@@ -71,7 +71,7 @@ function getSunriseSunset(lat, lng, gmtOffset, callback) {
             callback(sunData);
 
         }).catch(e => {
-            console.error(e);
+            logger.error(e);
             callback(sunData);
         });
 }
