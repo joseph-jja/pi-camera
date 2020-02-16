@@ -1,5 +1,5 @@
 const fs = require('fs'),
-    baseDir = __dirname,
+    baseDir = process.cwd(),
     httpGet = require(`${baseDir}/libs/httpGet`),
     logger = require(`${baseDir}/libs/logger`)(__filename);
 
