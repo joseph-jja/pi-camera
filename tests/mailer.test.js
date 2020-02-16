@@ -1,6 +1,6 @@
 const baseDir = process.cwd();
 
-const Mailer = require(`${baseDir}/mailer`);
+const Mailer = require(`${baseDir}/libs/mailer`);
 
 const mail = new Mailer();
 
@@ -11,5 +11,5 @@ const host = process.argv[2],
 
 mail.setupTransport(host, port, user, pass);
 
-mail.sendEmail(user, `${baseDir}/mailer.js`);
+mail.sendEmail(user, `${baseDir}/libs/mailer.js`);
 
