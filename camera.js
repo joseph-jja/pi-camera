@@ -5,7 +5,7 @@ const fs = require('fs'),
     messenger = require('messenger'),
     baseDir = __dirname,
     logger = require(`${baseDir}/libs/logger`)(__filename),
-    Mailer = require(`${baseDir}/mailer`),
+    Mailer = require(`${baseDir}/libs/mailer`),
     Leds = require(`${baseDir}/leds`),
     utilities = require(`${baseDir}/libs/utilities`);
 

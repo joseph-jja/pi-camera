@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer'),
-    baseDir = __dirname,
+    baseDir = process.cwd(),
     logger = require(`${baseDir}/libs/logger`)(__filename),
     events = require("events");
 
