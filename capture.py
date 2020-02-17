@@ -9,7 +9,7 @@ stream = picamera.PiCameraCircularIO(camera, seconds=5)
 camera.start_recording(stream, format='h264')
 
 # PIR setup
-pinIn= 11     # TODO change pint to argument
+pinIn= 11     # TODO change pin to argument
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pinIn, GPIO.IN)    
