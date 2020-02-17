@@ -3,8 +3,12 @@ from picamera import PiCamera
 from time import sleep 
 from fractions import Fraction 
 
+LOW_RES = (640, 480)
+MEDIUM_RES = (1640,1232)
+HIGH_RES = (3280,2464)
+
 camera = PiCamera()    
-camera.resolution = (3240,2464)
+camera.resolution = HIGH_RES
 
 num=0
 default_framerate = camera.framerate
@@ -36,6 +40,7 @@ while True:
         sleep(2)
         camera.capture('/tmp/Image#%s.jpg' % num)
         num = num + 1;
+        sleep(1)
         camera.stop_preview()
     elif choice == "5":
         camera.start_preview()
@@ -64,11 +69,11 @@ while True:
         camera.iso = 0
         sleep(10)
     elif choice == "h":
-        camera.resolution = (3240,2464)
+        camera.resolution = HIGH_RES
     elif choice == "m":
-        camera.resolution = (1640,1232)
+        camera.resolution = MEDIUM_RES
     elif choice == "l":
-        camera.resolution = (800, 480)
+        camera.resolution = LOW_RES
     elif choice == "q":
         break
 
