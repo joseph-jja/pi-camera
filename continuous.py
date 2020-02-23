@@ -59,12 +59,13 @@ while True:
             hdr_num = hdr_num + 1
          #camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
         sleep(1)
+        camera.exposure_compensation = 0
         camera.stop_preview()    
         print("Processing images ...")
         res = camera.resolution
         result = Image.new("RGB", res)
         for index, file in enumerate(image_list):
-            img = Image.open(path)
+            img = Image.open(file)
             result.paste(img, (0, 0, res[0], res[1]))
         result.save('/tmp/Image_hdr%s.jpg' % num)
         num = num + 1;
