@@ -57,7 +57,7 @@ while True:
             image_list.append('/tmp/Image_ev%s.jpg' % hdr_num)
             sleep(0.1)
             hdr_num = hdr_num + 1
-        //camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
+         #camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
         sleep(1)
         camera.stop_preview()    
         print("Processing images ...")
