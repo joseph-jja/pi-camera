@@ -48,7 +48,7 @@ while True:
     elif choice == "d":
         camera.start_preview()
         sleep(2)
-        camera.exposure_mode = 'off'
+        camera.exposure_mode = 'antishake'
         for ev in exposure_values:
             camera.exposure_compensation = ev
             camera.capture('/tmp/Image_ev%s.jpg' % hdr_num)
