@@ -11,17 +11,20 @@ camera = PiCamera()
 camera.resolution = HIGH_RES
 
 num=0
+hdr_num = 0
 default_framerate = camera.framerate
+
+exposure_values = [-24, -18, -12, -6, 0, 1, 6, 12, 18, 24]
 
 # menu to be printed on terminal
 def print_menu():
     print("Options:")
     print("    p to start preview")
     print("    s to stop preview")
-    print("    1 to capture single image")
-    print("    5 to capture 5 images")
+    print("    c to capture single image")
+    print("    d to capture hrd-ish images")
     print("    n for night mode")
-    print("    d to reset to normal mode")
+    print("    r to reset to normal mode")
     print("    h for high res image")
     print("    m for medium res image")
     print("    l for low res image")
@@ -35,18 +38,24 @@ while True:
         camera.start_preview()
     elif choice == "s":
         camera.stop_preview()
-    elif choice == "1":
+    elif choice == "c":
         camera.start_preview()
         sleep(2)
-        camera.capture('/tmp/Image#%s.jpg' % num)
+        camera.capture('/tmp/Image%s.jpg' % num)
         num = num + 1;
         sleep(1)
         camera.stop_preview()
-    elif choice == "5":
+    elif choice == "d":
         camera.start_preview()
         sleep(2)
-        camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
-        sleep(5)
+        camera.exposure_mode = 'off'
+        for ev in exposure_values:
+            camera.exposure_compensation = ev
+            camera.capture('/tmp/Image_ev%s.jpg' % hdr_num)
+            sleep(0.1)
+            hdr_num = hdr_num + 1
+        //camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
+        sleep(1)
         camera.stop_preview()    
     elif choice == "n":
         #camera.start_preview()
@@ -61,7 +70,7 @@ while True:
         # (you may wish to use fixed AWB instead)
         sleep(10)
         #camera.stop_preview()
-    elif choice == "d":
+    elif choice == "r":
         # regular mode
         camera.framerate = default_framerate
         camera.shutter_speed
