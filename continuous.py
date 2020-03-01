@@ -43,7 +43,7 @@ while True:
     elif choice == "c":
         camera.start_preview()
         sleep(2)
-        camera.capture('/tmp/Image%s.png' % num)
+        camera.capture('/tmp/Image%s.jpg' % num, quality=100)
         num = num + 1;
         sleep(1)
         camera.stop_preview()
@@ -54,9 +54,9 @@ while True:
         camera.exposure_mode = 'antishake'
         for ev in exposure_values:
             camera.exposure_compensation = ev
-            camera.capture('/tmp/Image_ev%s.jpg' % hdr_num)
+            camera.capture('/tmp/Image_ev%s.jpg' % hdr_num, quality=100)
             image_list.append('/tmp/Image_ev%s.jpg' % hdr_num)
-            sleep(0.1)
+            #sleep(0.1)
             hdr_num = hdr_num + 1
         #camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
         sleep(1)
@@ -79,11 +79,10 @@ while True:
         # night mode
         camera.framerate = Fraction(1, 6)
         camera.shutter_speed = 6000000
-        camera.exposure_mode = 'off'
-        camera.iso = 800
+        camera.exposure_mode = 'night'
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
-        sleep(10)
+        sleep(5)
         #camera.stop_preview()
     elif choice == "r":
         # regular mode
@@ -91,7 +90,7 @@ while True:
         camera.shutter_speed
         camera.exposure_mode = 'auto'
         camera.iso = 0
-        sleep(10)
+        sleep(5)
     elif choice == "h":
         camera.resolution = HIGH_RES
     elif choice == "m":
