@@ -3,6 +3,7 @@ from picamera import PiCamera
 from time import sleep 
 from fractions import Fraction 
 from PIL import Image
+from os import remove
 
 LOW_RES = (640, 480)
 MEDIUM_RES = (1640,1232)
@@ -42,7 +43,7 @@ while True:
     elif choice == "c":
         camera.start_preview()
         sleep(2)
-        camera.capture('/tmp/Image%s.jpg' % num)
+        camera.capture('/tmp/Image%s.png' % num)
         num = num + 1;
         sleep(1)
         camera.stop_preview()
@@ -57,7 +58,7 @@ while True:
             image_list.append('/tmp/Image_ev%s.jpg' % hdr_num)
             sleep(0.1)
             hdr_num = hdr_num + 1
-         #camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
+        #camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
         sleep(1)
         camera.exposure_compensation = 0
         camera.stop_preview()    
@@ -69,6 +70,8 @@ while True:
             result.paste(img, (0, 0, res[0], res[1]))
         result.save('/tmp/Image_hdr%s.jpg' % num)
         num = num + 1;
+        for index, file in enumerate(image_list):
+            remove(file)
     elif choice == "n":
         #camera.start_preview()
         # Set a framerate of 1/6fps, then set shutter
