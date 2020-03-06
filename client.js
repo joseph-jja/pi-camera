@@ -24,4 +24,4 @@ setTimeout(function() {
         // client does not exit :(
         process.exit(0);
     });
-}, 2000);
+}, 1000);
