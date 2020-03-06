@@ -85,7 +85,7 @@ app.get('/', function(req, res) {
 // deal wtih a post
 app.post('/update', function(req, res) {
     let updateKey;
-    logger.info("Key = " + req.body.changeModeKey);
+    logger.debug("Key = " + req.body.changeModeKey);
     if (req.body.changeModeKey && req.body.changeModeKey == config.changeModeKey) {
         updateKey = req.body.changeModeKey;
     }
