@@ -19,8 +19,7 @@ if (args[3]) {
 }
 setTimeout(function() {
     client.send(config.listenMessage, msg, function(resp) {
-        //console.log('Done! ' + JSON.stringify(resp));
-        console.log('Done! ');
+        console.log(`Done: ${resp[config.replyMessage]}`);
         // client does not exit :(
         process.exit(0);
     });
