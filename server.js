@@ -28,8 +28,8 @@ let baseLayout,
     indexPg;
 
 async function sendResponse(res, toggle) {
-    let result, cmd;
-    cmd = "node " + clientCode + " " + clientConfig;
+
+    let cmd = "node " + clientCode + " " + clientConfig;
     if (typeof toggle !== 'undefined') {
         cmd = cmd + " " + toggle;
     }
@@ -42,7 +42,8 @@ async function sendResponse(res, toggle) {
         indexPg = indexPg.toString();
     }
 
-    result = exec(cmd, function(err, stdout, stderr) {
+    const execResult = exec(cmd, function(err, stdout, stderr) {
+
         let result = '';
         if (stdout) {
             result += stdout;
@@ -57,11 +58,14 @@ async function sendResponse(res, toggle) {
         let pageData = '';
         if (result) {
             logger.debug(result);
-            result = result.replace("Done!", "");
-            try {
-                result = JSON.parse(result);
-            } catch (e) {}
-            if (result && result[config.replyMessage]) {
+            result = result.replace('Done', '');
+            result = result.replace(/\{/, '').replace(/\}/, '');
+            result = result.replace(config.replyMessage, '');
+            result = result.replace(/\"/g, '').replace(/:/g, '').trim();
+            //logger.info('---------------');
+            //logger.info(result);
+            //logger.info('---------------');
+            if (result && result !== 'true') {
                 pageData = indexPg.replace('{{currentState}}', 'Disabled');
                 pageData = pageData.replace('{{nextState}}', 'Enable');
             } else {
@@ -86,7 +90,7 @@ app.get('/', function(req, res) {
 app.post('/update', function(req, res) {
     let updateKey;
     logger.debug("Key = " + req.body.changeModeKey);
-    if (req.body.changeModeKey && req.body.changeModeKey == config.changeModeKey) {
+    if (req.body.changeModeKey && req.body.changeModeKey === config.changeModeKey) {
         updateKey = req.body.changeModeKey;
     }
     sendResponse(res, updateKey);
