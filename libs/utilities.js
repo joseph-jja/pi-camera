@@ -40,7 +40,7 @@ function getSunriseSunset(lat, lng, gmtOffset, callback) {
         offset = gmtOffset || 4;
 
     // yyyymmdd
-    urlPath = API_PATH(lat, lng);
+    let urlPath = API_PATH(lat, lng);
 
     httpGet(API_HOST, urlPath)
         .then(body => {
