@@ -1,7 +1,6 @@
 const fs = require('fs'),
     exec = require('child_process').exec,
     Gpio = require('onoff').Gpio,
-    _ = require('underscore'),
     messenger = require('messenger'),
     baseDir = __dirname,
     logger = require(`${baseDir}/libs/logger`)(__filename),
@@ -23,7 +22,7 @@ let args = process.argv;
 
 // read the config for the node mailer from the fs
 // we want sync here because it is starting up and don't want to mail anyway!
-let options = JSON.parse(fs.readFileSync(args[2]));
+let options = JSON.parse(fs.readFileSync(args[2]).toString());
 
 let pir = new Gpio(sensorPin, 'in', 'both');
 let led = new Leds((typeof options.useLight !== 'undefined' && options.useLight), ledPin);
