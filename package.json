@@ -4,7 +4,8 @@
   "description": "A pi camera capture program",
   "main": "index.js",
   "scripts": {
-    "beautify": "./node_modules/.bin/js-beautify -r `find ./ -name '*.js' -type f | grep -v node_modules`"
+    "beautify": "npx js-beautify -r `find ./ -type f -not -path './node_modules/*' -name '*.js'`",
+    "eslint": "npx eslint `find ./ -type f -not -path './node_modules/*' -name '*.js'`"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "winston": "3.2.1"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
     "js-beautify": "^1.10.3"
   }
 }

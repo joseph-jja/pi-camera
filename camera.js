@@ -54,7 +54,7 @@ sunData.sunriseHour = sunData.sunrise.substring(0, sunData.sunrise.indexOf(':'))
 sunData.sunsetHour = sunData.sunset.substring(0, sunData.sunset.indexOf(':'));
 
 function watchCB(err, value) {
-    
+
     if (err) {
         logger.info(err);
         return;
