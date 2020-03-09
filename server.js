@@ -99,7 +99,7 @@ app.post('/update', function(req, res) {
 const sslOptions = {
     key: fs.readFileSync(`${baseDir}/keys/domain.key`).toString(),
     cert: fs.readFileSync(`${baseDir}/keys/domain.csr`).toString()
-}
+};
 
 const secureServer = https.createServer(sslOptions, app);
 secureServer.listen(5443);
