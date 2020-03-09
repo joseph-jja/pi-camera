@@ -26,7 +26,7 @@ Leds.prototype.changeState = function(value) {
             });
         }
     }
-}
+};
 
 Leds.prototype.cleanup = function() {
 
@@ -34,6 +34,6 @@ Leds.prototype.cleanup = function() {
         led.writeSync(0);
         led.unexport();
     }
-}
+};
 
 module.exports = Leds;
