@@ -22,7 +22,7 @@ Mailer.prototype.setupTransport = function(host, port, user, pass, opts = {}) {
         }
     }, opts);
     transporter = nodemailer.createTransport(options);
-}
+};
 
 Mailer.prototype.sendEmail = function(user, file, opts = {}) {
     const self = this;
