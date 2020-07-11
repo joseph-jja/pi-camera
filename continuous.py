@@ -27,6 +27,8 @@ def print_menu():
     print("    d to capture hrd-ish images")
     print("    n for night mode")
     print("    r to reset to normal mode")
+    print("    e long video 300 seconds")
+    print("    v short video 60 seconds")
     print("    h for high res image")
     print("    m for medium res image")
     print("    l for low res image")
@@ -91,6 +93,14 @@ while True:
         camera.exposure_mode = 'auto'
         camera.iso = 0
         sleep(5)
+    elif choice == "e":
+        camera.start_recording('/tmp/video.h264')
+        camera.wait_recording(300)
+        camera.stop_recording()
+    elif choice == "v":
+        camera.start_recording('/tmp/video.h264')
+        camera.wait_recording(60)
+        camera.stop_recording()
     elif choice == "h":
         camera.resolution = HIGH_RES
     elif choice == "m":
