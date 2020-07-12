@@ -23,12 +23,13 @@ def print_menu():
     print("Options:")
     print("    p to start preview")
     print("    s to stop preview")
-    print("    c to capture single image")
+    print("    i to capture single image")
     print("    d to capture hrd-ish images")
-    print("    n for night mode")
-    print("    r to reset to normal mode")
+    print("    c to capture 5 seconds continuous images")
     print("    e long video 300 seconds")
     print("    v short video 60 seconds")
+    print("    n for night mode")
+    print("    r to reset to normal mode")
     print("    h for high res image")
     print("    m for medium res image")
     print("    l for low res image")
@@ -42,7 +43,7 @@ while True:
         camera.start_preview()
     elif choice == "s":
         camera.stop_preview()
-    elif choice == "c":
+    elif choice == "i":
         camera.start_preview()
         sleep(2)
         camera.capture('/tmp/Image%s.jpg' % num, quality=100)
@@ -53,14 +54,15 @@ while True:
         camera.start_preview()
         sleep(2)
         image_list = []
+        # 10 exposure compensation values at .25 seconds each
+        # so 2.5 seconds HDR-ish image capture
         camera.exposure_mode = 'antishake'
         for ev in exposure_values:
             camera.exposure_compensation = ev
             camera.capture('/tmp/Image_ev%s.jpg' % hdr_num, quality=100)
             image_list.append('/tmp/Image_ev%s.jpg' % hdr_num)
-            #sleep(0.1)
+            sleep(0.25)
             hdr_num = hdr_num + 1
-        #camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
         sleep(1)
         camera.exposure_compensation = 0
         camera.stop_preview()    
@@ -74,6 +76,20 @@ while True:
         num = num + 1;
         for index, file in enumerate(image_list):
             remove(file)
+    elif choice == "c":
+        camera.start_preview()
+        sleep(2)
+        camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
+        sleep(5)
+        camera.stop_preview()    
+    elif choice == "e":
+        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize='None')
+        camera.wait_recording(300)
+        camera.stop_recording()
+    elif choice == "v":
+        camera.start_recording('/tmp/video.h264')
+        camera.wait_recording(60)
+        camera.stop_recording()
     elif choice == "n":
         #camera.start_preview()
         # Set a framerate of 1/6fps, then set shutter
@@ -93,14 +109,6 @@ while True:
         camera.exposure_mode = 'auto'
         camera.iso = 0
         sleep(5)
-    elif choice == "e":
-        camera.start_recording('/tmp/video.h264')
-        camera.wait_recording(300)
-        camera.stop_recording()
-    elif choice == "v":
-        camera.start_recording('/tmp/video.h264')
-        camera.wait_recording(60)
-        camera.stop_recording()
     elif choice == "h":
         camera.resolution = HIGH_RES
     elif choice == "m":
