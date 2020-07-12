@@ -5,6 +5,7 @@ from fractions import Fraction
 from PIL import Image
 from os import remove
 
+HD_RES = (1920, 1080)
 LOW_RES = (640, 480)
 MEDIUM_RES = (1640,1232)
 HIGH_RES = (3280,2464)
@@ -83,13 +84,19 @@ while True:
         sleep(5)
         camera.stop_preview()    
     elif choice == "e":
+        old_res = camera.resolution
+        camera.resolution = HD_RES
         camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize='None')
         camera.wait_recording(300)
         camera.stop_recording()
+        camera.resolution = old_res
     elif choice == "v":
-        camera.start_recording('/tmp/video.h264')
+        old_res = camera.resolution
+        camera.resolution = HD_RES
+        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize='None')
         camera.wait_recording(60)
         camera.stop_recording()
+        camera.resolution = old_res
     elif choice == "n":
         #camera.start_preview()
         # Set a framerate of 1/6fps, then set shutter
