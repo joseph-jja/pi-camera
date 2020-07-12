@@ -86,14 +86,14 @@ while True:
     elif choice == "e":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize='None')
+        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(300)
         camera.stop_recording()
         camera.resolution = old_res
     elif choice == "v":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize='None')
+        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(60)
         camera.stop_recording()
         camera.resolution = old_res
