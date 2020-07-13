@@ -27,8 +27,9 @@ def print_menu():
     print("    i to capture single image")
     print("    d to capture hrd-ish images")
     print("    c to capture 5 seconds continuous images")
-    print("    e long video 300 seconds")
-    print("    v short video 60 seconds")
+    print("    t long video 30 minutes")
+    print("    e long video 5 minutes")
+    print("    v short video 1 minute")
     print("    n for night mode")
     print("    r to reset to normal mode")
     print("    h for high res image")
@@ -83,17 +84,24 @@ while True:
         camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
         sleep(5)
         camera.stop_preview()    
+    elif choice == "t":
+        old_res = camera.resolution
+        camera.resolution = HD_RES
+        camera.start_recording('/home/pi/videos/longest.mpeg', format='mjpeg', resize=None)
+        camera.wait_recording(1800)
+        camera.stop_recording()
+        camera.resolution = old_res
     elif choice == "e":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize=None)
+        camera.start_recording('/home/pi/videos/long_video.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(300)
         camera.stop_recording()
         camera.resolution = old_res
     elif choice == "v":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording('/tmp/video.mpeg', format='mjpeg', resize=None)
+        camera.start_recording('/home/pi/videos/short_video.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(60)
         camera.stop_recording()
         camera.resolution = old_res
