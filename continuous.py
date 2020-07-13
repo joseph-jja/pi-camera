@@ -4,7 +4,7 @@ from time import sleep
 from fractions import Fraction 
 from PIL import Image
 
-CAPTURE_DIR=/home/pi/captures
+CAPTURE_DIR='/home/pi/captures'
 
 HD_RES = (1920, 1080)
 LOW_RES = (640, 480)
