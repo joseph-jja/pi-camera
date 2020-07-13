@@ -3,7 +3,8 @@ from picamera import PiCamera
 from time import sleep 
 from fractions import Fraction 
 from PIL import Image
-from os import remove
+
+CAPTURE_DIR=/home/pi/captures
 
 HD_RES = (1920, 1080)
 LOW_RES = (640, 480)
@@ -48,7 +49,7 @@ while True:
     elif choice == "i":
         camera.start_preview()
         sleep(2)
-        camera.capture('/tmp/Image%s.jpg' % num, quality=100)
+        camera.capture(CAPTURE_DIR + '/Image%s.jpg' % num, quality=100)
         num = num + 1;
         sleep(1)
         camera.stop_preview()
@@ -61,8 +62,8 @@ while True:
         camera.exposure_mode = 'antishake'
         for ev in exposure_values:
             camera.exposure_compensation = ev
-            camera.capture('/tmp/Image_ev%s.jpg' % hdr_num, quality=100)
-            image_list.append('/tmp/Image_ev%s.jpg' % hdr_num)
+            camera.capture(CAPTURE_DIR + '/Image_ev%s.jpg' % hdr_num, quality=100)
+            image_list.append(CAPTURE_DIR + '/Image_ev%s.jpg' % hdr_num)
             sleep(0.25)
             hdr_num = hdr_num + 1
         sleep(1)
@@ -74,34 +75,34 @@ while True:
         for index, file in enumerate(image_list):
             img = Image.open(file)
             result.paste(img, (0, 0, res[0], res[1]))
-        result.save('/tmp/Image_hdr%s.jpg' % num)
+        result.save(CAPTURE_DIR + '/Image_hdr%s.jpg' % num)
         num = num + 1;
         for index, file in enumerate(image_list):
             remove(file)
     elif choice == "c":
         camera.start_preview()
         sleep(2)
-        camera.capture_continuous('/tmp/Image{counter:03d}.jpg')
+        camera.capture_continuous(CAPTURE_DIR + '/Image{counter:03d}.jpg')
         sleep(5)
         camera.stop_preview()    
     elif choice == "t":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording('/home/pi/videos/longest.mpeg', format='mjpeg', resize=None)
+        camera.start_recording(CAPTURE_DIR + '/longest.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(1800)
         camera.stop_recording()
         camera.resolution = old_res
     elif choice == "e":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording('/home/pi/videos/long_video.mpeg', format='mjpeg', resize=None)
+        camera.start_recording(CAPTURE_DIR + '/long_video.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(300)
         camera.stop_recording()
         camera.resolution = old_res
     elif choice == "v":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording('/home/pi/videos/short_video.mpeg', format='mjpeg', resize=None)
+        camera.start_recording(CAPTURE_DIR + '/short_video.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(60)
         camera.stop_recording()
         camera.resolution = old_res
