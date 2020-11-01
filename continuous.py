@@ -81,6 +81,9 @@ while True:
         for index, file in enumerate(image_list):
             try:
                 remove(file)
+            finally:
+                print("Could not remove file: " + file)
+                sleep(1)
     elif choice == "c":
         camera.start_preview()
         sleep(2)
