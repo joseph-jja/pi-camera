@@ -79,7 +79,8 @@ while True:
         result.save(CAPTURE_DIR + '/Image_hdr%s.jpg' % num)
         num = num + 1;
         for index, file in enumerate(image_list):
-            remove(file)
+            try:
+                remove(file)
     elif choice == "c":
         camera.start_preview()
         sleep(2)
