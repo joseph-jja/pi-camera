@@ -36,6 +36,7 @@ def print_menu():
     print("    h for high res image")
     print("    m for medium res image")
     print("    l for low res image")
+    print("    z to zoom") 
     print("    q quit")
 
 while True:
@@ -118,12 +119,15 @@ while True:
         # (you may wish to use fixed AWB instead)
         sleep(5)
         #camera.stop_preview()
+    elif choice == "z":
+        camera.zoom = (0.25, 0.25, 0.5, 0.5)
     elif choice == "r":
         # regular mode
         camera.framerate = default_framerate
         camera.shutter_speed
         camera.exposure_mode = 'auto'
         camera.iso = 0
+        camera zoom = (0.0, 0.0, 1.0, 1.0)
         sleep(5)
     elif choice == "h":
         camera.resolution = HIGH_RES
