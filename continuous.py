@@ -26,6 +26,7 @@ def print_menu():
     print("    p to start preview")
     print("    s to stop preview")
     print("    i to capture single image")
+    print("    l to capture exposure -18 and -12 images 1/2 sec & zoom")
     print("    d to capture hrd-ish images")
     print("    c to capture 5 seconds continuous images")
     print("    t long video 30 minutes")
@@ -35,7 +36,6 @@ def print_menu():
     print("    r to reset to normal mode")
     print("    h for high res image")
     print("    m for medium res image")
-    print("    l for low res image")
     print("    z to zoom") 
     print("    q quit")
 
@@ -54,7 +54,19 @@ while True:
         num = num + 1;
         sleep(1)
         camera.stop_preview()
-    elif choice == "d":
+    elif choice == "l":
+        camera.start_preview()
+        sleep(2)
+        camera.zoom = (0.25, 0.25, 0.5, 0.5)
+        camera.exposure_compensation = -18
+        camera.capture_continuous(CAPTURE_DIR + '/Image_ev18_{counter:03d}.jpg')
+        sleep(0.5)
+        camera.exposure_compensation = -12
+        camera.capture_continuous(CAPTURE_DIR + '/Image_ev12_{counter:03d}.jpg')
+        sleep(0.5)
+        camera zoom = (0.0, 0.0, 1.0, 1.0)
+        camera.stop_preview()    
+   elif choice == "d":
         camera.start_preview()
         sleep(2)
         image_list = []
@@ -137,8 +149,6 @@ while True:
         camera.resolution = HIGH_RES
     elif choice == "m":
         camera.resolution = MEDIUM_RES
-    elif choice == "l":
-        camera.resolution = LOW_RES
     elif choice == "q":
         break
 
