@@ -64,9 +64,9 @@ while True:
         camera.exposure_compensation = -12
         camera.capture_continuous(CAPTURE_DIR + '/Image_ev12_{counter:03d}.jpg')
         sleep(0.5)
-        camera zoom = (0.0, 0.0, 1.0, 1.0)
+        camera.zoom = (0.0, 0.0, 1.0, 1.0)
         camera.stop_preview()    
-   elif choice == "d":
+    elif choice == "d":
         camera.start_preview()
         sleep(2)
         image_list = []
@@ -143,7 +143,7 @@ while True:
         camera.shutter_speed
         camera.exposure_mode = 'auto'
         camera.iso = 0
-        camera zoom = (0.0, 0.0, 1.0, 1.0)
+        camera.zoom = (0.0, 0.0, 1.0, 1.0)
         sleep(5)
     elif choice == "h":
         camera.resolution = HIGH_RES
