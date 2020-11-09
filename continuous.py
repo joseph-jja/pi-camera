@@ -53,7 +53,7 @@ while True:
     elif choice == "i":
         camera.start_preview()
         sleep(2)
-        camera.capture(CAPTURE_DIR + '/Image%s.jpg' % num, quality=100)
+        camera.capture(CAPTURE_DIR + '/Image_x_%s.jpg' % num, quality=100)
         num = num + 1;
         sleep(1)
         camera.stop_preview()
@@ -78,8 +78,8 @@ while True:
         camera.exposure_mode = 'antishake'
         for ev in exposure_values:
             camera.exposure_compensation = ev
-            camera.capture(CAPTURE_DIR + '/Image_ev%s.jpg' % hdr_num, quality=100)
-            image_list.append(CAPTURE_DIR + '/Image_ev%s.jpg' % hdr_num)
+            camera.capture(CAPTURE_DIR + '/Image_x_ev%s.jpg' % hdr_num, quality=100)
+            image_list.append(CAPTURE_DIR + '/Image_x_ev%s.jpg' % hdr_num)
             sleep(0.25)
             hdr_num = hdr_num + 1
         sleep(1)
@@ -102,7 +102,7 @@ while True:
     elif choice == "c":
         camera.start_preview()
         sleep(2)
-        camera.capture_continuous(CAPTURE_DIR + '/Image{counter:03d}.jpg')
+        camera.capture_continuous(CAPTURE_DIR + '/Image_c_{counter:03d}.jpg')
         sleep(5)
         camera.stop_preview()    
     elif choice == "t":
