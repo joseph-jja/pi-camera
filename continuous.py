@@ -1,6 +1,7 @@
 # taken from https://www.instructables.com/id/Raspberry-Pi-Astro-Cam/
 from picamera import PiCamera 
 from time import sleep,time 
+from datetime import datetime
 from fractions import Fraction 
 from PIL import Image
 
@@ -14,11 +15,9 @@ HIGH_RES = (3280,2464)
 camera = PiCamera()    
 camera.resolution = HIGH_RES
 
-timenow = time()
-minute = (timenow / 60)
-second = (minute / 60)
-num = (minute * 1000) + (second * 10)
-hdr_num = num + 1
+daynow = datetime.now()
+datestamp = str(daynow.year) + '-' + str(daynow.month) + '-' + str(daynow.day) + '-' + str(daynow.hour) + '-' + str(daynow.minute) + '-'
+num = 0
 default_framerate = camera.framerate
 
 exposure_values = [-24, -18, -12, -6, 0, 1, 6, 12, 18, 24]
@@ -28,7 +27,7 @@ def print_menu():
     print("Options:")
     print("    p to start preview")
     print("    s to stop preview")
-    print("    i to capture single image")
+    print("    i to captur121840e single image")
     print("    l to capture exposure -18 and -12 images 1/2 sec & zoom")
     print("    d to capture hrd-ish images")
     print("    c to capture 5 seconds continuous images")
@@ -43,6 +42,7 @@ def print_menu():
     print("    q quit")
 
 while True:
+    num = num + 1
     print('\n' * 50)
     print_menu()
     choice = input('Enter a command: ')
@@ -53,8 +53,8 @@ while True:
     elif choice == "i":
         camera.start_preview()
         sleep(2)
-        camera.capture(CAPTURE_DIR + '/Image_img_%s.jpg' % num, quality=100)
-        num = num + 1;
+        inum = datestamp + str(daynow.second) + '-' + str(num)
+        camera.capture(CAPTURE_DIR + '/Image_img_%s.jpg' % inum, quality=100)
         sleep(1)
         camera.stop_preview()
     elif choice == "l":
@@ -62,10 +62,12 @@ while True:
         sleep(2)
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
         camera.exposure_compensation = -18
-        camera.capture(CAPTURE_DIR + '/Image_ev18_%s.jpg' % num, quality=100)
+        inum = datestamp + str(daynow.second) + '-' + str(num)
+        camera.capture(CAPTURE_DIR + '/Image_ev18_%s.jpg' % inum, quality=100)
         sleep(0.5)
         camera.exposure_compensation = -12
-        camera.capture(CAPTURE_DIR + '/Image_ev12_%s.jpg' % num, quality=100)
+        inum = datestamp + str(daynow.second) + '-' + str(num)
+        camera.capture(CAPTURE_DIR + '/Image_ev12_%s.jpg' % inum, quality=100)
         sleep(0.5)
         camera.zoom = (0.0, 0.0, 1.0, 1.0)
         camera.stop_preview()    
@@ -78,10 +80,11 @@ while True:
         camera.exposure_mode = 'antishake'
         for ev in exposure_values:
             camera.exposure_compensation = ev
-            camera.capture(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % hdr_num, quality=100)
-            image_list.append(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % hdr_num)
+            inum = datestamp + str(daynow.second) + '-' + str(num) 
+            camera.capture(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum, quality=100)
+            image_list.append(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum)
+            num = num + 1
             sleep(0.25)
-            hdr_num = hdr_num + 1
         sleep(1)
         camera.exposure_compensation = 0
         camera.stop_preview()    
@@ -91,7 +94,8 @@ while True:
         for index, file in enumerate(image_list):
             img = Image.open(file)
             result.paste(img, (0, 0, res[0], res[1]))
-        result.save(CAPTURE_DIR + '/Image_hdr%s.jpg' % num)
+        inum = datestamp + str(daynow.second) + '-' + str(num) 
+        result.save(CAPTURE_DIR + '/Image_hdr%s.jpg' % inum)
         num = num + 1;
         for index, file in enumerate(image_list):
             try:
@@ -102,6 +106,7 @@ while True:
     elif choice == "c":
         camera.start_preview()
         sleep(2)
+        inum = datestamp + str(daynow.second) + '-' + str(num)
         camera.capture_continuous(CAPTURE_DIR + '/Image_cntns_{counter:03d}.jpg')
         sleep(5)
         camera.stop_preview()    
