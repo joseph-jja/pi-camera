@@ -1,6 +1,6 @@
 # taken from https://www.instructables.com/id/Raspberry-Pi-Astro-Cam/
 from picamera import PiCamera 
-from time import sleep 
+from time import sleep,time 
 from fractions import Fraction 
 from PIL import Image
 
@@ -14,8 +14,11 @@ HIGH_RES = (3280,2464)
 camera = PiCamera()    
 camera.resolution = HIGH_RES
 
-num=0
-hdr_num = 0
+timenow = time()
+minute = (timenow / 60)
+second = (minute / 60)
+num = (minute * 1000) + (second * 10)
+hdr_num = num + 1
 default_framerate = camera.framerate
 
 exposure_values = [-24, -18, -12, -6, 0, 1, 6, 12, 18, 24]
