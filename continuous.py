@@ -53,7 +53,7 @@ while True:
     elif choice == "i":
         camera.start_preview()
         sleep(2)
-        camera.capture(CAPTURE_DIR + '/Image_x_%s.jpg' % num, quality=100)
+        camera.capture(CAPTURE_DIR + '/Image_img_%s.jpg' % num, quality=100)
         num = num + 1;
         sleep(1)
         camera.stop_preview()
@@ -62,10 +62,10 @@ while True:
         sleep(2)
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
         camera.exposure_compensation = -18
-        camera.capture_continuous(CAPTURE_DIR + '/Image_ev18_{counter:03d}.jpg')
+        camera.capture(CAPTURE_DIR + '/Image_ev18_%s.jpg' % num, quality=100)
         sleep(0.5)
         camera.exposure_compensation = -12
-        camera.capture_continuous(CAPTURE_DIR + '/Image_ev12_{counter:03d}.jpg')
+        camera.capture(CAPTURE_DIR + '/Image_ev12_%s.jpg' % num, quality=100)
         sleep(0.5)
         camera.zoom = (0.0, 0.0, 1.0, 1.0)
         camera.stop_preview()    
@@ -78,8 +78,8 @@ while True:
         camera.exposure_mode = 'antishake'
         for ev in exposure_values:
             camera.exposure_compensation = ev
-            camera.capture(CAPTURE_DIR + '/Image_x_ev%s.jpg' % hdr_num, quality=100)
-            image_list.append(CAPTURE_DIR + '/Image_x_ev%s.jpg' % hdr_num)
+            camera.capture(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % hdr_num, quality=100)
+            image_list.append(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % hdr_num)
             sleep(0.25)
             hdr_num = hdr_num + 1
         sleep(1)
@@ -102,7 +102,7 @@ while True:
     elif choice == "c":
         camera.start_preview()
         sleep(2)
-        camera.capture_continuous(CAPTURE_DIR + '/Image_c_{counter:03d}.jpg')
+        camera.capture_continuous(CAPTURE_DIR + '/Image_cntns_{counter:03d}.jpg')
         sleep(5)
         camera.stop_preview()    
     elif choice == "t":
@@ -154,4 +154,3 @@ while True:
         camera.resolution = MEDIUM_RES
     elif choice == "q":
         break
-
