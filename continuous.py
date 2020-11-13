@@ -27,7 +27,7 @@ def print_menu():
     print("Options:")
     print("    p to start preview")
     print("    s to stop preview")
-    print("    i to captur121840e single image")
+    print("    i to capture single image")
     print("    l to capture exposure -18 and -12 images 1/2 sec & zoom")
     print("    d to capture hrd-ish images")
     print("    c to capture 5 seconds continuous images")
