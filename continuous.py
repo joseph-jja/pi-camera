@@ -4,6 +4,9 @@ from time import sleep,time
 from datetime import datetime
 from fractions import Fraction 
 from PIL import Image
+from getopt import getopt
+from os import mkdir
+import sys
 
 CAPTURE_DIR='/home/pi/captures'
 EV_CAPTURE_DIR='/home/pi/captures/hdr_ev'
@@ -22,6 +25,30 @@ num = 0
 default_framerate = camera.framerate
 
 exposure_values = [-24, -18, -12, -6, 0, 1, 6, 12, 18, 24]
+
+stellar_object_name='space'
+try:
+   opts, args = getopt(sys.argv,"s")
+except getopt.GetoptError:
+    print ('test.py -p <stellar object name>')
+    sys.exit(2)
+for opt, arg in opts:
+    if opt == '-p':
+        stellar_object_name = arg
+
+CAPTURE_DIR='/home/pi/captures' + '/' + stellar_object_name
+try:
+    mkdir(CAPTURE_DIR)
+finally: 
+    print('Could not make dir ' + CAPTURE_DIR);
+    sleep(5)
+
+EV_CAPTURE_DIR='/home/pi/captures' + '/' + stellar_object_name + '/hdr_ev'
+try:
+    mkdir(EV_CAPTURE_DIR)
+finally: 
+    print('Could not make dir ' + EV_CAPTURE_DIR);
+    sleep(5)
 
 # menu to be printed on terminal
 def print_menu():
@@ -105,6 +132,15 @@ while True:
         inum = datestamp + str(daynow.second) + '-' + str(num)
         camera.capture_continuous(CAPTURE_DIR + '/Image_cntns_{counter:03d}.jpg')
         sleep(5)
+        # some fast zoomed image captures
+        old_zoom = camera.zoom
+        camera.zoom = (0.25, 0.25, 0.5, 0.5)
+        for ev in range(-25,25):
+            camera.exposure_compensation = ev
+            inum = datestamp + str(daynow.second) + '-' + str(num) 
+            camera.capture(EV_CAPTURE_DIR + '/Image_xhdr_ev%s.jpg' % inum, quality=100)
+            sleep(0.025)
+        camera.zoom = old_zoom
         camera.stop_preview()    
     elif choice == "t":
         old_res = camera.resolution
