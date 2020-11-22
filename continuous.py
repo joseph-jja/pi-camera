@@ -6,6 +6,7 @@ from fractions import Fraction
 from PIL import Image
 
 CAPTURE_DIR='/home/pi/captures'
+EV_CAPTURE_DIR='/home/pi/captures/hdr_ev'
 
 HD_RES = (1920, 1080)
 LOW_RES = (640, 480)
@@ -60,6 +61,7 @@ while True:
     elif choice == "l":
         camera.start_preview()
         sleep(2)
+        old_zoom = camera.zoom
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
         camera.exposure_compensation = -18
         inum = datestamp + str(daynow.second) + '-' + str(num)
@@ -69,7 +71,7 @@ while True:
         inum = datestamp + str(daynow.second) + '-' + str(num)
         camera.capture(CAPTURE_DIR + '/Image_ev12_%s.jpg' % inum, quality=100)
         sleep(0.5)
-        camera.zoom = (0.0, 0.0, 1.0, 1.0)
+        camera.zoom = old_zoom
         camera.stop_preview()    
     elif choice == "d":
         camera.start_preview()
@@ -81,8 +83,8 @@ while True:
         for ev in exposure_values:
             camera.exposure_compensation = ev
             inum = datestamp + str(daynow.second) + '-' + str(num) 
-            camera.capture(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum, quality=100)
-            image_list.append(CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum)
+            camera.capture(EV_CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum, quality=100)
+            image_list.append(EV_CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum)
             num = num + 1
             sleep(0.25)
         sleep(1)
@@ -97,12 +99,6 @@ while True:
         inum = datestamp + str(daynow.second) + '-' + str(num) 
         result.save(CAPTURE_DIR + '/Image_hdr%s.jpg' % inum)
         num = num + 1;
-        for index, file in enumerate(image_list):
-            try:
-                remove(file)
-            finally:
-                print("Could not remove file: " + file)
-                sleep(1)
     elif choice == "c":
         camera.start_preview()
         sleep(2)
