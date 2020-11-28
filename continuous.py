@@ -30,7 +30,7 @@ stellar_object_name='space'
 try:
    opts, args = getopt(sys.argv,"s")
 except getopt.GetoptError:
-    print ('test.py -p <stellar object name>')
+    print ('continuous.py -s <stellar object name>')
     sys.exit(2)
 for opt, arg in opts:
     if opt == '-p':
@@ -39,14 +39,14 @@ for opt, arg in opts:
 CAPTURE_DIR='/home/pi/captures' + '/' + stellar_object_name
 try:
     mkdir(CAPTURE_DIR)
-finally: 
+except: 
     print('Could not make dir ' + CAPTURE_DIR);
     sleep(5)
 
 EV_CAPTURE_DIR='/home/pi/captures' + '/' + stellar_object_name + '/hdr_ev'
 try:
     mkdir(EV_CAPTURE_DIR)
-finally: 
+except: 
     print('Could not make dir ' + EV_CAPTURE_DIR);
     sleep(5)
 
