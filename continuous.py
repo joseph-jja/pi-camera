@@ -27,15 +27,18 @@ default_framerate = camera.framerate
 exposure_values = [-24, -18, -12, -6, 0, 1, 6, 12, 18, 24]
 
 stellar_object_name='space'
+argv = sys.argv[1:]
 try:
-   opts, args = getopt(sys.argv,"s")
+   opts, args = getopt(argv,"s:")
 except getopt.GetoptError:
     print ('continuous.py -s <stellar object name>')
     sys.exit(2)
 for opt, arg in opts:
-    if opt == '-p':
+    print('opts ' + opt + ' ' + arg)
+    if opt == '-s':
         stellar_object_name = arg
 
+print ('stellar_object_name is set to ' + stellar_object_name)
 CAPTURE_DIR='/home/pi/captures' + '/' + stellar_object_name
 try:
     mkdir(CAPTURE_DIR)
