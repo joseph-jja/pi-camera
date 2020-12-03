@@ -175,8 +175,11 @@ while True:
         # speed to 6s and ISO to 800
         # night mode
         camera.framerate = Fraction(1, 6)
+        camera.sensor_mode = 3
         camera.shutter_speed = 6000000
-        camera.exposure_mode = 'night'
+        camera.iso = 800
+        sleep(30)
+        camera.exposure_mode = 'off'
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
         sleep(5)
