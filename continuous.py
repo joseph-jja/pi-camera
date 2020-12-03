@@ -62,9 +62,9 @@ def print_menu():
     print("    l to capture exposure -18 and -12 images 1/2 sec & zoom")
     print("    d to capture hrd-ish images")
     print("    c to capture 5 seconds continuous images")
-    print("    t long video 30 minutes")
     print("    e long video 5 minutes")
-    print("    v short video 1 minute")
+    print("    v medium video 1 minute")
+    print("    t short video 30 seconds")
     print("    n for night mode")
     print("    r to reset to normal mode")
     print("    h for high res image")
@@ -148,21 +148,24 @@ while True:
     elif choice == "t":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording(CAPTURE_DIR + '/longest.mpeg', format='mjpeg', resize=None)
-        camera.wait_recording(1800)
+        inum = datestamp + str(daynow.second) + '-' + str(num) 
+        camera.start_recording(CAPTURE_DIR + '/short-' + inum + '.mpeg', format='mjpeg', resize=None)
+        camera.wait_recording(30)
         camera.stop_recording()
         camera.resolution = old_res
     elif choice == "e":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording(CAPTURE_DIR + '/long_video.mpeg', format='mjpeg', resize=None)
+        inum = datestamp + str(daynow.second) + '-' + str(num) 
+        camera.start_recording(CAPTURE_DIR + '/long-' + inum + '.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(300)
         camera.stop_recording()
         camera.resolution = old_res
     elif choice == "v":
         old_res = camera.resolution
         camera.resolution = HD_RES
-        camera.start_recording(CAPTURE_DIR + '/short_video.mpeg', format='mjpeg', resize=None)
+        inum = datestamp + str(daynow.second) + '-' + str(num) 
+        camera.start_recording(CAPTURE_DIR + '/medium-' + inum + '.mpeg', format='mjpeg', resize=None)
         camera.wait_recording(60)
         camera.stop_recording()
         camera.resolution = old_res
