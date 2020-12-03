@@ -149,7 +149,7 @@ while True:
         old_res = camera.resolution
         camera.resolution = HD_RES
         inum = datestamp + str(daynow.second) + '-' + str(num) 
-        camera.start_recording(CAPTURE_DIR + '/short-' + inum + '.mpeg', format='mjpeg', resize=None)
+        camera.start_recording(CAPTURE_DIR + '/short-' + inum + '.mjpeg', format='mjpeg', quality=100, resize=None, bitrate=25000000)
         camera.wait_recording(30)
         camera.stop_recording()
         camera.resolution = old_res
@@ -157,7 +157,7 @@ while True:
         old_res = camera.resolution
         camera.resolution = HD_RES
         inum = datestamp + str(daynow.second) + '-' + str(num) 
-        camera.start_recording(CAPTURE_DIR + '/long-' + inum + '.mpeg', format='mjpeg', resize=None)
+        camera.start_recording(CAPTURE_DIR + '/long-' + inum + '.mjpeg', format='mjpeg', quality=100, resize=None, bitrate=25000000)
         camera.wait_recording(300)
         camera.stop_recording()
         camera.resolution = old_res
@@ -165,12 +165,11 @@ while True:
         old_res = camera.resolution
         camera.resolution = HD_RES
         inum = datestamp + str(daynow.second) + '-' + str(num) 
-        camera.start_recording(CAPTURE_DIR + '/medium-' + inum + '.mpeg', format='mjpeg', resize=None)
+        camera.start_recording(CAPTURE_DIR + '/medium-' + inum + '.mjpeg', format='mjpeg', quality=100, resize=None, bitrate=25000000)
         camera.wait_recording(60)
         camera.stop_recording()
         camera.resolution = old_res
     elif choice == "n":
-        #camera.start_preview()
         # Set a framerate of 1/6fps, then set shutter
         # speed to 6s and ISO to 800
         # night mode
@@ -183,7 +182,9 @@ while True:
         # Give the camera a good long time to measure AWB
         # (you may wish to use fixed AWB instead)
         sleep(5)
-        #camera.stop_preview()
+        camera.start_preview()
+        sleep(5)
+        camera.stop_preview()
     elif choice == "z":
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
     elif choice == "r":
