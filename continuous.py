@@ -72,12 +72,27 @@ def print_menu():
     print("    z to zoom") 
     print("    q quit")
 
+def capture_video(name, len):
+    old_res = camera.resolution
+    camera.resolution = HD_RES
+    camera.sensor_mode = 3
+    camera.framerate = 30
+    sleep(1)
+    inum = datestamp + str(daynow.second) + '-' + str(num) 
+    # camera.start_preview()
+    camera.start_recording(CAPTURE_DIR + name + inum + '.h264', format='h264', quality=15, resize=None, bitrate=20000000)
+    camera.wait_recording(len)
+    # camera.stop_preview()    
+    camera.stop_recording()
+    camera.resolution = old_res
+
 while True:
     num = num + 1
     print('\n' * 50)
     print_menu()
     choice = input('Enter a command: ')
     if choice == "p":
+        # camera.start_preview(fullscreen=False,window=(300,0,0,200))
         camera.start_preview()
     elif choice == "s":
         camera.stop_preview()
@@ -146,29 +161,11 @@ while True:
         camera.zoom = old_zoom
         camera.stop_preview()    
     elif choice == "t":
-        old_res = camera.resolution
-        camera.resolution = HD_RES
-        inum = datestamp + str(daynow.second) + '-' + str(num) 
-        camera.start_recording(CAPTURE_DIR + '/short-' + inum + '.mjpeg', format='mjpeg', quality=100, resize=None, bitrate=25000000)
-        camera.wait_recording(30)
-        camera.stop_recording()
-        camera.resolution = old_res
+        capture_video('/short', 30)
     elif choice == "e":
-        old_res = camera.resolution
-        camera.resolution = HD_RES
-        inum = datestamp + str(daynow.second) + '-' + str(num) 
-        camera.start_recording(CAPTURE_DIR + '/long-' + inum + '.mjpeg', format='mjpeg', quality=100, resize=None, bitrate=25000000)
-        camera.wait_recording(300)
-        camera.stop_recording()
-        camera.resolution = old_res
+        capture_video('/long', 60)
     elif choice == "v":
-        old_res = camera.resolution
-        camera.resolution = HD_RES
-        inum = datestamp + str(daynow.second) + '-' + str(num) 
-        camera.start_recording(CAPTURE_DIR + '/medium-' + inum + '.mjpeg', format='mjpeg', quality=100, resize=None, bitrate=25000000)
-        camera.wait_recording(60)
-        camera.stop_recording()
-        camera.resolution = old_res
+        capture_video('/medium', 60)
     elif choice == "n":
         # Set a framerate of 1/6fps, then set shutter
         # speed to 6s and ISO to 800
