@@ -5,7 +5,7 @@ from datetime import datetime
 from fractions import Fraction 
 from PIL import Image
 from getopt import getopt
-from os import mkdir
+from os import mkdir,system
 import sys
 
 CAPTURE_DIR='/home/pi/captures'
@@ -80,11 +80,13 @@ def capture_video(name, len):
     sleep(1)
     inum = datestamp + str(daynow.second) + '-' + str(num) 
     # camera.start_preview()
-    camera.start_recording(CAPTURE_DIR + name + inum + '.h264', format='h264', quality=15, resize=None, bitrate=20000000)
+    filename = CAPTURE_DIR + name + inum + '.h264'
+    camera.start_recording(filename, format='h264', quality=15, resize=None, bitrate=20000000)
     camera.wait_recording(len)
     # camera.stop_preview()    
     camera.stop_recording()
     camera.resolution = old_res
+    system('MP4Box -add ' + filename + ' -tmp ' + CAPTURE_DIR + ' ' + filename + '.mp4')
 
 while True:
     num = num + 1
