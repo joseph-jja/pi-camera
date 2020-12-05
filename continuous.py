@@ -12,12 +12,14 @@ CAPTURE_DIR='/home/pi/captures'
 EV_CAPTURE_DIR='/home/pi/captures/hdr_ev'
 
 HD_RES = (1920, 1080)
+#HD_RES = (1280, 720)
 LOW_RES = (640, 480)
 MEDIUM_RES = (1640,1232)
 HIGH_RES = (3280,2464)
 
 camera = PiCamera()    
 camera.resolution = HIGH_RES
+camera.still_stats = 'true'
 
 daynow = datetime.now()
 datestamp = str(daynow.year) + '-' + str(daynow.month) + '-' + str(daynow.day) + '-' + str(daynow.hour) + '-' + str(daynow.minute) + '-'
@@ -44,14 +46,14 @@ try:
     mkdir(CAPTURE_DIR)
 except: 
     print('Could not make dir ' + CAPTURE_DIR);
-    sleep(5)
+    sleep(2)
 
 EV_CAPTURE_DIR='/home/pi/captures' + '/' + stellar_object_name + '/hdr_ev'
 try:
     mkdir(EV_CAPTURE_DIR)
 except: 
     print('Could not make dir ' + EV_CAPTURE_DIR);
-    sleep(5)
+    sleep(2)
 
 # menu to be printed on terminal
 def print_menu():
@@ -79,11 +81,11 @@ def capture_video(name, len):
     camera.framerate = 30
     sleep(1)
     inum = datestamp + str(daynow.second) + '-' + str(num) 
-    # camera.start_preview()
+    camera.start_preview()
     filename = CAPTURE_DIR + name + inum + '.h264'
     camera.start_recording(filename, format='h264', quality=15, resize=None, bitrate=20000000)
     camera.wait_recording(len)
-    # camera.stop_preview()    
+    camera.stop_preview()    
     camera.stop_recording()
     camera.resolution = old_res
     system('MP4Box -add ' + filename + ' -tmp ' + CAPTURE_DIR + ' ' + filename + '.mp4')
@@ -172,7 +174,8 @@ while True:
         # Set a framerate of 1/6fps, then set shutter
         # speed to 6s and ISO to 800
         # night mode
-        camera.framerate = Fraction(1, 6)
+        #camera.framerate = Fraction(1, 6)
+        camera.framerate = 1
         camera.sensor_mode = 3
         camera.shutter_speed = 6000000
         camera.iso = 800
