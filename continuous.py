@@ -71,7 +71,8 @@ def print_menu():
     print("    r to reset to normal mode")
     print("    h for high res image")
     print("    m for medium res image")
-    print("    z to zoom") 
+    print("    zi to zoom in") 
+    print("    zo to zoom out") 
     print("    q quit")
 
 def capture_video(name, len):
@@ -187,8 +188,10 @@ while True:
         camera.start_preview()
         sleep(5)
         camera.stop_preview()
-    elif choice == "z":
+    elif choice == "zi":
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
+    elif choice == "zo":
+        camera.zoom = (0.0, 0.0, 1.0, 1.0)
     elif choice == "r":
         # regular mode
         camera.framerate = default_framerate
