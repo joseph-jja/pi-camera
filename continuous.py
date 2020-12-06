@@ -12,7 +12,7 @@ CAPTURE_DIR='/home/pi/captures'
 EV_CAPTURE_DIR='/home/pi/captures/hdr_ev'
 
 camera = PiCamera()    
-camera.resolution = HIGH_RES
+camera.resolution = (3280,2464)
 camera.still_stats = 'true'
 camera.shutter_speed = 6000000
 
@@ -99,8 +99,8 @@ def change_iso():
     print("100, 200, 400, 800, 1600, 3200 or 0 to reset")
     reschoice = input('Value: ')
     camera.exposure_mode = 'off'
-    camera.iso = reschoice
-    if rechoice == 0:
+    camera.iso = int(reschoice)
+    if reschoice == 0:
          camera.exposure_mode = 'auto'
 
 def change_framerate():
@@ -108,7 +108,7 @@ def change_framerate():
     print("Enter framerate Value:")
     print("1 to 30")
     reschoice = input('Value: ')
-    camera.framerate = rechoice
+    camera.framerate = int(reschoice)
 
 def capture_video(name, len):
     old_res = camera.resolution
@@ -126,7 +126,7 @@ def capture_video(name, len):
     camera.resolution = old_res
     system('MP4Box -add ' + filename + ' -tmp ' + CAPTURE_DIR + ' ' + filename + '.mp4')
 
-def capture_hdr():
+def capture_hdr(num):
     camera.start_preview()
     sleep(2)
     image_list = []
@@ -186,7 +186,7 @@ while True:
         camera.exposure_compensation = 0
         camera.stop_preview()    
     elif choice == "d":
-        capture_hdr()
+        capture_hdr(num)
     elif choice == "c":
         camera.start_preview()
         sleep(2)
