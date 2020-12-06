@@ -55,11 +55,11 @@ def print_menu():
     print("    p to start preview")
     print("    s to stop preview")
     print("    i to capture single image")
-    print("    l to capture exposure -18 and -12 images 1/2 sec & zoom")
+    print("    e to capture exposure -18 and -12 images 1/2 sec & zoom")
     print("    d to capture hrd-ish images")
     print("    c to capture 5 seconds continuous images")
-    print("    e long video 5 minutes")
-    print("    v medium video 1 minute")
+    print("    f long video 5 minutes")
+    print("    m medium video 1 minute")
     print("    t short video 30 seconds")
     print("    n for night mode")
     print("    r to change resolution")
@@ -142,12 +142,11 @@ while True:
         camera.stop_preview()
     elif choice == "i":
         camera.start_preview()
-        sleep(2)
         inum = datestamp + str(daynow.second) + '-' + str(num)
         camera.capture(CAPTURE_DIR + '/Image_img_%s.jpg' % inum, quality=100)
         sleep(1)
         camera.stop_preview()
-    elif choice == "l":
+    elif choice == "e":
         camera.start_preview()
         sleep(2)
         old_zoom = camera.zoom
@@ -182,9 +181,9 @@ while True:
         camera.stop_preview()    
     elif choice == "t":
         capture_video('/short', 30)
-    elif choice == "e":
+    elif choice == "f":
         capture_video('/long', 60)
-    elif choice == "v":
+    elif choice == "m":
         capture_video('/medium', 60)
     elif choice == "n":
         # Set a framerate of 1/6fps, then set shutter
