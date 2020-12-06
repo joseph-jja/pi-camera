@@ -14,6 +14,7 @@ EV_CAPTURE_DIR='/home/pi/captures/hdr_ev'
 camera = PiCamera()    
 camera.resolution = HIGH_RES
 camera.still_stats = 'true'
+camera.shutter_speed = 6000000
 
 daynow = datetime.now()
 datestamp = str(daynow.year) + '-' + str(daynow.month) + '-' + str(daynow.day) + '-' + str(daynow.hour) + '-' + str(daynow.minute) + '-'
@@ -61,7 +62,7 @@ def print_menu():
     print("    f long video 5 minutes")
     print("    m medium video 1 minute")
     print("    t short video 30 seconds")
-    print("    n for night mode")
+    print("    n options")
     print("    r to change resolution")
     print("    zi to zoom in") 
     print("    zo to zoom out") 
@@ -78,14 +79,19 @@ def change_resolution():
     reschoice = input('Enter a command: ')
     if reschoice == "a":
         camera.resolution = (3280,2464)
+        camera.sensor_mode = 3
     elif reschoice == "b":
         camera.resolution = (1640,1232)
+        camera.sensor_mode = 4
     elif reschoice == "c":
         camera.resolution = (1920, 1080)
+        camera.sensor_mode = 1
     elif reschoice == "d":
         camera.resolution = (1280, 720)
+        camera.sensor_mode = 6
     elif reschoice == "e":
         camera.resolution = (640, 480)
+        camera.sensor_mode = 7
    
 def change_iso():
     print('\n' * 50)
@@ -209,8 +215,6 @@ while True:
         # night mode
         #camera.framerate = Fraction(1, 6)
         change_framerate()
-        camera.sensor_mode = 3
-        camera.shutter_speed = 6000000
         change_iso()
         sleep(30)
         camera.start_preview()
