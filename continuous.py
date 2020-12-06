@@ -11,12 +11,6 @@ import sys
 CAPTURE_DIR='/home/pi/captures'
 EV_CAPTURE_DIR='/home/pi/captures/hdr_ev'
 
-HD_RES = (1920, 1080)
-#HD_RES = (1280, 720)
-LOW_RES = (640, 480)
-MEDIUM_RES = (1640,1232)
-HIGH_RES = (3280,2464)
-
 camera = PiCamera()    
 camera.resolution = HIGH_RES
 camera.still_stats = 'true'
@@ -68,16 +62,34 @@ def print_menu():
     print("    v medium video 1 minute")
     print("    t short video 30 seconds")
     print("    n for night mode")
-    print("    r to reset to normal mode")
-    print("    h for high res image")
-    print("    m for medium res image")
+    print("    r to change resolution")
     print("    zi to zoom in") 
     print("    zo to zoom out") 
     print("    q quit")
 
+def change_resolution():
+    print('\n' * 50)
+    print("Resolution Options:")
+    print("    a resolution 3280 x 2464")
+    print("    b resolution 1640 x 1232")
+    print("    c resolution 1920 x 1080")
+    print("    d resolution 1280 x 720")
+    print("    e resolution 640 x 480")
+    reschoice = input('Enter a command: ')
+    if reschoice == "a":
+        camera.resolution = (3280,2464)
+    elif reschoice == "b":
+        camera.resolution = (1640,1232)
+    elif reschoice == "c":
+        camera.resolution = (1920, 1080)
+    elif reschoice == "d":
+        camera.resolution = (1280, 720)
+    elif reschoice == "e":
+        camera.resolution = (640, 480)
+   
 def capture_video(name, len):
     old_res = camera.resolution
-    camera.resolution = HD_RES
+    camera.resolution = (1920, 1080)
     camera.sensor_mode = 3
     camera.framerate = 30
     sleep(1)
@@ -91,6 +103,33 @@ def capture_video(name, len):
     camera.resolution = old_res
     system('MP4Box -add ' + filename + ' -tmp ' + CAPTURE_DIR + ' ' + filename + '.mp4')
 
+def capture_hdr():
+    camera.start_preview()
+    sleep(2)
+    image_list = []
+    # 10 exposure compensation values at .25 seconds each
+    # so 2.5 seconds HDR-ish image capture
+    camera.exposure_mode = 'antishake'
+    for ev in exposure_values:
+        camera.exposure_compensation = ev
+        inum = datestamp + str(daynow.second) + '-' + str(num) 
+        camera.capture(EV_CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum, quality=100)
+        image_list.append(EV_CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum)
+        num = num + 1
+        sleep(0.25)
+    sleep(1)
+    camera.exposure_compensation = 0
+    camera.stop_preview()    
+    print("Processing images ...")
+    res = camera.resolution
+    result = Image.new("RGB", res)
+    for index, file in enumerate(image_list):
+        img = Image.open(file)
+        result.paste(img, (0, 0, res[0], res[1]))
+    inum = datestamp + str(daynow.second) + '-' + str(num) 
+    result.save(CAPTURE_DIR + '/Image_hdr%s.jpg' % inum)
+    num = num + 1;
+   
 while True:
     num = num + 1
     print('\n' * 50)
@@ -124,31 +163,7 @@ while True:
         camera.zoom = old_zoom
         camera.stop_preview()    
     elif choice == "d":
-        camera.start_preview()
-        sleep(2)
-        image_list = []
-        # 10 exposure compensation values at .25 seconds each
-        # so 2.5 seconds HDR-ish image capture
-        camera.exposure_mode = 'antishake'
-        for ev in exposure_values:
-            camera.exposure_compensation = ev
-            inum = datestamp + str(daynow.second) + '-' + str(num) 
-            camera.capture(EV_CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum, quality=100)
-            image_list.append(EV_CAPTURE_DIR + '/Image_hdr_ev%s.jpg' % inum)
-            num = num + 1
-            sleep(0.25)
-        sleep(1)
-        camera.exposure_compensation = 0
-        camera.stop_preview()    
-        print("Processing images ...")
-        res = camera.resolution
-        result = Image.new("RGB", res)
-        for index, file in enumerate(image_list):
-            img = Image.open(file)
-            result.paste(img, (0, 0, res[0], res[1]))
-        inum = datestamp + str(daynow.second) + '-' + str(num) 
-        result.save(CAPTURE_DIR + '/Image_hdr%s.jpg' % inum)
-        num = num + 1;
+        capture_hdr()
     elif choice == "c":
         camera.start_preview()
         sleep(2)
@@ -188,21 +203,11 @@ while True:
         camera.start_preview()
         sleep(5)
         camera.stop_preview()
+    elif choice == "r":
+        change_resolution()
     elif choice == "zi":
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
     elif choice == "zo":
         camera.zoom = (0.0, 0.0, 1.0, 1.0)
-    elif choice == "r":
-        # regular mode
-        camera.framerate = default_framerate
-        camera.shutter_speed
-        camera.exposure_mode = 'auto'
-        camera.iso = 0
-        camera.zoom = (0.0, 0.0, 1.0, 1.0)
-        sleep(5)
-    elif choice == "h":
-        camera.resolution = HIGH_RES
-    elif choice == "m":
-        camera.resolution = MEDIUM_RES
     elif choice == "q":
         break
