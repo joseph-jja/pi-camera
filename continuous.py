@@ -160,6 +160,7 @@ while True:
         camera.capture(CAPTURE_DIR + '/Image_ev12_%s.jpg' % inum, quality=100)
         sleep(0.5)
         camera.zoom = old_zoom
+        camera.exposure_compensation = 0
         camera.stop_preview()    
     elif choice == "d":
         capture_hdr()
