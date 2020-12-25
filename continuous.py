@@ -110,6 +110,27 @@ def change_framerate():
     reschoice = input('Value: ')
     camera.framerate = int(reschoice)
 
+def change_contrast():
+    print('\n' * 50)
+    print("Enter contrast Value:")
+    print("-100 to 100")
+    reschoice = input('Value: ')
+    camera.contrast = int(reschoice)
+
+def change_saturation():
+    print('\n' * 50)
+    print("Enter saturation Value:")
+    print("-100 to 100")
+    reschoice = input('Value: ')
+    camera.saturation = int(reschoice)
+
+def change_brightness():
+    print('\n' * 50)
+    print("Enter brightness Value:")
+    print("0 to 100")
+    reschoice = input('Value: ')
+    camera.brightness = int(reschoice)
+
 def capture_video(name, len):
     old_res = camera.resolution
     camera.resolution = (1920, 1080)
@@ -216,7 +237,10 @@ while True:
         #camera.framerate = Fraction(1, 6)
         change_framerate()
         change_iso()
-        sleep(30)
+        sleep(10)
+        change_contrast():
+        change_saturation():
+        change_brightness():
         camera.start_preview()
         sleep(5)
         camera.stop_preview()
