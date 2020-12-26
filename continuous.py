@@ -14,7 +14,7 @@ EV_CAPTURE_DIR='/home/pi/captures/hdr_ev'
 camera = PiCamera()    
 camera.resolution = (3280,2464)
 camera.still_stats = 'true'
-camera.shutter_speed = 6000000
+camera.shutter_speed = 150000000
 
 daynow = datetime.now()
 datestamp = str(daynow.year) + '-' + str(daynow.month) + '-' + str(daynow.day) + '-' + str(daynow.hour) + '-' + str(daynow.minute) + '-'
@@ -238,9 +238,9 @@ while True:
         change_framerate()
         change_iso()
         sleep(10)
-        change_contrast():
-        change_saturation():
-        change_brightness():
+        change_contrast()
+        change_saturation()
+        change_brightness()
         camera.start_preview()
         sleep(5)
         camera.stop_preview()
