@@ -62,7 +62,7 @@ def print_menu():
     print("    f long video 5 minutes")
     print("    m medium video 1 minute")
     print("    t short video 30 seconds")
-    print("    n framerate and iso")
+    print("    n framerate, iso, contrast, saturation and brightness")
     print("    r to change resolution")
     print("    zi to zoom in") 
     print("    zo to zoom out") 
