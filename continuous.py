@@ -98,10 +98,16 @@ def change_iso():
     print("Enter ISO Value:")
     print("100, 200, 400, 800, 1600, 3200 or 0 to reset: " + camera.exposure_mode)
     reschoice = input('Value: ')
-    camera.exposure_mode = 'off'
     camera.iso = int(reschoice)
+    sleep(4)
     if reschoice == 0:
          camera.exposure_mode = 'auto'
+    else:
+         camera.shutter_speed = camera.exposure_speed
+         camera.exposure_mode = 'off'
+         g = camera.awb_gains
+         camera.awb_mode = 'off'
+         camera.awb_gains = g
 
 def change_framerate():
     print('\n' * 50)
@@ -237,7 +243,6 @@ while True:
         #camera.framerate = Fraction(1, 6)
         change_framerate()
         change_iso()
-        sleep(10)
         change_contrast()
         change_saturation()
         change_brightness()
