@@ -62,7 +62,7 @@ def print_menu():
     print("    f long video 5 minutes")
     print("    m medium video 1 minute")
     print("    t short video 30 seconds")
-    print("    n framerate, iso, contrast, saturation and brightness")
+    print("    n framerate, iso, contrast, saturation, brightness and sharpness")
     print("    r to change resolution")
     print("    zi to zoom in") 
     print("    zo to zoom out") 
@@ -98,11 +98,11 @@ def change_iso():
     print("Enter ISO Value:")
     print("100, 200, 400, 800, 1600, 3200 or 0 to reset: " + camera.exposure_mode)
     reschoice = input('Value: ')
-    camera.iso = int(reschoice)
-    sleep(4)
     if reschoice == 0:
          camera.exposure_mode = 'auto'
     else:
+         camera.iso = int(reschoice)
+         sleep(5)
          camera.shutter_speed = camera.exposure_speed
          camera.exposure_mode = 'off'
          g = camera.awb_gains
@@ -121,21 +121,32 @@ def change_contrast():
     print("Enter contrast Value: " + str(camera.contrast))
     print("-100 to 100")
     reschoice = input('Value: ')
-    camera.contrast = int(reschoice)
+    if reschoice != 0:
+        camera.contrast = int(reschoice)
 
 def change_saturation():
     print('\n' * 50)
     print("Enter saturation Value: " + str(camera.saturation))
     print("-100 to 100")
     reschoice = input('Value: ')
-    camera.saturation = int(reschoice)
+    if reschoice != 0:
+        camera.saturation = int(reschoice)
+
+def change_sharpness():
+    print('\n' * 50)
+    print("Enter sharpness Value: " + str(camera.sharpness))
+    print("-100 to 100")
+    reschoice = input('Value: ')
+    if reschoice != 0:
+        camera.sharpness = int(reschoice)
 
 def change_brightness():
     print('\n' * 50)
     print("Enter brightness Value: " + str(camera.brightness))
     print("0 to 100")
     reschoice = input('Value: ')
-    camera.brightness = int(reschoice)
+    if reschoice != 0:
+        camera.brightness = int(reschoice)
 
 def capture_video(name, len):
     old_res = camera.resolution
@@ -246,6 +257,7 @@ while True:
         change_contrast()
         change_saturation()
         change_brightness()
+        change_sharpness()
         camera.start_preview()
         sleep(5)
         camera.stop_preview()
