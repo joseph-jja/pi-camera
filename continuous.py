@@ -232,6 +232,16 @@ while True:
         inum = datestamp + str(daynow.second) + '-' + str(num)
         camera.capture_continuous(CAPTURE_DIR + '/Image_cntns_{counter:03d}.jpg')
         sleep(5)
+        # capture 100 images
+        res = camera.resolution
+        result = Image.new("RGB", res)
+        for ev in range(0, 200):
+            inum = datestamp + str(daynow.second) + '-' + str(num) 
+            camera.capture(EV_CAPTURE_DIR + '/Image_xhdr_ev%s.jpg' % inum, quality=100)
+            sleep(0.025)
+            img = Image.open(EV_CAPTURE_DIR + '/Image_xhdr_ev%s.jpg' % inum, quality=100)
+            result.paste(img, (0, 0, res[0], res[1]))
+        result.save(CAPTURE_DIR + '/Image_combo_%s.jpg' % inum)
         # some fast zoomed image captures
         old_zoom = camera.zoom
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
