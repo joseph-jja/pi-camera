@@ -98,7 +98,7 @@ def change_iso():
     print("Enter ISO Value:")
     print("100, 200, 400, 800, 1600, 3200 or 0 to reset: " + camera.exposure_mode)
     reschoice = input('Value: ')
-    if reschoice == 0:
+    if not reschoice or reschoice == 0:
          camera.exposure_mode = 'auto'
     else:
          camera.iso = int(reschoice)
@@ -114,14 +114,15 @@ def change_framerate():
     print("Enter framerate Value: " + str(camera.framerate))
     print("1 to 30")
     reschoice = input('Value: ')
-    camera.framerate = int(reschoice)
+    if reschoice:
+        camera.framerate = int(reschoice)
 
 def change_contrast():
     print('\n' * 50)
     print("Enter contrast Value: " + str(camera.contrast))
     print("-100 to 100")
     reschoice = input('Value: ')
-    if reschoice != 0:
+    if reschoice and reschoice != 0:
         camera.contrast = int(reschoice)
 
 def change_saturation():
@@ -129,7 +130,7 @@ def change_saturation():
     print("Enter saturation Value: " + str(camera.saturation))
     print("-100 to 100")
     reschoice = input('Value: ')
-    if reschoice != 0:
+    if reschoice and reschoice != 0:
         camera.saturation = int(reschoice)
 
 def change_sharpness():
@@ -137,7 +138,7 @@ def change_sharpness():
     print("Enter sharpness Value: " + str(camera.sharpness))
     print("-100 to 100")
     reschoice = input('Value: ')
-    if reschoice != 0:
+    if reschoice and reschoice != 0:
         camera.sharpness = int(reschoice)
 
 def change_brightness():
@@ -145,7 +146,7 @@ def change_brightness():
     print("Enter brightness Value: " + str(camera.brightness))
     print("0 to 100")
     reschoice = input('Value: ')
-    if reschoice != 0:
+    if reschoice and reschoice != 0:
         camera.brightness = int(reschoice)
 
 def capture_video(name, len):
