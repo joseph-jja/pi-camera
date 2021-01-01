@@ -111,7 +111,7 @@ def change_iso():
 
 def change_framerate():
     print('\n' * 50)
-    print("Enter framerate Value: " + camera.framerate)
+    print("Enter framerate Value: " + str(camera.framerate))
     print("1 to 30")
     reschoice = input('Value: ')
     camera.framerate = int(reschoice)
