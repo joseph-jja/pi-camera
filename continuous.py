@@ -237,9 +237,9 @@ while True:
         result = Image.new("RGB", res)
         for ev in range(0, 200):
             inum = datestamp + str(daynow.second) + '-' + str(num) 
-            camera.capture(EV_CAPTURE_DIR + '/Image_xhdr_ev%s.jpg' % inum, quality=100)
+            camera.capture(EV_CAPTURE_DIR + '/Image_cont_ev%s.jpg' % inum, quality=100)
             sleep(0.025)
-            img = Image.open(EV_CAPTURE_DIR + '/Image_xhdr_ev%s.jpg' % inum, quality=100)
+            img = Image.open(EV_CAPTURE_DIR + '/Image_cont_ev%s.jpg' % inum, quality=100)
             result.paste(img, (0, 0, res[0], res[1]))
         result.save(CAPTURE_DIR + '/Image_combo_%s.jpg' % inum)
         # some fast zoomed image captures
