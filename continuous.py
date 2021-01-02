@@ -235,6 +235,7 @@ while True:
         # capture 100 images
         res = camera.resolution
         result = Image.new("RGB", res)
+        print('capturing ...')
         for ev in range(0, 200):
             inum = datestamp + str(daynow.second) + '-' + str(num) 
             camera.capture(EV_CAPTURE_DIR + '/Image_cont_ev%s.jpg' % inum, quality=100)
@@ -243,6 +244,7 @@ while True:
             result.paste(img, (0, 0, res[0], res[1]))
         result.save(CAPTURE_DIR + '/Image_combo_%s.jpg' % inum)
         # some fast zoomed image captures
+        print('zoomed capturing ...')
         old_zoom = camera.zoom
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
         for ev in range(-25,25):
