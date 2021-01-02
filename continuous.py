@@ -96,7 +96,7 @@ def change_resolution():
 def change_iso():
     print('\n' * 50)
     print("Enter ISO Value:")
-    print("100, 200, 400, 800, 1600, 3200 or 0 to reset: " + str(camera.exposure_speed) + ' ' + camera.exposure_mode + ' ' + str(camera.iso))
+    print("100, 200, 400, 800, 1600 or 0 to reset: " + str(camera.exposure_speed) + ' ' + camera.exposure_mode + ' ' + str(camera.iso))
     reschoice = input('Value: ')
     if not reschoice or reschoice == 0:
          camera.exposure_mode = 'auto'
