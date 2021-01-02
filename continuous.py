@@ -58,7 +58,7 @@ def print_menu():
     print("    a to capture single image")
     print("    b to capture exposure -18 and -12 images 1/2 sec & zoom")
     print("    c to capture hrd-ish images")
-    print("    d to capture continuous images")
+    print("    d to capture continuous images for about 1 minute")
     print("    e long video 5 minutes")
     print("    f medium video 1 minute")
     print("    g short video 30 seconds")
