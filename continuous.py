@@ -255,11 +255,11 @@ while True:
         camera.zoom = old_zoom
         camera.stop_preview()    
     elif choice == "e":
-        capture_video('/short', 30)
+        capture_video('/long', 300)
     elif choice == "f":
-        capture_video('/long', 60)
-    elif choice == "g":
         capture_video('/medium', 60)
+    elif choice == "g":
+        capture_video('/short', 30)
     elif choice == "h":
         # Set a framerate of 1/6fps, then set shutter
         # speed to 6s and ISO to 800
