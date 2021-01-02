@@ -55,17 +55,17 @@ def print_menu():
     print("Options:")
     print("    p to start preview")
     print("    s to stop preview")
-    print("    i to capture single image")
-    print("    e to capture exposure -18 and -12 images 1/2 sec & zoom")
-    print("    d to capture hrd-ish images")
-    print("    c to capture 5 seconds continuous images")
-    print("    f long video 5 minutes")
-    print("    m medium video 1 minute")
-    print("    t short video 30 seconds")
-    print("    n framerate, iso, contrast, saturation, brightness and sharpness")
-    print("    r to change resolution")
-    print("    zi to zoom in") 
-    print("    zo to zoom out") 
+    print("    a to capture single image")
+    print("    b to capture exposure -18 and -12 images 1/2 sec & zoom")
+    print("    c to capture hrd-ish images")
+    print("    d to capture continuous images")
+    print("    e long video 5 minutes")
+    print("    f medium video 1 minute")
+    print("    g short video 30 seconds")
+    print("    h framerate, iso, contrast, saturation, brightness and sharpness")
+    print("    i to change resolution")
+    print("    j to zoom in") 
+    print("    k to zoom out") 
     print("    q quit")
 
 def change_resolution():
@@ -202,13 +202,13 @@ while True:
         camera.start_preview()
     elif choice == "s":
         camera.stop_preview()
-    elif choice == "i":
+    elif choice == "a":
         camera.start_preview()
         inum = datestamp + str(daynow.second) + '-' + str(num)
         camera.capture(CAPTURE_DIR + '/Image_img_%s.jpg' % inum, quality=100)
         sleep(1)
         camera.stop_preview()
-    elif choice == "e":
+    elif choice == "b":
         camera.start_preview()
         sleep(2)
         old_zoom = camera.zoom
@@ -224,9 +224,9 @@ while True:
         camera.zoom = old_zoom
         camera.exposure_compensation = 0
         camera.stop_preview()    
-    elif choice == "d":
-        capture_hdr(num)
     elif choice == "c":
+        capture_hdr(num)
+    elif choice == "d":
         camera.start_preview()
         sleep(2)
         inum = datestamp + str(daynow.second) + '-' + str(num)
@@ -252,13 +252,13 @@ while True:
             sleep(0.025)
         camera.zoom = old_zoom
         camera.stop_preview()    
-    elif choice == "t":
+    elif choice == "e":
         capture_video('/short', 30)
     elif choice == "f":
         capture_video('/long', 60)
-    elif choice == "m":
+    elif choice == "g":
         capture_video('/medium', 60)
-    elif choice == "n":
+    elif choice == "h":
         # Set a framerate of 1/6fps, then set shutter
         # speed to 6s and ISO to 800
         # night mode
@@ -272,11 +272,11 @@ while True:
         camera.start_preview()
         sleep(5)
         camera.stop_preview()
-    elif choice == "r":
+    elif choice == "i":
         change_resolution()
-    elif choice == "zi":
+    elif choice == "j":
         camera.zoom = (0.25, 0.25, 0.5, 0.5)
-    elif choice == "zo":
+    elif choice == "k":
         camera.zoom = (0.0, 0.0, 1.0, 1.0)
     elif choice == "q":
         break
