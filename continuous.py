@@ -227,19 +227,27 @@ while True:
     elif choice == "c":
         capture_hdr(num)
     elif choice == "d":
+        # capture many images
+        c_time = 0.25
+        c_number = 200
+        capture_time = input('Enter image capture time: ')
+        capture_count = input('Enter number of image to capture: ')
+        if capture_time and float(capture_time):
+            c_time = capture_time
+        if capture_count and float(capture_count):
+            c_time = capture_time
         camera.start_preview()
         sleep(2)
         inum = datestamp + str(daynow.second) + '-' + str(num)
         camera.capture_continuous(CAPTURE_DIR + '/Image_cntns_{counter:03d}.jpg')
         sleep(5)
-        # capture 100 images
         res = camera.resolution
         result = Image.new("RGB", res)
         print('capturing ...')
-        for ev in range(0, 200):
+        for ev in range(0, c_number):
             inum = datestamp + str(daynow.second) + '-' + str(num) 
             camera.capture(EV_CAPTURE_DIR + '/Image_cont_ev%s.jpg' % inum, quality=100)
-            sleep(0.025)
+            sleep(c_time)
             img = Image.open(EV_CAPTURE_DIR + '/Image_cont_ev%s.jpg' % inum)
             result.paste(img, (0, 0, res[0], res[1]))
         result.save(CAPTURE_DIR + '/Image_combo_%s.jpg' % inum)
@@ -251,7 +259,7 @@ while True:
             camera.exposure_compensation = ev
             inum = datestamp + str(daynow.second) + '-' + str(num) 
             camera.capture(EV_CAPTURE_DIR + '/Image_xhdr_ev%s.jpg' % inum, quality=100)
-            sleep(0.025)
+            sleep(c_time)
         camera.zoom = old_zoom
         camera.stop_preview()    
     elif choice == "e":
