@@ -235,7 +235,7 @@ while True:
         if capture_time and float(capture_time):
             c_time = float(capture_time)
         if capture_count and float(capture_count):
-            c_time = int(capture_time)
+            c_number = int(capture_count)
         camera.start_preview()
         sleep(2)
         inum = datestamp + str(daynow.second) + '-' + str(num)
