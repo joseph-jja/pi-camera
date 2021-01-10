@@ -233,9 +233,9 @@ while True:
         capture_time = input('Enter image capture time: ')
         capture_count = input('Enter number of image to capture: ')
         if capture_time and float(capture_time):
-            c_time = capture_time
+            c_time = float(capture_time)
         if capture_count and float(capture_count):
-            c_time = capture_time
+            c_time = int(capture_time)
         camera.start_preview()
         sleep(2)
         inum = datestamp + str(daynow.second) + '-' + str(num)
