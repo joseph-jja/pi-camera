@@ -15,6 +15,8 @@ camera = PiCamera()
 camera.resolution = (3280,2464)
 camera.still_stats = 'true'
 camera.shutter_speed = 10000000
+camera.exposure_mode = 'night'
+camera.iso = 800
 
 daynow = datetime.now()
 datestamp = str(daynow.year) + '-' + str(daynow.month) + '-' + str(daynow.day) + '-' + str(daynow.hour) + '-' + str(daynow.minute) + '-'
@@ -93,6 +95,32 @@ def change_resolution():
         camera.resolution = (640, 480)
         camera.sensor_mode = 7
    
+def change_exposure_mode():
+    print('\n' * 50)
+    print("Select Value:")
+    print("    a auto")
+    print("    b off")
+    print("    c night")
+    print("    d backlight")
+    print("    e verylong")
+    print("    f fixedfps")
+    print("    g antishake")
+    reschoice = input('Value: ')
+    if reschoice == "a":
+         camera.exposure_mode = 'auto'
+    elif reschoice == "b":
+         camera.exposure_mode = 'off'
+    elif reschoice == "c":
+         camera.exposure_mode = 'night'
+    elif reschoice == "d":
+         camera.exposure_mode = 'backlight'
+    elif reschoice == "e":
+         camera.exposure_mode = 'verylong'
+    elif reschoice == "f":
+         camera.exposure_mode = 'fixedfps'
+    elif reschoice == "g":
+         camera.exposure_mode = 'antishake'
+
 def change_iso():
     print('\n' * 50)
     print("Enter ISO Value:")
@@ -104,10 +132,13 @@ def change_iso():
          camera.iso = int(reschoice)
          sleep(5)
          camera.shutter_speed = camera.exposure_speed
-         camera.exposure_mode = 'off'
-         g = camera.awb_gains
-         camera.awb_mode = 'off'
-         camera.awb_gains = g
+         # exp_mode = camera.exposute_mode
+         # camera.exposure_mode = 'off'
+         # g = camera.awb_gains
+         # camera.awb_mode = 'off'
+         # camera.awb_gains = g
+         # camera.exposute_mode = exp_mode
+         change_exposure_mode():
 
 def change_framerate():
     print('\n' * 50)
@@ -180,8 +211,8 @@ def capture_hdr(num):
         num = num + 1
         sleep(0.25)
     sleep(1)
+    camera.stop_preview()
     camera.exposure_compensation = 0
-    camera.stop_preview()    
     print("Processing images ...")
     res = camera.resolution
     result = Image.new("RGB", res)
@@ -199,9 +230,13 @@ while True:
     choice = input('Enter a command: ')
     if choice == "p":
         # camera.start_preview(fullscreen=False,window=(300,0,0,200))
+        if camera.exposure_mode == 'night':
+            exposuse_mode = 'nightpreview'
         camera.start_preview()
     elif choice == "s":
         camera.stop_preview()
+        if camera.exposure_mode == 'nightpreview':
+            exposuse_mode = 'night'
     elif choice == "a":
         camera.start_preview()
         inum = datestamp + str(daynow.second) + '-' + str(num)
