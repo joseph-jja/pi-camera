@@ -72,6 +72,7 @@ def print_menu():
 
 def change_resolution():
     print('\n' * 50)
+    print("Select resolution: " + camera.resolution)
     print("Resolution Options:")
     print("    a resolution 3280 x 2464")
     print("    b resolution 1640 x 1232")
@@ -97,6 +98,7 @@ def change_resolution():
    
 def change_exposure_mode():
     print('\n' * 50)
+    print("Enter exposure mode: " + camera.exposure_mode)
     print("Select Value:")
     print("    a auto")
     print("    b off")
@@ -138,7 +140,7 @@ def change_iso():
          # camera.awb_mode = 'off'
          # camera.awb_gains = g
          # camera.exposute_mode = exp_mode
-         change_exposure_mode():
+         change_exposure_mode()
 
 def change_framerate():
     print('\n' * 50)
