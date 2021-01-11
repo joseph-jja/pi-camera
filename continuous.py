@@ -72,8 +72,8 @@ def print_menu():
 
 def change_resolution():
     print('\n' * 50)
-    print("Select resolution: " + camera.resolution)
-    print("Resolution Options:")
+    print("Current resolution " + camera.resolution[0] + " x " + camera.resolution[1])
+    print("Select New Resolution:")
     print("    a resolution 3280 x 2464")
     print("    b resolution 1640 x 1232")
     print("    c resolution 1920 x 1080")
