@@ -1,4 +1,7 @@
-# taken from https://www.instructables.com/id/Raspberry-Pi-Astro-Cam/
+# originally taken from https://www.instructables.com/id/Raspberry-Pi-Astro-Cam/
+# has been vastly expanded to support many other options for capturing
+# with the idea of being able to support capturing longer times
+# different ISO and image capture settings and so on
 from picamera import PiCamera 
 from time import sleep,time 
 from datetime import datetime
