@@ -12,7 +12,7 @@ module.exports = [{
     name: 'filename',
     paramName: 'image.png'
 },{
-    name: 'xxx',
-    paramName: '-xxx',
-    boolean: false
+    name: 'framerate',
+    paramName: '--framerate',
+    values: [30, 60]
 }];
