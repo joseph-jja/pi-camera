@@ -1,3 +1,4 @@
+const os = require('os');
 
 async function start() {
 
@@ -11,12 +12,14 @@ async function start() {
         if (item.values) {
             return formFields.buildSelect(item.name, item.paramName, item.values);
         } else if (item.range) {
-            const values = formFields.getRangeValues(item.range, item.step);
+            const values = formFields.getRangeValues(item.range, item.step, item.decimalPlaces);
             return formFields.buildSelect(item.name, item.paramName, values);
         } else {
             console.log('Unsupported field: ', item);
             return '';
         }
+    }).reduce((acc, next) => {
+        return `${acc}${os.EOL}${next}`; 
     });
    
     console.log(fields); 
