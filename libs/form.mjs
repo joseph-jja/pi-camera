@@ -19,3 +19,11 @@ export function getRangeValue(range, step) {
     return values;
 }
 
+export function textField(name, defaultValue = '', size = 35) {
+    return `<input type="text" name="${name}" value="${defaultValue}" size="35">
+}
+
+export function checkboxField(name, value, isEnabled = false) {
+    return `<input type="checkbox" name="${name}" value="${value}">
+}
+
