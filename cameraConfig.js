@@ -1,13 +1,16 @@
 module.exports = [{
     name: 'ISO',
-    paramName: "-iso'
+    paramName: '-iso',
     values: []
 },{
     name: 'ev',
-    paramName: "-ev'
+    paramName: '-ev',
     range:[-1, 10]
 },{
+    name: 'filename',
+    paramName: 'image.png'
+},{
     name: 'xxx',
-    paramName: "-xxx'
+    paramName: '-xxx',
     boolean: false
 }];
