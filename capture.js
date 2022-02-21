@@ -6,7 +6,20 @@ async function start() {
 
     const formFields = await import('./libs/form.mjs');
 
-    console.log(formFields);
+    const fields = config.map(item => {
+
+        if (item.values) {
+            return formFields.buildSelect(item.name, item.paramName, item.values);
+        } else if (item.range) {
+            const values = formFields.getRangeValues(item.range, item.step);
+            return formFields.buildSelect(item.name, item.paramName, values);
+        } else {
+            console.log('Unsupported field: ', item);
+            return '';
+        }
+    });
+   
+    console.log(fields); 
 }
 
 start();
