@@ -42,7 +42,7 @@ async function start() {
             return '';
         }
     }).reduce((acc, next) => {
-        return `${acc}<br>${os.EOL}${next}`; 
+        return `${acc}<br><br>${os.EOL}${next}`; 
     });
    
     app.get('/', (request, response) => {
