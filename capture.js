@@ -52,7 +52,7 @@ async function start() {
         response.end(getHTML(fields));
     });
 
-    const server = http.createSErver(app);
+    const server = http.createServer(app);
     server.listen(20000);
 }
 
