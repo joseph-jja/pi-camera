@@ -35,16 +35,16 @@ async function start() {
         } else if (item.range) {
             const values = formFields.getRangeValues(item.range, item.step, item.decimalPlaces);
             return formFields.buildSelect(item.name, item.paramName, values);
+        } else if (item.fieldValue) {
+            return formFields.textField(item.name, item.fieldValue);
         } else {
-            console.log('Unsupported field: ', item);
+            console.log(item);
             return '';
         }
     }).reduce((acc, next) => {
         return `${acc}<br>${os.EOL}${next}`; 
     });
    
-    console.log(fields); 
-
     app.get('/', (request, response) => {
         response.writeHead(200, {
              'Content-Type': 'text/html'

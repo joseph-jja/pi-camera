@@ -10,7 +10,7 @@ module.exports = [{
     values:['--width 640 --height 480', '--width 1296 --height 730']
 },{
     name: 'filename',
-    paramName: 'video.png'
+    fieldValue: 'video.png'
 },{
     name: 'EV_compensation',
     paramName: '--ev',
@@ -20,6 +20,7 @@ module.exports = [{
 },{
     name: 'metering',
     paramName: '--metering',
+    values: ['centre', 'spot', 'average'] // 'custom'
 },{
     name: 'framerate',
     paramName: '--framerate',
