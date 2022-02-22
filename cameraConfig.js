@@ -1,5 +1,5 @@
 module.exports = [{
-    name: 'ISO',
+    name: 'ISO_Gain',
     paramName: '--gain',
     range: [1, 40],
     step: 0.1,
