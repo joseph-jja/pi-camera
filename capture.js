@@ -40,7 +40,7 @@ async function start() {
             return '';
         }
     }).reduce((acc, next) => {
-        return `${acc}${os.EOL}${next}`; 
+        return `${acc}<br>${os.EOL}${next}`; 
     });
    
     console.log(fields); 
