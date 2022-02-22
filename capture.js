@@ -19,6 +19,7 @@ function getHTML(body) {
         ${body}
     </body>
 </html>`;
+}
 
 async function start() {
 
@@ -51,7 +52,8 @@ async function start() {
         response.end(getHTML(fields));
     });
 
-    app.listen(20000);
+    const server = http.createSErver(app);
+    server.listen(20000);
 }
 
 start();
