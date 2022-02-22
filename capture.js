@@ -50,6 +50,8 @@ async function start() {
         });
         response.end(getHTML(fields));
     });
+
+    app.listen(20000);
 }
 
 start();
