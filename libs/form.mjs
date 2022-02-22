@@ -2,6 +2,10 @@ import {
     EOL
 } from 'os';
 
+export function makeLabel(name) {
+    return `<label>${name}</label>${EOL}`;
+}
+
 export function buildSelect(name, paramName, values) {
 
     const options = values.map(item => {
@@ -10,7 +14,9 @@ export function buildSelect(name, paramName, values) {
         return `${acc}${EOL}${next}`;
     });
 
-    return `<select name="${name}">${options}</select>`;
+    const initalOption = '<option></option>';
+
+    return `${makeLabel(name)}<select name="${name}">${initalOption}${options}</select>`;
 }
 
 export function getRangeValues(range, step, decimalPlaces = 0) {
@@ -23,9 +29,9 @@ export function getRangeValues(range, step, decimalPlaces = 0) {
 }
 
 export function textField(name, defaultValue = '', size = 35) {
-    return `<input type="text" name="${name}" value="${defaultValue}" size="35">`;
+    return `${makeLabel(name)}<input type="text" name="${name}" value="${defaultValue}" size="35">`;
 }
 
 export function checkboxField(name, value, isEnabled = false) {
-    return `<input type="checkbox" name="${name}" value="${value}">`;
+    return `${makeLabel(name)}<input type="checkbox" name="${name}" value="${value}">`;
 }

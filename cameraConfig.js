@@ -10,7 +10,16 @@ module.exports = [{
     values:['--width 640 --height 480', '--width 1296 --height 730']
 },{
     name: 'filename',
-    paramName: 'image.png'
+    paramName: 'video.png'
+},{
+    name: 'EV_compensation',
+    paramName: '--ev',
+    range: [-10, 10],
+    step: 0.1,
+    decimalPlaces: 1
+},{
+    name: 'metering',
+    paramName: '--metering',
 },{
     name: 'framerate',
     paramName: '--framerate',

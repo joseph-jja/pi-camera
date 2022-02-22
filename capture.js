@@ -1,4 +1,24 @@
-const os = require('os');
+const os = require('os'),
+    http = require('http'),
+    childProcess = require('child_process');
+
+const express = require('express');
+
+const app = express();
+
+const VIDEO_CMD = 'libcamera-vid',
+    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline --listen -o tcp://0.0.0.0:10000';
+
+function getHTML(body) {
+    return `<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>PI Camera</title>
+    </head>
+    <body>
+        ${body}
+    </body>
+</html>`;
 
 async function start() {
 
@@ -23,6 +43,13 @@ async function start() {
     });
    
     console.log(fields); 
+
+    app.get('/', (request, response) {
+        response.writeHead(200, {
+             'Content-Type': 'text/html'
+        });
+        response.end(getHTML(fields));
+    });
 }
 
 start();
