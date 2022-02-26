@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
              }).map(element => {
                  const tagName = element.tagName.toLowerCase();
                  if (tagName === 'select') {
-                     console.log(element.selectedValue);
+                     console.log(element.selectedOptions[0]);
                  }
 
                  return element;                 
