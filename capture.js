@@ -32,9 +32,9 @@ function getHTML(body) {
 </html>`;
 }
 
-app.use(bodyParser, {
+app.use(bodyParser({
     limit: 100000
-});
+}));
 
 async function start() {
 
