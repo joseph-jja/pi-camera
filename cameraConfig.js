@@ -9,9 +9,6 @@ module.exports = [{
     paramName: '',
     values:['--width 640 --height 480', '--width 1296 --height 730']
 },{
-    name: 'filename',
-    fieldValue: 'video.png'
-},{
     name: 'EV_compensation',
     paramName: '--ev',
     range: [-10, 10],

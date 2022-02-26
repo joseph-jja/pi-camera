@@ -11,14 +11,14 @@ window.addEventListener('DOMContentLoaded', () => {
              }).map(element => {
                  const tagName = element.tagName.toLowerCase();
                  if (tagName === 'select') {
-                     const value = element.selectedOptions[0].value;
-                     console.log(element.name, value);
-                     return element;
+                     return element.selectedOptions[0].value;
                  } else {
-                     console.log(element.name, element.value);
-                     return element;
+                     return element.value;
                  }
+             }).reduce((acc, next) => {
+                 return `${acc} ${next}`;
              });
+             console.log(options); 
         }
     });
 });

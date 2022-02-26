@@ -62,6 +62,12 @@ async function start() {
         fs.createReadStream('js/captureClient.js').pipe(response);
     }); 
 
+    app.post('/update', (request, response) => {
+        response.writeHead(200, {});
+        response.end('');
+        console.log(request);
+    });
+
     app.get('/', (request, response) => {
         response.writeHead(200, {
              'Content-Type': 'text/html'
