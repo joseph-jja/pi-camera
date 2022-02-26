@@ -1,4 +1,5 @@
 const os = require('os'),
+    fs = require('fs'),
     http = require('http'),
     childProcess = require('child_process');
 
@@ -6,9 +7,9 @@ const express = require('express');
 
 const app = express();
 
+// VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline --listen -o tcp://0.0.0.0:10000';
 const VIDEO_CMD = 'libcamera-vid',
-    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline --listen -o tcp://0.0.0.0:10000';
-//libcamera-vid -t 0 --inline -o - | cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264
+    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o - | cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264';
 
 
 function getHTML(body) {
@@ -21,11 +22,12 @@ function getHTML(body) {
         <form onsubmit="return false;">
             ${body}
             <br>
-            <button type="submit">
+            <button type="submit" id="executeButton">
                 Update
             </button>
         </form>
     </body>
+    <script src="/js/captureClient.js" type="text/javascript"></script>
 </html>`;
 }
 
@@ -53,6 +55,13 @@ async function start() {
         return `${acc}<br><br>${os.EOL}${next}`; 
     });
    
+    app.get('/js/captureClient.js', (request, response) => {
+        response.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        fs.createReadStream('js/captureClient.js').pipe(response);
+    }); 
+
     app.get('/', (request, response) => {
         response.writeHead(200, {
              'Content-Type': 'text/html'
