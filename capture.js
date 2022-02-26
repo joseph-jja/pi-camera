@@ -33,6 +33,7 @@ function getHTML(body) {
 }
 
 app.use(bodyParser.urlencoded({
+    extended: false,
     limit: 100000
 }));
 
