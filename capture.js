@@ -32,7 +32,7 @@ function getHTML(body) {
 </html>`;
 }
 
-app.use(bodyParser({
+app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
