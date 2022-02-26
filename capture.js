@@ -83,7 +83,7 @@ async function start() {
                 if (videoProcess) {
                     videoProcess.kill(0);
                 }
-                videoProcess = childProcess.exec(VIDEO_CMD + videoOpts + VIDEO_PREVIEW_OPTS);
+                videoProcess = childProcess.exec(VIDEO_CMD + options + VIDEO_PREVIEW_OPTS);
             }
         }
     });
