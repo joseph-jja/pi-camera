@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         const name = target.nodeName;
         if (name.toLowerCase() === 'button') {
-             const formElements = document.forms['cameraOptions');
+             const formElements = document.forms['cameraOptions'];
         }
     });
 });
