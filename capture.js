@@ -9,7 +9,7 @@ const app = express();
 
 // VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline --listen -o tcp://0.0.0.0:10000';
 const VIDEO_CMD = 'libcamera-vid',
-    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o - | cvlc stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264';
+    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o - | cvlc stream:///dev/stdin --sout \'#rtp{sdp=rtsp://:10000/stream1}\' :demux=h264';
 
 
 function getHTML(body) {
