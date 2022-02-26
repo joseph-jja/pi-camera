@@ -8,9 +8,13 @@ const express = require('express'),
 
 const app = express();
 
+let videoProcess, 
+    streamProcess;
+
 // VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline --listen -o tcp://0.0.0.0:10000';
 const VIDEO_CMD = 'libcamera-vid',
-    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o - | cvlc stream:///dev/stdin --sout \'#rtp{sdp=rtsp://:10000/stream1}\' :demux=h264';
+    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o - | cvlc stream:///dev/stdin --sout \'#rtp{sdp=rtsp://:10000/stream1}\' :demux=h264',
+    FFMPEG = 'ffmpeg';
 
 
 function getHTML(body) {
@@ -71,13 +75,16 @@ async function start() {
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-        console.log(request.body, Object.keys(request.body).length);
         if (request.body && Object.keys(request.body).length > 0) {
-        console.log('here');
             const options = Object.keys(request.body).filter(item => {
                 return (item && item.length > 0);
             });
-            console.log(options);
+            if (options.length > 0) {
+                if (videoProcess) {
+                    videoProcess.kill(0);
+                }
+                videoProcess = childProces.exec(VIDEO_CMD + videoOpts + VIDEO_PREVIEW_OPTS);
+            }
         }
     });
 
