@@ -70,7 +70,12 @@ async function start() {
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-        console.log(request.body);
+        if (request.body && request.body.length > 0) {
+            const options = Object.keys(request.body).filter(item => {
+                return (item && item.length > 0);
+            });
+            console.log(options);
+        }
     });
 
     app.get('/', (request, response) => {
