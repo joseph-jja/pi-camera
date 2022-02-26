@@ -18,7 +18,12 @@ function getHTML(body) {
         <title>PI Camera</title>
     </head>
     <body>
-        ${body}
+        <form onsubmit="return false;">
+            ${body}
+            <button type="submit">
+                Update
+            </button>
+        </form>
     </body>
 </html>`;
 }
