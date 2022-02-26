@@ -18,7 +18,17 @@ window.addEventListener('DOMContentLoaded', () => {
              }).reduce((acc, next) => {
                  return `${acc} ${next}`;
              });
-             console.log(options); 
+             if (options.trim().length > 0) {
+                 fetch('/update', {
+                     method: 'POST',
+                     cache: 'no-cache', 
+                     referrerPolicy: 'no-referrer',
+                     headers: {
+                         'Content-Type': 'application/x-www-form-urlencoded'
+                     },
+                     body: options
+                 })
+             }
         }
     });
 });
