@@ -11,10 +11,13 @@ window.addEventListener('DOMContentLoaded', () => {
              }).map(element => {
                  const tagName = element.tagName.toLowerCase();
                  if (tagName === 'select') {
-                     console.log(element.selectedOptions[0]);
+                     const value = element.selectedOptions[0].value;
+                     console.log(element.name, value);
+                     return element;
+                 } else {
+                     console.log(element.name, element.value);
+                     return element;
                  }
-
-                 return element;                 
              });
         }
     });
