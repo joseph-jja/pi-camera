@@ -20,6 +20,7 @@ function getHTML(body) {
     <body>
         <form onsubmit="return false;">
             ${body}
+            <br>
             <button type="submit">
                 Update
             </button>
