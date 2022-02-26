@@ -3,7 +3,8 @@ const os = require('os'),
     http = require('http'),
     childProcess = require('child_process');
 
-const express = require('express');
+const express = require('express'),
+    bodyParser = require('body-parser');
 
 const app = express();
 
@@ -30,6 +31,10 @@ function getHTML(body) {
     <script src="/js/captureClient.js" type="text/javascript"></script>
 </html>`;
 }
+
+app.use(bodyParser, {
+    limit: 100000
+});
 
 async function start() {
 
@@ -65,7 +70,7 @@ async function start() {
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-        console.log(request);
+        console.log(request.body);
     });
 
     app.get('/', (request, response) => {
