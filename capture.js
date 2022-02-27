@@ -87,7 +87,7 @@ async function start() {
         if (request.body && Object.keys(request.body).length > 0) {
             const options = Object.keys(request.body).filter(item => {
                 return (item && item.length > 0);
-            }).split(/\ /);
+            });
             if (options.length > 0) {
                 if (videoProcess) {
                     videoProcess.kill(0);
