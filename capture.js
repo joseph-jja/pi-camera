@@ -93,8 +93,7 @@ async function start() {
                     videoProcess.kill(0);
                 }
                 videoProcess = childProcess.spawn(VIDEO_CMD + options + RTSP_VIDEO_PREVIEW_OPTS);
-console.log(videoProcess.stdout);
-                videoProcess.stdout.pipe(RTSP_PIPED_VIDEO_PREVIEW_OPTS);
+                //videoProcess.stdout.pipe(RTSP_PIPED_VIDEO_PREVIEW_OPTS);
             }
         }
     });
