@@ -88,7 +88,8 @@ async function start() {
                 return (item && item.length > 0);
             });
             if (options.length > 0) {
-                videoProcess = childProcess.spawn(BASH_CMD, options.unshift(VIDEO_CMD));
+                options.unshift(VIDEO_CMD);
+                videoProcess = childProcess.spawn(BASH_CMD, options);
             }
         }
     });
