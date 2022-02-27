@@ -7,7 +7,13 @@ module.exports = [{
 },{
     name: 'videoSize',
     paramName: '',
-    values:['--width 640 --height 480', '--width 1296 --height 730']
+    values:[
+        '--width 640 --height 480', 
+        '--width 1296 --height 730',
+        '--width 1920 --height 1080',
+        '--width 1640 --height 1232',
+        '--width 3280 --height 2464'
+    ]
 },{
     name: 'EV_compensation',
     paramName: '--ev',
@@ -21,5 +27,29 @@ module.exports = [{
 },{
     name: 'framerate',
     paramName: '--framerate',
-    values: [30, 60]
+    values: [10, 15, 30, 60]
+},{
+    name: 'exposure_profile',
+    paramName: '--exposure',
+    values: ['normal', 'sport', 'long']
+},{
+    name: 'contrast',
+    paramName: '--contrast',
+    range: [0, 1],
+    step: 0.1
+},{
+    name: 'saturation',
+    paramName: '--saturation',
+    range: [0, 1],
+    step: 0.1
+},{
+    name: 'sharpness',
+    paramName: '--sharpness',
+    range: [0, 1],
+    step: 0.1
+},{
+    name: 'brightness',
+    paramName: '--brightness',
+    range: [-1, 1],
+    step: 0.1
 }];
