@@ -36,20 +36,24 @@ module.exports = [{
     name: 'contrast',
     paramName: '--contrast',
     range: [0, 1],
-    step: 0.1
+    step: 0.1,
+    decimalPlaces: 1
 },{
     name: 'saturation',
     paramName: '--saturation',
     range: [0, 1],
-    step: 0.1
+    step: 0.1,
+    decimalPlaces: 1
 },{
     name: 'sharpness',
     paramName: '--sharpness',
     range: [0, 1],
-    step: 0.1
+    step: 0.1,
+    decimalPlaces: 1
 },{
     name: 'brightness',
     paramName: '--brightness',
     range: [-1, 1],
-    step: 0.1
+    step: 0.1,
+    decimalPlaces: 1
 }];
