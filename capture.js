@@ -8,14 +8,13 @@ const express = require('express'),
 
 const app = express();
 
+const basedir = process.cwd();
+
 let videoProcess, 
     streamProcess;
 
-const VIDEO_CMD = '/usr/bin/libcamera-vid',
-    VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline --listen -o tcp://0.0.0.0:10000',
-    RTSP_VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o -'.split(/\ /),
-    RTSP_PIPED_VIDEO_PREVIEW_OPTS = 'cvlc stream:///dev/stdin --sout \'#rtp{sdp=rtsp://:10000/stream1}\' :demux=h264'.split(/\ /), 
-    FFMPEG = 'ffmpeg';
+const BASH_CMD = '/bin/bash';
+const VIDEO_CMD = `${basedir}/rtspStream.sh`;
 
 /*
 // ffmpeg -v verbose -i rtmp://192.168.50.100:10000/<stream> 
@@ -89,11 +88,7 @@ async function start() {
                 return (item && item.length > 0);
             });
             if (options.length > 0) {
-                if (videoProcess) {
-                    videoProcess.kill(0);
-                }
-                videoProcess = childProcess.spawn(VIDEO_CMD, options.concat(RTSP_VIDEO_PREVIEW_OPTS));
-                //videoProcess.stdout.pipe(RTSP_PIPED_VIDEO_PREVIEW_OPTS);
+                videoProcess = childProcess.spawn(BASH_CMD, options.unshift(VIDEO_CMD));
             }
         }
     });
