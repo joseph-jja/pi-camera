@@ -89,6 +89,9 @@ async function start() {
             });
             if (options.length > 0) {
                 options.unshift(VIDEO_CMD);
+                if (videoProcess) {
+                    console.log(videoProcess);
+                }
                 videoProcess = childProcess.spawn(BASH_CMD, options);
             }
         }
