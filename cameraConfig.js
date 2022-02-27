@@ -48,10 +48,10 @@ module.exports = [{
     range: [0, 1],
     step: 0.1,
     decimalPlaces: 1
-},{
+}/*,{
     name: 'brightness',
     paramName: '--brightness',
     range: [-1, 1],
     step: 0.1,
     decimalPlaces: 1
-}];
+}*/];
