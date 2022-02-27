@@ -11,9 +11,10 @@ const app = express();
 let videoProcess, 
     streamProcess;
 
-//VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o - | cvlc stream:///dev/stdin --sout \'#rtp{sdp=rtsp://:10000/stream1}\' :demux=h264',
 const VIDEO_CMD = 'libcamera-vid',
     VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline --listen -o tcp://0.0.0.0:10000',
+    RTSP_VIDEO_PREVIEW_OPTS = '--nopreview -t 0 --inline -o -',
+    RTSP_PIPED_VIDEO_PREVIEW_OPTS = 'cvlc stream:///dev/stdin --sout \'#rtp{sdp=rtsp://:10000/stream1}\' :demux=h264', 
     FFMPEG = 'ffmpeg';
 
 // ffplay tcp://192.168.50.100:10000/stream -vf "setpts=N/30" -fflags nobuffer -flags low_delay -framedrop
@@ -85,7 +86,8 @@ async function start() {
                 if (videoProcess) {
                     videoProcess.kill(0);
                 }
-                videoProcess = childProcess.exec(VIDEO_CMD + options + VIDEO_PREVIEW_OPTS);
+                videoProcess = childProcess.spawn(VIDEO_CMD + options + RTSP_VIDEO_PREVIEW_OPTS);
+                videoProcess.stdout.pipe(RTSP_PIPED_VIDEO_PREVIEW_OPTS);
             }
         }
     });
