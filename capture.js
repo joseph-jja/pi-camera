@@ -90,7 +90,8 @@ async function start() {
             if (options.length > 0) {
                 options.unshift(VIDEO_CMD);
                 if (videoProcess) {
-                    console.log(videoProcess);
+                    const pid = videoProcess.pid;
+                    process.kill(pid, 'SIGTERM')
                 }
                 videoProcess = childProcess.spawn(BASH_CMD, options);
             }
