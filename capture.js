@@ -12,7 +12,7 @@ let videoProcess,
     streamProcess;
 
 const BASH_CMD = '/bin/bash';
-const VIDEO_CMD = /home/pi/pi-camera/rtspStream.sh';
+const VIDEO_CMD = '/home/pi/pi-camera/rtspStream.sh';
 
 /*
 // ffmpeg -v verbose -i rtmp://192.168.50.100:10000/<stream> 
