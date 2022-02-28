@@ -31,7 +31,7 @@ FOREVER_LOG=/tmp/forever.log
 APP_LOG=/tmp/pi-camera.log
 APP_ERR_LOG=/tmp/pi-camera.error.log
 LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
-PID_FILE=/var/run/forever.pid
+PID_FILE=/tmp/forever.pid
 FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 # pi camera code setup
