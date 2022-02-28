@@ -107,7 +107,7 @@ async function start() {
                 } else {
                     videoProcess = childProcess.spawn(BASH_CMD, options);
                 }
-                console.log('execueted script ', options);
+                console.log('Executed script ', options);
             }
         }
     });
