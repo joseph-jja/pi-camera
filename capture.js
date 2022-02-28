@@ -100,10 +100,9 @@ async function start() {
                 options.unshift(VIDEO_CMD);
                 if (videoProcess) {
                     const pid = videoProcess.pid;
-                    const killProc = childProcess.spawn('kill', ['-9', pid]);    
-                    killProc.on('close', () => {
+                    childProcess.exec(`kill -9 ${pid}`, () => {
                         videoProcess = childProcess.spawn(BASH_CMD, options);
-                    });
+                    });    
                 } else {
                     videoProcess = childProcess.spawn(BASH_CMD, options);
                 }
