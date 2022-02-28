@@ -20,7 +20,8 @@ const VIDEO_CMD = '/home/pi/pi-camera/rtspStream.sh';
 // baseline -maxrate 400k -bufsize 1835k -pix_fmt yuv420p -flags 
 // -global_header -hls_time 10 -hls_list_size 6 -hls_wrap 10 -start_number 1 
 // /tmp/streamName.m3u8
-// ffplay rtsp://192.168.50.100:10000/stream -vf "setpts=N/30" -fflags nobuffer -flags low_delay -framedrop
+// ffplay rtsp://192.168.50.100:10000/stream1 -vf "setpts=N/30" -fflags nobuffer -flags low_delay -framedrop
+// vlc rtsp://192.168.50.100:10000/stream1
 */
 
 function getHTML(body) {
@@ -37,6 +38,7 @@ function getHTML(body) {
                 Update
             </button>
         </form>
+        <br><hr><br>
         <form name="shutdown" onsubmit="return false;">
             <button type="submit" id="shutdownButton">
                 Shutdown
