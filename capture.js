@@ -103,6 +103,7 @@ async function start() {
                     process.kill(pid, 'SIGTERM')
                 }
                 videoProcess = childProcess.spawn(BASH_CMD, options);
+                console.log('execueted script ', options);
             }
         }
     });
