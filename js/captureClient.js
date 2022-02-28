@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
                  return `${acc} ${next}`;
              });
              if (options.trim().length > 0) {
-                 fetch('/shutdown', {
+                 fetch('/update', {
                      method: 'POST',
                      cache: 'no-cache', 
                      referrerPolicy: 'no-referrer',
@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
                  });
              }
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
-                 fetch('/update', {
+                 fetch('/shutdown', {
                      method: 'POST',
                      cache: 'no-cache', 
                      referrerPolicy: 'no-referrer',
