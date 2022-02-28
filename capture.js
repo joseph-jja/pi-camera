@@ -85,7 +85,7 @@ async function start() {
         fs.createReadStream('js/captureClient.js').pipe(response);
     }); 
 
-    app.post('/shutdown.js', (request, response) => {
+    app.post('/shutdown', (request, response) => {
         response.writeHead(200, {});
         response.end('');
 		childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
