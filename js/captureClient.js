@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
                  return `${acc} ${next}`;
              });
              if (options.trim().length > 0) {
-                 fetch('/update', {
+                 fetch('/shutdown', {
                      method: 'POST',
                      cache: 'no-cache', 
                      referrerPolicy: 'no-referrer',
