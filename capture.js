@@ -13,6 +13,7 @@ let videoProcess,
 
 const BASH_CMD = '/bin/bash';
 const VIDEO_CMD = '/home/pi/pi-camera/rtspStream.sh';
+const MJPEG_CMD = '/home/pi/pi-camera/mjpegRestream.sh';
 
 /*
 // ffmpeg -v verbose -i rtmp://192.168.50.100:10000/<stream> 
@@ -110,6 +111,28 @@ async function start() {
                 }
                 console.log('Executed script ', options);
             }
+        }
+    });
+
+    apt.get('/preview', (request, response) => {
+        
+        if (videProcess) {
+            if (streamProcess) {
+                const pid = streamProcess.pid;
+                childProcess.exec(`kill -9 ${pid}`, () => {
+                    streamProcess = childProcess.spawn(BASH_CMD, [MJPEG_CMD]);
+                    response.writeHead(200, { 
+                        'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+                        'Cache-Control': 'no-cache'
+                    });
+                    streamProcess.stdout.pipe(response);
+                });    
+            }
+
+            
+        } else {
+            response.writeHead(200, {});
+            response.end('');
         }
     });
 
