@@ -1,11 +1,11 @@
 #! /bin/sh
 
 LIBCAMERA_PID=`ps -ef |grep libcamera-vid | awk '{print $2}'`
-if [ "$LIBCAMERA_PID" != "" } ; then 
+if [ "$LIBCAMERA_PID" != "" ] ; then 
     kill -9 "$LIBCAMERA_PID"
 fi
 VLC_PID=`ps -ef |grep vlc | awk '{print $2}'`
-if [ "$VLC_PID" != "" } ; then 
+if [ "$VLC_PID" != "" ] ; then 
     kill -9 "$VLC_PID"
 fi
 
