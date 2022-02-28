@@ -27,9 +27,9 @@ export PATH=$USR_BIN:$PATH
 FOREVER_BIN=/home/pi/.nvm/versions/node/v16.14.0/bin/forever
 
 # forever setup
-FOREVER_LOG=/var/log/forever.log
-APP_LOG=/var/log/pi-camera.log
-APP_ERR_LOG=/var/log/pi-camera.error.log
+FOREVER_LOG=/tmp/forever.log
+APP_LOG=/tmp/pi-camera.log
+APP_ERR_LOG=/tmp/pi-camera.error.log
 LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
 PID_FILE=/var/run/forever.pid
 FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
