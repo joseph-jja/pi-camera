@@ -39,6 +39,11 @@ function getHTML(body) {
                 Update
             </button>
         </form>
+        <form name="shutdown" onsubmit="return false;">
+            <button type="submit" id="shutdownButton">
+                Shutdown
+            </button>
+        </form>
     </body>
     <script src="/js/captureClient.js" type="text/javascript"></script>
 </html>`;
@@ -78,6 +83,12 @@ async function start() {
             'Content-Type': 'application/json'
         });
         fs.createReadStream('js/captureClient.js').pipe(response);
+    }); 
+
+    app.post('/shutdown.js', (request, response) => {
+        response.writeHead(200, {});
+        response.end('');
+		childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
     }); 
 
     app.post('/update', (request, response) => {
