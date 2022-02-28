@@ -29,7 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
                      body: options
                  });
              }
-        ] else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
+        } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
                  fetch('/update', {
                      method: 'POST',
                      cache: 'no-cache', 
