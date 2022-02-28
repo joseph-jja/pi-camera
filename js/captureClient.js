@@ -3,7 +3,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
-        if (name.toLowerCase() === 'button') {
+        if (name.toLowerCase() === 'button' && target.id === 'executeButton') {
              const formElements = Array.from(document.forms['cameraOptions']);
              const options = formElements.filter(element => {
                  const nodeName = element.nodeName.toLowerCase();
@@ -27,8 +27,18 @@ window.addEventListener('DOMContentLoaded', () => {
                          'Content-Type': 'application/x-www-form-urlencoded'
                      },
                      body: options
-                 })
+                 });
              }
+        ] else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
+                 fetch('/update', {
+                     method: 'POST',
+                     cache: 'no-cache', 
+                     referrerPolicy: 'no-referrer',
+                     headers: {
+                         'Content-Type': 'application/x-www-form-urlencoded'
+                     },
+                     body: ''
+                 })
         }
     });
 });
