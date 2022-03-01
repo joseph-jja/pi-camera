@@ -94,10 +94,20 @@ async function start() {
                 if (videoProcess) {
                     const pid = videoProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
-                        videoProcess = childProcess.spawn(BASH_CMD, options);
+                        videoProcess = childProcess.spawn(BASH_CMD, options, {
+                            env : process.env
+                        });
+                        videoProcess.stdout.on('data', (data) => {
+                            console.log(`${VIDEO_CMD}: ${data}`);
+                        });
                     });
                 } else {
-                    videoProcess = childProcess.spawn(BASH_CMD, options);
+                    videoProcess = childProcess.spawn(BASH_CMD, options, {
+                        env : process.env
+                    });
+                    videoProcess.stdout.on('data', (data) => {
+                        console.log(`${VIDEO_CMD}: ${data}`);
+                    });
                 }
                 console.log('Executed script ', options);
             }
