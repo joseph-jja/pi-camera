@@ -116,7 +116,7 @@ async function start() {
 
     app.get('/preview', (request, response) => {
         
-        if (videProcess) {
+        if (videoProcess) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
