@@ -127,9 +127,14 @@ async function start() {
                     });
                     streamProcess.stdout.pipe(response);
                 });    
+            } else {
+                streamProcess = childProcess.spawn(BASH_CMD, [MJPEG_CMD]);
+                response.writeHead(200, { 
+                    'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+                    'Cache-Control': 'no-cache'
+                });
+                streamProcess.stdout.pipe(response);
             }
-
-            
         } else {
             response.writeHead(200, {});
             response.end('');
