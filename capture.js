@@ -129,12 +129,9 @@ async function start() {
     app.get('/preview', (request, response) => {
 
         const params = (request.query && request.query.previewOpts ? request.query.previewOpts : '');
-        if (params && params.length > 0) {
-            console.log(params);
-        }
-        const options = []; //Object.keys(params).filter(item => {
-            //return (item && item.length > 0);
-        //});
+        const options = Object.keys(params).filter(item => {
+            return (item && item.length > 0);
+        });
         if (videoProcess) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
