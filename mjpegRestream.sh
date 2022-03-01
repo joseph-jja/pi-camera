@@ -5,5 +5,6 @@ if [ "$LIBCAMERA_PID" != "" ] ; then
      kill -9 "$LIBCAMERA_PID"
 fi
 
-ffmpeg -i "rtsp://192.168.50.100:10000/stream1" \
+IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
+ffmpeg -i "rtsp://$IP_ADDRESS:10000/stream1" \
     -c:v mjpeg -q:v 1 -f mpjpeg -an -
