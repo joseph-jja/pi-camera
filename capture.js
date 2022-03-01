@@ -114,7 +114,7 @@ async function start() {
         }
     });
 
-    apt.get('/preview', (request, response) => {
+    app.get('/preview', (request, response) => {
         
         if (videProcess) {
             if (streamProcess) {
