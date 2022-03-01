@@ -15,16 +15,6 @@ const BASH_CMD = '/bin/bash';
 const VIDEO_CMD = '/home/pi/pi-camera/rtspStream.sh';
 const MJPEG_CMD = '/home/pi/pi-camera/mjpegRestream.sh';
 
-/*
-// ffmpeg -v verbose -i rtmp://192.168.50.100:10000/<stream> 
-// -c:v libx264 -c:a aac -ac 1 -strict -2 -crf 18 -profile:v 
-// baseline -maxrate 400k -bufsize 1835k -pix_fmt yuv420p -flags 
-// -global_header -hls_time 10 -hls_list_size 6 -hls_wrap 10 -start_number 1 
-// /tmp/streamName.m3u8
-// ffplay rtsp://192.168.50.100:10000/stream1 -vf "setpts=N/30" -fflags nobuffer -flags low_delay -framedrop
-// vlc rtsp://192.168.50.100:10000/stream1
-*/
-
 function getHTML(body) {
     return `<!DOCTYPE HTML>
 <html>
