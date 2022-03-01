@@ -23,7 +23,7 @@ function getHTML(body) {
     </head>
     <body>
         <video width="640" height="480" controls>
-            <source src="/preview" type="video/mpeg">
+            <source src="/preview" type="video/mp4">
         </video>
         <form name="cameraOptions" onsubmit="return false;">
             ${body}
