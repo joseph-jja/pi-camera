@@ -45,6 +45,8 @@ WEB_APP_ERR_LOG=/var/log/pi-capture.error.log
 WEB_LOG_FILES="-a -l $FOREVER_LOG -o $WEB_APP_LOG -e $WEB_APP_ERR_LOG "
 FOREVER_WEB_OPTS="$WEB_LOG_FILES --pidFile $WEB_PID_FILE --spinSleepTime 1000 --minUptime 500"
 
+export IP_ADDR=192.168.50.100
+
 start_program () {
     cd $BASE_CODE && $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
 }
