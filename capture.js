@@ -108,8 +108,8 @@ async function start() {
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-        if (request.body && Object.keys(request.body).length > 0) {
-            const options = Object.keys(request.body).filter(item => {
+        if (request.body && request.body.length > 0) {
+            const options = request.body.split(' ').filter(item => {
                 return (item && item.length > 0);
             });
             if (options.length > 0) {
@@ -129,7 +129,7 @@ async function start() {
     app.get('/preview', (request, response) => {
 
         const params = (request.query && request.query.previewOpts ? request.query.previewOpts : '');
-        const options = Object.keys(params).filter(item => {
+        const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });
         if (videoProcess) {
