@@ -58,6 +58,16 @@ function spawnVideoProcess(options) {
     });
 }
 
+function sendVideoProcess(options, response) {
+    options.unshift(MJPEG_CMD);
+    streamProcess = childProcess.spawn(BASH_CMD, options);
+    response.writeHead(200, {
+        'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+        'Cache-Control': 'no-cache'
+    });
+    streamProcess.stdout.pipe(response);
+}
+
 async function start() {
 
     const baseDir = process.cwd();
@@ -118,24 +128,17 @@ async function start() {
 
     app.get('/preview', (request, response) => {
 
+        const options = Object.keys(request.body).filter(item => {
+            return (item && item.length > 0);
+        });
         if (videoProcess) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
-                    streamProcess = childProcess.spawn(BASH_CMD, [MJPEG_CMD]);
-                    response.writeHead(200, {
-                        'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-                        'Cache-Control': 'no-cache'
-                    });
-                    streamProcess.stdout.pipe(response);
+                    sendVideoProcess(options, response);
                 });
             } else {
-                streamProcess = childProcess.spawn(BASH_CMD, [MJPEG_CMD]);
-                response.writeHead(200, {
-                    'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-                    'Cache-Control': 'no-cache'
-                });
-                streamProcess.stdout.pipe(response);
+                sendVideoProcess(options, response);
             }
         } else {
             response.writeHead(200, {});
