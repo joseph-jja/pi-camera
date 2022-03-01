@@ -108,8 +108,8 @@ async function start() {
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-        if (request.body && request.body.length > 0) {
-            const options = request.body.split(' ').filter(item => {
+        if (request.body && Object.keys(request.body).length > 0) {
+            const options = Object.keys(request.body).filter(item => {
                 return (item && item.length > 0);
             });
             if (options.length > 0) {
