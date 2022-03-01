@@ -150,6 +150,9 @@ async function start() {
 
     const server = http.createServer(app);
     server.listen(20000);
+
+    // start rtps streaming
+    spawnVideoProcess([]);
 }
 
 start();
