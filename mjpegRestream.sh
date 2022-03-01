@@ -21,8 +21,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ "$WIDTH" != "" ]; then 
-    if [ "$HEIGHT" != "" ] ; then 
-        EXTRA_ARGS="$EXTRA_ARGS -s $WIDTHx$HEIGHT"
+    if [ "$HEIGHT" != "" ]; then 
+        EXTRA_ARGS="$EXTRA_ARGS -vf scale=$WIDTH:$HEIGHT"
     fi
 fi
 
