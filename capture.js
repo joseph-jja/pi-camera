@@ -22,6 +22,9 @@ function getHTML(body) {
         <title>PI Camera</title>
     </head>
     <body>
+        <video width="640" height="480" controls>
+            <source src="/preview" type="video/mpeg">
+        </video>
         <form name="cameraOptions" onsubmit="return false;">
             ${body}
             <br>
