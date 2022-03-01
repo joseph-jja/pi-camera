@@ -45,6 +45,17 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
+function spawnVideoProcess(options) {
+
+    options.unshift(VIDEO_CMD);
+    videoProcess = childProcess.spawn(BASH_CMD, options, {
+        env : process.env
+    });
+    videoProcess.stdout.on('data', (data) => {
+        console.log(`${VIDEO_CMD}: ${data}`);
+    });
+}
+
 async function start() {
 
     const baseDir = process.cwd();
@@ -90,24 +101,13 @@ async function start() {
                 return (item && item.length > 0);
             });
             if (options.length > 0) {
-                options.unshift(VIDEO_CMD);
                 if (videoProcess) {
                     const pid = videoProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
-                        videoProcess = childProcess.spawn(BASH_CMD, options, {
-                            env : process.env
-                        });
-                        videoProcess.stdout.on('data', (data) => {
-                            console.log(`${VIDEO_CMD}: ${data}`);
-                        });
+                        spawnVideoProcess(options);
                     });
                 } else {
-                    videoProcess = childProcess.spawn(BASH_CMD, options, {
-                        env : process.env
-                    });
-                    videoProcess.stdout.on('data', (data) => {
-                        console.log(`${VIDEO_CMD}: ${data}`);
-                    });
+                    spawnVideoProcess(options);
                 }
                 console.log('Executed script ', options);
             }
