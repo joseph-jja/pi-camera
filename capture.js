@@ -22,8 +22,8 @@ function getHTML(body) {
         <title>PI Camera</title>
     </head>
     <body>
-        <iframe width="640" height="480" src="/preview"></iframe>
-        
+        <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
+
         <form name="cameraOptions" onsubmit="return false;">
             ${body}
             <br>
@@ -128,9 +128,13 @@ async function start() {
 
     app.get('/preview', (request, response) => {
 
-        const options = Object.keys(request.body).filter(item => {
-            return (item && item.length > 0);
-        });
+        const params = (request.params ? request.params.previewOpts : '');
+        if (params && params.length > 0) {
+            console.log(params);
+        }
+        const options = []; //Object.keys(params).filter(item => {
+            //return (item && item.length > 0);
+        //});
         if (videoProcess) {
             if (streamProcess) {
                 const pid = streamProcess.pid;

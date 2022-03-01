@@ -27,6 +27,9 @@ window.addEventListener('DOMContentLoaded', () => {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: options
+                }).then(() => {
+                    const iframe = document.getElementById('videoDisplay');
+                    iframe.src = `/preview?previewOpts=${options}`;
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
