@@ -22,7 +22,7 @@ export function buildSelect(name, paramName, values) {
 export function getRangeValues(range, step, decimalPlaces = 0) {
 
     const values = [];
-    for (let i = range[0], end = range[1]; i < end; i += +step) {
+    for (let i = range[0], end = range[1]; i <= end; i += +step) {
         values.push(i.toFixed(decimalPlaces));
     }
     return values;

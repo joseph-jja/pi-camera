@@ -14,6 +14,7 @@ module.exports = [{
     ]
 },{
     name: 'EV_compensation',
+    comment: 'higher is brighter',
     paramName: '--ev',
     range: [-10, 10],
     step: 0.1,
