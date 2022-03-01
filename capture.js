@@ -128,7 +128,7 @@ async function start() {
 
     app.get('/preview', (request, response) => {
 
-        const params = (request.params ? request.params.previewOpts : '');
+        const params = (request.query && request.query.previewOpts ? request.query.previewOpts : '');
         if (params && params.length > 0) {
             console.log(params);
         }
