@@ -4,8 +4,7 @@
   "description": "A pi camera capture program",
   "main": "index.js",
   "scripts": {
-    "beautify": "npx js-beautify -r `find ./ -type f -not -path './node_modules/*' -name '*.js'`",
-    "eslint": "npx eslint --quiet `find ./ -type f -not -path './node_modules/*' -name '*.js'`"
+    "beautify": "bash ./bin/beautify.sh"
   },
   "repository": {
     "type": "git",

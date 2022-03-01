@@ -8,7 +8,7 @@ const express = require('express'),
 
 const app = express();
 
-let videoProcess, 
+let videoProcess,
     streamProcess;
 
 const BASH_CMD = '/bin/bash';
@@ -66,21 +66,21 @@ async function start() {
             return '';
         }
     }).reduce((acc, next) => {
-        return `${acc}<br><br>${os.EOL}${next}`; 
+        return `${acc}<br><br>${os.EOL}${next}`;
     });
-   
+
     app.get('/js/captureClient.js', (request, response) => {
         response.writeHead(200, {
             'Content-Type': 'application/json'
         });
         fs.createReadStream('js/captureClient.js').pipe(response);
-    }); 
+    });
 
     app.post('/shutdown', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-		childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
-    }); 
+        childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
+    });
 
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
@@ -95,7 +95,7 @@ async function start() {
                     const pid = videoProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
                         videoProcess = childProcess.spawn(BASH_CMD, options);
-                    });    
+                    });
                 } else {
                     videoProcess = childProcess.spawn(BASH_CMD, options);
                 }
@@ -105,21 +105,21 @@ async function start() {
     });
 
     app.get('/preview', (request, response) => {
-        
+
         if (videoProcess) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
                     streamProcess = childProcess.spawn(BASH_CMD, [MJPEG_CMD]);
-                    response.writeHead(200, { 
+                    response.writeHead(200, {
                         'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
                         'Cache-Control': 'no-cache'
                     });
                     streamProcess.stdout.pipe(response);
-                });    
+                });
             } else {
                 streamProcess = childProcess.spawn(BASH_CMD, [MJPEG_CMD]);
-                response.writeHead(200, { 
+                response.writeHead(200, {
                     'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
                     'Cache-Control': 'no-cache'
                 });
@@ -133,7 +133,7 @@ async function start() {
 
     app.get('/', (request, response) => {
         response.writeHead(200, {
-             'Content-Type': 'text/html'
+            'Content-Type': 'text/html'
         });
         response.end(getHTML(fields));
     });
@@ -143,4 +143,3 @@ async function start() {
 }
 
 start();
-
