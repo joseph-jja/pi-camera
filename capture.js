@@ -79,7 +79,11 @@ function spawnVideoProcess(options) {
 
 function sendVideoProcess(options, response) {
 
-    options.unshift(COMBINED_CMD);
+    if (ENABLE_RTSP) {
+        options.unshift(MJPEG_CMD);
+    } else {
+        options.unshift(COMBINED_CMD);
+    }
     streamProcess = childProcess.spawn(BASH_CMD, options);
     response.writeHead(200, {
         'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
