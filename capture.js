@@ -19,6 +19,8 @@ const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/rtspStream.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
 
+const DEFAULT_OPTIONS = ['--codec mjpeg']
+
 function getHTML(body) {
     return `<!DOCTYPE HTML>
 <html>
@@ -84,6 +86,8 @@ function sendVideoProcess(options, response) {
     } else {
         options.unshift(COMBINED_CMD);
     }
+    //DEFAULT_OPTIONS
+    console.log(options)
     streamProcess = childProcess.spawn(BASH_CMD, options);
     response.writeHead(200, {
         'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
@@ -202,7 +206,7 @@ async function start() {
     console.log(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
-    spawnVideoProcess([]);
+    spawnVideoProcess(DEFAULT_OPTIONS);
 }
 
 start();
