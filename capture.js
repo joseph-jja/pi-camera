@@ -9,6 +9,8 @@ const express = require('express'),
 
 const app = express();
 
+const ENABLE_RTSP = false;
+
 let videoProcess,
     streamProcess;
 
@@ -140,7 +142,10 @@ async function start() {
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-        /*if (request.body && Object.keys(request.body).length > 0) {
+        if (!ENABLE_RTSP) {
+            return;
+        }
+        if (request.body && Object.keys(request.body).length > 0) {
             const options = Object.keys(request.body).filter(item => {
                 return (item && item.length > 0);
             });
@@ -155,7 +160,7 @@ async function start() {
                 }
                 console.log('Executed script ', options);
             }
-        }*/
+        }
     });
 
     app.get('/preview', (request, response) => {
@@ -164,7 +169,7 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });
-        //if (videoProcess) {
+        if (!ENABLE_RTSP || (ENABLE_RTSP && videoProcess) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
@@ -173,10 +178,10 @@ async function start() {
             } else {
                 sendVideoProcess(options, response);
             }
-        //} else {
-        //    response.writeHead(200, {});
-        //    response.end('');
-        //}
+        } else {
+            response.writeHead(200, {});
+            response.end('');
+        }
     });
 
     app.get('/', (request, response) => {

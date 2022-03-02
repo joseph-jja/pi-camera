@@ -30,6 +30,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 }).then(() => {
                     const iframe = document.getElementById('videoDisplay');
                     iframe.src = `/preview?previewOpts=${options}`;
+                    const currentHost = window.location.origin;
+                    const historyPath = `${currentHost}?params=${escape(options)}`;
+                    window.history.pushState(escape(options), 'PI Camera', historyPath);
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
