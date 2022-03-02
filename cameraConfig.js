@@ -35,7 +35,23 @@ module.exports = [{
         name: 'framerate',
         paramName: '--framerate',
         values: [1, 2, 4, 8, 10, 15, 30, 60]
+    /*}, {
+        name: 'h264_bitrate',
+        paramName: '--bitrate',
+        values: [307200, 946080, 2073600]
     }, {
+        name: 'h264_intra',
+        paramName: '--intra',
+        range: [0, 100]
+    }, {
+        name: 'h264_profile',
+        paramName: '--profile',
+        values: ['baseline', 'main', 'high']
+    }, {
+        name: 'h264_level',
+        paramName: '--level',
+        values: [4, 4.1, 4.2]
+    */}, {
         name: 'exposure_profile',
         paramName: '--exposure',
         values: ['normal', 'sport', 'long']
