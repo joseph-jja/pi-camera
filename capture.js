@@ -169,7 +169,7 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });
-        if (!ENABLE_RTSP || (ENABLE_RTSP && videoProcess) {
+        if (!ENABLE_RTSP || (ENABLE_RTSP && videoProcess)) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
