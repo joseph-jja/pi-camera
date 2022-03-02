@@ -1,6 +1,7 @@
 const os = require('os'),
     fs = require('fs'),
     http = require('http'),
+    dns  = require('dns').promises,
     childProcess = require('child_process');
 
 const express = require('express'),
@@ -47,11 +48,26 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
+async function getHostname() {
+
+    return new Promise((resolve, reject) => {
+        childProcess.exec('hostname', (err, sout, serr) => {
+            if (err) {
+                reject(err);
+            } else if (serr) {
+                reject(serr);
+            } else {
+                resolve(sout);
+            }
+        });
+    });
+}
+
 function spawnVideoProcess(options) {
 
     options.unshift(VIDEO_CMD);
     videoProcess = childProcess.spawn(BASH_CMD, options, {
-        env : process.env
+        env: process.env
     });
     videoProcess.stdout.on('data', (data) => {
         console.log(`${VIDEO_CMD}: ${data}`);
@@ -74,6 +90,9 @@ async function start() {
     const config = require(`${baseDir}/cameraConfig`);
 
     const formFields = await import('./libs/form.mjs');
+
+    const hostname = (await getHostname()).trim();
+    const ipaddr = (await dns.resolve4(hostname))[0];
 
     const fields = config.map(item => {
 
@@ -154,8 +173,11 @@ async function start() {
         response.end(getHTML(fields));
     });
 
+    const port = 20000;
     const server = http.createServer(app);
-    server.listen(20000);
+    server.listen(port);
+    
+    console.log(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
     spawnVideoProcess([]);
