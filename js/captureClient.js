@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     return element.value;
                 }
             }).reduce((acc, next) => {
-                return `${acc} ${next}`;
+                return `${acc} ${next}`.trim();
             });
             if (options.trim().length > 0) {
                 fetch('/update', {
