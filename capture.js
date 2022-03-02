@@ -15,6 +15,7 @@ let videoProcess,
 const BASH_CMD = '/bin/bash';
 const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/rtspStream.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
+const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
@@ -76,7 +77,7 @@ function spawnVideoProcess(options) {
 
 function sendVideoProcess(options, response) {
 
-    options.unshift(MJPEG_CMD);
+    options.unshift(COMBINED_CMD);
     streamProcess = childProcess.spawn(BASH_CMD, options);
     response.writeHead(200, {
         'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
@@ -139,7 +140,7 @@ async function start() {
     app.post('/update', (request, response) => {
         response.writeHead(200, {});
         response.end('');
-        if (request.body && Object.keys(request.body).length > 0) {
+        /*if (request.body && Object.keys(request.body).length > 0) {
             const options = Object.keys(request.body).filter(item => {
                 return (item && item.length > 0);
             });
@@ -154,7 +155,7 @@ async function start() {
                 }
                 console.log('Executed script ', options);
             }
-        }
+        }*/
     });
 
     app.get('/preview', (request, response) => {
@@ -163,7 +164,7 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });
-        if (videoProcess) {
+        //if (videoProcess) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
@@ -172,10 +173,10 @@ async function start() {
             } else {
                 sendVideoProcess(options, response);
             }
-        } else {
-            response.writeHead(200, {});
-            response.end('');
-        }
+        //} else {
+        //    response.writeHead(200, {});
+        //    response.end('');
+        //}
     });
 
     app.get('/', (request, response) => {
