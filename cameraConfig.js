@@ -20,13 +20,21 @@ module.exports = [{
         step: 0.1,
         decimalPlaces: 1
     }, {
+        name: 'codec',
+        paramName: '--codec',
+        values: ['centre', 'spot', 'average'] // 'custom'
+    }, {
         name: 'metering',
         paramName: '--metering',
-        values: ['centre', 'spot', 'average'] // 'custom'
+        values: ['h264', 'mjpeg', 'yuv420'] 
+    }, {
+        name: 'quality',
+        paramName: '--quality',
+        range: [1, 100]
     }, {
         name: 'framerate',
         paramName: '--framerate',
-        values: [10, 15, 30, 60]
+        values: [1, 2, 4, 8, 10, 15, 30, 60]
     }, {
         name: 'exposure_profile',
         paramName: '--exposure',
