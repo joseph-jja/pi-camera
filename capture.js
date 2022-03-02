@@ -12,8 +12,8 @@ let videoProcess,
     streamProcess;
 
 const BASH_CMD = '/bin/bash';
-const VIDEO_CMD = '/home/pi/pi-camera/rtspStream.sh';
-const MJPEG_CMD = '/home/pi/pi-camera/mjpegRestream.sh';
+const VIDEO_CMD = '/home/pi/pi-camera/scripts/rtspStream.sh';
+const MJPEG_CMD = '/home/pi/pi-camera/scripts/mjpegRestream.sh';
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
