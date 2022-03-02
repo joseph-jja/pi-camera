@@ -13,35 +13,33 @@ if [ "$FFMPEG_PID" != "" ] ; then
      kill -9 "$FFMPEG_PID"
 fi
 
-# all args for libcamera
-LIBCAMERA_ARGS=""
-while [[ $# -gt 0 ]]; do
-    LIBCAMERA_ARGS="$LIBCAMERA_ARGS $1"
-    shift
-done
-
-# now translate them for ffmpeg
 WIDTH=""
 HEIGHT=""
 FRAMERATE=""
 FFMPEG_ARGS=""
 CODEC="-c:v mjpeg "
 FNAME_CODEC="-f mpjpeg"
+LIBCAMERA_ARGS=""
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
+    LIBCAMERA_ARGS="$LIBCAMERA_ARGS $IN_ARGS"
     if [ "$IN_ARGS" == "--width" ]; then
         shift
-        WIDTH=$1
+        IN_ARGS="$1"
+        WIDTH=$IN_ARGS
     elif [ "$IN_ARGS" == "--height" ]; then
         shift
-        HEIGHT=$1
+        IN_ARGS="$1"
+        HEIGHT=$IN_ARGS
     elif [ "$IN_ARGS" == "--framerate" ]; then
         shift
-        FRAMERATE=$1
+        IN_ARGS="$1"
+        FRAMERATE=$IN_ARGS
         FFMPEG_ARGS="$FFMPEG_ARGS fps=$FRAMERATE"
     elif [ "$IN_ARGS" == "--codec" ]; then
         shift
-        CODEC_VALUE=$1
+        IN_ARGS="$1"
+        CODEC_VALUE=$IN_ARGS
         #if [ "$CODEC_VALUE" == "h264" ]; then
             #CODEC="-c:v libx264"
             #FNAME_CODEC="-f mp4"
