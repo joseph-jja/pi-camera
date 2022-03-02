@@ -26,19 +26,23 @@ while [[ $# -gt 0 ]]; do
     if [ "$IN_ARGS" == "--width" ]; then
         shift
         IN_ARGS="$1"
+        LIBCAMERA_ARGS="$LIBCAMERA_ARGS $IN_ARGS"
         WIDTH=$IN_ARGS
     elif [ "$IN_ARGS" == "--height" ]; then
         shift
         IN_ARGS="$1"
+        LIBCAMERA_ARGS="$LIBCAMERA_ARGS $IN_ARGS"
         HEIGHT=$IN_ARGS
     elif [ "$IN_ARGS" == "--framerate" ]; then
         shift
         IN_ARGS="$1"
+        LIBCAMERA_ARGS="$LIBCAMERA_ARGS $IN_ARGS"
         FRAMERATE=$IN_ARGS
         FFMPEG_ARGS="$FFMPEG_ARGS fps=$FRAMERATE"
     elif [ "$IN_ARGS" == "--codec" ]; then
         shift
         IN_ARGS="$1"
+        LIBCAMERA_ARGS="$LIBCAMERA_ARGS $IN_ARGS"
         CODEC_VALUE=$IN_ARGS
         #if [ "$CODEC_VALUE" == "h264" ]; then
             #CODEC="-c:v libx264"
