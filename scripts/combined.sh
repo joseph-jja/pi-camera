@@ -42,16 +42,16 @@ while [[ $# -gt 0 ]]; do
     elif [ "$IN_ARGS" == "--codec" ]; then
         shift
         CODEC_VALUE=$1
-        if [ "$CODEC_VALUE" == "h264" ]; then
+        #if [ "$CODEC_VALUE" == "h264" ]; then
             #CODEC="-c:v libx264"
             #FNAME_CODEC="-f mp4"
-        elif [ "$CODEC_VALUE" == "mjpeg" ]; then
+        #elif [ "$CODEC_VALUE" == "mjpeg" ]; then
             CODEC="-c:v mjpeg "
             FNAME_CODEC="-f mpjpeg"
-        elif [ "$CODEC_VALUE" == "yuv420s" ]; then
+        #elif [ "$CODEC_VALUE" == "yuv420s" ]; then
             #CODEC=$1
             #FNAME_CODEC=$1
-        fi
+        #fi
     fi
     shift
 done
