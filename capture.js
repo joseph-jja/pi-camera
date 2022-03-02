@@ -75,7 +75,7 @@ function spawnVideoProcess(options) {
 }
 
 function sendVideoProcess(options, response) {
-    
+
     options.unshift(MJPEG_CMD);
     streamProcess = childProcess.spawn(BASH_CMD, options);
     response.writeHead(200, {
@@ -85,6 +85,16 @@ function sendVideoProcess(options, response) {
     streamProcess.stdout.pipe(response);
 }
 
+async function getIPAddress(hostname) {
+
+    let ipaddr;
+    try {
+        ipaddr = (await dns.resolve4(hostname))[0];
+    } catch(e) {
+        ipaddr = childProcess.execSync('ifconfig |grep inet|grep -v inet6 |grep broadcast | awk \'{print $2}\'');
+    }
+    return ipaddr;
+}
 async function start() {
 
     const baseDir = process.cwd();
@@ -93,7 +103,7 @@ async function start() {
     const formFields = await import('./libs/form.mjs');
 
     const hostname = (await getHostname()).trim();
-    const ipaddr = (await dns.resolve4(hostname))[0];
+    const ipaddr = await getIPAddress(hostname);
     process.env.IP_ADDR = ipaddr;
 
     const fields = config.map(item => {
@@ -178,7 +188,7 @@ async function start() {
     const port = 20000;
     const server = http.createServer(app);
     server.listen(port);
-    
+
     console.log(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
