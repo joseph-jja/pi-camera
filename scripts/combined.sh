@@ -38,7 +38,7 @@ while [[ $# -gt 0 ]]; do
         IN_ARGS="$1"
         LIBCAMERA_ARGS="$LIBCAMERA_ARGS $IN_ARGS"
         FRAMERATE=$IN_ARGS
-        FFMPEG_ARGS="$FFMPEG_ARGS fps=$FRAMERATE"
+        FFMPEG_ARGS="$FFMPEG_ARGS -filter:v fps=$FRAMERATE"
     elif [ "$IN_ARGS" == "--codec" ]; then
         shift
         IN_ARGS="$1"
