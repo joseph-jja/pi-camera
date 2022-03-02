@@ -7,21 +7,26 @@ fi
 
 WIDTH=""
 HEIGHT=""
+FRAMERATE=""
 EXTRA_ARGS=""
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
-    if [ "$IN_ARGS" == "--width" ]; then 
+    if [ "$IN_ARGS" == "--width" ]; then
         shift
-        WIDTH=$1 
-    elif [ "$IN_ARGS" == "--height" ]; then 
+        WIDTH=$1
+    elif [ "$IN_ARGS" == "--height" ]; then
         shift
-        HEIGHT=$1 
+        HEIGHT=$1
+    elif [ "$IN_ARGS" == "--framerate" ]; then
+        shift
+        FRAMERATE=$1
+        EXTRA_ARGS="$EXTRA_ARGS fps=$FRAMERATE"
     fi
     shift
 done
 
-if [ "$WIDTH" != "" ]; then 
-    if [ "$HEIGHT" != "" ]; then 
+if [ "$WIDTH" != "" ]; then
+    if [ "$HEIGHT" != "" ]; then
         EXTRA_ARGS="$EXTRA_ARGS -vf scale=$WIDTH:$HEIGHT"
     fi
 fi
