@@ -13,8 +13,8 @@ let videoProcess,
     streamProcess;
 
 const BASH_CMD = '/bin/bash';
-const VIDEO_CMD = '/home/pi/pi-camera/scripts/rtspStream.sh';
-const MJPEG_CMD = '/home/pi/pi-camera/scripts/mjpegRestream.sh';
+const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/rtspStream.sh`;
+const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
@@ -75,6 +75,7 @@ function spawnVideoProcess(options) {
 }
 
 function sendVideoProcess(options, response) {
+    
     options.unshift(MJPEG_CMD);
     streamProcess = childProcess.spawn(BASH_CMD, options);
     response.writeHead(200, {
@@ -93,6 +94,7 @@ async function start() {
 
     const hostname = (await getHostname()).trim();
     const ipaddr = (await dns.resolve4(hostname))[0];
+    process.env.IP_ADDR = ipaddr;
 
     const fields = config.map(item => {
 

@@ -22,15 +22,16 @@ module.exports = [{
     }, {
         name: 'codec',
         paramName: '--codec',
-        values: ['centre', 'spot', 'average'] // 'custom'
+        values: ['h264', 'mjpeg', 'yuv420'] 
     }, {
         name: 'metering',
         paramName: '--metering',
-        values: ['h264', 'mjpeg', 'yuv420'] 
+        values: ['centre', 'spot', 'average'] // 'custom'
     }, {
         name: 'quality',
         paramName: '--quality',
-        range: [1, 100]
+        range: [1, 100],
+        step: 1
     }, {
         name: 'framerate',
         paramName: '--framerate',
