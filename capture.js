@@ -206,7 +206,9 @@ async function start() {
     console.log(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
-    spawnVideoProcess(DEFAULT_OPTIONS);
+    if (ENABLE_RTSP){
+        spawnVideoProcess(DEFAULT_OPTIONS);
+    }
 }
 
 start();
