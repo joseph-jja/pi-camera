@@ -91,7 +91,7 @@ async function getIPAddress(hostname) {
     try {
         ipaddr = (await dns.resolve4(hostname))[0];
     } catch(e) {
-        ipaddr = childProcess.execSync('ifconfig |grep inet|grep -v inet6 |grep broadcast | awk \'{print $2}\'');
+        ipaddr = childProcess.execSync('ifconfig |grep inet|grep -v inet6 |grep broadcast | awk \'{print $2}\'').trim();
     }
     return ipaddr;
 }
