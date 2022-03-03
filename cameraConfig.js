@@ -11,7 +11,8 @@ module.exports = [{
             '--width 640 --height 480',
             '--width 1296 --height 730',
             '--width 1920 --height 1080'
-        ]
+        ],
+        defaultvalue: '--width 640 --height 480'
     }, {
         name: 'EV_compensation',
         comment: 'higher is brighter',
@@ -19,11 +20,11 @@ module.exports = [{
         range: [-10, 10],
         step: 0.1,
         decimalPlaces: 1
-    }, {
+    /*}, {
         name: 'codec',
         paramName: '--codec',
-        values: ['h264', 'mjpeg', 'yuv420'] 
-    }, {
+        values: ['h264', 'mjpeg', 'yuv420']
+    */}, {
         name: 'metering',
         paramName: '--metering',
         values: ['centre', 'spot', 'average'] // 'custom'
@@ -31,11 +32,13 @@ module.exports = [{
         name: 'quality',
         paramName: '--quality',
         range: [1, 100],
-        step: 1
+        step: 1,
+        defaultValue: 100
     }, {
         name: 'framerate',
         paramName: '--framerate',
-        values: [1, 2, 4, 8, 10, 15, 30, 60]
+        values: [1, 2, 4, 8, 10, 15, 30, 60],
+        defaultValue: 10
     /*}, {
         name: 'h264_bitrate',
         paramName: '--bitrate',
