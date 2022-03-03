@@ -19,7 +19,7 @@ const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/rtspStream.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
 
-const DEFAULT_OPTIONS = ['--codec mjpeg']
+const DEFAULT_OPTIONS = ['--codec mjpeg --width 640 --height 480']
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
@@ -81,8 +81,9 @@ function spawnVideoProcess(options) {
 
 function sendVideoProcess(options, response) {
 
-    //if //DEFAULT_OPTIONS
-    console.log(options)
+    if (options.length === 0) {
+        options.push(DEFAULT_OPTIONS);
+    }
     if (ENABLE_RTSP) {
         options.unshift(MJPEG_CMD);
     } else {
