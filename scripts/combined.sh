@@ -13,9 +13,9 @@ if [ "$FFMPEG_PID" != "" ] ; then
      kill -9 "$FFMPEG_PID"
 fi
 
-WIDTH=""
-HEIGHT=""
-FRAMERATE=""
+WIDTH="640"
+HEIGHT="480"
+FRAMERATE="10"
 FFMPEG_ARGS=""
 CODEC="-c:v mjpeg "
 FNAME_CODEC="-f mpjpeg"
