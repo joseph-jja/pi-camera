@@ -7,9 +7,16 @@ const os = require('os'),
 const express = require('express'),
     bodyParser = require('body-parser');
 
+function getEnvValue(envName, defaultValue) {
+    try {
+        return JSON.parse(envName);
+    } catch(e) {
+        return defaultValue;
+    }
+}
 const app = express();
 
-const ENABLE_RTSP = false;
+const ENABLE_RTSP = getEnvValue(process.env.ENABLE_RTSP, false);
 
 let videoProcess,
     streamProcess;
