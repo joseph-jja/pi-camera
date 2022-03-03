@@ -20,4 +20,4 @@ echo "Running script ... IP Address: $IP_ADDRESS ..."
 #/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
 #    stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264
 /usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | ffmpeg \
-    -i pipe: -f mpegts -listen 1 "http://$IP_ADDRESS:10000/stream1"
+    -i pipe: -f mpegts -listen 1 "http://localhost:10000/stream1"
