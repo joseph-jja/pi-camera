@@ -22,7 +22,7 @@ let videoProcess,
     streamProcess;
 
 const BASH_CMD = '/bin/bash';
-const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/rtspStream.sh`;
+const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/streamServer.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
 
