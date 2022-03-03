@@ -10,15 +10,22 @@ if [ "$VLC_PID" != "" ] ; then
 fi
 
 EXTRA_ARGS=""
+FRAMERATE=10
 while [[ $# -gt 0 ]]; do
-    EXTRA_ARGS="$EXTRA_ARGS $1"
+    IN_ARGS="$1"
+    EXTRA_ARGS="$IN_ARGS $1"
+    if [ "$IN_ARGS" == "--framerate" ]; then
+        shift
+        FRAMERATE=$1
+        EXTRA_ARGS="$EXTRA_ARGS $FRAMERATE"
+    fi
     shift
 done
 
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 echo "Running script ... IP Address: $IP_ADDRESS ..."
 /usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
- --no-audio –sout-transcode-fps=15.0 \
+ --no-audio –sout-transcode-fps=$FRAMERATE.0 \
     stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264
 #/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | ffmpeg \
 #    -i pipe: -f mpegts -listen 1 "http://127.0.0.1:10000/stream1"
