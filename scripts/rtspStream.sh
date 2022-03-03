@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
-echo "Runningscript ... IP Address: $IP_ADDRESS ..."
+echo "Running script ... IP Address: $IP_ADDRESS ..."
 #/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
 #    stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264
 /usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | ffmpeg \
