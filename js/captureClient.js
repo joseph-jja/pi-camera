@@ -1,5 +1,12 @@
 window.addEventListener('DOMContentLoaded', () => {
 
+    const currentHost = window.location.origin;
+    const defaultParams = window.location.search;
+    if (defaultParams && defaultParams.length > 0) {
+        const iframe = document.getElementById('videoDisplay');
+        iframe.src = `/preview?previewOpts=${defaultParams.replace('?', '')}`;
+    }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
@@ -30,7 +37,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 }).then(() => {
                     const iframe = document.getElementById('videoDisplay');
                     iframe.src = `/preview?previewOpts=${options}`;
-                    const currentHost = window.location.origin;
                     const historyPath = `${currentHost}?params=${escape(options)}`;
                     window.history.pushState(escape(options), 'PI Camera', historyPath);
                 });
