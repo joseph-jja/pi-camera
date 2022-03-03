@@ -10,10 +10,10 @@ if [ "$VLC_PID" != "" ] ; then
 fi
 
 EXTRA_ARGS=""
-FRAMERATE=10
+#FRAMERATE=10
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
-    EXTRA_ARGS="$IN_ARGS $1"
+    EXTRA_ARGS="$ EXTRA_ARGS $IN_ARGS"
     #if [ "$IN_ARGS" == "--framerate" ]; then
     #    shift
     #    FRAMERATE=$1
