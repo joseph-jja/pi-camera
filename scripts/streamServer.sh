@@ -14,11 +14,11 @@ FRAMERATE=10
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     EXTRA_ARGS="$IN_ARGS $1"
-    if [ "$IN_ARGS" == "--framerate" ]; then
-        shift
-        FRAMERATE=$1
-        EXTRA_ARGS="$EXTRA_ARGS $FRAMERATE"
-    fi
+    #if [ "$IN_ARGS" == "--framerate" ]; then
+    #    shift
+    #    FRAMERATE=$1
+    #    EXTRA_ARGS="$EXTRA_ARGS --framerate $FRAMERATE"
+    #fi
     shift
 done
 
