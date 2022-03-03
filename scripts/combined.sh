@@ -63,6 +63,6 @@ if [ "$WIDTH" != "" ]; then
         FFMPEG_ARGS="$FFMPEG_ARGS -vf scale=$WIDTH:$HEIGHT"
     fi
 fi
-
-/usr/bin/libcamera-vid $LIBCAMERA_ARGS --nopreview -t 0 --inline -o - | ffmpeg $FFMPEG_ARGS \
+# TODO fix $FFMPEG_ARGS
+/usr/bin/libcamera-vid $LIBCAMERA_ARGS --nopreview -t 0 --inline -o - | ffmpeg \
     -i pipe: $CODEC -q:v 1 $FNAME_CODEC -an -
