@@ -17,7 +17,8 @@ done
 
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 echo "Running script ... IP Address: $IP_ADDRESS ..."
-#/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
-#    stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264
-/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | ffmpeg \
-    -i pipe: -f mpegts -listen 1 "http://127.0.0.1:10000/stream1"
+/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
+ --no-audio –sout-transcode-fps=15.0 \
+    stream:///dev/stdin --sout '#rtp{sdp=rtsp://:10000/stream1}' :demux=h264
+#/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | ffmpeg \
+#    -i pipe: -f mpegts -listen 1 "http://127.0.0.1:10000/stream1"
