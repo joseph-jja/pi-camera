@@ -64,5 +64,5 @@ if [ "$WIDTH" != "" ]; then
     fi
 fi
 
-/usr/bin/libcamera-vid $LIBCAMERA_ARGS --nopreview -t 0 --inline -o - | ffmpeg \
-    -i pipe: $FFMPEG_ARGS $CODEC -q:v 1 $FNAME_CODEC -an -
+/usr/bin/libcamera-vid $LIBCAMERA_ARGS --nopreview -t 0 --inline -o - | ffmpeg $FFMPEG_ARGS \
+    -i pipe: $CODEC -q:v 1 $FNAME_CODEC -an -
