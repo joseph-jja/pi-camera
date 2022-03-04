@@ -131,6 +131,9 @@ function saveVideoProcess(options, response) {
     }
     spawnOptions.unshift(SAVE_CMD);
     const saveStream = childProcess.spawn(BASH_CMD, spawnOptions);
+    saveStream.on('data', data => {
+        console.log(data);
+    });
     saveStream.on('close', () => {
         response.writeHead(200, {});
         response.end(`<a href="/download?filename=${filename}">${filename}</a>`);
