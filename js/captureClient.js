@@ -67,7 +67,7 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             const options = getFormOptions();
             if (options.trim().length > 0) {
-                fetch('/saveStream?${options}', {
+                fetch(`/saveStream?${options}`, {
                     method: 'GET'
                 });
             }
