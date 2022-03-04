@@ -26,7 +26,7 @@ const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/streamServer.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
 
-const DEFAULT_OPTIONS = ['--codec h264 --width 640 --height 480 --framerate 10'];
+const DEFAULT_OPTIONS = ['--width 640 --height 480 --framerate 10'];
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
@@ -77,6 +77,7 @@ async function getHostname() {
 
 function spawnVideoProcess(options) {
 
+    optoins.unshift('--codec h264');
     options.unshift(VIDEO_CMD);
     videoProcess = childProcess.spawn(BASH_CMD, options, {
         env: process.env
