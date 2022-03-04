@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#LIBCAMERA_PID=`ps -ef |grep ffmpeg | grep -v grep | awk '{print $2}'`
-#if [ "$LIBCAMERA_PID" != "" ] ; then
-#     kill -9 "$LIBCAMERA_PID"
-#fi
+LIBCAMERA_PID=`ps -ef |grep ffmpeg | grep -v grep | awk '{print $2}'`
+if [ "$LIBCAMERA_PID" != "" ] ; then
+     kill -9 "$LIBCAMERA_PID"
+fi
 
 WIDTH=""
 HEIGHT=""
-FRAMERATE=""
+FRAMERATE="-filter:v fps=10"
 EXTRA_ARGS=""
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
@@ -20,18 +20,17 @@ while [[ $# -gt 0 ]]; do
     elif [ "$IN_ARGS" == "--framerate" ]; then
         shift
         FRAMERATE=$1
-        EXTRA_ARGS="$EXTRA_ARGS fps=$FRAMERATE"
+        EXTRA_ARGS="$EXTRA_ARGS -filter:v fps=$FRAMERATE"
     fi
     shift
 done
 
 if [ "$WIDTH" != "" ]; then
     if [ "$HEIGHT" != "" ]; then
-        EXTRA_ARGS="$EXTRA_ARGS -vf scale=$WIDTH:$HEIGHT"
+        #EXTRA_ARGS="$EXTRA_ARGS -vf scale=$WIDTH:$HEIGHT"
     fi
 fi
 
 #IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 ffmpeg -i "rtsp://127.0.0.1:10000/stream1" \
-    -c:v mjpeg -q:v 1 -f mpjpeg -an -
-    #$EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
+    $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
