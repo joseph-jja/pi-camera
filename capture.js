@@ -124,7 +124,7 @@ function saveVideoProcess(options, response) {
     const filename = `capture-${datePart}${timePart}.mjpeg`;
 
     const spawnOptions = options.concat();
-    spawnOptions.push(`--filename /tmp/${filename}`);
+    spawnOptions.push(`--filename "/tmp/${filename}""`);
     spawnOptions.push('--timeout 15')
     if (spawnOptions.length === 0) {
         spawnOptions.push(DEFAULT_OPTIONS);
