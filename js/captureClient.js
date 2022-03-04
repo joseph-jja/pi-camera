@@ -11,7 +11,15 @@ window.addEventListener('DOMContentLoaded', () => {
         const videoSize = formElements.filter(item => {
             return (item.name === 'videoSize');
         })[0];
-        console.log(videoSize);
+        if (videoSize.selectedOptions[0].value !== '') {
+            const videoOption = videoSize.selectedOptions[0].value.split(' ');
+            const [width, height] = videoOption.filter(item => {
+                return parseInt(item);
+            });
+            console.log(width, height);
+            return '--bitrate 1000';
+        }
+        return '';
     }
 
     document.addEventListener('click', (event) => {
@@ -32,7 +40,8 @@ window.addEventListener('DOMContentLoaded', () => {
             }).reduce((acc, next) => {
                 return `${acc} ${next}`.trim();
             });
-            setBitrate(formElements);
+            const bitrate = setBitrate(formElements);
+            console.log(bitrate);
             if (options.trim().length > 0) {
                 fetch('/update', {
                     method: 'POST',
