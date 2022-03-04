@@ -7,6 +7,13 @@ window.addEventListener('DOMContentLoaded', () => {
         iframe.src = `/preview?previewOpts=${defaultParams.replace('?', '')}`;
     }
 
+    function setBitrate(formElements) {
+        const videoSize = formElements.filter(item => {
+            return (item.name === 'videoSize');
+        })[0];
+        console.log(videoSize);
+    }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
@@ -25,6 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }).reduce((acc, next) => {
                 return `${acc} ${next}`.trim();
             });
+            setBitrate(formElements);
             if (options.trim().length > 0) {
                 fetch('/update', {
                     method: 'POST',
