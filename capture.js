@@ -214,8 +214,8 @@ async function start() {
     });
 
     app.get('/download', (request, response) => {
-        const params = (request.query && request.query.filename ? request.query.filename : undefined);
-        if (params) {
+        const filename = (request.query && request.query.filename ? request.query.filename : undefined);
+        if (filename) {
             response.writeHead(200, {
                 'Content-Type': 'application/json'
             });
