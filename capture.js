@@ -132,7 +132,7 @@ function saveVideoProcess(options, response) {
     spawnOptions.unshift(SAVE_CMD);
     const saveStream = childProcess.spawn(BASH_CMD, spawnOptions);
     saveStream.stdout.on('data', data => {
-        console.log(data);
+        console.log(data.toString());
     });
     saveStream.on('close', () => {
         response.writeHead(200, {});
