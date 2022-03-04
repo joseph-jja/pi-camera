@@ -125,13 +125,13 @@ function saveVideoProcess(options, response) {
 
     const spawnOptions = options.concat();
     spawnOptions.push(`--filename ${filename}`);
-    spawnOptions.push('--timeout 60')
+    spawnOptions.push('--timeout 15')
     if (spawnOptions.length === 0) {
         spawnOptions.push(DEFAULT_OPTIONS);
     }
     spawnOptions.unshift(SAVE_CMD);
     const saveStream = childProcess.spawn(BASH_CMD, spawnOptions);
-    saveStream.on('end', () => {
+    saveStream.on('close', () => {
         response.writeHead(200, {});
         response.end(`<a href="/download?filename=${filename}">${filename}</a>`);
     });
