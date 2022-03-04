@@ -158,12 +158,13 @@ async function start() {
 
         const comment = (item.comment ? `<br>${item.comment}` : '');
         if (item.values) {
-            return formFields.buildSelect(item.name, item.paramName, item.values) + comment;
+            return formFields.buildSelect(item) + comment;
         } else if (item.range) {
-            const values = formFields.getRangeValues(item.range, item.step, item.decimalPlaces);
-            return formFields.buildSelect(item.name, item.paramName, values) + comment;
+            const values = formFields.getRangeValues(item);
+            const ritem = Object.assign({}, item, {values});
+            return formFields.buildSelect(ritem) + comment;
         } else if (item.fieldValue) {
-            return formFields.textField(item.name, item.fieldValue) + comment;
+            return formFields.textField(item) + comment;
         } else {
             console.log(item, comment);
             return '';
@@ -210,7 +211,7 @@ async function start() {
     });
 
     app.get('/download', (request, response) => {
-        const params = (request.query && request.query.filename ? request.query.filename : 'undefined);
+        const params = (request.query && request.query.filename ? request.query.filename : undefined);
         if (params) {
             response.writeHead(200, {
                 'Content-Type': 'application/json'
@@ -218,7 +219,7 @@ async function start() {
             fs.createReadStream(`/tmp/${filename}`).pipe(response);
         } else {
             response.writeHead(404, {});
-            response.end('File not found'));
+            response.end('File not found');
         }
     });
 

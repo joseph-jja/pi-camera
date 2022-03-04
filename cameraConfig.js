@@ -2,7 +2,7 @@ module.exports = [{
         name: 'ISO_Gain',
         paramName: '--gain',
         range: [1, 40],
-        step: 0.1,
+        step: 0.5,
         decimalPlaces: 1
     }, {
         name: 'videoSize',
