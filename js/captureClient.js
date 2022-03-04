@@ -95,8 +95,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     /* eslint-disable no-unused-vars */
-    const intId = setInterval(() => {
+    /*const intId = setInterval(() => {
         const preview = iframe.src;
         iframe.src = preview;
-    }, 30000);
+    }, 30000);*/
 });
