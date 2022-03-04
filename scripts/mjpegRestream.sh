@@ -31,7 +31,7 @@ if [ "$WIDTH" != "" ]; then
     fi
 fi
 
-IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
+#IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 ffmpeg -i "rtsp://127.0.0.1:10000/stream1" \
     -c:v mjpeg -q:v 1 -f mpjpeg -an -
     #$EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
