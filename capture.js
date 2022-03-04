@@ -44,6 +44,10 @@ function getHTML(body) {
             <button type="submit" id="executeButton">
                 Update
             </button>
+            <br>
+            <button type="submit" id="saveStream">
+                Capture Stream
+            </button>
         </form>
         <br><hr><br>
         <form name="shutdown" onsubmit="return false;">

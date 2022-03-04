@@ -65,6 +65,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
+            const options = getFormOptions();
+            if (options.trim().length > 0) {
+                fetch('/saveStream?${options}', {
+                    method: 'GET'
+                });
+            }
+        } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
             fetch('/shutdown', {
                 method: 'POST',
                 cache: 'no-cache',
