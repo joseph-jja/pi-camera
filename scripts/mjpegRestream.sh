@@ -25,11 +25,11 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-if [ "$WIDTH" != "" ]; then
-    if [ "$HEIGHT" != "" ]; then
+#if [ "$WIDTH" != "" ]; then
+    #if [ "$HEIGHT" != "" ]; then
         #EXTRA_ARGS="$EXTRA_ARGS -vf scale=$WIDTH:$HEIGHT"
-    fi
-fi
+    #fi
+#fi
 
 #IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 ffmpeg -i "rtsp://127.0.0.1:10000/stream1" \
