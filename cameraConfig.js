@@ -14,13 +14,13 @@ module.exports = [{
             '--width 1640 --height 922 --profile high',
             '--width 1640 --height 1232 --profile high'
         ],
-        defaultvalue: '--width 640 --height 480'
+        defaultvalue: '--width 640 --height 480 --profile high'
     }, {
         name: 'EV_compensation',
         comment: 'higher is brighter',
         paramName: '--ev',
         range: [-10, 10],
-        step: 0.1,
+        step: 0.5,
         decimalPlaces: 1
     }, {
         name: 'metering',
@@ -40,7 +40,8 @@ module.exports = [{
     }, {
         name: 'exposure_profile',
         paramName: '--exposure',
-        values: ['normal', 'sport', 'long']
+        values: ['normal', 'sport', 'long'],
+        defaultValue: 'long'
     }, {
         name: 'contrast',
         paramName: '--contrast',
