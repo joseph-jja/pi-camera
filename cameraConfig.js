@@ -32,17 +32,17 @@ module.exports = [{
     paramName: '--quality',
     range: [1, 100],
     step: 1,
-    defaultvalue: '--quality 100'
+    defaultvalue: '100'
 }, {
     name: 'framerate',
     paramName: '--framerate',
     values: [1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
-    defaultvalue: '--framerate 10'
+    defaultvalue: '10'
 }, {
     name: 'exposure_profile',
     paramName: '--exposure',
     values: ['normal', 'sport', 'long'],
-    defaultvalue: '--exposure long'
+    defaultvalue: 'long'
 }, {
     name: 'contrast',
     paramName: '--contrast',
