@@ -20,7 +20,7 @@ while [[ $# -gt 0 ]]; do
         EXTRA_ARGS="$EXTRA_ARGS -filter:v fps=$FRAMERATE"
     elif [ "$IN_ARGS" == "--filename" ]; then
         shift
-        FILENAME="/tmp/$1"
+        FILENAME=$1
     elif [ "$IN_ARGS" == "--timeout" ]; then
         shift
         TIMEOUT=$1
