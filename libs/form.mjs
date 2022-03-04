@@ -22,7 +22,7 @@ export function buildSelect(item) {
     } = item;
 
     const options = values.map(element => {
-        const selected = (defaultvalue && defaultvalue.trim() === element.trim() ? 'selected' : '');
+        const selected = (defaultvalue && defaultvalue.trim() === `${element}`.trim() ? 'selected' : '');
         return `<option value="${paramName} ${element}" ${selected}>${element}</option>`;
     }).reduce((acc, next) => {
         return `${acc}${EOL}${next}`;
