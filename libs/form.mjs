@@ -8,7 +8,7 @@ export function makeLabel(name) {
 
 function getComment(item) {
     if (item.comment) {
-        return `<br>${item.comment}<br>`;
+        return `<br>${item.comment}`;
     }
     return '';
 }
