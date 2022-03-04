@@ -28,5 +28,5 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-ffmpeg -t $TIMEOUT -i "rtsp://127.0.0.1:10000/stream1" \
+ffmpeg -y  -t $TIMEOUT -i "rtsp://127.0.0.1:10000/stream1" \
     $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an $FILENAME
