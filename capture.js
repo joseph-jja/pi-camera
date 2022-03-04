@@ -121,7 +121,7 @@ function saveVideoProcess(options, response) {
     const now = new Date();
     const datePart = `${now.getFullYear()}${padNumber(now.getMonth()+1)}${padNumber(now.getDate())}`;
     const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
-    const filename = `capture-${datePart}${timePart}`;
+    const filename = `capture-${datePart}${timePart}.mjpeg`;
 
     const spawnOptions = options.concat();
     spawnOptions.push(`--filename ${filename}`);

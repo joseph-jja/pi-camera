@@ -5,7 +5,7 @@ HEIGHT=""
 FRAMERATE="-filter:v fps=10"
 EXTRA_ARGS=""
 FILENAME="/tmp/capture.mjpeg"
-TIMEOUT=60
+TIMEOUT=15
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     if [ "$IN_ARGS" == "--width" ]; then
