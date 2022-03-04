@@ -11,20 +11,21 @@ window.addEventListener('DOMContentLoaded', () => {
         const videoSize = formElements.filter(item => {
             return (item.name === 'videoSize');
         })[0];
-        const frameRate = formElements.filter(item => {
-            return (item.name === 'framerate');
-        })[0];
-        if (videoSize.selectedOptions[0].value !== '' && frameRate.selectedOptions[0].value !== '') {
-            const videoOption = videoSize.selectedOptions[0].value.split(' '),
-                framerateOption = frameRate.selectedOptions[0].value.split(' ');
+        if (videoSize.selectedOptions[0].value !== '') {
+            const videoOption = videoSize.selectedOptions[0].value.split(' ');
             const [width, height] = videoOption.filter(item => {
                 return parseInt(item);
             });
-            const [rate] = framerateOption.filter(item => {
-                return parseInt(item);
-            });
-            const bitrate = width * height * rate;
-            return `--bitrate ${bitrate < 25000000 ? bitrate : 25000000}`;
+            const wxh = width * height;
+            let bitrate = 25000000;
+            if (wxh === 307200) {
+                bitrate = 25000000;
+            } else if (wxh === 921600) {
+                bitrate = 20000000;
+            } else {
+                bitrate = 15000000;
+            }
+            return `--bitrate ${bitrate}`;
         }
         return '';
     }

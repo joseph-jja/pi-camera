@@ -9,8 +9,10 @@ module.exports = [{
         paramName: '',
         values: [
             '--width 640 --height 480 --profile high',
-            '--width 1296 --height 730 --profile high',
-            '--width 1920 --height 1080 --profile high'
+            '--width 1280 --height 720 --profile high',
+            '--width 1920 --height 1080 --profile high',
+            '--width 1640 --height 922 --profile high',
+            '--width 1640 --height 1232 --profile high'
         ],
         defaultvalue: '--width 640 --height 480'
     }, {
@@ -33,7 +35,7 @@ module.exports = [{
     }, {
         name: 'framerate',
         paramName: '--framerate',
-        values: [1, 2, 4, 8, 10, 15, 30, 60],
+        values: [1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
         defaultValue: 10
     }, {
         name: 'exposure_profile',
