@@ -77,9 +77,10 @@ async function getHostname() {
 
 function spawnVideoProcess(options) {
 
-    options.unshift('--codec h264');
-    options.unshift(VIDEO_CMD);
-    videoProcess = childProcess.spawn(BASH_CMD, options, {
+    const spawnOptions = options.concat();
+    spawnOptions.unshift('--codec h264');
+    spawnOptions.unshift(VIDEO_CMD);
+    videoProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
         env: process.env
     });
     videoProcess.stdout.on('data', (data) => {
