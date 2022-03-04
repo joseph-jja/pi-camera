@@ -93,4 +93,10 @@ window.addEventListener('DOMContentLoaded', () => {
         const options = getFormOptions();
         iframe.src = `/preview?previewOpts=${options}`;
     }
+
+    /* eslint-disable no-unused-vars */
+    const intId = setInterval(() => {
+        const preview = iframe.src;
+        iframe.src = preview;
+    }, 5000);
 });
