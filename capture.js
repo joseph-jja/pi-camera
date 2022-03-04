@@ -156,17 +156,16 @@ async function start() {
 
     const fields = config.map(item => {
 
-        const comment = (item.comment ? `<br>${item.comment}` : '');
         if (item.values) {
-            return formFields.buildSelect(item) + comment;
+            return formFields.buildSelect(item);
         } else if (item.range) {
             const values = formFields.getRangeValues(item);
             const ritem = Object.assign({}, item, {values});
-            return formFields.buildSelect(ritem) + comment;
+            return formFields.buildSelect(ritem);
         } else if (item.fieldValue) {
-            return formFields.textField(item) + comment;
+            return formFields.textField(item);
         } else {
-            console.log(item, comment);
+            console.log(item);
             return '';
         }
     }).reduce((acc, next) => {

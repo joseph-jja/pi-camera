@@ -8,9 +8,9 @@ module.exports = [{
         name: 'videoSize',
         paramName: '',
         values: [
-            '--width 640 --height 480',
-            '--width 1296 --height 730',
-            '--width 1920 --height 1080'
+            '--width 640 --height 480 --profile high',
+            '--width 1296 --height 730 --profile high',
+            '--width 1920 --height 1080 --profile high'
         ],
         defaultvalue: '--width 640 --height 480'
     }, {
@@ -20,11 +20,7 @@ module.exports = [{
         range: [-10, 10],
         step: 0.1,
         decimalPlaces: 1
-    /*}, {
-        name: 'codec',
-        paramName: '--codec',
-        values: ['h264', 'mjpeg', 'yuv420']
-    */}, {
+    }, {
         name: 'metering',
         paramName: '--metering',
         values: ['centre', 'spot', 'average'] // 'custom'
@@ -39,11 +35,7 @@ module.exports = [{
         paramName: '--framerate',
         values: [1, 2, 4, 8, 10, 15, 30, 60],
         defaultValue: 10
-    /*}, {
-        name: 'h264_bitrate',
-        paramName: '--bitrate',
-        values: [307200, 946080, 2073600]
-    }, {
+    /*},{
         name: 'h264_intra',
         paramName: '--intra',
         range: [0, 100]
