@@ -6,6 +6,12 @@ export function makeLabel(name) {
     return `<label>${name}</label>${EOL}`;
 }
 
+function getComment(item) {
+    if (item.comment) {
+        return `<br>${item.comment}<br>`;
+    }
+    return '';
+}
 export function buildSelect(item) {
 
     const {
@@ -22,7 +28,7 @@ export function buildSelect(item) {
 
     const initalOption = '<option></option>';
 
-    return `${makeLabel(name)}<select name="${name}">${initalOption}${options}</select>`;
+    return `${makeLabel(name)}<select name="${name}">${initalOption}${options}</select>${getComment(item)}`;
 }
 
 export function getRangeValues(item) {
@@ -46,7 +52,7 @@ export function textField(item) {
         defaultValue = '',
         size = 35
     } = item;
-    return `${makeLabel(name)}<input type="text" name="${name}" value="${defaultValue}" size="${size}">`;
+    return `${makeLabel(name)}<input type="text" name="${name}" value="${defaultValue}" size="${size}">${getComment(item)}`;
 }
 
 export function checkboxField(item) {
@@ -55,5 +61,5 @@ export function checkboxField(item) {
         value = '',
         isEnabled = false
     } = item;
-    return `${makeLabel(name)}<input type="checkbox" name="${name}" value="${value}">`;
+    return `${makeLabel(name)}<input type="checkbox" name="${name}" value="${value}">${getComment(item)}`;
 }
