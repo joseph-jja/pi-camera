@@ -24,6 +24,7 @@ let videoProcess,
 const BASH_CMD = '/bin/bash';
 const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/streamServer.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
+const SAVE_CMD = `${process.env.HOME}/pi-camera/scripts/saveStream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
 
 const DEFAULT_OPTIONS = ['--width 640 --height 480 --framerate 10'];
@@ -90,20 +91,46 @@ function spawnVideoProcess(options) {
 
 function sendVideoProcess(options, response) {
 
-    if (options.length === 0) {
-        options.push(DEFAULT_OPTIONS);
+    const spawnOptions = options.concat();
+    if (spawnOptions.length === 0) {
+        spawnOptions.push(DEFAULT_OPTIONS);
     }
     if (ENABLE_RTSP) {
-        options.unshift(MJPEG_CMD);
+        spawnOptions.unshift(MJPEG_CMD);
     } else {
-        options.unshift(COMBINED_CMD);
+        spawnOptions.unshift(COMBINED_CMD);
     }
-    streamProcess = childProcess.spawn(BASH_CMD, options);
+    streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
     response.writeHead(200, {
         'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
         'Cache-Control': 'no-cache'
     });
     streamProcess.stdout.pipe(response);
+}
+
+function padNumber(num) {
+    return new String(num).padStart(2, 0);
+}
+
+function saveVideoProcess(options, response) {
+
+    const now = new Date();
+    const datePart = `${now.getFullYear()}${padNumber(now.getMonth()+1)}${padNumber(now.getDate())}`;
+    const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
+    const filename = `capture-${datePart}${timePart}`;
+
+    const spawnOptions = options.concat();
+    spawnOptions.push(`--filename ${filename}`);
+    spawnOptions.push('--timeout 60')
+    if (spawnOptions.length === 0) {
+        spawnOptions.push(DEFAULT_OPTIONS);
+    }
+    spawnOptions.unshift(SAVE_CMD);
+    const saveStream = childProcess.spawn(BASH_CMD, spawnOptions);
+    saveStream.on('end', () => {
+        response.writeHead(200, {});
+        response.end(`<a href="/download?filename=${filename}">${filename}</a>`);
+    });
 }
 
 async function getIPAddress(hostname) {
@@ -129,15 +156,16 @@ async function start() {
 
     const fields = config.map(item => {
 
+        const comment = (item.comment ? `<br>${item.comment}` : '');
         if (item.values) {
-            return formFields.buildSelect(item.name, item.paramName, item.values);
+            return formFields.buildSelect(item.name, item.paramName, item.values) + comment;
         } else if (item.range) {
             const values = formFields.getRangeValues(item.range, item.step, item.decimalPlaces);
-            return formFields.buildSelect(item.name, item.paramName, values);
+            return formFields.buildSelect(item.name, item.paramName, values) + comment;
         } else if (item.fieldValue) {
-            return formFields.textField(item.name, item.fieldValue);
+            return formFields.textField(item.name, item.fieldValue) + comment;
         } else {
-            console.log(item);
+            console.log(item, comment);
             return '';
         }
     }).reduce((acc, next) => {
@@ -181,6 +209,19 @@ async function start() {
         }
     });
 
+    app.get('/download', (request, response) => {
+        const params = (request.query && request.query.filename ? request.query.filename : 'undefined);
+        if (params) {
+            response.writeHead(200, {
+                'Content-Type': 'application/json'
+            });
+            fs.createReadStream(`/tmp/${filename}`).pipe(response);
+        } else {
+            response.writeHead(404, {});
+            response.end('File not found'));
+        }
+    });
+
     app.get('/saveStream', (request, response) => {
         const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
         const options = unescape(params).trim().split(' ').filter(item => {
@@ -191,14 +232,14 @@ async function start() {
                 response.writeHead(503, {});
                 response.end('Video process is not running, try /update first.');
             } else {
-                // TODO - need script to save video
+                saveVideoProcess(options, response)
             }
         } else {
             if (streamProcess) {
                 response.writeHead(200, {});
                 response.end('Invalid configuration! ENABLE_RTSP is set to false, cannot view and save stream.');
             } else {
-                // TODO - need script to save video
+                saveVideoProcess(options, response)
             }
         }
     });
