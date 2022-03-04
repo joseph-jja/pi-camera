@@ -57,10 +57,10 @@ window.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: options + bitrate
+                    body: `${options} ${bitrate}`
                 }).then(() => {
                     const iframe = document.getElementById('videoDisplay');
-                    iframe.src = `/preview?previewOpts=${options}`;
+                    iframe.src = `/preview?previewOpts=${options} ${bitrate}`;
                     const historyPath = `${currentHost}?params=${escape(options)}`;
                     window.history.pushState(escape(options), 'PI Camera', historyPath);
                 });
