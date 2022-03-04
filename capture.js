@@ -181,6 +181,28 @@ async function start() {
         }
     });
 
+    app.get('/saveStream', (request, response) => {
+        const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
+        const options = unescape(params).trim().split(' ').filter(item => {
+            return (item && item.length > 0);
+        });
+        if (ENABLE_RTSP) {
+            if (!videoProcess) {
+                response.writeHead(503, {});
+                response.end('Video process is not running, try /update first.');
+            } else {
+                // TODO - need script to save video
+            }
+        } else {
+            if (streamProcess) {
+                response.writeHead(200, {});
+                response.end('Invalid configuration! ENABLE_RTSP is set to false, cannot view and save stream.');
+            } else {
+                // TODO - need script to save video
+            }
+        }
+    });
+
     app.get('/preview', (request, response) => {
 
         const params = (request.query && request.query.previewOpts ? request.query.previewOpts : '');
