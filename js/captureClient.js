@@ -98,5 +98,5 @@ window.addEventListener('DOMContentLoaded', () => {
     const intId = setInterval(() => {
         const preview = iframe.src;
         iframe.src = preview;
-    }, 5000);
+    }, 30000);
 });
