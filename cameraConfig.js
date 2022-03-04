@@ -3,7 +3,8 @@ module.exports = [{
         paramName: '--gain',
         range: [1, 40],
         step: 0.5,
-        decimalPlaces: 1
+        decimalPlaces: 1,
+        comment: 'Higher value is higher ISO'
     }, {
         name: 'videoSize',
         paramName: '',
