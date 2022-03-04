@@ -64,7 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     window.history.pushState(escape(options), 'PI Camera', historyPath);
                 });
             }
-        } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
+        } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             const options = getFormOptions();
             if (options.trim().length > 0) {
                 fetch('/saveStream?${options}', {
