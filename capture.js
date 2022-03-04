@@ -77,7 +77,7 @@ async function getHostname() {
 
 function spawnVideoProcess(options) {
 
-    optoins.unshift('--codec h264');
+    options.unshift('--codec h264');
     options.unshift(VIDEO_CMD);
     videoProcess = childProcess.spawn(BASH_CMD, options, {
         env: process.env
