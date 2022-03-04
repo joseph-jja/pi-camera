@@ -4,7 +4,8 @@ WIDTH=""
 HEIGHT=""
 FRAMERATE="-filter:v fps=10"
 EXTRA_ARGS=""
-FILENAME="capture.mjpeg"
+FILENAME="/tmp/capture.mjpeg"
+TIMEOUT=60
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     if [ "$IN_ARGS" == "--width" ]; then
@@ -19,10 +20,13 @@ while [[ $# -gt 0 ]]; do
         EXTRA_ARGS="$EXTRA_ARGS -filter:v fps=$FRAMERATE"
     elif [ "$IN_ARGS" == "--filename" ]; then
         shift
-        FILENAME=$1
+        FILENAME="/tmp/$1"
+    elif [ "$IN_ARGS" == "--timeout" ]; then
+        shift
+        TIMEOUT=$1
     fi
     shift
 done
 
-ffmpeg -i "rtsp://127.0.0.1:10000/stream1" \
+ffmpeg -t $TIMEOUT -i "rtsp://127.0.0.1:10000/stream1" \
     $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an $FILENAME
