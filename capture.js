@@ -104,7 +104,6 @@ function sendVideoProcess(options, response) {
         'Cache-Control': 'no-cache'
     });
     streamProcess.stdout.pipe(response);
-    return streamProcess.pid;
 }
 
 async function getIPAddress(hostname) {
@@ -192,16 +191,10 @@ async function start() {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
-                    const pid = sendVideoProcess(options, response);
-                    response.on('finish', () => {
-                        childProcess.exec(`kill -9 ${pid}`)
-                    });
+                    sendVideoProcess(options, response);
                 });
             } else {
-                const pid = sendVideoProcess(options, response);
-                response.on('finish', () => {
-                    childProcess.exec(`kill -9 ${pid}`)
-                });
+                sendVideoProcess(options, response);
             }
         } else {
             response.writeHead(200, {});
