@@ -49,7 +49,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 return `${acc} ${next}`.trim();
             });
             const bitrate = setBitrate(formElements);
-            console.log(bitrate);
             if (options.trim().length > 0) {
                 fetch('/update', {
                     method: 'POST',
@@ -58,7 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: options
+                    body: options + bitrate
                 }).then(() => {
                     const iframe = document.getElementById('videoDisplay');
                     iframe.src = `/preview?previewOpts=${options}`;
