@@ -1,12 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-    const currentHost = window.location.origin;
-    const defaultParams = window.location.search;
-    if (defaultParams && defaultParams.length > 0) {
-        const iframe = document.getElementById('videoDisplay');
-        iframe.src = `/preview?previewOpts=${defaultParams.replace('?', '')}`;
-    }
-
     function setBitrate(formElements) {
         const videoSize = formElements.filter(item => {
             return (item.name === 'videoSize');
@@ -30,25 +23,31 @@ window.addEventListener('DOMContentLoaded', () => {
         return '';
     }
 
+    function getFormOptions() {
+
+        const formElements = Array.from(document.forms['cameraOptions']);
+        const bitrate = setBitrate(formElements);
+        const options = formElements.filter(element => {
+            const nodeName = element.nodeName.toLowerCase();
+            return (nodeName !== 'button');
+        }).map(element => {
+            const tagName = element.tagName.toLowerCase();
+            if (tagName === 'select') {
+                return element.selectedOptions[0].value;
+            } else {
+                return element.value;
+            }
+        }).reduce((acc, next) => {
+            return `${acc} ${next}`.trim();
+        });
+        return `${options} ${bitrate}`;
+    }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
         if (name.toLowerCase() === 'button' && target.id === 'executeButton') {
-            const formElements = Array.from(document.forms['cameraOptions']);
-            const options = formElements.filter(element => {
-                const nodeName = element.nodeName.toLowerCase();
-                return (nodeName !== 'button');
-            }).map(element => {
-                const tagName = element.tagName.toLowerCase();
-                if (tagName === 'select') {
-                    return element.selectedOptions[0].value;
-                } else {
-                    return element.value;
-                }
-            }).reduce((acc, next) => {
-                return `${acc} ${next}`.trim();
-            });
-            const bitrate = setBitrate(formElements);
+            const options = getFormOptions();
             if (options.trim().length > 0) {
                 fetch('/update', {
                     method: 'POST',
@@ -57,10 +56,10 @@ window.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: `${options} ${bitrate}`
+                    body: options
                 }).then(() => {
                     const iframe = document.getElementById('videoDisplay');
-                    iframe.src = `/preview?previewOpts=${options} ${bitrate}`;
+                    iframe.src = `/preview?previewOpts=${options}`;
                     const historyPath = `${currentHost}?params=${escape(options)}`;
                     window.history.pushState(escape(options), 'PI Camera', historyPath);
                 });
@@ -77,4 +76,14 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    const currentHost = window.location.origin;
+    const defaultParams = window.location.search;
+    const iframe = document.getElementById('videoDisplay');
+    if (defaultParams && defaultParams.length > 0) {
+        iframe.src = `/preview?previewOpts=${defaultParams.replace('?', '')}`;
+    } else {
+        const options = getFormOptions();
+        iframe.src = `/preview?previewOpts=${options}`;
+    }
 });
