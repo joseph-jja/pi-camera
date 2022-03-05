@@ -235,9 +235,10 @@ async function start() {
                 response.end(`Executed script with options ${stringify(options)}`);
                 console.log('Executed script with options', options);
             }
+        } else {
+            response.writeHead(200, {});
+            response.end('No changes applied!');
         }
-        response.writeHead(200, {});
-        response.end('No changes applied!');
     });
 
     app.get('/download', (request, response) => {
@@ -288,6 +289,7 @@ async function start() {
                         return;
                     });
                 });
+                return;
             }
         }
         response.writeHead(200, {});
