@@ -31,5 +31,5 @@ done
 echo "Timeout: $TIMEOUT"
 echo "Args: $EXTRA_ARGS"
 echo "Filename: $FILENAME"
-ffmpeg -y  -t $TIMEOUT -i "rtsp://127.0.0.1:10000/stream1" \
+ffmpeg -y  -t $TIMEOUT -i tcp://127.0.0.1:10000 \
     $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an "$FILENAME"
