@@ -68,7 +68,11 @@ window.addEventListener('DOMContentLoaded', () => {
             const historyPath = `${window.location.href}?params=${escape(options)}`;
             window.history.pushState(escape(options), 'PI Camera', historyPath);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
-
+            fetch('/stopPreview', {
+                method: 'GET'
+            }).then(resp => {
+                console.log(resp);
+            });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             const options = getFormOptions();
             if (options.trim().length > 0) {
