@@ -37,7 +37,7 @@ function getHTML(body) {
         <title>PI Camera</title>
     </head>
     <body>
-        <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
+        <iframe id="videoDisplay" width="640" height="480" src="/defaultPreview"></iframe>
 
         <div id="server-messages"></div>
         <br>
@@ -292,6 +292,11 @@ async function start() {
         }
         response.writeHead(200, {});
         response.end('Nothing happened!');
+    });
+
+    app.get('/defaultPreview', (request, response) => {
+        response.writeHead(200, {});
+        response.end('Click preview to start the preview!');
     });
 
     app.get('/preview', (request, response) => {
