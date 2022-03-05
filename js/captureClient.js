@@ -43,7 +43,8 @@ window.addEventListener('DOMContentLoaded', () => {
         return `${options} ${bitrate}`;
     }
 
-    function setMessage(msg) {
+    async function setMessage(resp) {
+        const msg = await resp.text();
         const serverMsg = document.getElementById('server-messages');
         serverMsg.innerHTML = msg;
     }
