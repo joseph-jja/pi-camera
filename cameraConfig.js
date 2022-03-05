@@ -37,7 +37,7 @@ module.exports = [{
     name: 'framerate',
     paramName: '--framerate',
     values: [1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
-    defaultvalue: '10'
+    defaultvalue: '8'
 }, {
     name: 'exposure_profile',
     paramName: '--exposure',
