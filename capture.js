@@ -16,7 +16,7 @@ function getEnvValue(envName, defaultValue) {
 }
 const app = express();
 
-const ENABLE_RTSP = getEnvValue(process.env.ENABLE_RTSP, false);
+const ENABLE_RTSP = getEnvValue(process.env.ENABLE_RTSP, true);
 
 let videoProcess,
     streamProcess;
