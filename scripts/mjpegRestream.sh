@@ -32,5 +32,5 @@ done
 #fi
 
 # tcp connection
-ffmpeg -i tcp://127.0.0.1:10000 \
+ffmpeg -i tcp://192.168.50.100:10000 \
     $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
