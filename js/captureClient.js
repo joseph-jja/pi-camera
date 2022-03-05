@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
-        if (name.toLowerCase() === 'button' && target.id === 'executeButton') {
+        if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
             const options = getFormOptions();
             if (options.trim().length > 0) {
                 fetch('/update', {
@@ -57,18 +57,25 @@ window.addEventListener('DOMContentLoaded', () => {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: options
-                }).then(() => {
-                    const iframe = document.getElementById('videoDisplay');
-                    iframe.src = `/preview?previewOpts=${options}`;
-                    const historyPath = `${currentHost}?params=${escape(options)}`;
-                    window.history.pushState(escape(options), 'PI Camera', historyPath);
+                }).then(resp => {
+                    console.log(resp);
                 });
             }
+        } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
+            const options = getFormOptions();
+            const iframe = document.getElementById('videoDisplay');
+            iframe.src = `/preview?previewOpts=${options}`;
+            const historyPath = `${window.location.href}?params=${escape(options)}`;
+            window.history.pushState(escape(options), 'PI Camera', historyPath);
+        } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
+
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             const options = getFormOptions();
             if (options.trim().length > 0) {
                 fetch(`/saveStream?saveOpts=${options}`, {
                     method: 'GET'
+                }).then(resp => {
+                    console.log(resp);
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
@@ -83,20 +90,4 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-
-    const currentHost = window.location.origin;
-    const defaultParams = window.location.search;
-    const iframe = document.getElementById('videoDisplay');
-    if (defaultParams && defaultParams.length > 0) {
-        iframe.src = `/preview?previewOpts=${defaultParams.replace('?', '')}`;
-    } else {
-        const options = getFormOptions();
-        iframe.src = `/preview?previewOpts=${options}`;
-    }
-
-    /* eslint-disable no-unused-vars */
-    /*const intId = setInterval(() => {
-        const preview = iframe.src;
-        iframe.src = preview;
-    }, 30000);*/
 });

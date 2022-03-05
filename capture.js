@@ -41,12 +41,20 @@ function getHTML(body) {
         <form name="cameraOptions" onsubmit="return false;">
             ${body}
             <br>
-            <button type="submit" id="executeButton">
+            <button type="submit" id="updateButton">
                 Update
             </button>
-            <br>
+            <br><br>
             <button type="submit" id="saveStream">
                 Capture Stream
+            </button>
+            <br><br>
+            <button type="submit" id="startPreview">
+                Start Preview
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" id="stopPreview">
+                Stop Preview
             </button>
         </form>
         <br><hr><br>
@@ -248,6 +256,16 @@ async function start() {
                 response.end('Invalid configuration! ENABLE_RTSP is set to false, cannot view and save stream.');
             } else {
                 saveVideoProcess(options, response)
+            }
+        }
+    });
+
+    app.get('/stopPreview', (request, response) => {
+
+        if (!ENABLE_RTSP || (ENABLE_RTSP && videoProcess)) {
+            if (streamProcess) {
+                const pid = streamProcess.pid;
+                childProcess.exec(`kill -9 ${pid}`);
             }
         }
     });
