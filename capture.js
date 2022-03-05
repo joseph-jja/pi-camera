@@ -35,10 +35,16 @@ function getHTML(body) {
 <html>
     <head>
         <title>PI Camera</title>
+        <style type="text/css">
+            #server-messages {
+                height: 1.5em;
+            }
+        </style>
     </head>
     <body>
         <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
 
+        <div id="server-messages"></div>
         <form name="cameraOptions" onsubmit="return false;">
             ${body}
             <br>
@@ -73,6 +79,14 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: 100000
 }));
+
+function stringify(m) {
+    try {
+        return JSON.stringify(m);
+    } catch(e) {
+        return m;
+    }
+}
 
 async function getHostname() {
 
@@ -203,9 +217,9 @@ async function start() {
     });
 
     app.post('/update', (request, response) => {
-        response.writeHead(200, {});
-        response.end('');
         if (!ENABLE_RTSP) {
+            response.writeHead(200, {});
+            response.end('RTSP not enabled, nothing to do!');
             return;
         }
         if (request.body && Object.keys(request.body).length > 0) {
@@ -221,9 +235,13 @@ async function start() {
                 } else {
                     spawnVideoProcess(options);
                 }
-                console.log('Executed script ', options);
+                response.writeHead(200, {});
+                response.end(`Executed script with options ${stringify(options)}`);
+                console.log('Executed script with options', options);
             }
         }
+        response.writeHead(200, {});
+        response.end('No changes applied!');
     });
 
     app.get('/download', (request, response) => {
@@ -235,7 +253,7 @@ async function start() {
             fs.createReadStream(`/tmp/${filename}`).pipe(response);
         } else {
             response.writeHead(404, {});
-            response.end('File not found');
+            response.end('File not found!');
         }
     });
 
@@ -268,15 +286,16 @@ async function start() {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
                     childProcess.exec(`kill -9 ${FFMPEG_RUNNING_CMD}`, () => {
+                        // TODO check status of command
                         response.writeHead(200, {});
-                        response.end('');
+                        response.end('Preview should have stopped.');
                         return;
                     });
                 });
             }
         }
         response.writeHead(200, {});
-        response.end('');
+        response.end('Nothing happened!');
     });
 
     app.get('/preview', (request, response) => {
@@ -296,7 +315,7 @@ async function start() {
             }
         } else {
             response.writeHead(200, {});
-            response.end('');
+            response.end('Nothing saved!');
         }
     });
 

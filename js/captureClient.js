@@ -43,6 +43,10 @@ window.addEventListener('DOMContentLoaded', () => {
         return `${options} ${bitrate}`;
     }
 
+    function setMessage(msg) {
+        const serverMsg = document.getElementById('server-messages');
+        serverMsg.innerHTML = msg;
+    }
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
@@ -58,7 +62,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     },
                     body: options
                 }).then(resp => {
-                    console.log(resp);
+                    setMessage(resp);
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
@@ -71,7 +75,7 @@ window.addEventListener('DOMContentLoaded', () => {
             fetch('/stopPreview', {
                 method: 'GET'
             }).then(resp => {
-                console.log(resp);
+                setMessage(resp);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             const options = getFormOptions();
@@ -79,7 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 fetch(`/saveStream?saveOpts=${options}`, {
                     method: 'GET'
                 }).then(resp => {
-                    console.log(resp);
+                    setMessage(resp);
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
