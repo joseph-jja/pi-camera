@@ -35,16 +35,12 @@ function getHTML(body) {
 <html>
     <head>
         <title>PI Camera</title>
-        <style type="text/css">
-            #server-messages {
-                height: 1.5em;
-            }
-        </style>
     </head>
     <body>
         <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
 
         <div id="server-messages"></div>
+        <br>
         <form name="cameraOptions" onsubmit="return false;">
             ${body}
             <br>
