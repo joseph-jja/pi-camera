@@ -118,12 +118,7 @@ async function start() {
             return (item && item.length > 0);
         });
         if (ENABLE_RTSP) {
-            if (!global.videoProcess) {
-                response.writeHead(503, {});
-                response.end('Video process is not running, try /update first.');
-            } else {
-                saveVideoProcess(options, response)
-            }
+            saveVideoProcess(options, response);
         } else {
             if (global.streamProcess) {
                 response.writeHead(200, {});
@@ -136,19 +131,17 @@ async function start() {
 
     app.get('/stopPreview', (request, response) => {
 
-        if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
-            if (global.streamProcess) {
-                const pid = global.streamProcess.pid;
-                childProcess.exec(`kill -9 ${pid}`, () => {
-                    childProcess.exec(`/bin/bash ${FFMPEG_RUNNING_CMD}`, () => {
-                        // TODO check status of command
-                        response.writeHead(200, {});
-                        response.end('Preview should have stopped.');
-                        return;
-                    });
+        if (global.streamProcess) {
+            const pid = global.streamProcess.pid;
+            childProcess.exec(`kill -9 ${pid}`, () => {
+                childProcess.exec(`/bin/bash ${FFMPEG_RUNNING_CMD}`, () => {
+                    // TODO check status of command
+                    response.writeHead(200, {});
+                    response.end('Preview should have stopped.');
+                    return;
                 });
-                return;
-            }
+            });
+            return;
         }
         response.writeHead(200, {});
         response.end('Nothing happened!');
