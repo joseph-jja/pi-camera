@@ -4,7 +4,7 @@ WIDTH=""
 HEIGHT=""
 FRAMERATE="-filter:v fps=10"
 EXTRA_ARGS=""
-FILENAME="/tmp/capture.mjpeg"
+FILENAME="$HOME/images/capture.mjpeg"
 TIMEOUT=15
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
