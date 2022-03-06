@@ -60,6 +60,20 @@ function getHTML(body) {
                 Stop Preview
             </button>
         </form>
+        <!--
+        <br><br>
+        <form name="imageCapture" onsubmit="return false;">
+            <select name="imageCapture">
+                <option value="0.2">1/2 second</option>
+                <option value="0.03">1/30 second</option>
+                <option value="0.25">1/4 second</option>
+                <option value="0.06">1/6 second</option>
+            </select>
+            <button type="submit" id="imageCapture">
+                Image Capture
+            </button>
+        </form>
+        -->
         <br><hr><br>
         <form name="shutdown" onsubmit="return false;">
             <button type="submit" id="shutdownButton">
@@ -149,7 +163,7 @@ function saveVideoProcess(options, response) {
     const spawnOptions = options.concat();
     spawnOptions.push('--filename');
     spawnOptions.push(`/tmp/${filename}`);
-    spawnOptions.push('--timeout 15')
+    spawnOptions.push(`--timeout ${options.timeout ? options.timeout : 15}`);
     if (spawnOptions.length === 0) {
         spawnOptions.push(DEFAULT_OPTIONS);
     }
