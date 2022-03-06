@@ -9,6 +9,7 @@ WIDTH=""
 HEIGHT=""
 FRAMERATE="-filter:v fps=10"
 EXTRA_ARGS=""
+BITRATE="-b:a 384000"
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     echo $IN_ARGS
@@ -22,6 +23,9 @@ while [[ $# -gt 0 ]]; do
         shift
         FRAMERATE=$1
         EXTRA_ARGS="$EXTRA_ARGS -filter:v fps=$FRAMERATE"
+    elif [ "$IN_ARGS" == "--bitrate" ]; then
+        shift
+        BITRATE=$1
     fi
     shift
 done
@@ -34,6 +38,7 @@ if [ "$WIDTH" != "" ]; then
 fi
 
 # rtsp connection
+#$EXTRA_ARGS -vcodec libvpx -qmin 0 -qmax 50 -crf 10 -b:v 1M -an -
+# -f mpjpeg 
 ffmpeg -t 30 -i "rtsp://127.0.0.1:10000/stream1" \
-    $EXTRA_ARGS -vcodec libvpx -qmin 0 -qmax 50 -crf 10 -b:v 1M -an -
-#    $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
+    $EXTRA_ARGS -c:v libx264 -q:v 5 -an -
