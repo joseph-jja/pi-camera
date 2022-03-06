@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 // 640 x 480 
                 bitrate = 15000000;
             } else if (wxh === 921600) {
-                1280 x 720 
+                // 1280 x 720 
                 bitrate = 10000000;
             } else {
                 // everything else
