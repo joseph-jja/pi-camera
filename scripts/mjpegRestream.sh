@@ -28,7 +28,7 @@ done
 
 if [ "$WIDTH" != "" ]; then
     if [ "$HEIGHT" != "" ]; then
-        EXTRA_ARGS="$EXTRA_ARGS -s $WIDTH:$HEIGHT"
+        EXTRA_ARGS="$EXTRA_ARGS -s $WIDTHx$HEIGHT"
     fi
 fi
 
