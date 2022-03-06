@@ -18,7 +18,7 @@ done
 
 FRAMERATE=8
 for IN_ARG in $EXTRA_ARGS; do
-    if [ "$IN_ARG" == "--framerate" ];
+    if [ "$IN_ARG" == "--framerate" ]; then
         shift
         FRAMERATE=$IN_ARG
     fi
