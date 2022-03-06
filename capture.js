@@ -17,34 +17,27 @@ const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
     stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
-        padNumber,
         getIPAddress,
         getHostname
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
         BASH_CMD,
         DEFAULT_OPTIONS,
-        getVideoCommand,
-        getMjpegCommand,
-        getSaveCommand,
-        getCombinedCommand,
-        getFfmpegRunningVideoCommand,
-        getFfmpegRtspCopyCommand
-    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`);
+        VIDEO_CMD,
+        MJPEG_CMD,
+        SAVE_CMD,
+        COMBINED_CMD,
+        FFMPEG_RUNNING_CMD,
+        FFMPEG_RTSP_COPY_CMD,
+        getVideoFilename,
+        spawnVideoProcess
+    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
 
 const app = express();
 
 const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
 
-let videoProcess,
-    streamProcess;
-
-const VIDEO_CMD = getVideoCommand(RESOLVED_FILE_LOCATION);
-const MJPEG_CMD = getMjpegCommand(RESOLVED_FILE_LOCATION);
-const SAVE_CMD = getSaveCommand(RESOLVED_FILE_LOCATION);
-const COMBINED_CMD = getCombinedCommand(RESOLVED_FILE_LOCATION);
-const FFMPEG_RUNNING_CMD = getFfmpegRunningVideoCommand(RESOLVED_FILE_LOCATION);
-const FFMPEG_RTSP_COPY_CMD = getFfmpegRtspCopyCommand(RESOLVED_FILE_LOCATION);
+let streamProcess;
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
@@ -106,19 +99,6 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
-function spawnVideoProcess(options) {
-
-    const spawnOptions = options.concat();
-    spawnOptions.unshift('--codec h264');
-    spawnOptions.unshift(VIDEO_CMD);
-    videoProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
-        env: process.env
-    });
-    videoProcess.stdout.on('data', (data) => {
-        console.log(`${VIDEO_CMD}: ${data}`);
-    });
-}
-
 function sendVideoProcess(options, response) {
 
     const spawnOptions = options.concat();
@@ -144,10 +124,7 @@ function sendVideoProcess(options, response) {
 
 function saveVideoProcess(options, response) {
 
-    const now = new Date();
-    const datePart = `${now.getFullYear()}${padNumber(now.getMonth()+1)}${padNumber(now.getDate())}`;
-    const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
-    const filename = `capture-${datePart}${timePart}.mjpeg`;
+    const filename = getVideoFilename();
 
     const spawnOptions = options.concat();
     spawnOptions.push('--filename');
@@ -166,7 +143,6 @@ function saveVideoProcess(options, response) {
         response.end(`<a href="/download?filename=${filename}">${filename}</a>`);
     });
 }
-
 
 async function start() {
 
@@ -224,10 +200,10 @@ async function start() {
                 const spawnOpts = options.map(item => {
                     return item.split(' ');
                 }).reduce((acc, next) => acc.concat(next));
-                if (videoProcess) {
-                    const pid = videoProcess.pid;
+                if (global.videoProcess) {
+                    const pid = global.videoProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
-                        videoProcess = undefined;
+                        global.videoProcess = undefined;
                         spawnVideoProcess(spawnOpts);
                     });
                 } else {
@@ -262,7 +238,7 @@ async function start() {
             return (item && item.length > 0);
         });
         if (ENABLE_RTSP) {
-            if (!videoProcess) {
+            if (!global.videoProcess) {
                 response.writeHead(503, {});
                 response.end('Video process is not running, try /update first.');
             } else {
@@ -280,7 +256,7 @@ async function start() {
 
     app.get('/stopPreview', (request, response) => {
 
-        if (!ENABLE_RTSP || (ENABLE_RTSP && videoProcess)) {
+        if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
@@ -309,7 +285,7 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });
-        if (!ENABLE_RTSP || (ENABLE_RTSP && videoProcess)) {
+        if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
