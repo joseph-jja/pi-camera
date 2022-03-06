@@ -46,8 +46,6 @@ function getHTML(body) {
         <title>PI Camera</title>
     </head>
     <body>
-        <iframe id="videoDisplay" width="640" height="480" src="/defaultPreview"></iframe>
-
         <div id="server-messages"></div>
         <br>
         <form name="cameraOptions" onsubmit="return false;">
@@ -56,33 +54,7 @@ function getHTML(body) {
             <button type="submit" id="updateButton">
                 Update
             </button>
-            <br><br>
-            <button type="submit" id="saveStream">
-                Capture Stream
-            </button>
-            <br><br>
-            <button type="submit" id="startPreview">
-                Start Preview
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="submit" id="stopPreview">
-                Stop Preview
-            </button>
         </form>
-        <!--
-        <br><br>
-        <form name="imageCapture" onsubmit="return false;">
-            <select name="imageCapture">
-                <option value="0.2">1/2 second</option>
-                <option value="0.03">1/30 second</option>
-                <option value="0.25">1/4 second</option>
-                <option value="0.06">1/6 second</option>
-            </select>
-            <button type="submit" id="imageCapture">
-                Image Capture
-            </button>
-        </form>
-        -->
         <br><hr><br>
         <form name="shutdown" onsubmit="return false;">
             <button type="submit" id="shutdownButton">
@@ -172,104 +144,6 @@ async function start() {
             response.writeHead(200, {});
             response.end('No changes applied!');
         }
-    });
-
-    app.get('/download', (request, response) => {
-        const filename = (request.query && request.query.filename ? request.query.filename : undefined);
-        if (filename) {
-            response.writeHead(200, {
-                'Content-Type': 'application/json'
-            });
-            fs.createReadStream(`${process.env.HOME}/images/${filename}`).pipe(response);
-        } else {
-            response.writeHead(404, {});
-            response.end('File not found!');
-        }
-    });
-
-    app.get('/saveStream', (request, response) => {
-        const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
-        const options = unescape(params).trim().split(' ').filter(item => {
-            return (item && item.length > 0);
-        });
-        if (ENABLE_RTSP) {
-            if (!global.videoProcess) {
-                response.writeHead(503, {});
-                response.end('Video process is not running, try /update first.');
-            } else {
-                saveVideoProcess(options, response)
-            }
-        } else {
-            if (global.streamProcess) {
-                response.writeHead(200, {});
-                response.end('Invalid configuration! ENABLE_RTSP is set to false, cannot view and save stream.');
-            } else {
-                saveVideoProcess(options, response)
-            }
-        }
-    });
-
-    app.get('/stopPreview', (request, response) => {
-
-        if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
-            if (global.streamProcess) {
-                const pid = global.streamProcess.pid;
-                childProcess.exec(`kill -9 ${pid}`, () => {
-                    childProcess.exec(`/bin/bash ${FFMPEG_RUNNING_CMD}`, () => {
-                        // TODO check status of command
-                        response.writeHead(200, {});
-                        response.end('Preview should have stopped.');
-                        return;
-                    });
-                });
-                return;
-            }
-        }
-        response.writeHead(200, {});
-        response.end('Nothing happened!');
-    });
-
-    app.get('/defaultPreview', (request, response) => {
-        response.writeHead(200, {});
-        response.end('Click preview to start the preview!');
-    });
-
-    app.get('/preview', (request, response) => {
-
-        const params = (request.query && request.query.previewOpts ? request.query.previewOpts : '');
-        const options = unescape(params).trim().split(' ').filter(item => {
-            return (item && item.length > 0);
-        });
-        if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
-            console.log('Running preview with: ', options)
-            if (global.streamProcess) {
-                const pid = global.streamProcess.pid;
-                childProcess.exec(`kill -9 ${pid}`, () => {
-                    sendVideoProcess(options, response);
-                });
-            } else {
-                sendVideoProcess(options, response);
-            }
-        } else {
-            response.writeHead(200, {});
-            response.end('Nothing to do!');
-        }
-    });
-
-    app.get('/rtspPreview', (request, response) => {
-        // TODO fix this
-        const restream = childProcess.spawn(BASH_CMD, [FFMPEG_RTSP_COPY_CMD]);
-        response.writeHead(200, {
-            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-            'Cache-Control': 'no-cache'
-        });
-        restream.stdout.pipe(response);
-        response.on('close', () => {
-            const pid = restream.pid;
-            childProcess.exec(`kill -9 ${pid}`, () => {
-                console.log('Done!');
-            });
-        });
     });
 
     app.get('/', (request, response) => {
