@@ -58,6 +58,9 @@ module.exports = function(resolveFileLocation) {
             'Cache-Control': 'no-cache'
         });
         global.streamProcess.stdout.pipe(response);
+        global.streamProcess.on('error', (err) =>{
+            console.error('Error', err);
+        });
         global.streamProcess.on('close', () => {
             console.log('Video stream has ended!');
         });
