@@ -129,6 +129,7 @@ function sendVideoProcess(options, response) {
         'Cache-Control': 'no-cache'
     });
     streamProcess.stdout.pipe(response);
+    console.log('Should be streaming now ...');
 }
 
 function padNumber(num) {
