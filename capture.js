@@ -15,7 +15,7 @@ const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 
 const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
-    stringify = require(`${RESOLVED_FILE_LOCATION}libs/stringify`);
+    stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`);
 
 const app = express();
 
