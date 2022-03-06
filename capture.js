@@ -26,7 +26,7 @@ const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/streamServer.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 const SAVE_CMD = `${process.env.HOME}/pi-camera/scripts/saveStream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
-const FFMPEG_RUNNING_CMD = 'ps -ef |grep ffmpeg |grep -v capture |grep -v grep| awk \'{print $2}\'';
+const FFMPEG_RUNNING_CMD = `${process.env.HOME}/pi-camera/scripts/killPreview.sh`;
 
 const DEFAULT_OPTIONS = ['--width 640 --height 480 --profile high --framerate 8 --quality 100'];
 
@@ -287,7 +287,7 @@ async function start() {
             if (streamProcess) {
                 const pid = streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
-                    childProcess.exec(`kill -9 ${FFMPEG_RUNNING_CMD}`, () => {
+                    childProcess.exec(`/bin/bash ${FFMPEG_RUNNING_CMD}`, () => {
                         // TODO check status of command
                         response.writeHead(200, {});
                         response.end('Preview should have stopped.');
