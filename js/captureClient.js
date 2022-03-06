@@ -10,11 +10,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 return parseInt(item);
             });
             const wxh = width * height;
-            let bitrate = 25000000;
+            let bitrate = 15000000;
             if (wxh === 307200) {
-                bitrate = 25000000;
+                bitrate = 10000000;
             } else if (wxh === 921600) {
-                bitrate = 20000000;
+                bitrate = 10000000;
             } else {
                 bitrate = 15000000;
             }
