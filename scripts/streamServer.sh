@@ -34,4 +34,4 @@ echo "IP Address: $IP_ADDRESS ..."
 echo "Options: $EXTRA_ARGS ..."
 
 /usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
-    --no-audio stream:///dev/stdin --sout '#rtp{sdp=rtsp://127.0.0.1:10000/stream1}' :demux=h264
+    --no-audio stream:///dev/stdin --sout '#rtp{sdp=rtsp://0.0.0.0:10000/stream1}' :demux=h264
