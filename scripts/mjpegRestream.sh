@@ -8,7 +8,7 @@ fi
 WIDTH=""
 HEIGHT=""
 FRAMERATE="-filter:v fps=10"
-EXTRA_ARGS="-fflags no buffer -flags low_delay -framedrop" 
+EXTRA_ARGS="-fflags no buffer -flags low_delay -framedrop"
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     if [ "$IN_ARGS" == "--width" ]; then
@@ -25,12 +25,13 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-#if [ "$WIDTH" != "" ]; then
-    #if [ "$HEIGHT" != "" ]; then
-        #EXTRA_ARGS="$EXTRA_ARGS -vf scale=$WIDTH:$HEIGHT"
-    #fi
-#fi
+if [ "$WIDTH" != "" ]; then
+    if [ "$HEIGHT" != "" ]; then
+        EXTRA_ARGS="$EXTRA_ARGS -s $WIDTH:$HEIGHT"
+    fi
+fi
 
 # tcp connection
-ffmpeg -t 30 -i "rtsp://127.0.0.1:10000/stream1" \
-    $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
+echo COMMAND=$EXTRA_ARGS
+#ffmpeg -t 30 -i "rtsp://127.0.0.1:10000/stream1" -fflags nobuffer -flags low_delay -framedrop \
+#    $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
