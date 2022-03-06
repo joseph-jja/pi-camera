@@ -63,13 +63,10 @@ module.exports = function(resolveFileLocation) {
         });
         console.log('Should be streaming now ...');
     }
-    /*
+
     function saveVideoProcess(options, response) {
 
-        const now = new Date();
-        const datePart = `${now.getFullYear()}${padNumber(now.getMonth()+1)}${padNumber(now.getDate())}`;
-        const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
-        const filename = `capture-${datePart}${timePart}.mjpeg`;
+        const filename = getVideoFilename();
 
         const spawnOptions = options.concat();
         spawnOptions.push('--filename');
@@ -88,7 +85,6 @@ module.exports = function(resolveFileLocation) {
             response.end(`<a href="/download?filename=${filename}">${filename}</a>`);
         });
     }
-    */
 
     return {
         BASH_CMD,
@@ -101,7 +97,8 @@ module.exports = function(resolveFileLocation) {
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
         spawnVideoProcess,
-        sendVideoProcess
+        sendVideoProcess,
+        saveVideoProcess
     };
 
 };

@@ -31,7 +31,8 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
         spawnVideoProcess,
-        sendVideoProcess
+        sendVideoProcess,
+        saveVideoProcess
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
 
 const app = express();
@@ -97,28 +98,6 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: 100000
 }));
-
-function saveVideoProcess(options, response) {
-
-    const filename = getVideoFilename();
-
-    const spawnOptions = options.concat();
-    spawnOptions.push('--filename');
-    spawnOptions.push(`${process.env.HOME}/images/${filename}`);
-    spawnOptions.push(`--timeout ${options.timeout ? options.timeout : 15}`);
-    if (spawnOptions.length === 0) {
-        spawnOptions.push(DEFAULT_OPTIONS);
-    }
-    spawnOptions.unshift(SAVE_CMD);
-    const saveStream = childProcess.spawn(BASH_CMD, spawnOptions);
-    saveStream.stdout.on('data', data => {
-        console.log(data.toString());
-    });
-    saveStream.on('close', () => {
-        response.writeHead(200, {});
-        response.end(`<a href="/download?filename=${filename}">${filename}</a>`);
-    });
-}
 
 async function start() {
 
