@@ -1,6 +1,6 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          pi-capture.sh
+# Provides:          capture-server.sh
 # Required-Start:    $local_fs $network $syslog $time $remote_fs
 # Required-Stop:     $local_fs
 # Default-Start:     2 3 4 5
@@ -36,12 +36,12 @@ FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 50
 
 # pi camera code setup
 BASE_CODE=/home/pi/pi-camera
-PI_CAMERA_JS=capture.js
+PI_CAMERA_JS=capture-server.js
 
 # client condig
 WEB_PID_FILE=/var/run/forever.pid
-WEB_APP_LOG=/var/log/pi-capture.log
-WEB_APP_ERR_LOG=/var/log/pi-capture.error.log
+WEB_APP_LOG=/var/log/capture-server.log
+WEB_APP_ERR_LOG=/var/log/capture-server.error.log
 WEB_LOG_FILES="-a -l $FOREVER_LOG -o $WEB_APP_LOG -e $WEB_APP_ERR_LOG "
 FOREVER_WEB_OPTS="$WEB_LOG_FILES --pidFile $WEB_PID_FILE --spinSleepTime 1000 --minUptime 500"
 
@@ -78,4 +78,3 @@ case "$1" in
 esac
 
 :
-
