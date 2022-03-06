@@ -40,4 +40,4 @@ fi
 #$EXTRA_ARGS -vcodec libvpx -qmin 0 -qmax 50 -crf 10 -b:v 1M -an -
 # -f mpjpeg
 ffmpeg -t 30 -i "rtsp://127.0.0.1:10000/stream1" \
-    $EXTRA_ARGS -c:v mjpeg -q:v 5 -f mpjepg -an -
+    $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
