@@ -241,6 +241,7 @@ async function start() {
             return (item && item.length > 0);
         });
         if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
+            console.log('Running preview with: ', options)
             if (global.streamProcess) {
                 const pid = global.streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
@@ -251,7 +252,7 @@ async function start() {
             }
         } else {
             response.writeHead(200, {});
-            response.end('Nothing saved!');
+            response.end('Nothing to do!');
         }
     });
 
