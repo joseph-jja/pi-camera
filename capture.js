@@ -20,7 +20,11 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
         padNumber,
         getIPAddress,
         getHostname
-    } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`);
+    } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
+    {
+        BASH_CMD,
+        DEFAULT_OPTIONS
+    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`);
 
 const app = express();
 
@@ -29,15 +33,12 @@ const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
 let videoProcess,
     streamProcess;
 
-const BASH_CMD = '/bin/bash';
 const VIDEO_CMD = `${RESOLVED_FILE_LOCATION}/scripts/streamServer.sh`;
 const MJPEG_CMD = `${RESOLVED_FILE_LOCATION}/scripts/mjpegRestream.sh`;
 const SAVE_CMD = `${RESOLVED_FILE_LOCATION}/scripts/saveStream.sh`;
 const COMBINED_CMD = `${RESOLVED_FILE_LOCATION}/scripts/combined.sh`;
 const FFMPEG_RUNNING_CMD = `${RESOLVED_FILE_LOCATION}/scripts/killPreview.sh`;
 const FFMPEG_RTSP_COPY_CMD = `${RESOLVED_FILE_LOCATION}/scripts/rtspCopyStream.sh`;
-
-const DEFAULT_OPTIONS = ['--width 640 --height 480 --profile high --framerate 8 --quality 100'];
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
