@@ -26,7 +26,7 @@ const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/streamServer.sh`;
 const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 const SAVE_CMD = `${process.env.HOME}/pi-camera/scripts/saveStream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
-const FFMPEG_RUNNING_CMD = 'ps -ef |grep ffmpeg |grep capture |grep -v grep| awk \'{print $2}\'';
+const FFMPEG_RUNNING_CMD = 'ps -ef |grep ffmpeg |grep -v capture |grep -v grep| awk \'{print $2}\'';
 
 const DEFAULT_OPTIONS = ['--width 640 --height 480 --profile high --framerate 8 --quality 100'];
 
