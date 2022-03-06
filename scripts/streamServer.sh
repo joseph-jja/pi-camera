@@ -26,7 +26,7 @@ for IN_ARG in $EXTRA_ARGS; do
         IS_FRAMERATE=true
     fi
 done
-echo "$FRAMERATE"
+
 # use tcp and avoice vlc
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 echo "Running script ... "
