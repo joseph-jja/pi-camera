@@ -28,8 +28,10 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
+IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
+
 echo "Timeout: $TIMEOUT"
 echo "Args: $EXTRA_ARGS"
 echo "Filename: $FILENAME"
-ffmpeg -y  -t $TIMEOUT -i "rtsp://127.0.0.1:10000/stream1" \
+ffmpeg -y  -t $TIMEOUT -i "rtsp://$IP_ADDRESS:10000/stream1" \
     $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an "$FILENAME"

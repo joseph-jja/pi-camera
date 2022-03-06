@@ -12,10 +12,10 @@ window.addEventListener('DOMContentLoaded', () => {
             const wxh = width * height;
             let bitrate = 15000000;
             if (wxh === 307200) {
-                // 640 x 480 
+                // 640 x 480
                 bitrate = 15000000;
             } else if (wxh === 921600) {
-                // 1280 x 720 
+                // 1280 x 720
                 bitrate = 10000000;
             } else {
                 // everything else
@@ -70,7 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
-            const options = getFormOptions();
+            const options = '';//getFormOptions();
             const iframe = document.getElementById('videoDisplay');
             iframe.src = `/preview?previewOpts=${options}`;
             const historyPath = `${window.location.href}?params=${escape(options)}`;
@@ -82,14 +82,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 setMessage(resp);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
-            const options = getFormOptions();
-            if (options.trim().length > 0) {
-                fetch(`/saveStream?saveOpts=${options}`, {
-                    method: 'GET'
-                }).then(resp => {
-                    setMessage(resp);
-                });
-            }
+            const options = '';//getFormOptions();
+            fetch(`/saveStream?saveOpts=${options}`, {
+                method: 'GET'
+            }).then(resp => {
+                setMessage(resp);
+            });
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
             fetch('/shutdown', {
                 method: 'POST',
