@@ -163,7 +163,7 @@ function saveVideoProcess(options, response) {
 
     const spawnOptions = options.concat();
     spawnOptions.push('--filename');
-    spawnOptions.push(`/tmp/${filename}`);
+    spawnOptions.push(`${process.env.HOME}/images/${filename}`);
     spawnOptions.push(`--timeout ${options.timeout ? options.timeout : 15}`);
     if (spawnOptions.length === 0) {
         spawnOptions.push(DEFAULT_OPTIONS);
@@ -267,7 +267,7 @@ async function start() {
             response.writeHead(200, {
                 'Content-Type': 'application/json'
             });
-            fs.createReadStream(`/tmp/${filename}`).pipe(response);
+            fs.createReadStream(`${process.env.HOME}/images/${filename}`).pipe(response);
         } else {
             response.writeHead(404, {});
             response.end('File not found!');
