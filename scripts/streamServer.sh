@@ -24,7 +24,9 @@ done
 
 # use tcp and avoice vlc
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
-echo "Running script ... IP Address: $IP_ADDRESS ..."
+echo "Running script ... "
+echo "IP Address: $IP_ADDRESS ..."
+echo "Options: $EXTRA_ARGS ..."
 #/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline --listen -o tcp://192.168.50.100:10000
 /usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
     --no-audio stream:///dev/stdin --sout '#rtp{sdp=rtsp://127.0.0.1:10000/stream1}' :demux=h264
