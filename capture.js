@@ -227,6 +227,7 @@ async function start() {
                 if (videoProcess) {
                     const pid = videoProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
+                        videoProcess = undefined;
                         spawnVideoProcess(options);
                     });
                 } else {
