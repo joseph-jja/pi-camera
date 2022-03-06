@@ -343,7 +343,7 @@ async function start() {
     });
 
     app.get('/rtspPreview', (request, response) => {
-
+        // TODO fix this
         const restream = childProcess.spawn(BASH_CMD, [FFMPEG_RTSP_COPY_CMD]);
         response.writeHead(200, {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
