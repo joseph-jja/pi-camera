@@ -32,5 +32,5 @@ done
 #fi
 
 # tcp connection
-ffmpeg -t 15 -i "rtsp://127.0.0.1:10000/stream1" \
+ffmpeg -t 30 -i "rtsp://127.0.0.1:10000/stream1" \
     $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
