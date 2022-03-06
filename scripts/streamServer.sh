@@ -17,10 +17,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 FRAMERATE=8
+IS_FRAMERATE=false
 for IN_ARG in $EXTRA_ARGS; do
-    if [ "$IN_ARG" == "--framerate" ]; then
-        shift
+    if [ "$IS_FRAMERATE" == "true" ]; then
         FRAMERATE=$IN_ARG
+        IS_FRAMERATE=false
+    elif [ "$IN_ARG" == "--framerate" ]; then
+        IS_FRAMERATE=true
     fi
 done
 echo "$FRAMERATE"
