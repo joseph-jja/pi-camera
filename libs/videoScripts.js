@@ -54,7 +54,7 @@ module.exports = function(resolveFileLocation) {
         }
         global.streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         response.writeHead(200, {
-            //'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
         global.streamProcess.stdout.pipe(response);
