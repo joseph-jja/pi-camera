@@ -27,6 +27,7 @@ const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
 const SAVE_CMD = `${process.env.HOME}/pi-camera/scripts/saveStream.sh`;
 const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
 const FFMPEG_RUNNING_CMD = `${process.env.HOME}/pi-camera/scripts/killPreview.sh`;
+const FFMPEG_RTSP_COPY_CMD = `${process.env.HOME}/pi-camera/scripts/rtspCopyStream.sh`;
 
 const DEFAULT_OPTIONS = ['--width 640 --height 480 --profile high --framerate 8 --quality 100'];
 
@@ -144,7 +145,7 @@ function sendVideoProcess(options, response) {
     });
     streamProcess.stdout.pipe(response);
     streamProcess.on('close', () => {
-        console.log('Video stream has ended!'); 
+        console.log('Video stream has ended!');
     });
     console.log('Should be streaming now ...');
 }
@@ -339,6 +340,22 @@ async function start() {
             response.writeHead(200, {});
             response.end('Nothing saved!');
         }
+    });
+
+    app.get('/rtspPreview', (request, response) => {
+
+        const restream = childProcess.spawn(BASH_CMD, [FFMPEG_RTSP_COPY_CMD]);
+        response.writeHead(200, {
+            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+            'Cache-Control': 'no-cache'
+        });
+        restream.stdout.pipe(response);
+        response.on('close', () => {
+            const pid = restream.pid;
+            childProcess.exec(`kill -9 ${pid}`, () => {
+                console.log('Done!');
+            });
+        });
     });
 
     app.get('/', (request, response) => {
