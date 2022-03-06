@@ -15,7 +15,12 @@ const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 
 const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
-    stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`);
+    stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
+    {
+        padNumber,
+        getIPAddress,
+        getHostname
+    } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`);
 
 const app = express();
 
@@ -94,21 +99,6 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
-async function getHostname() {
-
-    return new Promise((resolve, reject) => {
-        childProcess.exec('hostname', (err, sout, serr) => {
-            if (err) {
-                reject(err);
-            } else if (serr) {
-                reject(serr);
-            } else {
-                resolve(sout);
-            }
-        });
-    });
-}
-
 function spawnVideoProcess(options) {
 
     const spawnOptions = options.concat();
@@ -145,10 +135,6 @@ function sendVideoProcess(options, response) {
     console.log('Should be streaming now ...');
 }
 
-function padNumber(num) {
-    return new String(num).padStart(2, 0);
-}
-
 function saveVideoProcess(options, response) {
 
     const now = new Date();
@@ -174,16 +160,7 @@ function saveVideoProcess(options, response) {
     });
 }
 
-async function getIPAddress(hostname) {
 
-    let ipaddr;
-    try {
-        ipaddr = (await dns.resolve4(hostname))[0];
-    } catch(e) {
-        ipaddr = childProcess.execSync('ifconfig |grep inet|grep -v inet6 |grep broadcast | awk \'{print $2}\'');
-    }
-    return `${ipaddr}`.trim();
-}
 async function start() {
 
     const baseDir = process.cwd();
