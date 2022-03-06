@@ -32,6 +32,6 @@ if [ "$WIDTH" != "" ]; then
 fi
 
 # tcp connection
-echo COMMAND=$EXTRA_ARGS
+echo "$EXTRA_ARGS"
 #ffmpeg -t 30 -i "rtsp://127.0.0.1:10000/stream1" -fflags nobuffer -flags low_delay -framedrop \
 #    $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
