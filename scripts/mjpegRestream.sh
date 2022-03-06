@@ -8,9 +8,10 @@ fi
 WIDTH=""
 HEIGHT=""
 FRAMERATE="-filter:v fps=10"
-EXTRA_ARGS="-fflags no buffer -flags low_delay -framedrop"
+EXTRA_ARGS="-fflags no buffer -flags low_delay "
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
+    echo $IN_ARGS
     if [ "$IN_ARGS" == "--width" ]; then
         shift
         WIDTH=$1
