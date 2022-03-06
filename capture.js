@@ -1,33 +1,36 @@
 const os = require('os'),
     fs = require('fs'),
     http = require('http'),
+    {
+        resolve,
+        basename
+    } = require('path'),
     dns  = require('dns').promises,
     childProcess = require('child_process');
 
 const express = require('express'),
     bodyParser = require('body-parser');
 
-function getEnvValue(envName, defaultValue) {
-    try {
-        return JSON.parse(envName);
-    } catch(e) {
-        return defaultValue;
-    }
-}
+const FILENAME = basename(__filename);
+const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
+
+const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
+    stringify = require(`${RESOLVED_FILE_LOCATION}libs/stringify`);
+
 const app = express();
 
-const ENABLE_RTSP = getEnvValue(process.env.ENABLE_RTSP, true);
+const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
 
 let videoProcess,
     streamProcess;
 
 const BASH_CMD = '/bin/bash';
-const VIDEO_CMD = `${process.env.HOME}/pi-camera/scripts/streamServer.sh`;
-const MJPEG_CMD = `${process.env.HOME}/pi-camera/scripts/mjpegRestream.sh`;
-const SAVE_CMD = `${process.env.HOME}/pi-camera/scripts/saveStream.sh`;
-const COMBINED_CMD = `${process.env.HOME}/pi-camera/scripts/combined.sh`;
-const FFMPEG_RUNNING_CMD = `${process.env.HOME}/pi-camera/scripts/killPreview.sh`;
-const FFMPEG_RTSP_COPY_CMD = `${process.env.HOME}/pi-camera/scripts/rtspCopyStream.sh`;
+const VIDEO_CMD = `${RESOLVED_FILE_LOCATION}/scripts/streamServer.sh`;
+const MJPEG_CMD = `${RESOLVED_FILE_LOCATION}/scripts/mjpegRestream.sh`;
+const SAVE_CMD = `${RESOLVED_FILE_LOCATION}/scripts/saveStream.sh`;
+const COMBINED_CMD = `${RESOLVED_FILE_LOCATION}/scripts/combined.sh`;
+const FFMPEG_RUNNING_CMD = `${RESOLVED_FILE_LOCATION}/scripts/killPreview.sh`;
+const FFMPEG_RTSP_COPY_CMD = `${RESOLVED_FILE_LOCATION}/scripts/rtspCopyStream.sh`;
 
 const DEFAULT_OPTIONS = ['--width 640 --height 480 --profile high --framerate 8 --quality 100'];
 
@@ -90,14 +93,6 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: 100000
 }));
-
-function stringify(m) {
-    try {
-        return JSON.stringify(m);
-    } catch(e) {
-        return m;
-    }
-}
 
 async function getHostname() {
 
@@ -192,7 +187,7 @@ async function getIPAddress(hostname) {
 async function start() {
 
     const baseDir = process.cwd();
-    const config = require(`${baseDir}/cameraConfig`);
+    const config = require(`${RESOLVED_FILE_LOCATION}/cameraConfig`);
 
     const formFields = await import('./libs/form.mjs');
 
@@ -242,18 +237,21 @@ async function start() {
                 return (item && item.length > 0);
             });
             if (options.length > 0) {
+                const spawnOpts = options.map(item => {
+                    return item.split(' ');
+                }).reduce((acc, next) => acc.concat(next));
                 if (videoProcess) {
                     const pid = videoProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
                         videoProcess = undefined;
-                        spawnVideoProcess(options);
+                        spawnVideoProcess(spawnOpts);
                     });
                 } else {
-                    spawnVideoProcess(options);
+                    spawnVideoProcess(spawnOpts);
                 }
                 response.writeHead(200, {});
-                response.end(`Executed script with options ${stringify(options)}`);
-                console.log('Executed script with options', options);
+                response.end(`Executed script with options ${stringify(spawnOpts)}`);
+                console.log('Executed script with options', spawnOpts);
             }
         } else {
             response.writeHead(200, {});
