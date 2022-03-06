@@ -24,7 +24,12 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
     {
         BASH_CMD,
         DEFAULT_OPTIONS,
-        getVideoCommand
+        getVideoCommand,
+        getMjpegCommand,
+        getSaveCommand,
+        getCombinedCommand,
+        getFfmpegRunningVideoCommand,
+        getFfmpegRtspCopyCommand
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`);
 
 const app = express();
@@ -35,11 +40,11 @@ let videoProcess,
     streamProcess;
 
 const VIDEO_CMD = getVideoCommand(RESOLVED_FILE_LOCATION);
-const MJPEG_CMD = `${RESOLVED_FILE_LOCATION}/scripts/mjpegRestream.sh`;
-const SAVE_CMD = `${RESOLVED_FILE_LOCATION}/scripts/saveStream.sh`;
-const COMBINED_CMD = `${RESOLVED_FILE_LOCATION}/scripts/combined.sh`;
-const FFMPEG_RUNNING_CMD = `${RESOLVED_FILE_LOCATION}/scripts/killPreview.sh`;
-const FFMPEG_RTSP_COPY_CMD = `${RESOLVED_FILE_LOCATION}/scripts/rtspCopyStream.sh`;
+const MJPEG_CMD = getMjpegCommand(RESOLVED_FILE_LOCATION);
+const SAVE_CMD = getSaveCommand(RESOLVED_FILE_LOCATION);
+const COMBINED_CMD = getCombinedCommand(RESOLVED_FILE_LOCATION);
+const FFMPEG_RUNNING_CMD = getFfmpegRunningVideoCommand(RESOLVED_FILE_LOCATION);
+const FFMPEG_RTSP_COPY_CMD = getFfmpegRtspCopyCommand(RESOLVED_FILE_LOCATION);
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>

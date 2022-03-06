@@ -3,8 +3,28 @@ const BASH_CMD = '/bin/bash';
 
 const DEFAULT_OPTIONS = ['--width 640 --height 480 --profile high --framerate 8 --quality 100'];
 
-const getVideoCommand = (scriptDir) => {
+function getVideoCommand(scriptDir) {
     return `${scriptDir}/scripts/streamServer.sh`;
+};
+
+function getMjpegCommand(scriptDir) {
+    return `${scriptDir}/scripts/mjpegRestream.sh`;
+};
+
+function getSaveCommand(scriptDir) {
+    return `${scriptDir}/scripts/saveStream.sh`;
+};
+
+function getCombinedCommand(scriptDir) {
+    return `${scriptDir}/scripts/combined.sh`;
+};
+
+function getFfmpegRunningVideoCommand(scriptDir) {
+    return `${scriptDir}/scripts/killPreview.sh`;
+};
+
+function getFfmpegRtspCopyCommand(scriptDir) {
+    return `${scriptDir}/scripts/rtspCopyStream.sh`;
 };
 
 /*
@@ -79,7 +99,12 @@ function saveVideoProcess(options, response) {
 module.exports = {
     BASH_CMD,
     DEFAULT_OPTIONS,
-    getVideoCommand/*,
+    getVideoCommand,
+    getMjpegCommand,
+    getSaveCommand,
+    getCombinedCommand,
+    getFfmpegRunningVideoCommand,
+    getFfmpegRtspCopyCommand/*,
     sendVideoProcess,
     saveVideoProcess,
     spawnVideoProcess*/
