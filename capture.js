@@ -30,14 +30,13 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
         FFMPEG_RUNNING_CMD,
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
-        spawnVideoProcess
+        spawnVideoProcess,
+        sendVideoProcess
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
 
 const app = express();
 
 const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
-
-let streamProcess;
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
@@ -98,29 +97,6 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: 100000
 }));
-
-function sendVideoProcess(options, response) {
-
-    const spawnOptions = options.concat();
-    if (spawnOptions.length === 0) {
-        spawnOptions.push(DEFAULT_OPTIONS);
-    }
-    if (ENABLE_RTSP) {
-        spawnOptions.unshift(MJPEG_CMD);
-    } else {
-        spawnOptions.unshift(COMBINED_CMD);
-    }
-    streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
-    response.writeHead(200, {
-        'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-        'Cache-Control': 'no-cache'
-    });
-    streamProcess.stdout.pipe(response);
-    streamProcess.on('close', () => {
-        console.log('Video stream has ended!');
-    });
-    console.log('Should be streaming now ...');
-}
 
 function saveVideoProcess(options, response) {
 
@@ -245,7 +221,7 @@ async function start() {
                 saveVideoProcess(options, response)
             }
         } else {
-            if (streamProcess) {
+            if (global.streamProcess) {
                 response.writeHead(200, {});
                 response.end('Invalid configuration! ENABLE_RTSP is set to false, cannot view and save stream.');
             } else {
@@ -257,8 +233,8 @@ async function start() {
     app.get('/stopPreview', (request, response) => {
 
         if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
-            if (streamProcess) {
-                const pid = streamProcess.pid;
+            if (global.streamProcess) {
+                const pid = global.streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
                     childProcess.exec(`/bin/bash ${FFMPEG_RUNNING_CMD}`, () => {
                         // TODO check status of command
@@ -286,8 +262,8 @@ async function start() {
             return (item && item.length > 0);
         });
         if (!ENABLE_RTSP || (ENABLE_RTSP && global.videoProcess)) {
-            if (streamProcess) {
-                const pid = streamProcess.pid;
+            if (global.streamProcess) {
+                const pid = global.streamProcess.pid;
                 childProcess.exec(`kill -9 ${pid}`, () => {
                     sendVideoProcess(options, response);
                 });

@@ -2,7 +2,10 @@ const childProcess = require('child_process');
 
 module.exports = function(resolveFileLocation) {
 
-    const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
+    const { padNumber } = require(`${resolveFileLocation}/libs/utils`),
+        { getEnvVar } = require(`${resolveFileLocation}/libs/env`);
+
+    const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
 
     const BASH_CMD = '/bin/bash';
 
@@ -23,6 +26,7 @@ module.exports = function(resolveFileLocation) {
     }
 
     global.videoProcess;
+    global.streamProcess;
 
     function spawnVideoProcess(options) {
 
@@ -36,7 +40,6 @@ module.exports = function(resolveFileLocation) {
             console.log(`${VIDEO_CMD}: ${data}`);
         });
     }
-    /*
 
     function sendVideoProcess(options, response) {
 
@@ -49,18 +52,18 @@ module.exports = function(resolveFileLocation) {
         } else {
             spawnOptions.unshift(COMBINED_CMD);
         }
-        streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
+        global.streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         response.writeHead(200, {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        streamProcess.stdout.pipe(response);
-        streamProcess.on('close', () => {
+        global.streamProcess.stdout.pipe(response);
+        global.streamProcess.on('close', () => {
             console.log('Video stream has ended!');
         });
         console.log('Should be streaming now ...');
     }
-
+    /*
     function saveVideoProcess(options, response) {
 
         const now = new Date();
@@ -97,7 +100,8 @@ module.exports = function(resolveFileLocation) {
         FFMPEG_RUNNING_CMD,
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
-        spawnVideoProcess
+        spawnVideoProcess,
+        sendVideoProcess
     };
 
 };
