@@ -8,7 +8,7 @@ fi
 WIDTH=""
 HEIGHT=""
 FRAMERATE="-filter:v fps=10"
-EXTRA_ARGS="-fflags nobuffer -flags low_delay "
+EXTRA_ARGS=""
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     echo $IN_ARGS
@@ -35,5 +35,5 @@ fi
 
 # rtsp connection
 ffmpeg -t 30 -i "rtsp://127.0.0.1:10000/stream1" \
-    $EXTRA_ARGS -vcodec libvpx-vp9 -b:v 1M -acodec libvorbis -
+    $EXTRA_ARGS -vcodec libvpx -qmin 0 -qmax 50 -crf 10 -b:v 1M -an -
 #    $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an -
