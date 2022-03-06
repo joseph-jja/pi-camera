@@ -129,6 +129,9 @@ function sendVideoProcess(options, response) {
         'Cache-Control': 'no-cache'
     });
     streamProcess.stdout.pipe(response);
+    streamProcess.on('close', () => {
+        console.log('Video stream has ended!'); 
+    });
     console.log('Should be streaming now ...');
 }
 
