@@ -10,18 +10,20 @@ if [ "$VLC_PID" != "" ] ; then
 fi
 
 EXTRA_ARGS=""
-#FRAMERATE=10
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     EXTRA_ARGS="$EXTRA_ARGS $IN_ARGS"
-    if [ "$IN_ARGS" == "--framerate" ]; then
-        shift
-        FRAMERATE=$1
-        EXTRA_ARGS="$EXTRA_ARGS $IN_ARGS $FRAMERATE"
-    fi
     shift
 done
 
+FRAMERATE=8
+for IN_ARG in $EXTRA_ARGS; do
+    if [ "$IN_ARG" == "--framerate" ];
+        shift
+        FRAMERATE=$IN_ARG
+    fi
+done
+echo "$FRAMERATE"
 # use tcp and avoice vlc
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 echo "Running script ... "
