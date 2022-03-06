@@ -3,8 +3,11 @@ const BASH_CMD = '/bin/bash';
 
 const DEFAULT_OPTIONS = ['--width 640 --height 480 --profile high --framerate 8 --quality 100'];
 
+const getVideoCommand = (scriptDir) => {
+    return `${scriptDir}/scripts/streamServer.sh`;
+};
+
 /*
-const VIDEO_CMD = `${RESOLVED_FILE_LOCATION}/scripts/streamServer.sh`;
 const MJPEG_CMD = `${RESOLVED_FILE_LOCATION}/scripts/mjpegRestream.sh`;
 const SAVE_CMD = `${RESOLVED_FILE_LOCATION}/scripts/saveStream.sh`;
 const COMBINED_CMD = `${RESOLVED_FILE_LOCATION}/scripts/combined.sh`;
@@ -75,7 +78,8 @@ function saveVideoProcess(options, response) {
 */
 module.exports = {
     BASH_CMD,
-    DEFAULT_OPTIONS/*,
+    DEFAULT_OPTIONS,
+    getVideoCommand/*,
     sendVideoProcess,
     saveVideoProcess,
     spawnVideoProcess*/

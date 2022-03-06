@@ -23,7 +23,8 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
         BASH_CMD,
-        DEFAULT_OPTIONS
+        DEFAULT_OPTIONS,
+        getVideoCommand
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`);
 
 const app = express();
@@ -33,7 +34,7 @@ const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
 let videoProcess,
     streamProcess;
 
-const VIDEO_CMD = `${RESOLVED_FILE_LOCATION}/scripts/streamServer.sh`;
+const VIDEO_CMD = getVideoCommand(RESOLVED_FILE_LOCATION);
 const MJPEG_CMD = `${RESOLVED_FILE_LOCATION}/scripts/mjpegRestream.sh`;
 const SAVE_CMD = `${RESOLVED_FILE_LOCATION}/scripts/saveStream.sh`;
 const COMBINED_CMD = `${RESOLVED_FILE_LOCATION}/scripts/combined.sh`;
