@@ -22,7 +22,6 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
         BASH_CMD,
-        DEFAULT_OPTIONS,
         VIDEO_CMD,
         MJPEG_CMD,
         SAVE_CMD,
@@ -37,8 +36,7 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
 
 const app = express();
 
-const ENABLE_RTSP = true;
-const RTSP_HOST = '192.168.50.100';
+const RTSP_HOST = getEnvVar('IP_ADDR', '192.168.50.100');
 
 function getHTML() {
     return `<!DOCTYPE HTML>
@@ -117,15 +115,11 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });
-        if (ENABLE_RTSP) {
-            saveVideoProcess(options, response);
+        if (global.streamProcess) {
+            response.writeHead(200, {});
+            response.end('Invalid configuration, cannot view and save stream.');
         } else {
-            if (global.streamProcess) {
-                response.writeHead(200, {});
-                response.end('Invalid configuration! ENABLE_RTSP is set to false, cannot view and save stream.');
-            } else {
-                saveVideoProcess(options, response)
-            }
+            saveVideoProcess(options, response)
         }
     });
 
