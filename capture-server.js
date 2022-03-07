@@ -137,7 +137,7 @@ async function start() {
     });
 
     app.get('/config', (request, response) => {
-        response.writehead(200, {});
+        response.writeHead(200, {});
         response.end(stringify(lastUpdateOpts));
     });
 
