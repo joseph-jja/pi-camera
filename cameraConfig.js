@@ -10,6 +10,7 @@ module.exports = [{
     paramName: '',
     values: [
         '--width 640 --height 480 --profile high',
+        '--width 800 --height 600 --profile high',
         '--width 1280 --height 720 --profile high',
         '--width 1920 --height 1080 --profile high',
         '--width 1640 --height 922 --profile high',

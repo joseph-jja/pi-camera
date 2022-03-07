@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
             const wxh = width * height;
             let bitrate = 15000000;
-            if (wxh === 307200) {
+            if (wxh === 307200 || wxh === 480000) {
                 // 640 x 480
                 bitrate = 15000000;
             } else if (wxh === 921600) {
