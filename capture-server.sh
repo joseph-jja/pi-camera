@@ -28,8 +28,8 @@ FOREVER_BIN=/home/pi/.nvm/versions/node/v16.14.0/bin/forever
 
 # forever setup
 FOREVER_LOG=/tmp/forever.log
-APP_LOG=/tmp/pi-camera.log
-APP_ERR_LOG=/tmp/pi-camera.error.log
+APP_LOG=/tmp/pi-capture-server.log
+APP_ERR_LOG=/tmp/pi-capture-server.error.log
 LOG_FILES="-a -l $FOREVER_LOG -o $APP_LOG -e $APP_ERR_LOG "
 PID_FILE=/tmp/forever.pid
 FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
