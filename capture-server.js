@@ -136,6 +136,11 @@ async function start() {
         }
     });
 
+    app.get('/config', (request, response) => {
+        response.writehead(200, {});
+        response.end(stringify(lastUpdateOpts));
+    });
+
     app.get('/', (request, response) => {
         response.writeHead(200, {
             'Content-Type': 'text/html'
