@@ -101,6 +101,7 @@ async function start() {
         childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
     });
 
+    let lastUpdateOpts = DEFAULT_OPTIONS;
     app.post('/update', (request, response) => {
         if (!ENABLE_RTSP) {
             response.writeHead(200, {});
@@ -115,6 +116,7 @@ async function start() {
                 const spawnOpts = options.map(item => {
                     return item.split(' ');
                 }).reduce((acc, next) => acc.concat(next));
+                lastUpdateOpts = spawnOpts;
                 if (global.videoProcess) {
                     const pid = global.videoProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
