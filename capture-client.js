@@ -50,6 +50,8 @@ function getHTML() {
         <div id="server-messages"></div>
         <br>
         <form name="cameraOptions" onsubmit="return false;">
+            <label>Streaming options</label>
+            <input type="text" name="previewOptions" size=60">
             <button type="submit" id="saveStream">
                 Capture Stream
             </button>
