@@ -32,7 +32,8 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
         spawnVideoProcess,
         sendVideoProcess,
         saveVideoProcess
-    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
+    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
+    httpGet = require(`${RESOLVED_FILE_LOCATION}/libs/httpGet`);
 
 const app = express();
 
@@ -51,7 +52,13 @@ function getHTML() {
         <br>
         <form name="cameraOptions" onsubmit="return false;">
             <label>Streaming options</label>
+            <br>
             <input type="text" name="previewOptions" size=60">
+            <br><br>
+            <button type="submit" id="updateOptions">
+                Update Preview Options
+            </button>
+            <br><br>
             <button type="submit" id="saveStream">
                 Capture Stream
             </button>
@@ -112,8 +119,27 @@ async function start() {
         }
     });
 
+    app.get('/config', (request, response) => {
+
+        const portConfig = {
+            port: 20000
+        };
+        httpGet(RTSP_HOST, '/config', {}, portConfig).then(data => {
+            response.writeHead(200, {});
+            response.end(data);
+        }).catch(e => {
+            console.error('Error:', e);
+            response.writeHead(200, {});
+            response.end(stringify(e));
+        });
+    });
+
     app.get('/saveStream', (request, response) => {
         const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
+        let saveOpts;
+        if (params) {
+            saveOpts = '';
+        }
         const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });

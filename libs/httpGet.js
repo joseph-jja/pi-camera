@@ -3,13 +3,13 @@ const baseDir = process.cwd(),
         request
     } = require('http');
 
-async function httpGet(host, urlPath, headers = {}) {
+async function httpGet(host, urlPath, headers = {}, extraOptions) {
 
     return new Promise((resolve, reject) => {
 
         const options = {
             hostname: host,
-            port: 80,
+            port: extraOptions.port || 80,
             path: urlPath,
             method: 'GET',
             headers: headers
