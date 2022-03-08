@@ -76,7 +76,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const options = '';//getFormOptions();
             const iframe = document.getElementById('videoDisplay');
             iframe.src = `/preview?previewOpts=${options}`;
-            const historyPath = `${window.location.href}?params=${escape(options)}`;
+            const historyPath = `${window.location.origin}?params=${escape(options)}`;
             window.history.pushState(escape(options), 'PI Camera', historyPath);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             fetch('/stopPreview', {
