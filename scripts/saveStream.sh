@@ -28,6 +28,13 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
+if [ "$WIDTH" != "" ]; then
+    if [ "$HEIGHT" != "" ]; then
+        SIZE=`echo "$WIDTH:$HEIGHT" | sed 's/\:/x/'`
+        EXTRA_ARGS="$EXTRA_ARGS -s $SIZE"
+    fi
+fi
+
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 
 echo "Timeout: $TIMEOUT"

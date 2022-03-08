@@ -136,11 +136,11 @@ async function start() {
 
     app.get('/saveStream', (request, response) => {
         const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
-        let saveOpts;
+        let saveOpts = [];
         if (params) {
-            saveOpts = '';
+            saveOpts = JSON.parse(params);
         }
-        const options = unescape(params).trim().split(' ').filter(item => {
+        const options = saveOpts.filter(item => {
             return (item && item.length > 0);
         });
         if (global.streamProcess) {
