@@ -1,11 +1,13 @@
 #!/bin/bash
 
+NOW=`date +%Y%m%d%M%H%M%S`
+
 WIDTH=""
 HEIGHT=""
 FRAMERATE="-filter:v fps=10"
 EXTRA_ARGS=""
-FILENAME="$HOME/images/capture.mjpeg"
-TIMEOUT=15
+FILENAME="$HOME/images/capture-$NOW.mjpeg"
+TIMEOUT=30
 while [[ $# -gt 0 ]]; do
     IN_ARGS="$1"
     if [ "$IN_ARGS" == "--width" ]; then
@@ -40,5 +42,5 @@ IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 echo "Timeout: $TIMEOUT"
 echo "Args: $EXTRA_ARGS"
 echo "Filename: $FILENAME"
-ffmpeg -loglevel quiet -y  -t $TIMEOUT -i "rtsp://$IP_ADDRESS:10000/stream1" \
+ffmpeg -y  -t $TIMEOUT -i "rtsp://$IP_ADDRESS:10000/stream1" \
     $EXTRA_ARGS -c:v mjpeg -q:v 1 -f mpjpeg -an "$FILENAME"
