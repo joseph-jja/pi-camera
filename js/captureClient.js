@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const videoSize = formElements.filter(item => {
             return (item.name === 'videoSize');
         })[0];
-        if (videoSize.selectedOptions[0].value !== '') {
+        if (videoSize && videoSize.selectedOptions && videoSize.selectedOptions[0].value !== '') {
             const videoOption = videoSize.selectedOptions[0].value.split(' ');
             const [width, height] = videoOption.filter(item => {
                 return parseInt(item);
@@ -51,6 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const serverMsg = document.getElementById('server-messages');
         serverMsg.innerHTML = msg;
     }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
@@ -67,6 +68,8 @@ window.addEventListener('DOMContentLoaded', () => {
                     body: options
                 }).then(resp => {
                     setMessage(resp);
+                }).catch(e => {
+                    console.log(e);
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
@@ -80,13 +83,30 @@ window.addEventListener('DOMContentLoaded', () => {
                 method: 'GET'
             }).then(resp => {
                 setMessage(resp);
+            }).catch(e => {
+                console.log(e);
+            });
+        } else if (name.toLowerCase() === 'button' && target.id === 'updateOptions') {
+            const formObj = document.forms['cameraOptions'],
+                saveOptions = formObj.previewOptions.value;;
+            fetch('/config').then(resp => {
+                resp.text().then(data => {
+                    saveOptionsObj.value = data;
+                }).catch(e => {
+                    console.log(e);
+                });
+            }).catch(e => {
+                console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
-            const options = '';//getFormOptions();
-            fetch(`/saveStream?saveOpts=${options}`, {
+            const formObj = document.forms['cameraOptions'],
+                saveOptions = formObj.previewOptions.value;
+            fetch(`/saveStream?saveOpts=${saveOptions}`, {
                 method: 'GET'
             }).then(resp => {
                 setMessage(resp);
+            }).catch(e => {
+                console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
             fetch('/shutdown', {
@@ -97,6 +117,8 @@ window.addEventListener('DOMContentLoaded', () => {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: ''
+            }).catch(e => {
+                console.log(e);
             });
         }
     });
