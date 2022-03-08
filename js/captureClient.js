@@ -88,7 +88,7 @@ window.addEventListener('DOMContentLoaded', () => {
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'updateOptions') {
             const formObj = document.forms['cameraOptions'],
-                saveOptions = formObj.previewOptions.value;;
+                saveOptionsObj = formObj.previewOptions;
             fetch('/config').then(resp => {
                 resp.text().then(data => {
                     saveOptionsObj.value = data;
