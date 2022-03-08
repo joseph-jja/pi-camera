@@ -13,8 +13,7 @@ const express = require('express'),
 const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 
-const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
-    stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
+const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         getIPAddress,
         getHostname
@@ -26,8 +25,6 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
 
 const app = express();
 app.disable('x-powered-by');
-
-const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
 
 function getHTML(body) {
     return `<!DOCTYPE HTML>
@@ -104,11 +101,6 @@ async function start() {
 
     let lastUpdateOpts = DEFAULT_OPTIONS;
     app.post('/update', (request, response) => {
-        if (!ENABLE_RTSP) {
-            response.writeHead(200, {});
-            response.end('RTSP not enabled, nothing to do!');
-            return;
-        }
         if (request.body && Object.keys(request.body).length > 0) {
             const options = Object.keys(request.body).filter(item => {
                 return (item && item.length > 0);
@@ -156,9 +148,7 @@ async function start() {
     console.log(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
-    if (ENABLE_RTSP){
-        spawnVideoProcess(DEFAULT_OPTIONS);
-    }
+    spawnVideoProcess(DEFAULT_OPTIONS);
 }
 
 start();

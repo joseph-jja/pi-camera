@@ -144,12 +144,7 @@ async function start() {
         const options = saveOpts.filter(item => {
             return (item && item.length > 0);
         });
-        if (global.streamProcess) {
-            response.writeHead(200, {});
-            response.end('Invalid configuration, cannot view and save stream.');
-        } else {
-            saveVideoProcess(options, response)
-        }
+        saveVideoProcess(options, response)
     });
 
     app.get('/stopPreview', (request, response) => {

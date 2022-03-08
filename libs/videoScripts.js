@@ -2,10 +2,7 @@ const childProcess = require('child_process');
 
 module.exports = function(resolveFileLocation) {
 
-    const { padNumber } = require(`${resolveFileLocation}/libs/utils`),
-        { getEnvVar } = require(`${resolveFileLocation}/libs/env`);
-
-    const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
+    const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
 
     const BASH_CMD = '/bin/bash';
 
@@ -14,7 +11,6 @@ module.exports = function(resolveFileLocation) {
     const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
     const MJPEG_CMD = `${resolveFileLocation}/scripts/mjpegRestream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
-    const COMBINED_CMD = `${resolveFileLocation}/scripts/combined.sh`;
     const FFMPEG_RUNNING_CMD = `${resolveFileLocation}/scripts/killPreview.sh`;
     const FFMPEG_RTSP_COPY_CMD = `${resolveFileLocation}/scripts/rtspCopyStream.sh`;
 
@@ -47,11 +43,7 @@ module.exports = function(resolveFileLocation) {
         if (spawnOptions.length === 0) {
             spawnOptions.push(DEFAULT_OPTIONS);
         }
-        if (ENABLE_RTSP) {
-            spawnOptions.unshift(MJPEG_CMD);
-        } else {
-            spawnOptions.unshift(COMBINED_CMD);
-        }
+        spawnOptions.unshift(MJPEG_CMD);
         global.streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         response.writeHead(200, {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
@@ -95,7 +87,6 @@ module.exports = function(resolveFileLocation) {
         VIDEO_CMD,
         MJPEG_CMD,
         SAVE_CMD,
-        COMBINED_CMD,
         FFMPEG_RUNNING_CMD,
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
