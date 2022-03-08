@@ -36,6 +36,7 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
     httpGet = require(`${RESOLVED_FILE_LOCATION}/libs/httpGet`);
 
 const app = express();
+app.disable('x-powered-by');
 
 const RTSP_HOST = getEnvVar('IP_ADDR', '192.168.50.100');
 

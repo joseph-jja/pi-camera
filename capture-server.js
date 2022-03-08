@@ -25,6 +25,7 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
 
 const app = express();
+app.disable('x-powered-by');
 
 const ENABLE_RTSP = getEnvVar(process.env.ENABLE_RTSP, true);
 
