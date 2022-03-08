@@ -5,7 +5,11 @@ if [ "$LIBCAMERA_PID" != "" ] ; then
      kill -9 "$LIBCAMERA_PID"
 fi
 
-IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
+IP_ADDRESS=`echo $IP_ADDR`
+if [ "$IP_ADDRESS" == "" ]; then
+    echo "IP Address IP_ADDR not set, exiting!"
+    exit -1
+fi
 
 # rtsp connection
 # for preview we want to not overload the server
