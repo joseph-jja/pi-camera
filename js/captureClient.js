@@ -75,9 +75,10 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
             const options = '';//getFormOptions();
             const iframe = document.getElementById('videoDisplay');
-            iframe.src = `/preview?previewOpts=${options}`;
-            const historyPath = `${window.location.origin}?params=${escape(options)}`;
-            window.history.pushState(escape(options), 'PI Camera', historyPath);
+            //iframe.src = `/preview?previewOpts=${options}`;
+            iframe.src = `/preview`;
+            //const historyPath = `${window.location.origin}?params=${escape(options)}`;
+            //window.history.pushState(escape(options), 'PI Camera', historyPath);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             fetch('/stopPreview', {
                 method: 'GET'

@@ -171,6 +171,8 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
             return (item && item.length > 0);
         });
+        options.push('--rtspHost');
+        options.push(RTSP_HOST);
         console.log('Running preview with: ', options)
         if (global.streamProcess) {
             const pid = global.streamProcess.pid;
