@@ -1,11 +1,12 @@
 {
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": "latest"
+        "ecmaVersion": 9
     },
     "env": {
         "browser": true,
-        "node": true
+        "node": true,
+        "shared-node-browser": true
     },
 
     "globals": {
