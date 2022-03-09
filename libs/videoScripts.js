@@ -3,6 +3,7 @@ const childProcess = require('child_process');
 module.exports = function(resolveFileLocation) {
 
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
+    const stringify = require(`${resolveFileLocation}/libs/stringify`);
 
     const BASH_CMD = '/bin/bash';
 
@@ -64,7 +65,7 @@ module.exports = function(resolveFileLocation) {
             }
             return isRtpsHost;
         });
-        console.log(`Should be streaming now from ${rptsHost} ...`);
+        console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
     function saveVideoProcess(options, response) {
