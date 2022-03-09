@@ -134,7 +134,7 @@ async function start() {
         const options = saveOpts.filter(item => {
             return (item && item.length > 0);
         });
-        saveVideoProcess(options, response)
+        saveVideoProcess(options, response);
     });
 
     app.get('/stopPreview', (request, response) => {
@@ -163,7 +163,7 @@ async function start() {
         });
         options.push('--rtspHost');
         options.push(RTSP_HOST);
-        console.log('Running preview with: ', options)
+        console.log('Running preview with: ', options);
         if (global.streamProcess) {
             const pid = global.streamProcess.pid;
             childProcess.exec(`kill -9 ${pid}`, () => {

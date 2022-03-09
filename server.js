@@ -6,7 +6,7 @@ const express = require('express'),
     exec = require("child_process").exec,
     app = express(),
     https = require('https'),
-    http = require('http'),
+    //http = require('http'),
     util = require('util'),
     fs = require("fs");
 
@@ -34,7 +34,6 @@ async function sendResponse(res, toggle) {
         cmd = cmd + " " + toggle;
     }
 
-    let pgs;
     if (!baseLayout || !indexPg) {
         baseLayout = await readFile(`${baseDir}/views/layouts/baseLayout.hbs`);
         indexPg = await readFile(`${baseDir}/views/index.hbs`);
@@ -42,7 +41,7 @@ async function sendResponse(res, toggle) {
         indexPg = indexPg.toString();
     }
 
-    const execResult = exec(cmd, function(err, stdout, stderr) {
+    exec(cmd, function(err, stdout, stderr) {
 
         let result = '';
         if (stdout) {

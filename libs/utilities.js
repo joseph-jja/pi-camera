@@ -9,14 +9,14 @@ let sunData = {
 };
 
 const API_HOST = 'api.sunrise-sunset.org',
-    API_PATH = (lat, lng) => {
+    apiPath = (lat, lng) => {
         return '/json?lat=' + lat + '&lng=' + lng + '&date=today';
     };
 
 function safeUnlink(filename) {
     if (filename) {
         // remove sent video
-        // in a perfect world we would be we cant here :( 
+        // in a perfect world we would be we cant here :(
         try {
             fs.unlink(filename, function(err) {
                 if (err) {
@@ -31,16 +31,15 @@ function safeUnlink(filename) {
     }
 }
 
-// cm signature function (error, response, body) 
+// cm signature function (error, response, body)
 // callback get sunData argument
 function getSunriseSunset(lat, lng, gmtOffset, callback) {
 
-    let url,
-        now = new Date(),
+    let now = new Date(),
         offset = gmtOffset || 4;
 
     // yyyymmdd
-    let urlPath = API_PATH(lat, lng);
+    let urlPath = apiPath(lat, lng);
 
     httpGet(API_HOST, urlPath)
         .then(body => {

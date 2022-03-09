@@ -1,7 +1,6 @@
-const baseDir = process.cwd(),
-    {
-        request
-    } = require('http');
+const {
+    request
+} = require('http');
 
 async function httpGet(host, urlPath, headers = {}, extraOptions) {
 
