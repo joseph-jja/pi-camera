@@ -1,11 +1,9 @@
-const os = require('os'),
-    fs = require('fs'),
+const fs = require('fs'),
     http = require('http'),
     {
         resolve,
         basename
     } = require('path'),
-    dns  = require('dns').promises,
     childProcess = require('child_process');
 
 const express = require('express'),
@@ -21,15 +19,7 @@ const { getEnvVar } = require(`${RESOLVED_FILE_LOCATION}/libs/env`),
         getHostname
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
-        BASH_CMD,
-        VIDEO_CMD,
-        MJPEG_CMD,
-        SAVE_CMD,
-        COMBINED_CMD,
         FFMPEG_RUNNING_CMD,
-        FFMPEG_RTSP_COPY_CMD,
-        getVideoFilename,
-        spawnVideoProcess,
         sendVideoProcess,
         saveVideoProcess
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),

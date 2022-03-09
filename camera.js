@@ -17,7 +17,7 @@ const sensorPin = 23,
 let isRec = false,
     doSend = true;
 
-// command line arguments    
+// command line arguments
 let args = process.argv;
 
 // read the config for the node mailer from the fs
@@ -42,7 +42,7 @@ Sendmail.on('end', function(data) {
     }
     if (data.filename) {
         // remove sent video
-        // in a perfect world we would be we cant here :( 
+        // in a perfect world we would be we cant here :(
         const fname = data.filename;
         utilities.safeUnlink(fname);
     }
@@ -73,26 +73,36 @@ function watchCB(err, value) {
         const videoPath = videPathBase + '.h264';
         const mpegPath = videPathBase + '.mp4';
 
-        // brightness  
+        // brightness
         let nightMode = '-br 60';
         if (timestamp.getHours() > 18 || timestamp.getHours() < 6) {
             nightMode = '-br 70';
         }
 
         // we don't want a preview, we want video 800x600 because we are emailing
-        // we want exposure to auto for when it is dark 
+        // we want exposure to auto for when it is dark
         // fps we want low also for email
         const cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
         const ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
         logger.debug('Video record command: ' + cmd);
         logger.debug('Video convert command: ' + ffmpegCmd);
-        exec(cmd, function(error, stdout, stderr) {
+        exec(cmd, function(errorA, stdoutA, stderrA) {
+            if (stderrA) {
+                logger.error(JSON.stringify(stderrA));
+            } else if (errorA) {
+                logger.error(JSON.stringify(errorA));
+            }
             // turn recording flag off ASAP
             isRec = false;
             // output is in stdout
             logger.debug('Video saved: ', videoPath);
             // convert video to be smaller
-            exec(ffmpegCmd, function(error, stdout, stderr) {
+            exec(ffmpegCmd, function(errorB, stdoutB, stderrB) {
+                if (stderrB) {
+                    logger.error(JSON.stringify(stderrB));
+                } else if (errorB) {
+                    logger.error(JSON.stringify(errorB));
+                }
                 // send the video
                 if (doSend) {
                     Sendmail.sendEmail(options.user, mpegPath);

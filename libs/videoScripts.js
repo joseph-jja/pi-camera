@@ -56,7 +56,7 @@ module.exports = function(resolveFileLocation) {
         global.streamProcess.on('close', () => {
             console.log('Video stream has ended!');
         });
-        let isRtpsHost = false
+        let isRtpsHost = false;
         const rptsHost = spawnOptions.filter(item => {
             if (item === '--rtspHost') {
                 isRtpsHost = true;
