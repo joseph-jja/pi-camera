@@ -73,11 +73,15 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
-            //const options = '';//getFormOptions();
+            const options = document.forms['cameraOptions'].previewOptions.value;
             const iframe = document.getElementById('videoDisplay');
-            //iframe.src = `/preview?previewOpts=${options}`;
-            iframe.src = `/preview`;
-            //const historyPath = `${window.location.origin}?params=${escape(options)}`;
+            if (options && options.length > 0) {
+                const previewOpts = JSON.parse(options);
+                iframe.src = `/preview?previewOpts=${previewOpts.join(' ')}`;
+            } else {
+                iframe.src = `/preview`;
+            }
+            ////const historyPath = `${window.location.origin}?params=${escape(options)}`;
             //window.history.pushState(escape(options), 'PI Camera', historyPath);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             fetch('/stopPreview', {
