@@ -47,6 +47,7 @@ module.exports = function(resolveFileLocation) {
         spawnOptions.unshift(MJPEG_CMD);
         global.streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         response.writeHead(200, {
+            //'Content-Type': 'video/webm',
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });

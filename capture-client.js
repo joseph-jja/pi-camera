@@ -38,7 +38,10 @@ function getHTML() {
     </head>
     <body>
         <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
-
+        <!--<video width="640" height="480" controls>
+            <source src="/preview" type="video/webm">
+            Your browser does not support the video tag.
+        </video>-->
         <div id="server-messages"></div>
         <br>
         <form name="cameraOptions" onsubmit="return false;">
