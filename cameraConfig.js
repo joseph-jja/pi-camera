@@ -16,7 +16,8 @@ module.exports = [{
         '--width 1640 --height 922 --profile high',
         '--width 1640 --height 1232 --profile high'
     ],
-    defaultvalue: '--width 640 --height 480 --profile high'
+    comment: '1640x1232 uses full sensor with binning'
+    defaultvalue: '--width 1640 --height 1232 --profile high'
 }, {
     name: 'EV_compensation',
     comment: 'higher is brighter',
@@ -27,23 +28,24 @@ module.exports = [{
 }, {
     name: 'metering',
     paramName: '--metering',
-    values: ['centre', 'spot', 'average'] // 'custom'
+    values: ['centre', 'spot', 'average'], // 'custom'
+    defaultValue: 'centre'
 }, {
     name: 'quality',
     paramName: '--quality',
     range: [1, 100],
     step: 1,
-    defaultvalue: '100'
+    defaultvalue: '20'
 }, {
     name: 'framerate',
     paramName: '--framerate',
     values: [1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
-    defaultvalue: '8'
+    defaultvalue: '15'
 }, {
     name: 'exposure_profile',
     paramName: '--exposure',
     values: ['normal', 'sport', 'long'],
-    defaultvalue: 'long'
+    defaultvalue: 'normal'
 }, {
     name: 'contrast',
     paramName: '--contrast',
