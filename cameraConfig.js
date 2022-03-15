@@ -16,7 +16,7 @@ module.exports = [{
         '--width 1640 --height 922 --profile high',
         '--width 1640 --height 1232 --profile high'
     ],
-    comment: '1640x1232 uses full sensor with binning'
+    comment: '1640x1232 uses full sensor with binning',
     defaultvalue: '--width 1640 --height 1232 --profile high'
 }, {
     name: 'EV_compensation',
