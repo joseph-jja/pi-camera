@@ -6,6 +6,8 @@ if [ "$IP_ADDRESS" == "" ]; then
     exit -1
 fi
 
+echo "Trying IP Address $IP_ADDRESS"
+
 #ffplay -i "rtsp://$IP_ADDRESS:10000/stream1" \
 ffplay -loglevel quiet -i "rtsp://$IP_ADDRESS:10000/stream1" \
     -an  \

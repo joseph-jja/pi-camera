@@ -44,6 +44,7 @@ function getHTML() {
         </video>-->
         <div id="server-messages"></div>
         <br>
+        <div style="float: left; width: 40%; min-width: 450px">
         <form name="cameraOptions" onsubmit="return false;">
             <label>Streaming options</label>
             <br>
@@ -71,6 +72,10 @@ function getHTML() {
                 Shutdown
             </button>
         </form>
+        </div>
+        <div style="float: left; width: 40%; min-width: 410px">
+            <iframe src="http://${RTSP_HOST}:20000" width="400" height="600"></iframe>
+        </div>
     </body>
     <script src="/js/captureClient.js" type="text/javascript"></script>
 </html>`;
