@@ -16,22 +16,14 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 
-FRAMERATE=8
-IS_FRAMERATE=false
-for IN_ARG in $EXTRA_ARGS; do
-    if [ "$IS_FRAMERATE" == "true" ]; then
-        FRAMERATE=$IN_ARG
-        IS_FRAMERATE=false
-    elif [ "$IN_ARG" == "--framerate" ]; then
-        IS_FRAMERATE=true
-    fi
-done
-
 # use tcp and avoice vlc
 IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 echo "Running script ... "
 echo "IP Address: $IP_ADDRESS ..."
 echo "Options: $EXTRA_ARGS ..."
 
-/usr/bin/libcamera-vid $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
+/usr/bin/libcamera-vid --codec h264 $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
     --no-audio stream:///dev/stdin --sout '#rtp{sdp=rtsp://0.0.0.0:10000/stream1}' :demux=h264
+
+#/usr/bin/libcamera-vid --codec mjpeg $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
+#    --no-audio stream:///dev/stdin --sout '#rtp{sdp=rtsp://0.0.0.0:10000/stream1}' :demux=mpjpeg

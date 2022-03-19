@@ -6,6 +6,7 @@ if [ "$IP_ADDRESS" == "" ]; then
     exit -1
 fi
 
+#ffplay -i "rtsp://$IP_ADDRESS:10000/stream1" \
 ffplay -loglevel quiet -i "rtsp://$IP_ADDRESS:10000/stream1" \
-    -an -filter_threads 2 \
+    -an  \
     -vf "setpts=N/8" -fflags nobuffer -flags low_delay -framedrop

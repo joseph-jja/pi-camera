@@ -28,7 +28,6 @@ module.exports = function(resolveFileLocation) {
     function spawnVideoProcess(options) {
 
         const spawnOptions = options.concat();
-        spawnOptions.unshift('--codec h264');
         spawnOptions.unshift(VIDEO_CMD);
         global.videoProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
