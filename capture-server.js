@@ -131,15 +131,11 @@ async function start() {
     });
 
     app.get('/directpreview', (request, response) => {
-        if (request.body && Object.keys(request.body).length > 0) {
-            const options = Object.keys(request.body).filter(item => {
-                return (item && item.length > 0);
-            });
-            directStream(spawnOpts, response);
-        } else {
-            response.writeHead(200, {});
-            response.end('No changes applied!');
-        }
+        const params = (request.query && request.query.previewOpts ? request.query.previewOpts : '');
+        const options = unescape(params).trim().split(' ').filter(item => {
+             return (item && item.length > 0);
+        });
+        directStream(spawnOpts, response);
     });
 
     app.get('/config', (request, response) => {
