@@ -83,7 +83,10 @@ module.exports = function(resolveFileLocation) {
             'Cache-Control': 'no-cache'
         });
         directStream.stdout.pipe(response);
-        directStream.on('error', (err) =>{
+        directStream.stdout.on('data', (d) => {
+            console.log('Got data', d.length);
+        });
+        directStream.stderr.on('error', (err) => {
             console.error('Error', err);
         });
         directStream.on('close', () => {
