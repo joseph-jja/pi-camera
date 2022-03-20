@@ -20,7 +20,8 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
         DEFAULT_OPTIONS,
-        spawnVideoProcess
+        spawnVideoProcess,
+        directStream
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
 
 const app = express();
@@ -123,6 +124,18 @@ async function start() {
                 response.end(`Executed script with options ${stringify(spawnOpts)}`);
                 console.log('Executed script with options', spawnOpts);
             }
+        } else {
+            response.writeHead(200, {});
+            response.end('No changes applied!');
+        }
+    });
+
+    app.get('/directpreview', (request, response) => {
+        if (request.body && Object.keys(request.body).length > 0) {
+            const options = Object.keys(request.body).filter(item => {
+                return (item && item.length > 0);
+            });
+            directStream(spawnOpts, response);
         } else {
             response.writeHead(200, {});
             response.end('No changes applied!');

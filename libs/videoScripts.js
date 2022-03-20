@@ -11,6 +11,7 @@ module.exports = function(resolveFileLocation) {
 
     const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
     const MJPEG_CMD = `${resolveFileLocation}/scripts/mjpegRestream.sh`;
+    const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/directStream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
     const FFMPEG_RUNNING_CMD = `${resolveFileLocation}/scripts/killPreview.sh`;
     const FFMPEG_RTSP_COPY_CMD = `${resolveFileLocation}/scripts/rtspCopyStream.sh`;
@@ -68,6 +69,37 @@ module.exports = function(resolveFileLocation) {
         console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
+    function directStream(options, response) {
+
+        const spawnOptions = options.concat();
+        if (spawnOptions.length === 0) {
+            spawnOptions.push(DEFAULT_OPTIONS);
+        }
+        spawnOptions.unshift(MJPEG_DIRECT_CMD);
+        global.streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
+        response.writeHead(200, {
+            //'Content-Type': 'video/webm',
+            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+            'Cache-Control': 'no-cache'
+        });
+        global.streamProcess.stdout.pipe(response);
+        global.streamProcess.on('error', (err) =>{
+            console.error('Error', err);
+        });
+        global.streamProcess.on('close', () => {
+            console.log('Video stream has ended!');
+        });
+        let isRtpsHost = false;
+        const rptsHost = spawnOptions.filter(item => {
+            if (item === '--rtspHost') {
+                isRtpsHost = true;
+                return false;
+            }
+            return isRtpsHost;
+        });
+        console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
+    }
+
     function saveVideoProcess(options, response) {
 
         const filename = getVideoFilename();
@@ -101,6 +133,7 @@ module.exports = function(resolveFileLocation) {
         getVideoFilename,
         spawnVideoProcess,
         sendVideoProcess,
+        directStream,
         saveVideoProcess
     };
 
