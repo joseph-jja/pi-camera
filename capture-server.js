@@ -135,7 +135,7 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
              return (item && item.length > 0);
         });
-        directStream(spawnOpts, response);
+        directStream(options, response);
     });
 
     app.get('/config', (request, response) => {
