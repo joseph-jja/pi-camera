@@ -76,17 +76,17 @@ module.exports = function(resolveFileLocation) {
             spawnOptions.push(DEFAULT_OPTIONS);
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
-        global.streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
+        const directStream = childProcess.spawn(BASH_CMD, spawnOptions);
         response.writeHead(200, {
             //'Content-Type': 'video/webm',
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        global.streamProcess.stdout.pipe(response);
-        global.streamProcess.on('error', (err) =>{
+        directStream.stdout.pipe(response);
+        directStream.on('error', (err) =>{
             console.error('Error', err);
         });
-        global.streamProcess.on('close', () => {
+        directStream.on('close', () => {
             console.log('Video stream has ended!');
         });
         let isRtpsHost = false;
