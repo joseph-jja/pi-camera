@@ -22,6 +22,6 @@ IP_ADDRESS=`env |grep IP_ADDR | sed 's/IP_ADDR=//g'`
 #echo "IP Address: $IP_ADDRESS ..."
 #echo "Options: $EXTRA_ARGS ..."
 
-/usr/bin/libcamera-vid --codec mjpeg $EXTRA_ARGS --nopreview -t 0 --inline -o - \
-    ffmpeg -i pipe: -filter_threads 1 -s 640x480 -filter:v fps=10 \
+/usr/bin/libcamera-vid --codec mjpeg $EXTRA_ARGS --nopreview -t 0 --inline -o - |
+    ffmpeg -i pipe: -an -filter_threads 1 -s 640x480 -filter:v fps=10 \
     -c:v mjpeg -q:v 1 -f mpjpeg -
