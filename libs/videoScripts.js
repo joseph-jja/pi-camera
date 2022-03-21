@@ -73,7 +73,7 @@ module.exports = function(resolveFileLocation) {
 
         const spawnOptions = options;
         if (spawnOptions.length === 0) {
-            spawnOptions.push(DEFAULT_OPTIONS.join(' '));
+            spawnOptions.push('--width 1640 --height 1232 --quality 20 --framerate 15 --exposure normal --bitrate 5000000');
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
         const directStream = childProcess.spawn(BASH_CMD, spawnOptions);
