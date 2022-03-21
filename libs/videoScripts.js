@@ -71,10 +71,7 @@ module.exports = function(resolveFileLocation) {
 
     function directStream(options, response) {
 
-        const spawnOptions = options.concat();
-        if (spawnOptions.length === 0) {
-            spawnOptions.push(DEFAULT_OPTIONS);
-        }
+        const spawnOptions = (options.length === 0 ? [].concat(DEFAULT_OPTIONS) : [].concat(options));
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
         const directStream = childProcess.spawn(BASH_CMD, spawnOptions);
         response.writeHead(200, {
@@ -82,9 +79,10 @@ module.exports = function(resolveFileLocation) {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        directStream.stdout.pipe(response);
+        //directStream.stdout.pipe(response);
         directStream.stdout.on('data', (d) => {
             console.log('Got data', d.length);
+            response.write(d);
         });
         directStream.stderr.on('error', (err) => {
             console.error('Error', err);
