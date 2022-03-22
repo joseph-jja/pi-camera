@@ -88,7 +88,7 @@ module.exports = function(resolveFileLocation) {
     function directStream(options) {
 
         // TODO fix these options
-        const spawnOptions = options.filter(filterOptions).join(' ');
+        const spawnOptions = [options.filter(filterOptions).join(' ')];
         if (spawnOptions.length === 0) {
             const filtered =  DEFAULT_OPTIONS.filter(filterOptions).join(' ');
             spawnOptions.push(filtered);
