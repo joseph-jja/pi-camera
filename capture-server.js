@@ -135,7 +135,15 @@ async function start() {
         const options = unescape(params).trim().split(' ').filter(item => {
              return (item && item.length > 0);
         });
-        directStream(options, response);
+        if (global.directStreamProcess) {
+            const pid = global.directStreamProcess.pid;
+            childProcess.exec(`kill -9 ${pid}`, () => {
+                global.directStreamProcess = undefined;
+                directStream(options, response);
+            });
+        } else {
+            directStream(options, response);
+        }
     });
 
     app.get('/config', (request, response) => {

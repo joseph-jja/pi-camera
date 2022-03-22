@@ -25,6 +25,7 @@ module.exports = function(resolveFileLocation) {
 
     global.videoProcess;
     global.streamProcess;
+    global.directStreamProcess;
 
     function spawnVideoProcess(options) {
 
@@ -89,20 +90,20 @@ module.exports = function(resolveFileLocation) {
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
-        const directStream = childProcess.spawn(BASH_CMD, spawnOptions);
+        global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         response.writeHead(200, {
             //'Content-Type': 'video/webm',
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        directStream.stdout.pipe(response);
-        /*directStream.stdout.on('data', (d) => {
+        global.directStreamProcess.stdout.pipe(response);
+        /*global.directStreamProcess.stdout.on('data', (d) => {
             console.log('Got data', d.length);
         });*/
-        directStream.stderr.on('error', (err) => {
+        global.directStreamProcess.stderr.on('error', (err) => {
             console.error('Error', err);
         });
-        directStream.on('close', () => {
+        global.directStreamProcess.on('close', () => {
             console.log('Video stream has ended!');
         });
         let isRtpsHost = false;
