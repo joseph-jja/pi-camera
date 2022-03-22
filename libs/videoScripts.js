@@ -71,10 +71,20 @@ module.exports = function(resolveFileLocation) {
 
     function directStream(options, response) {
 
-        // TODO fix these options 
+        // TODO fix these options
         const spawnOptions = options.concat();
         if (spawnOptions.length === 0) {
-            spawnOptions.push(DEFAULT_OPTIONS.join(' '));
+            let keep = true;
+            const filtered =  DEFAULT_OPTIONS.filter(item => {
+                if ( item === '--profile' || item === '--bitrate' ) {
+                    keep = false;
+                    return false;
+                } else if (!keep) {
+                    return false;
+                }
+                return true;
+            });
+            spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
         const directStream = childProcess.spawn(BASH_CMD, spawnOptions);
