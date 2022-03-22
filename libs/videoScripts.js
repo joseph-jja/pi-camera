@@ -76,7 +76,8 @@ module.exports = function(resolveFileLocation) {
         if (spawnOptions.length === 0) {
             let keep = true;
             const filtered =  DEFAULT_OPTIONS.filter(item => {
-                if ( item === '--profile' || item === '--bitrate' ) {
+                if ( item === '--profile' || item === '--bitrate' ||
+                    item === '--metering' ) {
                     keep = false;
                     return false;
                 } else if (!keep) {
