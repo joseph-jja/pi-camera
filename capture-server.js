@@ -202,7 +202,7 @@ async function start() {
                 //console.log('Got data', d.length);
             });
         } else {
-            response.writeHead(200, {));
+            response.writeHead(200, {});
             response.write('Preview has not been started!');
         }
     });
