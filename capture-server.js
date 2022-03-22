@@ -139,9 +139,11 @@ async function start() {
             const pid = global.directStreamProcess.pid;
             childProcess.exec(`kill -9 ${pid}`, () => {
                 global.directStreamProcess = undefined;
-                response.writeHead(200, {});
-                response.end('Preview should have stopped.');
-                console.log('Preview should have stopped.');
+                childProcess.exec(`kill -9 \`ps -ef | grep libcamera | awk '{print $2}' | grep -v grep \``, () => {
+                    response.writeHead(200, {});
+                    response.end('Preview should have stopped.');
+                    console.log('Preview should have stopped.');
+                });
             });
             return;
         }
