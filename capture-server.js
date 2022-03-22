@@ -141,6 +141,7 @@ async function start() {
                 global.directStreamProcess = undefined;
                 response.writeHead(200, {});
                 response.end('Preview should have stopped.');
+                console.log('Preview should have stopped.');
             });
             return;
         }
