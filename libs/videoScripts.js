@@ -77,7 +77,7 @@ module.exports = function(resolveFileLocation) {
             let keep = true;
             const filtered =  DEFAULT_OPTIONS.filter(item => {
                 if ( item === '--profile' || item === '--bitrate' ||
-                    item === '--metering' ) {
+                    item === '--quality' ) {
                     keep = false;
                     return false;
                 } else if (!keep) {
