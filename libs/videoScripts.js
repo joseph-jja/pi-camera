@@ -80,6 +80,7 @@ module.exports = function(resolveFileLocation) {
                     keep = false;
                     return false;
                 } else if (!keep) {
+                    keep = true;
                     return false;
                 }
                 return true;
