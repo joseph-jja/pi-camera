@@ -1,9 +1,6 @@
 #!/bin/bash
 
-LIBCAMERA_PID=`ps -ef |grep ffmpeg | grep -v grep | awk '{print $2}'`
-if [ "$LIBCAMERA_PID" != "" ] ; then
-     kill -9 "$LIBCAMERA_PID"
-fi
+/bin/bash $HOME/pi-camera/scripts/killall.sh
 
 IP_ADDRESS=`echo $IP_ADDR`
 if [ "$IP_ADDRESS" == "" ]; then
