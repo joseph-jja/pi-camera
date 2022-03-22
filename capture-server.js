@@ -175,6 +175,7 @@ async function start() {
     });
 
     app.get('/startpreview', (request, response) => {
+        //lastUpdateOpts
         const options = filterParams(request, 'previewOpts');
         if (global.directStreamProcess) {
             const pid = global.directStreamProcess.pid;
@@ -201,13 +202,8 @@ async function start() {
                 //console.log('Got data', d.length);
             });
         } else {
-            directStream(DEFAULT_OPTIONS);
-            setTimeout(() => {
-                global.directStreamProcess.stdout.on('data', (d) => {
-                    response.write(d);
-                    //console.log('Got data', d.length);
-                });
-            }, 100);
+            response.writeHead(200, {));
+            response.write('Preview has not been started!');
         }
     });
 
@@ -230,7 +226,8 @@ async function start() {
     console.log(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
-    spawnVideoProcess(DEFAULT_OPTIONS);
+    //spawnVideoProcess(DEFAULT_OPTIONS);
+    directStream(DEFAULT_OPTIONS);
 }
 
 start();
