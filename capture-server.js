@@ -64,6 +64,10 @@ async function start() {
     const config = require(`${RESOLVED_FILE_LOCATION}/cameraConfig`);
 
     const formFields = await import('./libs/form.mjs');
+    const params = await import('./libs/params.mjs');
+    const {
+        filterParams
+    } = params;
 
     const hostname = (await getHostname()).trim();
     const ipaddr = await getIPAddress(hostname);
@@ -130,11 +134,22 @@ async function start() {
         }
     });
 
-    app.get('/directpreview', (request, response) => {
-        const params = (request.query && request.query.previewOpts ? request.query.previewOpts : '');
-        const options = unescape(params).trim().split(' ').filter(item => {
-             return (item && item.length > 0);
-        });
+    app.get('/stopPreview', (request, response) => {
+        if (global.directStreamProcess) {
+            const pid = global.directStreamProcess.pid;
+            childProcess.exec(`kill -9 ${pid}`, () => {
+                global.directStreamProcess = undefined;
+                response.writeHead(200, {});
+                response.end('Preview should have stopped.');
+            });
+            return;
+        }
+        response.writeHead(200, {});
+        response.end('Nothing happened!');
+    });
+
+    app.get('/preview', (request, response) => {
+        const options = filterParams(request, 'previewOpts');
         if (global.directStreamProcess) {
             const pid = global.directStreamProcess.pid;
             childProcess.exec(`kill -9 ${pid}`, () => {
