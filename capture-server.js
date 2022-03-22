@@ -172,10 +172,20 @@ async function start() {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        global.directStreamProcess.stdout.on('data', (d) => {
-            response.write(d);
-            //console.log('Got data', d.length);
-        });
+        if (global.directStreamProcess) {
+            global.directStreamProcess.stdout.on('data', (d) => {
+                response.write(d);
+                //console.log('Got data', d.length);
+            });
+        } else {
+            directStream(DEFAULT_OPTIONS);
+            setTimeout(() => {
+                global.directStreamProcess.stdout.on('data', (d) => {
+                    response.write(d);
+                    //console.log('Got data', d.length);
+                });
+            }, 100);
+        }
     });
 
     app.get('/config', (request, response) => {
