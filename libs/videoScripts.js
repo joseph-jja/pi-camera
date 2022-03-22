@@ -72,23 +72,25 @@ module.exports = function(resolveFileLocation) {
         console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
+    let keep = true;
+    function filterOptions(item) {
+        if ( item === '--profile' || item === '--bitrate' ||
+            item === '--quality' ) {
+            keep = false;
+            return false;
+        } else if (!keep) {
+            keep = true;
+            return false;
+        }
+        return true;
+    }
+
     function directStream(options) {
 
         // TODO fix these options
-        const spawnOptions = options.concat();
+        const spawnOptions = options.filter(filterOptions).join(' ');
         if (spawnOptions.length === 0) {
-            let keep = true;
-            const filtered =  DEFAULT_OPTIONS.filter(item => {
-                if ( item === '--profile' || item === '--bitrate' ||
-                    item === '--quality' ) {
-                    keep = false;
-                    return false;
-                } else if (!keep) {
-                    keep = true;
-                    return false;
-                }
-                return true;
-            }).join(' ');
+            const filtered =  DEFAULT_OPTIONS.filter(filterOptions).join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
