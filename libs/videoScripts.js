@@ -4,6 +4,8 @@ module.exports = function(resolveFileLocation) {
 
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
+    const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
+    const DevNull = new NullStream();
 
     const BASH_CMD = '/bin/bash';
 
@@ -70,7 +72,7 @@ module.exports = function(resolveFileLocation) {
         console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
-    function directStream(options, response) {
+    function directStream(options) {
 
         // TODO fix these options
         const spawnOptions = options.concat();
@@ -91,15 +93,7 @@ module.exports = function(resolveFileLocation) {
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
-        response.writeHead(200, {
-            //'Content-Type': 'video/webm',
-            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-            'Cache-Control': 'no-cache'
-        });
-        global.directStreamProcess.stdout.pipe(response);
-        /*global.directStreamProcess.stdout.on('data', (d) => {
-            console.log('Got data', d.length);
-        });*/
+        global.directStreamProcess.stdout.pipe(DevNull);
         global.directStreamProcess.stderr.on('error', (err) => {
             console.error('Error', err);
         });

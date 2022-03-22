@@ -148,17 +148,31 @@ async function start() {
         response.end('Nothing happened!');
     });
 
-    app.get('/preview', (request, response) => {
+    app.get('/startpreview', (request, response) => {
         const options = filterParams(request, 'previewOpts');
         if (global.directStreamProcess) {
             const pid = global.directStreamProcess.pid;
             childProcess.exec(`kill -9 ${pid}`, () => {
                 global.directStreamProcess = undefined;
-                directStream(options, response);
+                directStream(options);
             });
         } else {
-            directStream(options, response);
+            directStream(options);
         }
+        response.writeHead(200, {});
+        response.end('Direct preview has started');
+    });
+
+    app.get('/preview', (request, response) => {
+        response.writeHead(200, {
+            //'Content-Type': 'video/webm',
+            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+            'Cache-Control': 'no-cache'
+        });
+        global.directStreamProcess.stdout.on('data', (d) => {
+            response.write(d);
+            //console.log('Got data', d.length);
+        });
     });
 
     app.get('/config', (request, response) => {
