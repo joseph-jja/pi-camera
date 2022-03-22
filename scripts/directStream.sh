@@ -8,6 +8,10 @@ VLC_PID=`ps -ef |grep vlc | grep -v grep | awk '{print $2}'`
 if [ "$VLC_PID" != "" ] ; then
     kill -9 "$VLC_PID"
 fi
+FFMPPEG_PID=`ps -ef |grep ffmpeg | grep -v grep | awk '{print $2}'`
+if [ "$FFMPPEG_PID" != "" ] ; then
+    kill -9 "$FFMPPEG_PID"
+fi
 
 EXTRA_ARGS=""
 while [[ $# -gt 0 ]]; do
