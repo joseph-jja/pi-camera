@@ -83,7 +83,7 @@ module.exports = function(resolveFileLocation) {
                     return false;
                 }
                 return true;
-            });
+            }).join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
