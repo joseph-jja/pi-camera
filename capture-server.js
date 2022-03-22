@@ -34,6 +34,7 @@ function getHTML(body) {
         <title>PI Camera</title>
     </head>
     <body>
+        <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
         <div id="server-messages"></div>
         <br>
         <form name="cameraOptions" onsubmit="return false;">
@@ -149,6 +150,28 @@ async function start() {
         }
         response.writeHead(200, {});
         response.end('Nothing happened!');
+    });
+
+    app.get('/saveStream', (request, response) => {
+        const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
+        let saveOpts = [];
+        if (params) {
+            saveOpts = JSON.parse(params);
+        }
+        const options = saveOpts.filter(item => {
+            return (item && item.length > 0);
+        });
+        const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
+        const fileout = fs.createWriteStream(filename);
+        const callback = (d) => {
+            fileout.write(d);
+        };
+        global.directStreamProcess.stdout.on('data', callback);
+        setTimeout(() => {
+            global.directStreamProcess.stdout.off('data', callback);
+        }, 1000);
+        response.writeHead(200, {});
+        response.end('Writing file to disk');
     });
 
     app.get('/startpreview', (request, response) => {
