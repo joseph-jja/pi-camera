@@ -205,13 +205,7 @@ async function start() {
             'Cache-Control': 'no-cache'
         });
         const options = lastUpdateOpts.concat();
-        if (global.directStreamProcess) {
-            const pid = global.directStreamProcess.pid;
-            childProcess.exec(`kill -9 ${pid}`, () => {
-                global.directStreamProcess = undefined;
-                directStream(options);
-            });
-        } else {
+        if (!global.directStreamProcess) {
             directStream(options);
         }
         global.directStreamProcess.stdout.on('data', (d) => {
