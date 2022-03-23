@@ -9,7 +9,7 @@ module.exports = function(resolveFileLocation) {
 
     const BASH_CMD = '/bin/bash';
 
-    const DEFAULT_OPTIONS = '--width 1640 --height 1232 --profile high --metering centre --quality 20 --framerate 15 --exposure normal --bitrate 5000000'.split(' ');
+    const DEFAULT_OPTIONS = '--width 1640 --height 1232 --metering centre --framerate 15 --exposure normal'.split(' ');
 
     const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
     const MJPEG_CMD = `${resolveFileLocation}/scripts/mjpegRestream.sh`;

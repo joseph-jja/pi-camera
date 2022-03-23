@@ -9,15 +9,15 @@ module.exports = [{
     name: 'videoSize',
     paramName: '',
     values: [
-        '--width 640 --height 480 --profile high',
-        '--width 800 --height 600 --profile high',
-        '--width 1280 --height 720 --profile high',
-        '--width 1920 --height 1080 --profile high',
-        '--width 1640 --height 922 --profile high',
-        '--width 1640 --height 1232 --profile high'
+        '--width 640 --height 480',
+        '--width 800 --height 600',
+        '--width 1280 --height 720',
+        '--width 1920 --height 1080',
+        '--width 1640 --height 922',
+        '--width 1640 --height 1232'
     ],
     comment: '1640x1232 uses full sensor with binning',
-    defaultvalue: '--width 1640 --height 1232 --profile high'
+    defaultvalue: '--width 1640 --height 1232'
 }, {
     name: 'EV_compensation',
     comment: 'higher is brighter',
@@ -30,13 +30,13 @@ module.exports = [{
     paramName: '--metering',
     values: ['centre', 'spot', 'average'], // 'custom'
     defaultValue: 'centre'
-}, {
+}/*, {
     name: 'quality',
     paramName: '--quality',
     range: [1, 100],
     step: 1,
     defaultvalue: '20'
-}, {
+}*/, {
     name: 'framerate',
     paramName: '--framerate',
     values: [1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
