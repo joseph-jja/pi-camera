@@ -111,18 +111,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }).catch(e => {
                 console.log(e);
             });
-        } else if (name.toLowerCase() === 'button' && target.id === 'updateOptions') {
-            const formObj = document.forms['cameraOptions'],
-                saveOptionsObj = formObj.previewOptions;
-            fetch('/config').then(resp => {
-                resp.text().then(data => {
-                    saveOptionsObj.value = data;
-                }).catch(e => {
-                    console.log(e);
-                });
-            }).catch(e => {
-                console.log(e);
-            });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             const formObj = document.forms['cameraOptions'],
                 saveOptions = formObj.previewOptions.value;
