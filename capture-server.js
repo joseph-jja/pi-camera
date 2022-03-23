@@ -185,6 +185,7 @@ async function start() {
 
         listImageFiles(`${process.env.HOME}/images/`)
             .then(filedata => {
+                console.log('Got file data ', filedata);
                 if (filedata.hasError) {
                     response.writeHead(500, {
                         'Content-Type': 'text/html'
