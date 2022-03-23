@@ -9,6 +9,7 @@ fi
 echo "Trying IP Address $IP_ADDRESS"
 
 #ffplay -i "rtsp://$IP_ADDRESS:10000/stream1" \
-ffplay -loglevel quiet -i "rtsp://$IP_ADDRESS:10000/stream1" \
-    -an  \
-    -vf "setpts=N/8" -fflags nobuffer -flags low_delay -framedrop
+#ffplay -loglevel quiet -i "rtsp://$IP_ADDRESS:10000/stream1" \
+#ffplay -loglevel quiet -i "http://$IP_ADDRESS:20000/preview" \
+ffplay -i "http://$IP_ADDRESS:20000/preview" \
+    -an -fflags nobuffer -flags low_delay -framedrop -f mjpeg
