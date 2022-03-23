@@ -5,7 +5,6 @@ module.exports = function(resolveFileLocation) {
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
-    const DevNull = new NullStream();
 
     const BASH_CMD = '/bin/bash';
 
@@ -95,12 +94,18 @@ module.exports = function(resolveFileLocation) {
         }
         spawnOptions.unshift(MJPEG_DIRECT_CMD);
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
+        const listeners = global.directStreamProcess.stdout.listeners('data');
+        for (let i =0, end = listeners.length; i < end; i++) {
+            global.directStreamProcess.stdout.removeListener('data', listeners[i]);
+        }
+        const DevNull = new NullStream();
         global.directStreamProcess.stdout.pipe(DevNull);
         global.directStreamProcess.stderr.on('error', (err) => {
             console.error('Error', err);
         });
         global.directStreamProcess.on('close', () => {
             console.log('Video stream has ended!');
+            DevNull.destroy();
         });
         let isRtpsHost = false;
         const rptsHost = spawnOptions.filter(item => {

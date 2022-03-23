@@ -42,6 +42,8 @@ function getHTML(body) {
             <input type="text" name="previewOptions" size=60">
             <br>
             <br>
+            ${body}
+            <br>
             <button type="submit" id="updateButton">
                 Update
             </button>
