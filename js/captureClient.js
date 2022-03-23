@@ -56,6 +56,19 @@ window.addEventListener('DOMContentLoaded', () => {
         serverMsg.innerHTML = msg;
     }
 
+    function getConfig() {
+        const saveOptionsObj = formObj.previewOptions;
+        fetch('/config').then(resp => {
+            resp.text().then(data => {
+                saveOptionsObj.value = data;
+            }).catch(e => {
+                console.log(e);
+            });
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
@@ -70,17 +83,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 },
                 body: options
             }).then(async resp => {
-                await setMessage(resp);
-                const saveOptionsObj = formObj.previewOptions;
-                fetch('/config').then(resp => {
-                    resp.text().then(data => {
-                        saveOptionsObj.value = data;
-                    }).catch(e => {
-                        console.log(e);
-                    });
-                }).catch(e => {
-                    console.log(e);
-                });
+                setMessage(resp);
+                getConfig();
             }).catch(e => {
                 console.log(e);
             });
@@ -97,6 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 body: options
             }).then(resp => {
                 setMessage(resp);
+                getConfig();
                 iframe.src = `/preview`;
             }).catch(e => {
                 console.log(e);
@@ -110,6 +115,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
+            getConfig();
             fetch('/saveStream', {
                 method: 'GET'
             }).then(resp => {
