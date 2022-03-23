@@ -36,7 +36,8 @@ const promiseWrapper = promiseIn => (
     promiseIn.then(data => ([undefined, data])).catch(msg => ([msg, undefined]))
 );
 
-async function listImageFile(imageDir) {
+async function listImageFiles(imageDir) {
+
 
     const promisifedReaddir = (indir) => {
         return new Promise((resolve, reject) => {
@@ -45,7 +46,6 @@ async function listImageFile(imageDir) {
                     console.error(err);
                     reject(err);
                 } else {
-                    console.log('Got list ', data);
                     resolve(data);
                 }
             });
@@ -54,10 +54,14 @@ async function listImageFile(imageDir) {
     const [err, files] = await promiseWrapper(promisifedReaddir(imageDir));
     if (err) {
         console.error(err);
+        return {
+            hasError: true,
+            message: err
+        };
     }
     return {
-        hasError: err,
-        message: err || files
+        hasError: false,
+        message: files
     };
 }
 
@@ -66,5 +70,5 @@ module.exports = {
     getIPAddress,
     getHostname,
     promiseWrapper,
-    listImageFile
+    listImageFiles
 };
