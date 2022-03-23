@@ -104,6 +104,7 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess.stdout.on('data', callback);
         setTimeout(() => {
             global.directStreamProcess.stdout.off('data', callback);
+            console.log(`Finished writing file ${filename}`);
         }, 60000);
     }
 
