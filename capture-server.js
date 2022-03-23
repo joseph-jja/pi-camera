@@ -86,10 +86,6 @@ async function start() {
     const config = require(`${RESOLVED_FILE_LOCATION}/cameraConfig`);
 
     const formFields = await import('./libs/form.mjs');
-    const params = await import('./libs/params.mjs');
-    const {
-        filterParams
-    } = params;
 
     const hostname = (await getHostname()).trim();
     const ipaddr = await getIPAddress(hostname);
