@@ -39,6 +39,9 @@ function getHTML(body) {
         <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
         <div id="server-messages"></div>
         <label>Streaming options</label>
+        <form name="imageFiles" onsubmit="return false;">
+            <div id="image-files"></div>
+        </form>
         <br>
         <form name="cameraOptions" onsubmit="return false;">
             <input type="text" name="previewOptions" size=60">
