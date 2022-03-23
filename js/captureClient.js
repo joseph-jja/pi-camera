@@ -26,7 +26,8 @@ window.addEventListener('DOMContentLoaded', () => {
         return '';
     }*/
 
-    const formObj = document.forms['cameraOptions'];
+    const formObj = document.forms['cameraOptions'],
+        imageListForm = document.forms['imageFiles'];
 
     function getFormOptions() {
 
@@ -120,6 +121,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 method: 'GET'
             }).then(resp => {
                 setMessage(resp);
+            }).catch(e => {
+                console.log(e);
+            });
+        } else if (name.toLowerCase() === 'button' && target.id === 'listCaptures') {
+            fetch('/imageList', {
+                method: 'GET'
+            }).then(async resp => {
+                const images = await resp.text();
+                const container = document.getElementById('image-files');
+                container.innerHTML = images;
             }).catch(e => {
                 console.log(e);
             });
