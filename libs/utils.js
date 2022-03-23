@@ -53,7 +53,6 @@ async function listImageFiles(imageDir) {
     };
     const [err, files] = await promiseWrapper(promisifedReaddir(imageDir));
     if (err) {
-        console.error(err);
         return {
             hasError: true,
             message: err
