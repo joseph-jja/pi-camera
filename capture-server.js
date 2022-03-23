@@ -42,7 +42,7 @@ function getHTML(body) {
         <br>
         <label>Streaming options</label>
         <br>
-        <fieldset style="width: 450px; float: left;">
+        <fieldset style="width: 450px; height: 550px; float: left;">
             <form name="cameraOptions" onsubmit="return false;">
                 <input type="text" name="previewOptions" size=60">
                 <br>
@@ -56,10 +56,6 @@ function getHTML(body) {
                 <button type="submit" id="saveStream">
                     Capture Stream
                 </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="listCaptures">
-                    List Captures
-                </button>
                 <br><br>
                 <button type="submit" id="startPreview">
                     Start Preview
@@ -70,13 +66,17 @@ function getHTML(body) {
                 </button>
             </form>
         </fieldset>
-        <fieldset style="width: 275px; float: left;">
+        <fieldset style="width: 275px; height: 550px; float: left;">
             <form name="imageFiles" onsubmit="return false;">
                 <div id="image-files"></div>
             </form>
+            <br><br>
+            <button type="submit" id="listCaptures">
+                List Captures
+            </button>
         </fieldset>
         <br clear="both">
-        <fieldset style="width: 100%; float: none;">
+        <fieldset style="width: 90%; float: none;">
             <form name="shutdown" onsubmit="return false;">
                 <button type="submit" id="shutdownButton">
                     Shutdown
