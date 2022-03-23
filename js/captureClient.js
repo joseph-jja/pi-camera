@@ -37,8 +37,10 @@ window.addEventListener('DOMContentLoaded', () => {
             const tagName = element.tagName.toLowerCase();
             if (tagName === 'select') {
                 return element.selectedOptions[0].value;
-            } else {
+            } else if (tagName !== 'input'){
                 return element.value;
+            } else {
+                return '';
             }
         }).reduce((acc, next) => {
             return `${acc} ${next}`.trim();
@@ -70,8 +72,15 @@ window.addEventListener('DOMContentLoaded', () => {
                     await setMessage(resp);
                     const formObj = document.forms['cameraOptions'],
                         saveOptionsObj = formObj.previewOptions;
-                    const serverMsg = document.getElementById('server-messages');
-                    saveOptionsObj.value = serverMsg.innerHTML;
+                    fetch('/config').then(resp => {
+                        resp.text().then(data => {
+                            saveOptionsObj.value = JSON.parse(data);
+                        }).catch(e => {
+                            console.log(e);
+                        });
+                    }).catch(e => {
+                        console.log(e);
+                    });
                 }).catch(e => {
                     console.log(e);
                 });

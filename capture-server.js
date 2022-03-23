@@ -38,10 +38,9 @@ function getHTML(body) {
         <div id="server-messages"></div>
         <label>Streaming options</label>
         <br>
-        <input type="text" name="previewOptions" size=60">
-        <br>
         <form name="cameraOptions" onsubmit="return false;">
-            ${body}
+            <input type="text" name="previewOptions" size=60">
+            <br>
             <br>
             <button type="submit" id="updateButton">
                 Update
