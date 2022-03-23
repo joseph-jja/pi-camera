@@ -1,6 +1,6 @@
 const dns  = require('dns').promises,
     childProcess = require('child_process'),
-    { readdir } = require('fs/promises');
+    { readdir } = require('fs');
 
 function padNumber(num) {
     return new String(num).padStart(2, 0);
@@ -38,7 +38,18 @@ const promiseWrapper = promiseIn => (
 
 async function listImageFile(imageDir) {
 
-    const [err, files] = await promiseWrapper(readdir(imageDir));
+    const promisifedReaddir = (indir) => {
+        return new Promise((resolve, reject) => {
+            readdir(indir, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    };
+    const [err, files] = await promiseWrapper(promisifedReaddir(imageDir));
     if (err) {
         console.error(err);
     }
