@@ -91,7 +91,11 @@ module.exports = function(resolveFileLocation) {
         if (!global.directStreamProcess) {
             directStream(options);
         }
-
+        try {
+            fs.mkdirSync(`${process.env.HOME}/images`);
+        } catch(e) {
+            console.error(e);
+        }
         const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
         const fileout = fs.createWriteStream(filename);
         const callback = (d) => {
