@@ -17,7 +17,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         getIPAddress,
         getHostname,
-        listImageFile
+        listImageFiles
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
         DEFAULT_OPTIONS,
@@ -183,15 +183,22 @@ async function start() {
 
     app.get('/imageList', (request, response) => {
 
-        listImageFile(`${process.env.HOME}/images/`)
-            .then(files => {
+        listImageFiles(`${process.env.HOME}/images/`)
+            .then(filedata => {
+                if (filedata.hasError) {
+                    response.writeHead(500, {
+                        'Content-Type': 'text/html'
+                    });
+                    response.end(stringify(filedata.message));
+                    return;
+                }
                 response.writeHead(200, {
                     'Content-Type': 'text/html'
                 });
                 const selectData = {
                     name: 'imageList',
                     comment: 'Select an image to delete or download or rename',
-                    value: files
+                    value: filedata.message
                 };
                 const htmlForm = formFields.buildSelect(selectData);
                 response.end(htmlForm);
