@@ -193,7 +193,7 @@ async function start() {
                     return;
                 }
                 const selectData = {
-                    name: 'imageList',
+                    name: 'image_list',
                     paramName: '',
                     comment: 'Select an image to delete or download or rename',
                     values: filedata.message
