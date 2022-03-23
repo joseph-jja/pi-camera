@@ -192,16 +192,18 @@ async function start() {
                     response.end(stringify(filedata.message));
                     return;
                 }
-                console.log('Got file data ', filedata);
-                response.writeHead(200, {
-                    'Content-Type': 'text/html'
-                });
                 const selectData = {
                     name: 'imageList',
+                    paramName: '',
                     comment: 'Select an image to delete or download or rename',
                     value: filedata.message
                 };
+                console.log('Got select data ', selectData);
                 const htmlForm = formFields.buildSelect(selectData);
+                console.log('Got html form data ', htmlForm);
+                response.writeHead(200, {
+                    'Content-Type': 'text/html'
+                });
                 response.end(htmlForm);
             }).catch(e => {
                 response.writeHead(500, {
