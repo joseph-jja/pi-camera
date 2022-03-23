@@ -39,37 +39,42 @@ function getHTML(body) {
     <body>
         <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
         <div id="server-messages"></div>
-        <label>Streaming options</label>
-        <form name="imageFiles" onsubmit="return false;">
-            <div id="image-files"></div>
-        </form>
         <br>
-        <form name="cameraOptions" onsubmit="return false;">
-            <input type="text" name="previewOptions" size=60">
-            <br>
-            <br>
-            ${body}
-            <br><br>
-            <button type="submit" id="updateButton">
-                Update
-            </button>
-            <br><br>
-            <button type="submit" id="saveStream">
-                Capture Stream
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="submit" id="listCaptures">
-                List Captures
-            </button>
-            <br><br>
-            <button type="submit" id="startPreview">
-                Start Preview
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="submit" id="stopPreview">
-                Stop Preview
-            </button>
-        </form>
+        <label>Streaming options</label>
+        <br>
+        <fieldset style="width: 450px; float; left;">
+            <form name="cameraOptions" onsubmit="return false;">
+                <input type="text" name="previewOptions" size=60">
+                <br>
+                <br>
+                ${body}
+                <br><br>
+                <button type="submit" id="updateButton">
+                    Update
+                </button>
+                <br><br>
+                <button type="submit" id="saveStream">
+                    Capture Stream
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="listCaptures">
+                    List Captures
+                </button>
+                <br><br>
+                <button type="submit" id="startPreview">
+                    Start Preview
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="stopPreview">
+                    Stop Preview
+                </button>
+            </form>
+        </fieldset>
+        <fieldset style="width: 275px; float; left;">
+            <form name="imageFiles" onsubmit="return false;">
+                <div id="image-files"></div>
+            </form>
+        </fieldset>
         <br><hr><br>
         <form name="shutdown" onsubmit="return false;">
             <button type="submit" id="shutdownButton">
