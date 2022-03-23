@@ -199,15 +199,16 @@ async function start() {
     });
 
     app.get('/preview', (request, response) => {
+        if (!global.directStreamProcess) {
+            response.writeHead(200, {});
+            response.end('Preview service is not running!');
+            return;
+        }
         response.writeHead(200, {
             //'Content-Type': 'video/webm',
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        const options = lastUpdateOpts.concat();
-        if (!global.directStreamProcess) {
-            directStream(options);
-        }
         global.directStreamProcess.stdout.on('data', (d) => {
             response.write(d);
             //console.log('Got data', d.length);
