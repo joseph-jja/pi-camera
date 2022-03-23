@@ -196,7 +196,7 @@ async function start() {
                     name: 'imageList',
                     paramName: '',
                     comment: 'Select an image to delete or download or rename',
-                    value: filedata.message
+                    values: filedata.message
                 };
                 console.log('Got select data ', selectData);
                 const htmlForm = formFields.buildSelect(selectData);
