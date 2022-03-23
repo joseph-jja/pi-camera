@@ -61,31 +61,29 @@ window.addEventListener('DOMContentLoaded', () => {
         const name = target.nodeName;
         if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
             const options = getFormOptions();
-            if (options.trim().length > 0) {
-                fetch('/update', {
-                    method: 'POST',
-                    cache: 'no-cache',
-                    referrerPolicy: 'no-referrer',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: options
-                }).then(async resp => {
-                    await setMessage(resp);
-                    const saveOptionsObj = formObj.previewOptions;
-                    fetch('/config').then(resp => {
-                        resp.text().then(data => {
-                            saveOptionsObj.value = data;
-                        }).catch(e => {
-                            console.log(e);
-                        });
+            fetch('/update', {
+                method: 'POST',
+                cache: 'no-cache',
+                referrerPolicy: 'no-referrer',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: options
+            }).then(async resp => {
+                await setMessage(resp);
+                const saveOptionsObj = formObj.previewOptions;
+                fetch('/config').then(resp => {
+                    resp.text().then(data => {
+                        saveOptionsObj.value = data;
                     }).catch(e => {
                         console.log(e);
                     });
                 }).catch(e => {
                     console.log(e);
                 });
-            }
+            }).catch(e => {
+                console.log(e);
+            });
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
             const options = getFormOptions();
             const iframe = document.getElementById('videoDisplay');
@@ -112,9 +110,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
-            const formObj = document.forms['cameraOptions'],
-                saveOptions = formObj.previewOptions.value;
-            fetch(`/saveStream?saveOpts=${saveOptions}`, {
+            fetch('/saveStream', {
                 method: 'GET'
             }).then(resp => {
                 setMessage(resp);

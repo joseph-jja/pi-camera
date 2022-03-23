@@ -174,14 +174,6 @@ async function start() {
     });
 
     app.get('/saveStream', (request, response) => {
-        const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
-        let saveOpts = [];
-        if (params) {
-            saveOpts = params.split(',');
-        }
-        const options = saveOpts.filter(item => {
-            return (item && item.length > 0);
-        });
         const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
         const fileout = fs.createWriteStream(filename);
         const callback = (d) => {
