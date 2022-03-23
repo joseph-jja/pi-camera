@@ -16,7 +16,8 @@ const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         getIPAddress,
-        getHostname
+        getHostname,
+        listImageFile
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
         DEFAULT_OPTIONS,
@@ -178,6 +179,28 @@ async function start() {
         saveVideoProcess(lastUpdateOpts);
         response.writeHead(200, {});
         response.end('Writing file to disk');
+    });
+
+    app.get('/imageList', (request, response) => {
+
+        listImageFile(`${process.env.HOME}/images/`)
+            .then(files => {
+                response.writeHead(200, {
+                    'Content-Type': 'text/html'
+                });
+                const selectData = {
+                    name: 'imageList',
+                    comment: 'Select an image to delete or download or rename',
+                    value: files
+                };
+                const htmlForm = formFields.buildSelect(selectData);
+                response.end(htmlForm);
+            }).catch(e => {
+                response.writeHead(500, {
+                    'Content-Type': 'text/html'
+                });
+                response.end(stringify(e));
+            });
     });
 
     app.post('/startPreview', (request, response) => {
