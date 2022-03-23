@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-    function setBitrate(formElements) {
+    /*function setBitrate(formElements) {
         const videoSize = formElements.filter(item => {
             return (item.name === 'videoSize');
         })[0];
@@ -24,11 +24,13 @@ window.addEventListener('DOMContentLoaded', () => {
             return `--bitrate ${bitrate}`;
         }
         return '';
-    }
+    }*/
+
+    const formObj = document.forms['cameraOptions'];
 
     function getFormOptions() {
 
-        const formElements = Array.from(document.forms['cameraOptions']);
+        const formElements = Array.from(formObj);
         //const bitrate = setBitrate(formElements);
         const options = formElements.filter(element => {
             const nodeName = element.nodeName.toLowerCase();
@@ -70,11 +72,10 @@ window.addEventListener('DOMContentLoaded', () => {
                     body: options
                 }).then(async resp => {
                     await setMessage(resp);
-                    const formObj = document.forms['cameraOptions'],
-                        saveOptionsObj = formObj.previewOptions;
+                    const saveOptionsObj = formObj.previewOptions;
                     fetch('/config').then(resp => {
                         resp.text().then(data => {
-                            saveOptionsObj.value = JSON.parse(data);
+                            saveOptionsObj.value = data;
                         }).catch(e => {
                             console.log(e);
                         });
@@ -86,24 +87,22 @@ window.addEventListener('DOMContentLoaded', () => {
                 });
             }
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
-            const options = document.forms['cameraOptions'].previewOptions.value;
+            const options = getFormOptions();
             const iframe = document.getElementById('videoDisplay');
             fetch('/startPreview', {
-                method: 'GET'
+                method: 'POST',
+                cache: 'no-cache',
+                referrerPolicy: 'no-referrer',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: options
             }).then(resp => {
                 setMessage(resp);
-                if (options && options.length > 0) {
-                    const previewOpts = JSON.parse(options);
-                    iframe.src = `/preview?previewOpts=${previewOpts.join(' ')}`;
-                } else {
-                    iframe.src = `/preview`;
-                }
+                iframe.src = `/preview`;
             }).catch(e => {
                 console.log(e);
             });
-
-            ////const historyPath = `${window.location.origin}?params=${escape(options)}`;
-            //window.history.pushState(escape(options), 'PI Camera', historyPath);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             fetch('/stopPreview', {
                 method: 'GET'

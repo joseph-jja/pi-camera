@@ -122,12 +122,16 @@ async function start() {
         childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
     });
 
+    const filterRequestBody = (body) => {
+        return Object.keys(body).filter(item => {
+            return (item && item.length > 0);
+        });
+    };
+
     let lastUpdateOpts = DEFAULT_OPTIONS;
     app.post('/update', (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {
-            const options = Object.keys(request.body).filter(item => {
-                return (item && item.length > 0);
-            });
+            const options = filterRequestBody(request.body);
             if (options.length > 0) {
                 const spawnOpts = options.map(item => {
                     return item.split(' ');
@@ -191,12 +195,10 @@ async function start() {
         response.end('Writing file to disk');
     });
 
-    app.get('/startPreview', (request, response) => {
-        //lastUpdateOpts
-        let options = filterParams(request, 'previewOpts');
-        if (options.length == 0) {
-            options = lastUpdateOpts.concat();
-        }
+    app.post('/startPreview', (request, response) => {
+        const hasRequestData = (request.body && Object.keys(request.body).length > 0);
+        const options = hasRequestData ? filterRequestBody(request.body) : lastUpdateOpts.concat();
+
         if (global.directStreamProcess) {
             const pid = global.directStreamProcess.pid;
             childProcess.exec(`kill -9 ${pid}`, () => {
