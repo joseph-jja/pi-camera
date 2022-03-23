@@ -20,7 +20,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     {
         DEFAULT_OPTIONS,
-        spawnVideoProcess,
+        //spawnVideoProcess,
         directStream,
         getVideoFilename
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
@@ -174,15 +174,8 @@ async function start() {
     });
 
     app.get('/saveStream', (request, response) => {
-        const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
-        const fileout = fs.createWriteStream(filename);
-        const callback = (d) => {
-            fileout.write(d);
-        };
-        global.directStreamProcess.stdout.on('data', callback);
-        setTimeout(() => {
-            global.directStreamProcess.stdout.off('data', callback);
-        }, 60000);
+
+        saveStream(lastUpdateOpts);
         response.writeHead(200, {});
         response.end('Writing file to disk');
     });

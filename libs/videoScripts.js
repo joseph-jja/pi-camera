@@ -1,4 +1,5 @@
-const childProcess = require('child_process');
+const childProcess = require('child_process'),
+    fs = require('fs');
 
 module.exports = function(resolveFileLocation) {
 
@@ -25,7 +26,6 @@ module.exports = function(resolveFileLocation) {
     }
 
     global.videoProcess;
-    global.streamProcess;
     global.directStreamProcess;
 
     function spawnVideoProcess(options) {
@@ -38,37 +38,6 @@ module.exports = function(resolveFileLocation) {
         global.videoProcess.stdout.on('data', (data) => {
             console.log(`${VIDEO_CMD}: ${data}`);
         });
-    }
-
-    function sendVideoProcess(options, response) {
-
-        const spawnOptions = options.concat();
-        if (spawnOptions.length === 0) {
-            spawnOptions.push(DEFAULT_OPTIONS);
-        }
-        spawnOptions.unshift(MJPEG_CMD);
-        global.streamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
-        response.writeHead(200, {
-            //'Content-Type': 'video/webm',
-            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-            'Cache-Control': 'no-cache'
-        });
-        global.streamProcess.stdout.pipe(response);
-        global.streamProcess.on('error', (err) =>{
-            console.error('Error', err);
-        });
-        global.streamProcess.on('close', () => {
-            console.log('Video stream has ended!');
-        });
-        let isRtpsHost = false;
-        const rptsHost = spawnOptions.filter(item => {
-            if (item === '--rtspHost') {
-                isRtpsHost = true;
-                return false;
-            }
-            return isRtpsHost;
-        });
-        console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
     let keep = true;
@@ -86,7 +55,6 @@ module.exports = function(resolveFileLocation) {
 
     function directStream(options) {
 
-        // TODO fix these options
         const spawnOptions = [options.filter(filterOptions).join(' ')];
         if (spawnOptions.length === 0) {
             const filtered =  DEFAULT_OPTIONS.filter(filterOptions).join(' ');
@@ -118,26 +86,21 @@ module.exports = function(resolveFileLocation) {
         console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
-    function saveVideoProcess(options, response) {
+    function saveVideoProcess(options) {
 
-        const filename = getVideoFilename();
-
-        const spawnOptions = options.concat();
-        spawnOptions.push('--filename');
-        spawnOptions.push(`${process.env.HOME}/images/${filename}`);
-        spawnOptions.push(`--timeout ${options.timeout ? options.timeout : 15}`);
-        if (spawnOptions.length === 0) {
-            spawnOptions.push(DEFAULT_OPTIONS);
+        if (!global.directStreamProcess) {
+            directStream(options);
         }
-        spawnOptions.unshift(SAVE_CMD);
-        const saveStream = childProcess.spawn(BASH_CMD, spawnOptions);
-        saveStream.stdout.on('data', data => {
-            console.log(data.toString());
-        });
-        saveStream.on('close', () => {
-            response.writeHead(200, {});
-            response.end(`<a href="/download?filename=${filename}">${filename}</a>`);
-        });
+
+        const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
+        const fileout = fs.createWriteStream(filename);
+        const callback = (d) => {
+            fileout.write(d);
+        };
+        global.directStreamProcess.stdout.on('data', callback);
+        setTimeout(() => {
+            global.directStreamProcess.stdout.off('data', callback);
+        }, 60000);
     }
 
     return {
@@ -150,7 +113,6 @@ module.exports = function(resolveFileLocation) {
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
         spawnVideoProcess,
-        sendVideoProcess,
         directStream,
         saveVideoProcess
     };
