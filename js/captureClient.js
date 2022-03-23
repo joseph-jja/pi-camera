@@ -79,12 +79,20 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
             const options = document.forms['cameraOptions'].previewOptions.value;
             const iframe = document.getElementById('videoDisplay');
-            if (options && options.length > 0) {
-                const previewOpts = JSON.parse(options);
-                iframe.src = `/preview?previewOpts=${previewOpts.join(' ')}`;
-            } else {
-                iframe.src = `/preview`;
-            }
+            fetch('/startPreview', {
+                method: 'GET'
+            }).then(resp => {
+                setMessage(resp);
+                if (options && options.length > 0) {
+                    const previewOpts = JSON.parse(options);
+                    iframe.src = `/preview?previewOpts=${previewOpts.join(' ')}`;
+                } else {
+                    iframe.src = `/preview`;
+                }
+            }).catch(e => {
+                console.log(e);
+            });
+
             ////const historyPath = `${window.location.origin}?params=${escape(options)}`;
             //window.history.pushState(escape(options), 'PI Camera', historyPath);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {

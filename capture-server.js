@@ -46,6 +46,18 @@ function getHTML(body) {
             <button type="submit" id="updateButton">
                 Update
             </button>
+            <br><br>
+            <button type="submit" id="saveStream">
+                Capture Stream
+            </button>
+            <br><br>
+            <button type="submit" id="startPreview">
+                Start Preview
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" id="stopPreview">
+                Stop Preview
+            </button>
         </form>
         <br><hr><br>
         <form name="shutdown" onsubmit="return false;">
@@ -177,7 +189,7 @@ async function start() {
         response.end('Writing file to disk');
     });
 
-    app.get('/startpreview', (request, response) => {
+    app.get('/startPreview', (request, response) => {
         //lastUpdateOpts
         let options = filterParams(request, 'previewOpts');
         if (options.length == 0) {
