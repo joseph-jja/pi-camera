@@ -42,8 +42,10 @@ async function listImageFile(imageDir) {
         return new Promise((resolve, reject) => {
             readdir(indir, (err, data) => {
                 if (err) {
+                    console.error(err);
                     reject(err);
                 } else {
+                    console.log('Got list ', data);
                     resolve(data);
                 }
             });
