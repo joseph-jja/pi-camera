@@ -176,7 +176,10 @@ async function start() {
 
     app.get('/startpreview', (request, response) => {
         //lastUpdateOpts
-        const options = filterParams(request, 'previewOpts');
+        let options = filterParams(request, 'previewOpts');
+        if (options.length == 0) {
+            options = lastUpdateOpts.concat();
+        }
         if (global.directStreamProcess) {
             const pid = global.directStreamProcess.pid;
             childProcess.exec(`kill -9 ${pid}`, () => {
