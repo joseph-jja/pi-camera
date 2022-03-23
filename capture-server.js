@@ -116,14 +116,14 @@ async function start() {
                     return item.split(' ');
                 }).reduce((acc, next) => acc.concat(next));
                 lastUpdateOpts = spawnOpts;
-                if (global.videoProcess) {
-                    const pid = global.videoProcess.pid;
+                if (global.directStreamProcess) {
+                    const pid = global.directStreamProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
-                        global.videoProcess = undefined;
-                        spawnVideoProcess(spawnOpts);
+                        global.directStreamProcess = undefined;
+                        directStream(spawnOpts);
                     });
                 } else {
-                    spawnVideoProcess(spawnOpts);
+                    directStream(spawnOpts);
                 }
                 response.writeHead(200, {});
                 response.end(`Executed script with options ${stringify(spawnOpts)}`);
