@@ -169,7 +169,7 @@ async function start() {
         global.directStreamProcess.stdout.on('data', callback);
         setTimeout(() => {
             global.directStreamProcess.stdout.off('data', callback);
-        }, 1000);
+        }, 60000);
         response.writeHead(200, {});
         response.end('Writing file to disk');
     });
