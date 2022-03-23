@@ -66,8 +66,12 @@ window.addEventListener('DOMContentLoaded', () => {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: options
-                }).then(resp => {
-                    setMessage(resp);
+                }).then(async resp => {
+                    await setMessage(resp);
+                    const formObj = document.forms['cameraOptions'],
+                        saveOptionsObj = formObj.previewOptions;
+                    const serverMsg = document.getElementById('server-messages');
+                    saveOptionsObj.value = serverMsg.innerHTML;
                 }).catch(e => {
                     console.log(e);
                 });
