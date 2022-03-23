@@ -75,8 +75,8 @@ function getHTML(body) {
                 <div id="image-files"></div>
             </form>
         </fieldset>
-        <br><hr><br>
-        <fieldset style="width: 275px; float: none;">
+        <br clear="both">
+        <fieldset style="width: 100%; float: none;">
             <form name="shutdown" onsubmit="return false;">
                 <button type="submit" id="shutdownButton">
                     Shutdown
