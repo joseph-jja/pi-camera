@@ -173,7 +173,7 @@ async function start() {
         const params = (request.query && request.query.saveOpts ? request.query.saveOpts : '');
         let saveOpts = [];
         if (params) {
-            saveOpts = JSON.parse(params);
+            saveOpts = params.split(',');
         }
         const options = saveOpts.filter(item => {
             return (item && item.length > 0);
