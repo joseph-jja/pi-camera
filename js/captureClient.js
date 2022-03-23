@@ -29,7 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
     function getFormOptions() {
 
         const formElements = Array.from(document.forms['cameraOptions']);
-        const bitrate = setBitrate(formElements);
+        //const bitrate = setBitrate(formElements);
         const options = formElements.filter(element => {
             const nodeName = element.nodeName.toLowerCase();
             return (nodeName !== 'button');
@@ -43,7 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }).reduce((acc, next) => {
             return `${acc} ${next}`.trim();
         });
-        return `${options} ${bitrate}`;
+        return options; //`${options} ${bitrate}`;
     }
 
     async function setMessage(resp) {
