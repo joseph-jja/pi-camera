@@ -21,7 +21,8 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         DEFAULT_OPTIONS,
         spawnVideoProcess,
-        directStream
+        directStream,
+        getVideoFilename
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
 
 const app = express();
