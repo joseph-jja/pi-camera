@@ -21,7 +21,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         DEFAULT_OPTIONS,
         //spawnVideoProcess,
-        saveStream,
+        saveVideoProcess,
         directStream,
         getVideoFilename
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
@@ -176,7 +176,7 @@ async function start() {
 
     app.get('/saveStream', (request, response) => {
 
-        saveStream(lastUpdateOpts);
+        saveVideoProcess(lastUpdateOpts);
         response.writeHead(200, {});
         response.end('Writing file to disk');
     });
