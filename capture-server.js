@@ -204,15 +204,20 @@ async function start() {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
+        const options = lastUpdateOpts.concat();
         if (global.directStreamProcess) {
-            global.directStreamProcess.stdout.on('data', (d) => {
-                response.write(d);
-                //console.log('Got data', d.length);
+            const pid = global.directStreamProcess.pid;
+            childProcess.exec(`kill -9 ${pid}`, () => {
+                global.directStreamProcess = undefined;
+                directStream(options);
             });
         } else {
-            response.writeHead(200, {});
-            response.write('Preview has not been started!');
+            directStream(options);
         }
+        global.directStreamProcess.stdout.on('data', (d) => {
+            response.write(d);
+            //console.log('Got data', d.length);
+        });
     });
 
     app.get('/config', (request, response) => {
