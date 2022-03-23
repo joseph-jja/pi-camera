@@ -49,13 +49,17 @@ function getHTML(body) {
             <br>
             <br>
             ${body}
-            <br>
+            <br><br>
             <button type="submit" id="updateButton">
                 Update
             </button>
             <br><br>
             <button type="submit" id="saveStream">
                 Capture Stream
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" id="listCaptures">
+                List Captures
             </button>
             <br><br>
             <button type="submit" id="startPreview">
