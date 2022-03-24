@@ -41,7 +41,9 @@ window.addEventListener('DOMContentLoaded', () => {
         }).map(element => {
             const tagName = element.tagName.toLowerCase();
             if (tagName === 'select') {
-                if ()
+                if (imageCaptureType === 'stream' && element.name === 'quality') {
+                    return '';
+                }
                 return element.selectedOptions[0].value;
             } else if (tagName !== 'input'){
                 return element.value;
