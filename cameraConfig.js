@@ -30,13 +30,12 @@ module.exports = [{
     paramName: '--metering',
     values: ['centre', 'spot', 'average'], // 'custom'
     defaultValue: 'centre'
-}/*, {
+}, {
     name: 'quality',
     paramName: '--quality',
     range: [1, 100],
-    step: 1,
-    defaultvalue: '20'
-}*/, {
+    step: 1
+}, {
     name: 'framerate',
     paramName: '--framerate',
     values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
