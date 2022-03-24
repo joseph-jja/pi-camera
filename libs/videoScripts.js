@@ -113,13 +113,11 @@ module.exports = function(resolveFileLocation) {
             fileout.write(d);
         };
         global.directStreamProcess.stdout.on('data', callback);
-        global.directStreamProcess.on('close', () => {
-            response.writeHead(200, {});
-            response.end('Finished writing file to disk');
-        });
         setTimeout(() => {
             global.directStreamProcess.stdout.off('data', callback);
             console.log(`Finished writing file ${filename}`);
+            response.writeHead(200, {});
+            response.end('Finished writing file to disk');
         }, 60000);
     }
 
