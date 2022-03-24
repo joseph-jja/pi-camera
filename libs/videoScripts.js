@@ -12,7 +12,6 @@ module.exports = function(resolveFileLocation) {
     const DEFAULT_OPTIONS = '--width 1640 --height 1232 --metering centre --framerate 15 --exposure normal'.split(' ');
 
     const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
-    const MJPEG_CMD = `${resolveFileLocation}/scripts/mjpegRestream.sh`;
     const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/directStream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
     const FFMPEG_RTSP_COPY_CMD = `${resolveFileLocation}/scripts/rtspCopyStream.sh`;
@@ -111,7 +110,6 @@ module.exports = function(resolveFileLocation) {
         BASH_CMD,
         DEFAULT_OPTIONS,
         VIDEO_CMD,
-        MJPEG_CMD,
         SAVE_CMD,
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
