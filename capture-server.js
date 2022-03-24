@@ -42,7 +42,7 @@ function getHTML(body) {
         <br>
         <label>Streaming options</label>
         <br>
-        <fieldset style="width: 450px; height: 550px; float: left;">
+        <fieldset style="width: 450px; height: 600px; float: left;">
             <form name="cameraOptions" onsubmit="return false;">
                 <input type="text" name="previewOptions" size=60">
                 <br>
@@ -66,7 +66,7 @@ function getHTML(body) {
                 </button>
             </form>
         </fieldset>
-        <fieldset style="width: 275px; height: 550px; float: left;">
+        <fieldset style="width: 275px; height: 600px; float: left;">
             <form name="imageFiles" onsubmit="return false;">
                 <div id="image-files"></div>
             </form>

@@ -31,6 +31,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function getFormOptions() {
 
+        const imageCaptureType = 'stream';
+
         const formElements = Array.from(formObj);
         //const bitrate = setBitrate(formElements);
         const options = formElements.filter(element => {
@@ -39,6 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }).map(element => {
             const tagName = element.tagName.toLowerCase();
             if (tagName === 'select') {
+                if ()
                 return element.selectedOptions[0].value;
             } else if (tagName !== 'input'){
                 return element.value;
