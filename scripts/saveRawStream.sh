@@ -17,4 +17,5 @@ echo "Running script ... " >> $FOREVER_LOG
 echo "IP Address: $IP_ADDRESS ..." >> $FOREVER_LOG
 echo "Options: $EXTRA_ARGS ..." >> $FOREVER_LOG
 
-/usr/bin/libcamera-raw --nopreview \$EXTRA_ARGS 
+# needs -o FILENAME.raw also -t 2000 - f
+/usr/bin/libcamera-raw --nopreview \$EXTRA_ARGS
