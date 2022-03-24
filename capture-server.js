@@ -22,6 +22,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         DEFAULT_OPTIONS,
         //spawnVideoProcess,
+        saveRawVideoData,
         saveVideoProcess,
         directStream,
         getVideoFilename
