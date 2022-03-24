@@ -42,6 +42,8 @@ module.exports = function(resolveFileLocation) {
 
         const spawnOptions = options.concat();
         spawnOptions.unshift(SAVE_RAW_CMD);
+        const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
+        spawnOptions.push(`-o ${filename}`);
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
         });
