@@ -26,13 +26,11 @@ window.addEventListener('DOMContentLoaded', () => {
         return '';
     }*/
 
-    const formObj = document.forms['cameraOptions'],
-        imageListForm = document.forms['imageFiles'];
+    const formObj = document.forms['cameraOptions'];
+    const serverMsg = document.getElementById('server-messages');
 
-    function getFormOptions() {
-
+    function getImageCaptureType() {
         const formElements = Array.from(formObj);
-        //const bitrate = setBitrate(formElements);
 
         const checkboxes = formElements.filter(element => {
             const nodeName = element.nodeName.toLowerCase(),
@@ -41,7 +39,15 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 
         const isImageCapture = checkboxes.filter(item => item.name === 'Image_Capture')[0];
-        const imageCaptureType = (isImageCapture && isImageCapture.checked) ? 'image' : 'stream';
+        return (isImageCapture && isImageCapture.checked) ? 'image' : 'stream';
+    }
+
+    function getFormOptions() {
+
+        const formElements = Array.from(formObj);
+        //const bitrate = setBitrate(formElements);
+
+        const imageCaptureType = getImageCaptureType();
 
         const options = formElements.filter(element => {
             const nodeName = element.nodeName.toLowerCase();
@@ -64,7 +70,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     async function setMessage(resp) {
         const msg = await resp.text();
-        const serverMsg = document.getElementById('server-messages');
         serverMsg.innerHTML = msg;
     }
 
@@ -81,10 +86,27 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function listImageCaptures() {
+        fetch('/imageList', {
+            method: 'GET'
+        }).then(async resp => {
+            const images = await resp.text();
+            const container = document.getElementById('image-files');
+            container.innerHTML = images;
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
         if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
+            const imageCaptureType = getImageCaptureType();
+            if (imageCaptureType === 'image') {
+                serverMsg.innerHTML = 'Uncheck Image_Capture to update options.';
+                return;
+            }
             const options = getFormOptions();
             fetch('/update', {
                 method: 'POST',
@@ -101,6 +123,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
+            const imageCaptureType = getImageCaptureType();
+            if (imageCaptureType === 'image') {
+                serverMsg.innerHTML = 'Uncheck Image_Capture to start preview.';
+                return;
+            }
             const options = getFormOptions();
             const iframe = document.getElementById('videoDisplay');
             fetch('/startPreview', {
@@ -127,24 +154,22 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
+            const imageCaptureType = getImageCaptureType();
+            if (imageCaptureType === 'image') {
+                serverMsg.innerHTML = 'Uncheck Image_Capture to start preview.';
+                return;
+            }
             getConfig();
             fetch('/saveStream', {
                 method: 'GET'
             }).then(resp => {
                 setMessage(resp);
+                listImageCaptures();
             }).catch(e => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'listCaptures') {
-            fetch('/imageList', {
-                method: 'GET'
-            }).then(async resp => {
-                const images = await resp.text();
-                const container = document.getElementById('image-files');
-                container.innerHTML = images;
-            }).catch(e => {
-                console.log(e);
-            });
+            listImageCaptures();
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
             fetch('/shutdown', {
                 method: 'POST',

@@ -42,7 +42,7 @@ function getHTML(body) {
         <br>
         <label>Streaming options</label>
         <br>
-        <fieldset style="width: 450px; height: 600px; float: left;">
+        <fieldset style="width: 450px; height: 650px; float: left;">
             <form name="cameraOptions" onsubmit="return false;">
                 <input type="text" name="previewOptions" size=60">
                 <br>
@@ -66,7 +66,7 @@ function getHTML(body) {
                 </button>
             </form>
         </fieldset>
-        <fieldset style="width: 275px; height: 600px; float: left;">
+        <fieldset style="width: 275px; height: 650px; float: left;">
             <form name="imageFiles" onsubmit="return false;">
                 <div id="image-files"></div>
             </form>
@@ -189,9 +189,7 @@ async function start() {
 
     app.get('/saveStream', (request, response) => {
 
-        saveVideoProcess(lastUpdateOpts);
-        response.writeHead(200, {});
-        response.end('Writing file to disk');
+        saveVideoProcess(lastUpdateOpts, response);
     });
 
     app.get('/imageList', (request, response) => {
@@ -258,6 +256,10 @@ async function start() {
             response.write(d);
             //console.log('Got data', d.length);
         });
+    });
+
+    app.get('/saveRawStream', (request, response) => {
+        saveRawVideoData(lastUpdateOpts, response);
     });
 
     app.get('/config', (request, response) => {

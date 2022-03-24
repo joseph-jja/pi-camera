@@ -14,7 +14,7 @@ module.exports = function(resolveFileLocation) {
     const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
     const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/directStream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
-    const FFMPEG_RTSP_COPY_CMD = `${resolveFileLocation}/scripts/rtspCopyStream.sh`;
+    const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
 
     function getVideoFilename() {
         const now = new Date();
@@ -35,6 +35,19 @@ module.exports = function(resolveFileLocation) {
         });
         global.videoProcess.stdout.on('data', (data) => {
             console.log(`${VIDEO_CMD}: ${data}`);
+        });
+    }
+
+    function saveRawVideoData(options, response) {
+
+        const spawnOptions = options.concat();
+        spawnOptions.unshift(SAVE_RAW_CMD);
+        const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
+            env: process.env
+        });
+        rawDataProcess.on('close', () => {
+            response.writeHead(200, {});
+            response.end('Saved raw data');
         });
     }
 
@@ -84,7 +97,7 @@ module.exports = function(resolveFileLocation) {
         console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
-    function saveVideoProcess(options) {
+    function saveVideoProcess(options, response) {
 
         if (!global.directStreamProcess) {
             directStream(options);
@@ -100,6 +113,10 @@ module.exports = function(resolveFileLocation) {
             fileout.write(d);
         };
         global.directStreamProcess.stdout.on('data', callback);
+        global.directStream.on('close', () => {
+            response.writeHead(200, {});
+            response.end('Finished writing file to disk');
+        });
         setTimeout(() => {
             global.directStreamProcess.stdout.off('data', callback);
             console.log(`Finished writing file ${filename}`);
@@ -111,9 +128,9 @@ module.exports = function(resolveFileLocation) {
         DEFAULT_OPTIONS,
         VIDEO_CMD,
         SAVE_CMD,
-        FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
         spawnVideoProcess,
+        saveRawVideoData,
         directStream,
         saveVideoProcess
     };
