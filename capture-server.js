@@ -24,6 +24,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         //spawnVideoProcess,
         saveRawVideoData,
         saveVideoProcess,
+        saveImagesData,
         directStream,
         getVideoFilename
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
@@ -194,6 +195,10 @@ async function start() {
 
     app.get('/saveStream', (request, response) => {
         saveVideoProcess(lastUpdateOpts, response);
+    });
+
+    app.get('/saveImage', (request, response) => {
+        saveImagesData(lastUpdateOpts, response);
     });
 
     app.get('/imageList', (request, response) => {
