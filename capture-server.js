@@ -188,7 +188,6 @@ async function start() {
     });
 
     app.get('/saveStream', (request, response) => {
-
         saveVideoProcess(lastUpdateOpts, response);
     });
 
