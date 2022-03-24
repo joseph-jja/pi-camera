@@ -53,8 +53,12 @@ function getHTML(body) {
                     Update
                 </button>
                 <br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button type="submit" id="saveStream">
                     Capture Stream
+                </button>
+                <button type="submit" id="saveRawStream">
+                    Capture RAW Stream
                 </button>
                 <br><br>
                 <button type="submit" id="startPreview">

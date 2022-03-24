@@ -45,9 +45,9 @@ module.exports = function(resolveFileLocation) {
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
         });
-        rawDataProcess.on('close', () => {
+        rawDataProcess.on('close', (code) => {
             response.writeHead(200, {});
-            response.end('Saved raw data');
+            response.end(`Saved raw data with status code ${code}.`);
         });
     }
 

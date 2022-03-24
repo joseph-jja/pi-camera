@@ -98,6 +98,23 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function saveRawDataStream(url) {
+        const imageCaptureType = getImageCaptureType();
+        if (imageCaptureType === 'image') {
+            serverMsg.innerHTML = 'Uncheck Image_Capture to save data.';
+            return;
+        }
+        getConfig();
+        fetch(url, {
+            method: 'GET'
+        }).then(resp => {
+            setMessage(resp);
+            listImageCaptures();
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
@@ -154,20 +171,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
-            const imageCaptureType = getImageCaptureType();
-            if (imageCaptureType === 'image') {
-                serverMsg.innerHTML = 'Uncheck Image_Capture to start preview.';
-                return;
-            }
-            getConfig();
-            fetch('/saveStream', {
-                method: 'GET'
-            }).then(resp => {
-                setMessage(resp);
-                listImageCaptures();
-            }).catch(e => {
-                console.log(e);
-            });
+            saveRawDataStream('/saveStream');
+        } else if (name.toLowerCase() === 'button' && target.id === 'saveRawStream') {
+            saveRawDataStream('/saveRawStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'listCaptures') {
             listImageCaptures();
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
