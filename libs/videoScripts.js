@@ -15,7 +15,6 @@ module.exports = function(resolveFileLocation) {
     const MJPEG_CMD = `${resolveFileLocation}/scripts/mjpegRestream.sh`;
     const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/directStream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
-    const FFMPEG_RUNNING_CMD = `${resolveFileLocation}/scripts/killPreview.sh`;
     const FFMPEG_RTSP_COPY_CMD = `${resolveFileLocation}/scripts/rtspCopyStream.sh`;
 
     function getVideoFilename() {
@@ -114,7 +113,6 @@ module.exports = function(resolveFileLocation) {
         VIDEO_CMD,
         MJPEG_CMD,
         SAVE_CMD,
-        FFMPEG_RUNNING_CMD,
         FFMPEG_RTSP_COPY_CMD,
         getVideoFilename,
         spawnVideoProcess,
