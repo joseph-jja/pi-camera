@@ -113,6 +113,8 @@ async function start() {
             return formFields.buildSelect(ritem);
         } else if (item.fieldValue) {
             return formFields.textField(item);
+        } else if (item.value) {
+            return formFields.checkboxField(item);
         } else {
             console.log(item);
             return '';

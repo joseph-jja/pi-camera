@@ -31,13 +31,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function getFormOptions() {
 
-        const imageCaptureType = 'stream';
-
         const formElements = Array.from(formObj);
         //const bitrate = setBitrate(formElements);
+
+        const checkboxes = formElements.filter(element => {
+            const nodeName = element.nodeName.toLowerCase(),
+                nodeType = element.type.toLowerCase();
+            return (nodeName === 'input' && nodeType === 'checkbox');
+        });
+
+        const isImageCapture = checkboxes.filter(item => item.name === 'Image_Capture')[0];
+        const imageCaptureType = (isImageCapture && isImageCapture.checked) ? 'image' : 'stream';
+
         const options = formElements.filter(element => {
             const nodeName = element.nodeName.toLowerCase();
-            return (nodeName !== 'button');
+            return (nodeName !== 'button' && nodeName !== 'input');
         }).map(element => {
             const tagName = element.tagName.toLowerCase();
             if (tagName === 'select') {
@@ -45,8 +53,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     return '';
                 }
                 return element.selectedOptions[0].value;
-            } else if (tagName !== 'input'){
-                return element.value;
             } else {
                 return '';
             }
