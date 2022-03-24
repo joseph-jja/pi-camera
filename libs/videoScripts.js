@@ -15,6 +15,7 @@ module.exports = function(resolveFileLocation) {
     const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/directStream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
     const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
+    const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
 
     function getVideoFilename() {
         const now = new Date();
@@ -43,6 +44,21 @@ module.exports = function(resolveFileLocation) {
         const spawnOptions = options.concat();
         spawnOptions.unshift(SAVE_RAW_CMD);
         const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'raw')}`;
+        spawnOptions.push(`-o ${filename}`);
+        const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
+            env: process.env
+        });
+        rawDataProcess.on('close', (code) => {
+            response.writeHead(200, {});
+            response.end(`Saved raw data with status code ${code}.`);
+        });
+    }
+
+    function saveImagesData(options, response) {
+
+        const spawnOptions = options.concat();
+        spawnOptions.unshift(SAVE_IMAGES_CMD);
+        const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'png')}`;
         spawnOptions.push(`-o ${filename}`);
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
@@ -131,6 +147,7 @@ module.exports = function(resolveFileLocation) {
         getVideoFilename,
         spawnVideoProcess,
         saveRawVideoData,
+        saveImagesData,
         directStream,
         saveVideoProcess
     };
