@@ -28,6 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const formObj = document.forms['cameraOptions'];
     const serverMsg = document.getElementById('server-messages');
+    let intervalTimer;
 
     function getImageCaptureType() {
         const formElements = Array.from(formObj);
@@ -115,6 +116,26 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function runPreview() {
+        const options = getFormOptions();
+        const iframe = document.getElementById('videoDisplay');
+        fetch('/startPreview', {
+            method: 'POST',
+            cache: 'no-cache',
+            referrerPolicy: 'no-referrer',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: options
+        }).then(resp => {
+            setMessage(resp);
+            getConfig();
+            iframe.src = `/preview`;
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
@@ -145,23 +166,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 serverMsg.innerHTML = 'Uncheck Image_Capture to start preview.';
                 return;
             }
-            const options = getFormOptions();
-            const iframe = document.getElementById('videoDisplay');
-            fetch('/startPreview', {
-                method: 'POST',
-                cache: 'no-cache',
-                referrerPolicy: 'no-referrer',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: options
-            }).then(resp => {
-                setMessage(resp);
-                getConfig();
-                iframe.src = `/preview`;
-            }).catch(e => {
-                console.log(e);
-            });
+            runPreview();
+            intervalTimer = setInterval(() => {
+                fetch('/stopPreview', {
+                    method: 'GET'
+                }).then(() => {
+                    runPreview();
+                }).catch(e => {
+                    console.log(e);
+                });
+            }, 30000);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             fetch('/stopPreview', {
                 method: 'GET'

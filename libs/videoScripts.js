@@ -6,6 +6,7 @@ module.exports = function(resolveFileLocation) {
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
+    const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
 
     const BASH_CMD = '/bin/bash';
 
@@ -48,7 +49,7 @@ module.exports = function(resolveFileLocation) {
             env: process.env
         });
         global.videoProcess.stdout.on('data', (data) => {
-            console.log(`${VIDEO_CMD}: ${data}`);
+            logger.info(`${VIDEO_CMD}: ${data}`);
         });
     }
 
@@ -113,7 +114,7 @@ module.exports = function(resolveFileLocation) {
             console.error('Error', err);
         });
         global.directStreamProcess.on('close', () => {
-            console.log('Video stream has ended!');
+            logger.info('Video stream has ended!');
             DevNull.destroy();
         });
         let isRtpsHost = false;
@@ -124,7 +125,7 @@ module.exports = function(resolveFileLocation) {
             }
             return isRtpsHost;
         });
-        console.log(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
+        logger.info(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
     }
 
     function saveVideoProcess(options, response) {
@@ -145,7 +146,7 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess.stdout.on('data', callback);
         setTimeout(() => {
             global.directStreamProcess.stdout.off('data', callback);
-            console.log(`Finished writing file ${filename}`);
+            logger.info(`Finished writing file ${filename}`);
             response.writeHead(200, {});
             response.end('Finished writing file to disk');
         }, 60000);
