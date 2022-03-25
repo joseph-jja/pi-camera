@@ -265,8 +265,8 @@ async function start() {
             response.write(d);
             //console.log('Got data', d.length);
         });
-        global.directStreamProcess.stdout.on('pause', () => {
-            //console.log('Stream paused');
+        global.directStreamProcess.stdout.on('error', (e) => {
+            console.log('Stream error ', e);
         });
         global.directStreamProcess.stdout.on('close', () => {
             console.log('Stream closed');
