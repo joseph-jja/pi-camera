@@ -67,9 +67,21 @@ module.exports = function(resolveFileLocation) {
         });
     }
 
+    let replaceFlag = false;
+    function replaceOption(item) {
+        if (item === '--framerate') {
+            replaceFlag = true;
+            return '-t';
+        } else if (replaceFlag) {
+            replaceFlag = false;
+            return (1 / item); // convert framerate to how long we want to capture the image
+        }
+        return item;
+    }
+
     function saveImagesData(options, response) {
 
-        const spawnOptions = options.concat();
+        const spawnOptions = options.map(replaceOption).concat();
         spawnOptions.unshift(SAVE_IMAGES_CMD);
         const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'png')}`;
         spawnOptions.push(`-o ${filename}`);
