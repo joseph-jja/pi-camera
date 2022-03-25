@@ -19,6 +19,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getHostname,
         listImageFiles
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
+    logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename),
     {
         DEFAULT_OPTIONS,
         //spawnVideoProcess,
@@ -122,7 +123,7 @@ async function start() {
         } else if (item.value) {
             return formFields.checkboxField(item);
         } else {
-            console.log(item);
+            logger.info(`${stringify(item)}`);
             return '';
         }
     }).reduce((acc, next) => {
@@ -167,8 +168,9 @@ async function start() {
                     directStream(spawnOpts);
                 }
                 response.writeHead(200, {});
-                response.end(`Executed script with options ${stringify(spawnOpts)}`);
-                console.log('Executed script with options', spawnOpts);
+                const message = `Executed script with options ${stringify(spawnOpts)}`;
+                response.end(message);
+                logger.info(message);
             }
         } else {
             response.writeHead(200, {});
@@ -184,7 +186,7 @@ async function start() {
                 childProcess.exec(`kill -9 \`ps -ef | grep libcamera | awk '{print $2}' | grep -v grep \``, () => {
                     response.writeHead(200, {});
                     response.end('Preview should have stopped.');
-                    console.log('Preview should have stopped.');
+                    logger.info('Preview should have stopped.');
                 });
             });
             return;
@@ -218,9 +220,9 @@ async function start() {
                     comment: 'Select an image to delete or download or rename',
                     values: filedata.message
                 };
-                console.log('Got select data ', selectData);
+                logger.verbose(`Got select data ${stringify(selectData)}`);
                 const htmlForm = formFields.buildSelect(selectData);
-                console.log('Got html form data ', htmlForm);
+                logger.verbose(`Got html form data ${stringify(htmlForm)}`);
                 response.writeHead(200, {
                     'Content-Type': 'text/html'
                 });
@@ -263,16 +265,16 @@ async function start() {
         });
         global.directStreamProcess.stdout.on('data', (d) => {
             response.write(d);
-            //console.log('Got data', d.length);
+            //logger.info(`Got data ${d.length}`);
         });
         global.directStreamProcess.stdout.on('error', (e) => {
-            console.log('Stream error ', e);
+            logger.error(`Stream error ${stringify(e)}`);
         });
         global.directStreamProcess.stdout.on('close', () => {
-            console.log('Stream closed');
+            logger.info('Stream closed');
         });
         global.directStreamProcess.stdout.on('end', () => {
-            console.log('Stream end');
+            logger.info('Stream end');
         });
     });
 
@@ -296,7 +298,7 @@ async function start() {
     const server = http.createServer(app);
     server.listen(port);
 
-    console.log(`Listening on IP: ${ipaddr} and port ${port}`);
+    logger.info(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
     //spawnVideoProcess(DEFAULT_OPTIONS);
