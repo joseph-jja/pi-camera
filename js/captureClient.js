@@ -168,13 +168,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             runPreview();
             intervalTimer = setInterval(() => {
-                fetch('/stopPreview', {
-                    method: 'GET'
-                }).then(() => {
-                    runPreview();
-                }).catch(e => {
-                    console.log(e);
-                });
+                runPreview();
             }, 30000);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             fetch('/stopPreview', {
