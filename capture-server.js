@@ -263,8 +263,15 @@ async function start() {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
+        response.on('data', (d) => {
+            //logger.info(`Got data ${d.length}`);
+        });
         global.directStreamProcess.stdout.on('data', (d) => {
-            response.write(d);
+            response.write(d, undefined, (err, d) => {
+                if (err) {
+                    logger.error(`Response write error ${stringify(err)}`);
+                }
+            });
             //logger.info(`Got data ${d.length}`);
         });
         global.directStreamProcess.stdout.on('error', (e) => {
