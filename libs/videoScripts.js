@@ -71,7 +71,7 @@ module.exports = function(resolveFileLocation) {
     function replaceOption(item) {
         if (item === '--framerate') {
             replaceFlag = true;
-            return '-t';
+            return '---shutter';
         } else if (replaceFlag) {
             replaceFlag = false;
             return (1 / item); // convert framerate to how long we want to capture the image
