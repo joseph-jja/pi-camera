@@ -5,6 +5,7 @@ const os = require('os'),
         resolve,
         basename
     } = require('path'),
+    { pipeline } = require('stream'),
     childProcess = require('child_process');
 
 const express = require('express'),
@@ -263,10 +264,15 @@ async function start() {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        response.on('data', (d) => {
-            //logger.info(`Got data ${d.length}`);
-        });
-        global.directStreamProcess.stdout.on('data', (d) => {
+        pipeline(global.directStreamProcess.stdout, response,
+            (err) => {
+            if (err) {
+              logger.error(`Stream error ${stringify(err)}`);
+            } else {
+              logger.info('Stream end');
+            }
+          })
+        /*global.directStreamProcess.stdout.on('data', (d) => {
             response.write(d);
             //logger.info(`Got data ${d.length}`);
         });
@@ -278,7 +284,7 @@ async function start() {
         });
         global.directStreamProcess.stdout.on('end', () => {
             logger.info('Stream end');
-        });
+        });*/
     });
 
     app.get('/saveRawStream', (request, response) => {
