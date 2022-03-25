@@ -27,6 +27,19 @@ module.exports = function(resolveFileLocation) {
     global.videoProcess;
     global.directStreamProcess;
 
+    let keep = true;
+    function filterOptions(item) {
+        if ( item === '--profile' || item === '--bitrate' ||
+            item === '--quality' ) {
+            keep = false;
+            return false;
+        } else if (!keep) {
+            keep = true;
+            return false;
+        }
+        return true;
+    }
+
     function spawnVideoProcess(options) {
 
         const spawnOptions = options.concat();
@@ -41,7 +54,7 @@ module.exports = function(resolveFileLocation) {
 
     function saveRawVideoData(options, response) {
 
-        const spawnOptions = options.concat();
+        const spawnOptions = [options.filter(filterOptions).join(' ')];
         spawnOptions.unshift(SAVE_RAW_CMD);
         const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'raw')}`;
         spawnOptions.push(`-o ${filename}`);
@@ -67,19 +80,6 @@ module.exports = function(resolveFileLocation) {
             response.writeHead(200, {});
             response.end(`Saved raw data with status code ${code}.`);
         });
-    }
-
-    let keep = true;
-    function filterOptions(item) {
-        if ( item === '--profile' || item === '--bitrate' ||
-            item === '--quality' ) {
-            keep = false;
-            return false;
-        } else if (!keep) {
-            keep = true;
-            return false;
-        }
-        return true;
     }
 
     function directStream(options) {
