@@ -265,6 +265,15 @@ async function start() {
             response.write(d);
             //console.log('Got data', d.length);
         });
+        global.directStreamProcess.stdout.on('pause', () => {
+            console.log('Stream paused');
+        });
+        global.directStreamProcess.stdout.on('close', () => {
+            console.log('Stream closed');
+        });
+        global.directStreamProcess.stdout.on('end', () => {
+            console.log('Stream end');
+        });
     });
 
     app.get('/saveRawStream', (request, response) => {
