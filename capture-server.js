@@ -267,11 +267,7 @@ async function start() {
             //logger.info(`Got data ${d.length}`);
         });
         global.directStreamProcess.stdout.on('data', (d) => {
-            response.write(d, undefined, (err, d) => {
-                if (err) {
-                    logger.error(`Response write error ${stringify(err)}`);
-                }
-            });
+            response.write(d);
             //logger.info(`Got data ${d.length}`);
         });
         global.directStreamProcess.stdout.on('error', (e) => {
