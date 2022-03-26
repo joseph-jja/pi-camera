@@ -267,7 +267,7 @@ async function start() {
         });
 
         const previewCmd = previewProcess();
-        pipeline(global.directStreamProcess.stdout,
+        /*pipeline(global.directStreamProcess.stdout,
             //previewCmd,
             response,
             (err) => {
@@ -277,8 +277,13 @@ async function start() {
               logger.info('Stream end');
             }
         });
-        /*global.directStreamProcess.stdout.on('data', (d) => {
+        previewCmd.stdout.on('data', (d) => {
             response.write(d);
+            //logger.info(`Got data ${d.length}`);
+        });
+        global.directStreamProcess.stdout.on('data', (d) => {
+            previewCmd.write(d);
+            //response.write(d);
             //logger.info(`Got data ${d.length}`);
         });
         global.directStreamProcess.stdout.on('error', (e) => {
@@ -289,7 +294,8 @@ async function start() {
         });
         global.directStreamProcess.stdout.on('end', () => {
             logger.info('Stream end');
-        });*/
+            response.end();
+        });
     });
 
     app.get('/saveRawStream', (request, response) => {
