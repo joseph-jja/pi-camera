@@ -28,7 +28,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const formObj = document.forms['cameraOptions'];
     const serverMsg = document.getElementById('server-messages');
-    let intervalTimer;
 
     function getImageCaptureType() {
         const formElements = Array.from(formObj);
@@ -117,25 +116,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function runPreview() {
-        const options = getFormOptions();
         const iframe = document.getElementById('videoDisplay');
-        fetch('/startPreview', {
-            method: 'POST',
-            cache: 'no-cache',
-            referrerPolicy: 'no-referrer',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: options
-        }).then(resp => {
-            setMessage(resp);
-            getConfig();
-            setTimeout(() => {
-                iframe.src = '/preview';
-            }, 100);
-        }).catch(e => {
-            console.log(e);
-        });
+        setTimeout(() => {
+            iframe.src = '/preview';
+        }, 100);
     }
 
     document.addEventListener('click', (event) => {
@@ -169,20 +153,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             runPreview();
-            //intervalTimer = setInterval(() => {
-            //runPreview();
-            //}, 30000);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             const iframe = document.getElementById('videoDisplay');
             iframe.src = '';
-            //clearInterval(intervalTimer);
-            /* fetch('/stopPreview', {
+            fetch('/stopPreview', {
                 method: 'GET'
             }).then(resp => {
                 setMessage(resp);
             }).catch(e => {
                 console.log(e);
-            });*/
+            });
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             saveRawDataStream('/saveStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'saveRawStream') {
