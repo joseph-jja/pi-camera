@@ -235,7 +235,7 @@ async function start() {
     app.post('/startPreview', (request, response) => {
 
         response.writeHead(200, {});
-        response.end('Direct preview has started');
+        response.end('Preview has started');
     });
 
     app.get('/preview', (request, response) => {
