@@ -272,7 +272,7 @@ async function start() {
         const globalStreamPreview = (d) => {
             previewCmd.stdin.write(d);
         };
-        response.on('close', () => {
+        response.on('finish', () => {
             global.directStreamProcess.stdout.off('data', globalStreamPreview);
             previewCmd.stdout.off('data', previewCmdCB);
             childProcess.exec(`kill -9 ${previewCmd.pid}`);
