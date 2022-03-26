@@ -25,4 +25,4 @@ echo "IP Address: $IP_ADDRESS ..." >> $FOREVER_LOG
 echo "Options: $EXTRA_ARGS ..." >> $FOREVER_LOG
 
 /usr/bin/libcamera-vid --codec mjpeg $EXTRA_ARGS --nopreview -t 0 --inline -o - |
-    ffmpeg -f mpjpeg -i pipe: -an -filter_threads 1 -c:v copy -f mpjpeg -
+    ffmpeg -i pipe: -an -filter_threads 1 -c:v copy -f mpjpeg -
