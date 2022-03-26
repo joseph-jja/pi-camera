@@ -1,16 +1,21 @@
 const childProcess = require('child_process'),
     fs = require('fs');
 
+global.videoProcess;
+global.directStreamProcess;
+
+const BASH_CMD = '/bin/bash';
+
+const DEFAULT_OPTIONS = '--width 1640 --height 1232 --metering centre --framerate 15 --exposure normal'.split(' ');
+
+const PREVIEW_PROCESS = 'ffmpeg -f mpjpeg -i pipe: -an -filter_threads 1 -s 640x480 -filter:v fps=12 -f mpjpeg -';
+
 module.exports = function(resolveFileLocation) {
 
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
-
-    const BASH_CMD = '/bin/bash';
-
-    const DEFAULT_OPTIONS = '--width 1640 --height 1232 --metering centre --framerate 15 --exposure normal'.split(' ');
 
     const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
     const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/directStream.sh`;
@@ -24,9 +29,6 @@ module.exports = function(resolveFileLocation) {
         const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
         return `capture-${datePart}${timePart}.mjpeg`;
     }
-
-    global.videoProcess;
-    global.directStreamProcess;
 
     let keep = true;
     function filterOptions(item) {
@@ -152,6 +154,10 @@ module.exports = function(resolveFileLocation) {
         }, 60000);
     }
 
+    function previewProcess() {
+        return childProcess.spawn(PREVIEW_PROCESS);
+    }
+
     return {
         BASH_CMD,
         DEFAULT_OPTIONS,
@@ -162,6 +168,7 @@ module.exports = function(resolveFileLocation) {
         saveRawVideoData,
         saveImagesData,
         directStream,
+        previewProcess,
         saveVideoProcess
     };
 

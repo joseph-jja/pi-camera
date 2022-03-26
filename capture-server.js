@@ -27,6 +27,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         saveRawVideoData,
         saveVideoProcess,
         saveImagesData,
+        previewProcess,
         directStream,
         getVideoFilename
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
@@ -264,7 +265,11 @@ async function start() {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        pipeline(global.directStreamProcess.stdout, response,
+
+        const previewCmd = previewProcess();
+        pipeline(global.directStreamProcess.stdout,
+            previewCmd,
+            response,
             (err) => {
             if (err) {
               logger.error(`Stream error ${stringify(err)}`);
