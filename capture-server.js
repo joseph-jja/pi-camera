@@ -5,7 +5,6 @@ const os = require('os'),
         resolve,
         basename
     } = require('path'),
-    { pipeline } = require('stream'),
     childProcess = require('child_process');
 
 const express = require('express'),
@@ -267,34 +266,23 @@ async function start() {
         });
 
         const previewCmd = previewProcess();
-        /*pipeline(global.directStreamProcess.stdout,
-            //previewCmd,
-            response,
-            (err) => {
-            if (err) {
-              logger.error(`Stream error ${stringify(err)}`);
-            } else {
-              logger.info('Stream end');
-            }
-        });*/
-        previewCmd.stdout.on('data', (d) => {
+        const previewCmdCB = (d) => {
             response.write(d);
-            //logger.info(`Got data ${d.length}`);
+        };
+        response.on('finish', () {
+            previewCmd.stdout.off('data', previewCmdCB);
+            childProcess.exec(`kill -9 ${previewCmd.pid}`);
         });
+        previewCmd.stdout.on('data', previewCmdCB);
+
         global.directStreamProcess.stdout.on('data', (d) => {
             previewCmd.stdin.write(d);
-            //response.write(d);
-            //logger.info(`Got data ${d.length}`);
         });
-        global.directStreamProcess.stdout.on('error', (e) => {
+        global.directStreamProcess.stdout.once('error', (e) => {
             logger.error(`Stream error ${stringify(e)}`);
         });
-        global.directStreamProcess.stdout.on('close', () => {
+        global.directStreamProcess.stdout.once('close', () => {
             logger.info('Stream closed');
-        });
-        global.directStreamProcess.stdout.on('end', () => {
-            logger.info('Stream end');
-            response.end();
         });
     });
 
