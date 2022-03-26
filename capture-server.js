@@ -269,15 +269,18 @@ async function start() {
         const previewCmdCB = (d) => {
             response.write(d);
         };
+        const globalStreamPreview = (d) => {
+            previewCmd.stdin.write(d);
+        });
         response.on('finish', () => {
+            global.directStreamProcess.stdout.off('data', globalStreamPreview);
             previewCmd.stdout.off('data', previewCmdCB);
             childProcess.exec(`kill -9 ${previewCmd.pid}`);
         });
         previewCmd.stdout.on('data', previewCmdCB);
 
-        global.directStreamProcess.stdout.on('data', (d) => {
-            previewCmd.stdin.write(d);
-        });
+        global.directStreamProcess.stdout.on('data', globalStreamPreview);
+
         global.directStreamProcess.stdout.once('error', (e) => {
             logger.error(`Stream error ${stringify(e)}`);
         });
