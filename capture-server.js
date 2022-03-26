@@ -271,7 +271,7 @@ async function start() {
         };
         const globalStreamPreview = (d) => {
             previewCmd.stdin.write(d);
-        });
+        };
         response.on('finish', () => {
             global.directStreamProcess.stdout.off('data', globalStreamPreview);
             previewCmd.stdout.off('data', previewCmdCB);
