@@ -117,9 +117,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function runPreview() {
-        const options = getFormOptions();
+        //const options = getFormOptions();
         const iframe = document.getElementById('videoDisplay');
-        fetch('/startPreview', {
+        /*fetch('/startPreview', {
             method: 'POST',
             cache: 'no-cache',
             referrerPolicy: 'no-referrer',
@@ -129,11 +129,13 @@ window.addEventListener('DOMContentLoaded', () => {
             body: options
         }).then(resp => {
             setMessage(resp);
-            getConfig();
-            iframe.src = `/preview`;
+            getConfig();*/
+            setTimeout(() => {
+                iframe.src = `/preview`;
+            }, 100);/*
         }).catch(e => {
             console.log(e);
-        });
+        });*/
     }
 
     document.addEventListener('click', (event) => {
