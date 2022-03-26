@@ -154,7 +154,7 @@ module.exports = function(resolveFileLocation) {
     }
 
     function previewProcess() {
-        return childProcess.spawn(PREVIEW_PROCESS);
+        return childProcess.spawn(BASH_CMD, [PREVIEW_PROCESS]);
     }
 
     return {
