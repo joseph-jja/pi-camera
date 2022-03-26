@@ -8,8 +8,6 @@ const BASH_CMD = '/bin/bash';
 
 const DEFAULT_OPTIONS = '--width 1640 --height 1232 --metering centre --framerate 15 --exposure normal'.split(' ');
 
-const PREVIEW_PROCESS = 'ffmpeg -f mpjpeg -i pipe: -an -filter_threads 1 -s 640x480 -filter:v fps=12 -f mpjpeg -';
-
 module.exports = function(resolveFileLocation) {
 
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
@@ -22,6 +20,7 @@ module.exports = function(resolveFileLocation) {
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
     const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
+    const PREVIEW_PROCESS = `${resolveFileLocation}/scripts/previewStream.sh`;
 
     function getVideoFilename() {
         const now = new Date();
