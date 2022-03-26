@@ -265,9 +265,9 @@ async function start() {
             'Cache-Control': 'no-cache'
         });
 
-        childProcess.execSync(`kill -9 \`ps -ef | grep previewStream | awk '{print $2}' | grep -v grep \``);
-        childProcess.exec(`kill -9 \`ps -ef | grep "filter:v fps" | awk '{print $2}' | grep -v grep \``);
-        logger.info('Killed all preview processes');
+        //childProcess.execSync(`kill -9 \`ps -ef | grep previewStream | awk '{print $2}' | grep -v grep \``);
+        //childProcess.exec(`kill -9 \`ps -ef | grep "filter:v fps" | awk '{print $2}' | grep -v grep \``);
+        //logger.info('Killed all preview processes');
 
         const previewCmd = previewProcess();
         const previewCmdCB = (d) => {
