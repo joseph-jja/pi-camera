@@ -168,7 +168,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             runPreview();
             //intervalTimer = setInterval(() => {
-            runPreview();
+            //runPreview();
             //}, 30000);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             //clearInterval(intervalTimer);
