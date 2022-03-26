@@ -282,7 +282,7 @@ async function start() {
             //logger.info(`Got data ${d.length}`);
         });
         global.directStreamProcess.stdout.on('data', (d) => {
-            previewCmd.stdout.write(d);
+            previewCmd.stdin.write(d);
             //response.write(d);
             //logger.info(`Got data ${d.length}`);
         });
