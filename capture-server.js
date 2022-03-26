@@ -268,7 +268,7 @@ async function start() {
 
         const previewCmd = previewProcess();
         pipeline(global.directStreamProcess.stdout,
-            previewCmd,
+            //previewCmd,
             response,
             (err) => {
             if (err) {
@@ -276,7 +276,7 @@ async function start() {
             } else {
               logger.info('Stream end');
             }
-          })
+        });
         /*global.directStreamProcess.stdout.on('data', (d) => {
             response.write(d);
             //logger.info(`Got data ${d.length}`);
