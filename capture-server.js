@@ -237,17 +237,13 @@ async function start() {
     });
 
     app.post('/startPreview', (request, response) => {
-        const hasRequestData = (request.body && Object.keys(request.body).length > 0);
-        const options = hasRequestData ? filterRequestBody(request.body) : lastUpdateOpts.concat();
 
-        if (global.directStreamProcess) {
-            const pid = global.directStreamProcess.pid;
-            childProcess.exec(`kill -9 ${pid}`, () => {
-                global.directStreamProcess = undefined;
-                directStream(options);
-            });
-        } else {
-            directStream(options);
+        try {
+            childProcess.execSync(`kill -9 \`ps -ef | grep previewStream | awk '{print $2}' | grep -v grep \``);
+            childProcess.exec(`kill -9 \`ps -ef | grep "filter:v fps" | awk '{print $2}' | grep -v grep \``);
+            logger.info('Killed all preview processes');
+        } catch(e) {
+            logger.info('Nothing happened!');
         }
         response.writeHead(200, {});
         response.end('Direct preview has started');
@@ -264,10 +260,6 @@ async function start() {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-
-        //childProcess.execSync(`kill -9 \`ps -ef | grep previewStream | awk '{print $2}' | grep -v grep \``);
-        //childProcess.exec(`kill -9 \`ps -ef | grep "filter:v fps" | awk '{print $2}' | grep -v grep \``);
-        //logger.info('Killed all preview processes');
 
         const previewCmd = previewProcess();
         const previewCmdCB = (d) => {
