@@ -173,6 +173,7 @@ window.addEventListener('DOMContentLoaded', () => {
             //runPreview();
             //}, 30000);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
+            const iframe = document.getElementById('videoDisplay');
             iframe.src = '';
             //clearInterval(intervalTimer);
             /* fetch('/stopPreview', {
