@@ -131,7 +131,7 @@ window.addEventListener('DOMContentLoaded', () => {
             setMessage(resp);
             getConfig();*/
             setTimeout(() => {
-                iframe.src = `/preview`;
+                iframe.src = '/preview';
             }, 100);/*
         }).catch(e => {
             console.log(e);
@@ -173,14 +173,15 @@ window.addEventListener('DOMContentLoaded', () => {
             //runPreview();
             //}, 30000);
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
+            iframe.src = '';
             //clearInterval(intervalTimer);
-            fetch('/stopPreview', {
+            /* fetch('/stopPreview', {
                 method: 'GET'
             }).then(resp => {
                 setMessage(resp);
             }).catch(e => {
                 console.log(e);
-            });
+            });*/
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             saveRawDataStream('/saveStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'saveRawStream') {
