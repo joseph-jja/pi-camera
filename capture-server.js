@@ -180,20 +180,16 @@ async function start() {
     });
 
     app.get('/stopPreview', (request, response) => {
-        if (global.directStreamProcess) {
-            const pid = global.directStreamProcess.pid;
-            childProcess.exec(`kill -9 ${pid}`, () => {
-                global.directStreamProcess = undefined;
-                childProcess.exec(`kill -9 \`ps -ef | grep libcamera | awk '{print $2}' | grep -v grep \``, () => {
-                    response.writeHead(200, {});
-                    response.end('Preview should have stopped.');
-                    logger.info('Preview should have stopped.');
-                });
-            });
-            return;
+        try {
+            childProcess.execSync(`kill -9 \`ps -ef | grep previewStream | awk '{print $2}' | grep -v grep \``);
+            childProcess.exec(`kill -9 \`ps -ef | grep "filter:v fps" | awk '{print $2}' | grep -v grep \``);
+            logger.info('Killed all preview processes');
+        } catch(e) {
+            logger.info('Nothing happened!');
         }
         response.writeHead(200, {});
-        response.end('Nothing happened!');
+        response.end('Preview should have stopped.');
+        logger.info('Preview should have stopped.');
     });
 
     app.get('/saveStream', (request, response) => {
@@ -238,13 +234,6 @@ async function start() {
 
     app.post('/startPreview', (request, response) => {
 
-        try {
-            childProcess.execSync(`kill -9 \`ps -ef | grep previewStream | awk '{print $2}' | grep -v grep \``);
-            childProcess.exec(`kill -9 \`ps -ef | grep "filter:v fps" | awk '{print $2}' | grep -v grep \``);
-            logger.info('Killed all preview processes');
-        } catch(e) {
-            logger.info('Nothing happened!');
-        }
         response.writeHead(200, {});
         response.end('Direct preview has started');
     });
@@ -268,7 +257,7 @@ async function start() {
         const globalStreamPreview = (d) => {
             previewCmd.stdin.write(d);
         };
-        response.on('finish', () => {
+        response.on('close', () => {
             global.directStreamProcess.stdout.off('data', globalStreamPreview);
             previewCmd.stdout.off('data', previewCmdCB);
             childProcess.exec(`kill -9 ${previewCmd.pid}`);
