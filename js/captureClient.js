@@ -117,7 +117,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function runPreview() {
-        //const options = getFormOptions();
+        const options = getFormOptions();
         const iframe = document.getElementById('videoDisplay');
         fetch('/startPreview', {
             method: 'POST',
