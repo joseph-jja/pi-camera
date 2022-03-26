@@ -276,7 +276,7 @@ async function start() {
             } else {
               logger.info('Stream end');
             }
-        });
+        });*/
         previewCmd.stdout.on('data', (d) => {
             response.write(d);
             //logger.info(`Got data ${d.length}`);
