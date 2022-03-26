@@ -269,7 +269,7 @@ async function start() {
         const previewCmdCB = (d) => {
             response.write(d);
         };
-        response.on('finish', () {
+        response.on('finish', () => {
             previewCmd.stdout.off('data', previewCmdCB);
             childProcess.exec(`kill -9 ${previewCmd.pid}`);
         });
