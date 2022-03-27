@@ -42,6 +42,9 @@ function getHTML(body) {
     </head>
     <body>
         <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
+        <!--<video controls width="640" height="480">
+            <source src="/preview-mp4" type="video/mp4">
+        </video>-->
         <div id="server-messages"></div>
         <br>
         <label>Streaming options</label>
