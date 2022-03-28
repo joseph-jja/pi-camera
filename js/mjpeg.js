@@ -6,38 +6,38 @@ MJPEG.Stream = function(args) {
     var self = this;
     var autoStart = args.autoStart || false;
 
-    self.url = args.url;
-    self.refreshRate = args.refreshRate || 500;
-    self.onStart = args.onStart || null;
+    this.url = args.url;
+    this.refreshRate = args.refreshRate || 500;
+    this.onStart = args.onStart || null;
     self.onFrame = args.onFrame || null;
-    self.onStop = args.onStop || null;
+    this.onStop = args.onStop || null;
     self.callbacks = {};
-    self.running = false;
-    self.frameTimer = 0;
+    this.running = false;
+    this.frameTimer = 0;
 
     self.img = new Image();
     if (autoStart) {
         self.img.onload = self.start;
     }
-    self.img.src = self.url;
+    self.img.src = this.url;
 
     const setRunning = (running) => {
-        self.running = running;
-        if (self.running) {
-            self.img.src = self.url;
-            self.frameTimer = setInterval(function() {
+        this.running = running;
+        if (this.running) {
+            self.img.src = this.url;
+            this.frameTimer = setInterval(function() {
                 if (self.onFrame) {
                     self.onFrame(self.img);
                 }
-            }, self.refreshRate);
-            if (self.onStart) {
-                self.onStart();
+            }, this.refreshRate);
+            if (this.onStart) {
+                this.onStart();
             }
         } else {
             self.img.src = "#";
-            clearInterval(self.frameTimer);
-            if (self.onStop) {
-                self.onStop();
+            clearInterval(this.frameTimer);
+            if (this.onStop) {
+                this.onStop();
             }
         }
     };
