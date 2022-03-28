@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Player</title>
+  </head>
+  <body>
+    <canvas id="player" style="background: #000;">
+      Your browser sucks.
+    </canvas>
+  </body>
+  <script src="mjpeg.js"></script>
+  <script>
+    //Leave your .mjpeg video URL here.
+    var player = new MJPEG.Player("player", "/mjpg/video.mjpg");
+    player.start();
+  </script>
+</html>
