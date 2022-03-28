@@ -109,8 +109,8 @@ class MJPEGPlayer {
             height: img.naturalHeight
         };
         var dstRect = this.scaleRect(srcRect, {
-            width: this.canvas.width,
-            height: this.canvas.height
+            width: this.options.width,
+            height: this.options.height
         });
         try {
             this.context.drawImage(img,
