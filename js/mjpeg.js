@@ -16,11 +16,11 @@ class Stream {
         this.running = false;
         this.frameTimer = 0;
 
-        self.img = new Image();
+        this.img = new Image();
         if (autoStart) {
-            self.img.onload = self.start;
+            this.img.onload = this.start;
         }
-        self.img.src = this.url;
+        this.img.src = this.url;
     }
 
     setRunning(running) {
