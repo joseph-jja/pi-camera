@@ -9,7 +9,10 @@ class MJPEGStream {
         this.refreshRate = args.refreshRate || 500;
         this.onStart = args.onStart || null;
         this.onFrame = args.onFrame || null;
-        this.onFrameCaller = args.onFrameCaller || null;
+        if ( !args.onFrameCaller) {
+            throw Error('onFrameCaller option is REQUIRED!');
+        }
+        this.onFrameCaller = args.onFrameCaller;
         this.onStop = args.onStop || null;
         this.callbacks = {};
         this.running = false;
@@ -29,7 +32,7 @@ class MJPEGStream {
             this.img.src = this.url;
             this.frameTimer = setInterval(function() {
                 if (self.onFrame) {
-                    self.onFrame(self.img);
+                    self.onFrame.call(self.onFrameCaller, self.img);
                 }
             }, this.refreshRate);
             if (this.onStart) {
