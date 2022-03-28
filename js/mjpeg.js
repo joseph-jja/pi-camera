@@ -1,5 +1,6 @@
 // namespace MJPEG { ...
-var MJPEG = (function(module) {
+const MJPEG = {};
+(function(module) {
     "use strict";
 
     // class Stream { ...
@@ -137,4 +138,4 @@ var MJPEG = (function(module) {
 
     return module;
 
-})(MJPEG || {});
+})();
