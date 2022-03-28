@@ -1,7 +1,7 @@
 // namespace MJPEG { ...
 const MJPEG = {};
 
-(function() {
+//(function() {
 
     // class Stream { ...
     MJPEG.Stream = function(args) {
@@ -23,7 +23,7 @@ const MJPEG = {};
         }
         self.img.src = self.url;
 
-        function setRunning(running) {
+        const setRunning = (running) => {
             self.running = running;
             if (self.running) {
                 self.img.src = self.url;
@@ -42,7 +42,7 @@ const MJPEG = {};
                     self.onStop();
                 }
             }
-        }
+        };
 
         self.start = () => {
             setRunning(true);
@@ -137,4 +137,4 @@ const MJPEG = {};
         }
     };
 
-})();
+//})();
