@@ -25,7 +25,7 @@ MJPEG.Stream = function(args) {
         self.running = running;
         if (self.running) {
             self.img.src = self.url;
-            self.frameTimer = setInterval(() => {
+            self.frameTimer = setInterval(function() {
                 if (self.onFrame) {
                     self.onFrame(self.img);
                 }
@@ -65,17 +65,19 @@ MJPEG.Player = function(canvas, url, options) {
     }
     options.url = url;
     options.onFrame = updateFrame;
-    options.onStart = () => {
+    
+    options.onStart = function() {
         console.log("started");
     };
 
-    options.onStop = () => {
+    options.onStop = function() {
         console.log("stopped");
     };
 
+
     self.stream = new MJPEG.Stream(options);
 
-    canvas.addEventListener("click", () => {
+    canvas.addEventListener("click", function() {
         if (self.stream.running) {
             self.stop();
         } else {
@@ -83,7 +85,7 @@ MJPEG.Player = function(canvas, url, options) {
         }
     }, false);
 
-    const scaleRect = (srcSize, dstSize) => {
+    function scaleRect(srcSize, dstSize) {
         var ratio = Math.min(dstSize.width / srcSize.width,
             dstSize.height / srcSize.height);
         var newRect = {
@@ -95,9 +97,9 @@ MJPEG.Player = function(canvas, url, options) {
         newRect.x = (dstSize.width / 2) - (newRect.width / 2);
         newRect.y = (dstSize.height / 2) - (newRect.height / 2);
         return newRect;
-    };
+    }
 
-    const updateFrame = (img) => {
+    function updateFrame(img) {
         var srcRect = {
             x: 0,
             y: 0,
@@ -126,13 +128,13 @@ MJPEG.Player = function(canvas, url, options) {
             console.log("!");
             throw e;
         }
-    };
+    }
 
-    self.start = () => {
+    self.start = function() {
         self.stream.start();
     };
 
-    self.stop = () => {
+    self.stop = function() {
         self.stream.stop();
     };
 };
