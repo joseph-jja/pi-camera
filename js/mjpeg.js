@@ -66,7 +66,7 @@ MJPEG.Player = function(canvas, url, options) {
         options = {};
     }
     options.url = url;
-    options.onFrame = updateFrame;
+    options.onFrame = this.updateFrame;
 
     options.onStart = function() {
         console.log("started");
@@ -101,7 +101,7 @@ MJPEG.Player = function(canvas, url, options) {
         return newRect;
     };
 
-    const updateFrame = (img) => {
+    this.updateFrame = (img) => {
         var srcRect = {
             x: 0,
             y: 0,
