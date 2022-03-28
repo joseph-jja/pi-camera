@@ -64,6 +64,9 @@ class MJPEGPlayer {
 
         this.options = Object.assign({}, options);
 
+        this.options.width = options.width || this.canvas.width;
+        this.options.height = options.height || this.canvas.height;
+
         this.options.url = url;
         this.options.onFrame = this.updateFrame;
 
@@ -109,8 +112,8 @@ class MJPEGPlayer {
             height: img.naturalHeight
         };
         var dstRect = this.scaleRect(srcRect, {
-            width: this.options.width,
-            height: this.options.height
+            width: this.canvas.width,
+            height: this.canvas.height
         });
         try {
             this.context.drawImage(img,
