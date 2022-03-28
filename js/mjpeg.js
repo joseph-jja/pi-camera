@@ -1,10 +1,11 @@
 // namespace MJPEG { ...
 const MJPEG = {};
-(function(module) {
+
+(function() {
     "use strict";
 
     // class Stream { ...
-    module.Stream = function(args) {
+    MJPEG.Stream = function(args) {
         var self = this;
         var autoStart = args.autoStart || false;
 
@@ -53,7 +54,7 @@ const MJPEG = {};
     };
 
     // class Player { ...
-    module.Player = function(canvas, url, options) {
+    MJPEG.Player = function(canvas, url, options) {
 
         var self = this;
         if (typeof canvas === "string" || canvas instanceof String) {
@@ -73,7 +74,7 @@ const MJPEG = {};
             console.log("stopped");
         }
 
-        self.stream = new module.Stream(options);
+        self.stream = new MJPEG.Stream(options);
 
         canvas.addEventListener("click", function() {
             if (self.stream.running) {
@@ -136,6 +137,6 @@ const MJPEG = {};
         }
     };
 
-    return module;
+    return MJPEG;
 
 })();
