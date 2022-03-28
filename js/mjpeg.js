@@ -55,7 +55,7 @@ class MJPEGStream {
 }
 
 // class Player { ...
-MJPEG.Player = function(canvas, url, options) {
+MJPEGPlayer = function(canvas, url, options) {
 
     if (typeof canvas === "string" || canvas instanceof String) {
         canvas = document.getElementById(canvas);
