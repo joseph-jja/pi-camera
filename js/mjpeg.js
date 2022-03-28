@@ -1,5 +1,3 @@
-// namespace MJPEG { ...
-const MJPEG = {};
 
 class MJPEGStream {
 
@@ -55,14 +53,41 @@ class MJPEGStream {
 }
 
 // class Player { ...
-MJPEGPlayer = function(canvas, url, options) {
+class MJPEGPlayer {
 
-    if (typeof canvas === "string" || canvas instanceof String) {
-        canvas = document.getElementById(canvas);
+    constructor(canvas, url, options = {}) {
+
+        if (typeof canvas === "string" || canvas instanceof String) {
+            this.canvas = document.getElementById(canvas);
+        }
+        this.context = this.canvas.getContext("2d");
+
+        this.options = Object.assign({}, options);
+
+        this.options.url = url;
+        this.options.onFrame = this.updateFrame;
+
+        this.options.onStart = () => {
+            console.log("started");
+        };
+
+        this.options.onStop = () => {
+            console.log("stopped");
+        };
+
+        this.stream = new MJPEGStream(this.options);
+
+        const self = this;
+        this.canvas.addEventListener("click", function() {
+            if (self.stream.running) {
+                self.stop();
+            } else {
+                self.start();
+            }
+        }, false);
     }
-    const context = canvas.getContext("2d");
 
-    const scaleRect = (srcSize, dstSize) => {
+    scaleRect(srcSize, dstSize) {
         var ratio = Math.min(dstSize.width / srcSize.width,
             dstSize.height / srcSize.height);
         var newRect = {
@@ -74,21 +99,21 @@ MJPEGPlayer = function(canvas, url, options) {
         newRect.x = (dstSize.width / 2) - (newRect.width / 2);
         newRect.y = (dstSize.height / 2) - (newRect.height / 2);
         return newRect;
-    };
+    }
 
-    const updateFrame = (img) => {
+    updateFrame(img) {
         var srcRect = {
             x: 0,
             y: 0,
             width: img.naturalWidth,
             height: img.naturalHeight
         };
-        var dstRect = scaleRect(srcRect, {
-            width: canvas.width,
-            height: canvas.height
+        var dstRect = this.scaleRect(srcRect, {
+            width: this.canvas.width,
+            height: this.canvas.height
         });
         try {
-            context.drawImage(img,
+            this.context.drawImage(img,
                 srcRect.x,
                 srcRect.y,
                 srcRect.width,
@@ -107,36 +132,11 @@ MJPEGPlayer = function(canvas, url, options) {
         }
     };
 
-    if (!options) {
-        options = {};
-    }
-    options.url = url;
-    options.onFrame = updateFrame;
-
-    options.onStart = function() {
-        console.log("started");
-    };
-
-    options.onStop = function() {
-        console.log("stopped");
-    };
-
-    var self = this;
-    self.stream = new MJPEGStream(options);
-
-    canvas.addEventListener("click", function() {
-        if (self.stream.running) {
-            self.stop();
-        } else {
-            self.start();
-        }
-    }, false);
-
-    this.start = function() {
+    start() {
         this.stream.start();
     };
 
-    this.stop = function() {
+    stop() {
         this.stream.stop();
     };
-};
+}
