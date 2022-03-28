@@ -27,7 +27,7 @@ class MJPEGStream {
         this.running = running;
         const self = this;
         if (this.running) {
-            self.img.src = this.url;
+            this.img.src = this.url;
             this.frameTimer = setInterval(function() {
                 if (self.onFrame) {
                     self.onFrame(self.img);
@@ -37,7 +37,7 @@ class MJPEGStream {
                 this.onStart();
             }
         } else {
-            self.img.src = "#";
+            this.img.src = "#";
             clearInterval(this.frameTimer);
             if (this.onStop) {
                 this.onStop();
@@ -54,12 +54,9 @@ class MJPEGStream {
     }
 }
 
-MJPEG.Stream = MJPEGStream;
-
 // class Player { ...
 MJPEG.Player = function(canvas, url, options) {
 
-    var self = this;
     if (typeof canvas === "string" || canvas instanceof String) {
         canvas = document.getElementById(canvas);
     }
@@ -79,8 +76,8 @@ MJPEG.Player = function(canvas, url, options) {
         console.log("stopped");
     };
 
-
-    self.stream = new MJPEG.Stream(options);
+    var self = this;
+    self.stream = new MJPEGStream(options);
 
     canvas.addEventListener("click", function() {
         if (self.stream.running) {
@@ -90,7 +87,7 @@ MJPEG.Player = function(canvas, url, options) {
         }
     }, false);
 
-    function scaleRect(srcSize, dstSize) {
+    const scaleRect = (srcSize, dstSize) => {
         var ratio = Math.min(dstSize.width / srcSize.width,
             dstSize.height / srcSize.height);
         var newRect = {
@@ -102,9 +99,9 @@ MJPEG.Player = function(canvas, url, options) {
         newRect.x = (dstSize.width / 2) - (newRect.width / 2);
         newRect.y = (dstSize.height / 2) - (newRect.height / 2);
         return newRect;
-    }
+    };
 
-    function updateFrame(img) {
+    const updateFrame = (img) => {
         var srcRect = {
             x: 0,
             y: 0,
@@ -129,11 +126,11 @@ MJPEG.Player = function(canvas, url, options) {
             console.log(".");
         } catch (e) {
             // if we can't draw, don't bother updating anymore
-            self.stop();
+            this.stop();
             console.log("!");
             throw e;
         }
-    }
+    };
 
     this.start = function() {
         this.stream.start();
