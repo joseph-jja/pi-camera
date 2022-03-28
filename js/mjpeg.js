@@ -9,6 +9,7 @@ class MJPEGStream {
         this.refreshRate = args.refreshRate || 500;
         this.onStart = args.onStart || null;
         this.onFrame = args.onFrame || null;
+        this.onFrameCaller = args.onFrameCaller || null;
         this.onStop = args.onStop || null;
         this.callbacks = {};
         this.running = false;
@@ -69,6 +70,7 @@ class MJPEGPlayer {
 
         this.options.url = url;
         this.options.onFrame = this.updateFrame;
+        this.options.onFrameCaller = this;
 
         this.options.onStart = () => {
             console.log("started");
