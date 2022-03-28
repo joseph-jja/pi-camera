@@ -1,8 +1,63 @@
 // namespace MJPEG { ...
 const MJPEG = {};
 
+class Stream {
+
+    constructor(args) {
+
+        const autoStart = args.autoStart || false;
+
+        this.url = args.url;
+        this.refreshRate = args.refreshRate || 500;
+        this.onStart = args.onStart || null;
+        this.onFrame = args.onFrame || null;
+        this.onStop = args.onStop || null;
+        this.callbacks = {};
+        this.running = false;
+        this.frameTimer = 0;
+
+        self.img = new Image();
+        if (autoStart) {
+            self.img.onload = self.start;
+        }
+        self.img.src = this.url;
+    }
+
+    setRunning(running) {
+        this.running = running;
+        const self = this;
+        if (this.running) {
+            self.img.src = this.url;
+            this.frameTimer = setInterval(function() {
+                if (self.onFrame) {
+                    self.onFrame(self.img);
+                }
+            }, this.refreshRate);
+            if (this.onStart) {
+                this.onStart();
+            }
+        } else {
+            self.img.src = "#";
+            clearInterval(this.frameTimer);
+            if (this.onStop) {
+                this.onStop();
+            }
+        }
+    }
+
+    start() {
+        this.setRunning(true);
+    }
+
+    stop() {
+        this.setRunning(false);
+    }
+}
+
+MJPEG.Stream = Stream;
+
 // class Stream { ...
-MJPEG.Stream = function(args) {
+/*MJPEG.Stream = function(args) {
     var self = this;
     var autoStart = args.autoStart || false;
 
@@ -49,7 +104,7 @@ MJPEG.Stream = function(args) {
     this.stop = () => {
         setRunning(false);
     };
-};
+};*/
 
 // class Player { ...
 MJPEG.Player = function(canvas, url, options) {
