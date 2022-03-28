@@ -260,13 +260,13 @@ async function start() {
             response.end('Preview service is not running!');
             return;
         }
-        const uuid = randomUUID();
-        previewProcesses[uid] = {};
+        //const uuid = randomUUID();
+        //previewProcesses[uid] = {};
         response.writeHead(200, {
             //'Content-Type': 'video/webm',
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-            'Cache-Control': 'no-cache',
-            'x-user-id': uuid
+            'Cache-Control': 'no-cache'
+            //'x-user-id': uuid
         });
 
         const previewCmd = previewProcess();
