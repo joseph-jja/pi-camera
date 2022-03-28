@@ -2,7 +2,6 @@
 const MJPEG = {};
 
 (function() {
-    "use strict";
 
     // class Stream { ...
     MJPEG.Stream = function(args) {
@@ -45,12 +44,13 @@ const MJPEG = {};
             }
         }
 
-        self.start = function() {
+        self.start = () => {
             setRunning(true);
-        }
-        self.stop = function() {
+        };
+
+        self.stop = () => {
             setRunning(false);
-        }
+        };
     };
 
     // class Player { ...
@@ -136,7 +136,5 @@ const MJPEG = {};
             self.stream.stop();
         }
     };
-
-    return MJPEG;
 
 })();
