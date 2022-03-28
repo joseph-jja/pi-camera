@@ -42,9 +42,9 @@ function getHTML(body) {
     </head>
     <body>
         <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
-        <!--<video controls width="640" height="480">
-            <source src="/preview-mp4" type="video/mp4">
-        </video>-->
+        <!--<canvas id="player" style="background: #000;" width="640px" height="480px">
+          Your browser sucks.
+        </canvas>-->
         <div id="server-messages"></div>
         <br>
         <label>Streaming options</label>
@@ -95,6 +95,7 @@ function getHTML(body) {
             </form>
         </fieldset>
     </body>
+    <script src="/js/mjpeg.js"></script>
     <script src="/js/captureClient.js" type="text/javascript"></script>
 </html>`;
 }
