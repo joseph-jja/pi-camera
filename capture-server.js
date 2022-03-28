@@ -1,5 +1,6 @@
 const os = require('os'),
     fs = require('fs'),
+    { randomUUID } = require('crypto'),
     http = require('http'),
     {
         resolve,
@@ -22,7 +23,6 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename),
     {
         DEFAULT_OPTIONS,
-        //spawnVideoProcess,
         saveRawVideoData,
         saveVideoProcess,
         saveImagesData,
@@ -104,6 +104,8 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: 100000
 }));
+
+const previewProcesses = {};
 
 async function start() {
 
@@ -258,10 +260,13 @@ async function start() {
             response.end('Preview service is not running!');
             return;
         }
+        const uuid = randomUUID();
+        previewProcesses[uid] = {};
         response.writeHead(200, {
             //'Content-Type': 'video/webm',
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-            'Cache-Control': 'no-cache'
+            'Cache-Control': 'no-cache',
+            'x-user-id': uuid
         });
 
         const previewCmd = previewProcess();

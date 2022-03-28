@@ -6,9 +6,11 @@ global.directStreamProcess;
 
 const BASH_CMD = '/bin/bash';
 
-const DEFAULT_OPTIONS = '--width 1640 --height 1232 --metering centre --framerate 15 --exposure normal'.split(' ');
+const DEFAULT_OPTIONS = [];
 
 module.exports = function(resolveFileLocation) {
+
+    const config = require(`${resolveFileLocation}/cameraConfig`);
 
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
@@ -21,6 +23,14 @@ module.exports = function(resolveFileLocation) {
     const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
     const PREVIEW_PROCESS = `${resolveFileLocation}/scripts/previewStream.sh`;
+
+    config.forEach(item => {
+        if (item.defaultvalue) {
+            item.defaultvalue.split(' ').forEach(item => {
+                DEFAULT_OPTIONS.push(item);
+            });
+        }
+});
 
     function getVideoFilename() {
         const now = new Date();
@@ -158,8 +168,8 @@ module.exports = function(resolveFileLocation) {
     }
 
     return {
-        BASH_CMD,
         DEFAULT_OPTIONS,
+        BASH_CMD,
         VIDEO_CMD,
         SAVE_CMD,
         getVideoFilename,
