@@ -1,7 +1,7 @@
 // namespace MJPEG { ...
 const MJPEG = {};
 
-class Stream {
+class MJPEGStream {
 
     constructor(args) {
 
@@ -54,57 +54,7 @@ class Stream {
     }
 }
 
-MJPEG.Stream = Stream;
-
-// class Stream { ...
-/*MJPEG.Stream = function(args) {
-    var self = this;
-    var autoStart = args.autoStart || false;
-
-    this.url = args.url;
-    this.refreshRate = args.refreshRate || 500;
-    this.onStart = args.onStart || null;
-    self.onFrame = args.onFrame || null;
-    this.onStop = args.onStop || null;
-    self.callbacks = {};
-    this.running = false;
-    this.frameTimer = 0;
-
-    self.img = new Image();
-    if (autoStart) {
-        self.img.onload = self.start;
-    }
-    self.img.src = this.url;
-
-    const setRunning = (running) => {
-        this.running = running;
-        if (this.running) {
-            self.img.src = this.url;
-            this.frameTimer = setInterval(function() {
-                if (self.onFrame) {
-                    self.onFrame(self.img);
-                }
-            }, this.refreshRate);
-            if (this.onStart) {
-                this.onStart();
-            }
-        } else {
-            self.img.src = "#";
-            clearInterval(this.frameTimer);
-            if (this.onStop) {
-                this.onStop();
-            }
-        }
-    };
-
-    this.start = () => {
-        setRunning(true);
-    };
-
-    this.stop = () => {
-        setRunning(false);
-    };
-};*/
+MJPEG.Stream = MJPEGStream;
 
 // class Player { ...
 MJPEG.Player = function(canvas, url, options) {
@@ -185,11 +135,11 @@ MJPEG.Player = function(canvas, url, options) {
         }
     }
 
-    self.start = function() {
-        self.stream.start();
+    this.start = function() {
+        this.stream.start();
     };
 
-    self.stop = function() {
-        self.stream.stop();
+    this.stop = function() {
+        this.stream.stop();
     };
 };
