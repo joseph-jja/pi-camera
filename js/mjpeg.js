@@ -60,32 +60,7 @@ MJPEG.Player = function(canvas, url, options) {
     if (typeof canvas === "string" || canvas instanceof String) {
         canvas = document.getElementById(canvas);
     }
-    var context = canvas.getContext("2d");
-
-    if (!options) {
-        options = {};
-    }
-    options.url = url;
-    options.onFrame = this.updateFrame;
-
-    options.onStart = function() {
-        console.log("started");
-    };
-
-    options.onStop = function() {
-        console.log("stopped");
-    };
-
-    var self = this;
-    self.stream = new MJPEGStream(options);
-
-    canvas.addEventListener("click", function() {
-        if (self.stream.running) {
-            self.stop();
-        } else {
-            self.start();
-        }
-    }, false);
+    const context = canvas.getContext("2d");
 
     const scaleRect = (srcSize, dstSize) => {
         var ratio = Math.min(dstSize.width / srcSize.width,
@@ -101,7 +76,7 @@ MJPEG.Player = function(canvas, url, options) {
         return newRect;
     };
 
-    this.updateFrame = (img) => {
+    const updateFrame = (img) => {
         var srcRect = {
             x: 0,
             y: 0,
@@ -131,6 +106,31 @@ MJPEG.Player = function(canvas, url, options) {
             throw e;
         }
     };
+
+    if (!options) {
+        options = {};
+    }
+    options.url = url;
+    options.onFrame = updateFrame;
+
+    options.onStart = function() {
+        console.log("started");
+    };
+
+    options.onStop = function() {
+        console.log("stopped");
+    };
+
+    var self = this;
+    self.stream = new MJPEGStream(options);
+
+    canvas.addEventListener("click", function() {
+        if (self.stream.running) {
+            self.stop();
+        } else {
+            self.start();
+        }
+    }, false);
 
     this.start = function() {
         this.stream.start();
