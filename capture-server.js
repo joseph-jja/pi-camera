@@ -203,6 +203,10 @@ async function start() {
         saveImagesData(lastUpdateOpts, response);
     });
 
+    app.get('/canvas', (request, response) => {
+        fs.createReadStream(`${RESOLVED_FILE_LOCATION}/views/video.html`).pipe(response);
+    });
+
     app.get('/imageList', (request, response) => {
 
         listImageFiles(`${process.env.HOME}/images/`)
