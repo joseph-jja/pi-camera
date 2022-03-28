@@ -136,11 +136,17 @@ async function start() {
 
     app.get('/js/captureClient.js', (request, response) => {
         response.writeHead(200, {
-            'Content-Type': 'application/json'
+            'Content-Type': 'text/javascript; charset=utf-8'
         });
         fs.createReadStream('js/captureClient.js').pipe(response);
     });
 
+    app.get('/js/captureClient.js', (request, response) => {
+        response.writeHead(200, {
+            'Content-Type': 'text/javascript; charset=utf-8'
+        });
+        fs.createReadStream('js/mjpeg.js').pipe(response);
+    });
     app.post('/shutdown', (request, response) => {
         response.writeHead(200, {});
         response.end('');
