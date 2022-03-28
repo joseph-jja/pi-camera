@@ -141,7 +141,7 @@ async function start() {
         fs.createReadStream('js/captureClient.js').pipe(response);
     });
 
-    app.get('/js/captureClient.js', (request, response) => {
+    app.get('/js/mjpeg.js', (request, response) => {
         response.writeHead(200, {
             'Content-Type': 'text/javascript; charset=utf-8'
         });
