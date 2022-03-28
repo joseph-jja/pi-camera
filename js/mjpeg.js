@@ -42,11 +42,11 @@ MJPEG.Stream = function(args) {
         }
     };
 
-    self.start = () => {
+    this.start = () => {
         setRunning(true);
     };
 
-    self.stop = () => {
+    this.stop = () => {
         setRunning(false);
     };
 };
@@ -65,7 +65,7 @@ MJPEG.Player = function(canvas, url, options) {
     }
     options.url = url;
     options.onFrame = updateFrame;
-    
+
     options.onStart = function() {
         console.log("started");
     };
