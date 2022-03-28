@@ -2,59 +2,54 @@
 
 const MJPEG = {};
 
-class Stream {
+// class Stream { ...
+MJPEG.Stream = function(args) {
+    var self = this;
+    var autoStart = args.autoStart || false;
 
-    constructor(args) {
-        var autoStart = args.autoStart || false;
+    self.url = args.url;
+    self.refreshRate = args.refreshRate || 500;
+    self.onStart = args.onStart || null;
+    self.onFrame = args.onFrame || null;
+    self.onStop = args.onStop || null;
+    self.callbacks = {};
+    self.running = false;
+    self.frameTimer = 0;
 
-        this.url = args.url;
-        this.refreshRate = args.refreshRate || 500;
-        this.onStart = args.onStart || null;
-        this.onFrame = args.onFrame || null;
-        this.onStop = args.onStop || null;
-        this.callbacks = {};
-        this.running = false;
-        this.frameTimer = 0;
-
-        this.img = new Image();
-        if (autoStart) {
-            this.img.onload = this.start;
-        }
-        this.img.src = this.url;
+    self.img = new Image();
+    if (autoStart) {
+        self.img.onload = self.start;
     }
+    self.img.src = self.url;
 
-    setRunning(running) {
-        this.running = running;
-        if (this.running) {
-            this.img.src = this.url;
-            this.frameTimer = setInterval(function() {
-                if (this.onFrame) {
-                    this.onFrame(self.img);
+    function setRunning(running) {
+        self.running = running;
+        if (self.running) {
+            self.img.src = self.url;
+            self.frameTimer = setInterval(function() {
+                if (self.onFrame) {
+                    self.onFrame(self.img);
                 }
-            }, this.refreshRate);
-            if (this.onStart) {
-                this.onStart();
+            }, self.refreshRate);
+            if (self.onStart) {
+                self.onStart();
             }
         } else {
-            this.img.src = "#";
+            self.img.src = "#";
             clearInterval(self.frameTimer);
-            if (this.onStop) {
-                this.onStop();
+            if (self.onStop) {
+                self.onStop();
             }
         }
     }
 
-    start() {
-        this.setRunning(true);
-    }
-
-    stop() {
-        this.setRunning(false);
-    }
-}
-
-// class Stream { ...
-MJPEG.Stream = Stream;
+    self.start = function() {
+        setRunning(true);
+    };
+    self.stop = function() {
+        setRunning(false);
+    };
+};
 
 // class Player { ...
 MJPEG.Player = function(canvas, url, options) {
@@ -72,10 +67,10 @@ MJPEG.Player = function(canvas, url, options) {
     options.onFrame = updateFrame;
     options.onStart = function() {
         console.log("started");
-    }
+    };
     options.onStop = function() {
         console.log("stopped");
-    }
+    };
 
     self.stream = new MJPEG.Stream(options);
 
@@ -134,8 +129,8 @@ MJPEG.Player = function(canvas, url, options) {
 
     self.start = function() {
         self.stream.start();
-    }
+    };
     self.stop = function() {
         self.stream.stop();
-    }
+    };
 };
