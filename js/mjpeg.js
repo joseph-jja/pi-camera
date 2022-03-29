@@ -1,4 +1,3 @@
-
 class MJPEGStream {
 
     constructor(args) {
@@ -9,7 +8,7 @@ class MJPEGStream {
         this.refreshRate = args.refreshRate || 500;
         this.onStart = args.onStart || null;
         this.onFrame = args.onFrame || null;
-        if ( !args.onFrameCaller) {
+        if (!args.onFrameCaller) {
             throw Error('onFrameCaller option is REQUIRED!');
         }
         this.onFrameCaller = args.onFrameCaller;
