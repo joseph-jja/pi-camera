@@ -59,6 +59,10 @@ class MJPEGStream {
 // class Player { ...
 class MJPEGPlayer {
 
+    defaultErrorHandler(e) {
+        throw e;
+    }
+
     constructor(canvas, url, options = {}) {
 
         if (typeof canvas === "string" || canvas instanceof String) {
@@ -70,6 +74,8 @@ class MJPEGPlayer {
 
         this.options.width = options.width || this.canvas.width;
         this.options.height = options.height || this.canvas.height;
+
+        this.options.errorHandler = options.errorHandler || this.defaultErrorHandler;
 
         this.options.url = url;
         this.options.onFrame = this.updateFrame;
@@ -136,7 +142,7 @@ class MJPEGPlayer {
             // if we can't draw, don't bother updating anymore
             this.stop();
             console.log("!");
-            throw e;
+            this.options.errorHandler(e);
         }
     };
 
