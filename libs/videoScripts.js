@@ -30,7 +30,7 @@ module.exports = function(resolveFileLocation) {
                 DEFAULT_OPTIONS.push(item);
             });
         }
-});
+    });
 
     function getVideoFilename() {
         const now = new Date();
@@ -180,5 +180,4 @@ module.exports = function(resolveFileLocation) {
         previewProcess,
         saveVideoProcess
     };
-
 };
