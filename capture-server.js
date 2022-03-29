@@ -109,6 +109,11 @@ const previewProcesses = {};
 
 async function start() {
 
+    const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
+        return `/js/${item}`;
+    });
+    console.log(jsFiles);
+
     const config = require(`${RESOLVED_FILE_LOCATION}/cameraConfig`);
 
     const formFields = await import('./libs/form.mjs');
@@ -137,19 +142,14 @@ async function start() {
         return `${acc}<br><br>${os.EOL}${next}`;
     });
 
-    app.get('/js/captureClient.js', (request, response) => {
+    app.get(jsFiles, (request, response) => {
+        const baseFileName = request.url.replace(/\/js\//, '');
         response.writeHead(200, {
             'Content-Type': 'text/javascript; charset=utf-8'
         });
-        fs.createReadStream('js/captureClient.js').pipe(response);
+        fs.createReadStream(`js/${baseFileName}`).pipe(response);
     });
 
-    app.get('/js/mjpeg.js', (request, response) => {
-        response.writeHead(200, {
-            'Content-Type': 'text/javascript; charset=utf-8'
-        });
-        fs.createReadStream('js/mjpeg.js').pipe(response);
-    });
     app.post('/shutdown', (request, response) => {
         response.writeHead(200, {});
         response.end('');
