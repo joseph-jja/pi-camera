@@ -17,7 +17,8 @@ module.exports = [{
         '--width 1280 --height 720',
         '--width 1920 --height 1080',
         '--width 1640 --height 922',
-        '--width 1640 --height 1232'
+        '--width 1640 --height 1232',
+        '--width 3280 --height 2464' 
     ],
     comment: '1640x1232 uses full sensor with binning',
     defaultvalue: '--width 1640 --height 1232'
