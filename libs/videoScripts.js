@@ -10,7 +10,7 @@ const DEFAULT_OPTIONS = [];
 
 module.exports = function(resolveFileLocation) {
 
-    const config = require(`${resolveFileLocation}/cameraConfig`);
+    const config = require(`${resolveFileLocation}/videoConfig`);
 
     const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
     const stringify = require(`${resolveFileLocation}/libs/stringify`);

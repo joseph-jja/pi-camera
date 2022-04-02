@@ -114,7 +114,7 @@ async function start() {
     });
     console.log(jsFiles);
 
-    const config = require(`${RESOLVED_FILE_LOCATION}/cameraConfig`);
+    const config = require(`${RESOLVED_FILE_LOCATION}/videoConfig`);
 
     const formFields = await import('./libs/form.mjs');
 
