@@ -19,4 +19,4 @@ echo "Options: $EXTRA_ARGS ..."
 
 # needs -o FILENAME.raw at a minimum
 # we will use 30000 for 30 seconds of data at a time 
-/usr/bin/libcamera-raw --nopreview -t 30000 $EXTRA_ARGS
+/usr/bin/libcamera-vid --codec h264 --nopreview -t 30000 $EXTRA_ARGS
