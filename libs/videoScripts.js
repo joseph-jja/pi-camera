@@ -18,7 +18,7 @@ module.exports = function(resolveFileLocation) {
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
 
     const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
-    const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/directStream.sh`;
+    const MJPEG_DIRECT_CMD = `${resolveFileLocation}/scripts/videoStream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
     const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
