@@ -36,8 +36,8 @@ app.disable('x-powered-by');
 
 const VIDEO_HTML = fs.readFileSync(`${RESOLVED_FILE_LOCATION}/views/capture.html`).toString();
 
-function getHTML(videoBody) {
-    return VIDEO_HTML.replace('[[VIDEO_FORM]]', videoBody);
+function getHTML(videoBody, imageBody) {
+    return VIDEO_HTML.replace('[[VIDEO_FORM]]', videoBody).replace('[[IMAGE_FORM]]', imageBody);
 }
 
 app.use(bodyParser.urlencoded({
@@ -54,7 +54,8 @@ async function start() {
     });
     console.log(jsFiles);
 
-    const config = require(`${RESOLVED_FILE_LOCATION}/videoConfig`);
+    const videoConfig = require(`${RESOLVED_FILE_LOCATION}/videoConfig`),
+        imageConfig = require(`${RESOLVED_FILE_LOCATION}/stillConfig`);
 
     const formFields = await import('./libs/form.mjs');
 
@@ -62,7 +63,7 @@ async function start() {
     const ipaddr = await getIPAddress(hostname);
     process.env.IP_ADDR = ipaddr;
 
-    const fields = config.map(item => {
+    const formBuilder = item => {
 
         if (item.values) {
             return formFields.buildSelect(item);
@@ -78,7 +79,11 @@ async function start() {
             logger.info(`${stringify(item)}`);
             return '';
         }
-    }).reduce((acc, next) => {
+    };
+    const fields = videoConfig.map(formBuilder).reduce((acc, next) => {
+        return `${acc}<br><br>${os.EOL}${next}`;
+    });
+    const imageFields = imageConfig.map(formBuilder).reduce((acc, next) => {
         return `${acc}<br><br>${os.EOL}${next}`;
     });
 
@@ -246,7 +251,7 @@ async function start() {
         response.writeHead(200, {
             'Content-Type': 'text/html'
         });
-        response.end(getHTML(fields));
+        response.end(getHTML(fields, imageFields));
     });
 
     const port = 20000;
