@@ -74,10 +74,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     function getConfig() {
-        const saveOptionsObj = formObj.previewOptions;
+        const saveOptionsObj = document.getElementById('previewOptions');
         fetch('/config').then(resp => {
             resp.text().then(data => {
-                saveOptionsObj.value = data;
+                saveOptionsObj.innerHTML = data;
             }).catch(e => {
                 console.log(e);
             });

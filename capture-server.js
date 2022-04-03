@@ -34,70 +34,10 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
 const app = express();
 app.disable('x-powered-by');
 
-function getHTML(body) {
-    return `<!DOCTYPE HTML>
-<html>
-    <head>
-        <title>PI Camera</title>
-    </head>
-    <body>
-        <iframe id="videoDisplay" width="640" height="480" src="/preview"></iframe>
-        <!--<canvas id="player" style="background: #000;" width="640px" height="480px">
-          Your browser sucks.
-        </canvas>-->
-        <div id="server-messages"></div>
-        <br>
-        <label>Streaming options</label>
-        <br>
-        <fieldset style="width: 450px; min-height: 650px; float: left;">
-            <form name="cameraOptions" onsubmit="return false;">
-                <input type="text" name="previewOptions" size=60">
-                <br>
-                <br>
-                ${body}
-                <br><br>
-                <button type="submit" id="updateButton">
-                    Update
-                </button>
-                <br><br>
-                <button type="submit" id="saveStream">
-                    Capture Stream
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="saveRawStream">
-                    Capture RAW Stream
-                </button>
-                <br><br>
-                <button type="submit" id="startPreview">
-                    Start Preview
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="stopPreview">
-                    Stop Preview
-                </button>
-            </form>
-        </fieldset>
-        <fieldset style="width: 275px; height: 650px; float: left;">
-            <form name="imageFiles" onsubmit="return false;">
-                <div id="image-files"></div>
-            </form>
-            <br><br>
-            <button type="submit" id="listCaptures">
-                List Captures
-            </button>
-        </fieldset>
-        <br clear="both">
-        <fieldset style="width: 90%; float: none;">
-            <form name="shutdown" onsubmit="return false;">
-                <button type="submit" id="shutdownButton">
-                    Shutdown
-                </button>
-            </form>
-        </fieldset>
-    </body>
-    <script src="/js/mjpeg.js"></script>
-    <script src="/js/captureClient.js" type="text/javascript"></script>
-</html>`;
+const VIDEO_HTML = fs.readFileSync(`${RESOLVED_FILE_LOCATION}/views/capture.html`).toString();
+
+function getHTML(videoBody) {
+    return VIDEO_HTML.replace('[[VIDEO_FORM]]', videoBody);
 }
 
 app.use(bodyParser.urlencoded({
