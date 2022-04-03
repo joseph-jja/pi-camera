@@ -3,6 +3,7 @@ const childProcess = require('child_process'),
 
 global.videoProcess;
 global.directStreamProcess;
+global.imageStreamProcess;
 
 const BASH_CMD = '/bin/bash';
 
@@ -69,7 +70,7 @@ module.exports = function(resolveFileLocation) {
 
         const spawnOptions = [options.filter(filterOptions).join(' ')];
         spawnOptions.unshift(SAVE_RAW_CMD);
-        const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'raw')}`;
+        const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'h264')}`;
         spawnOptions.push(`-o ${filename}`);
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
