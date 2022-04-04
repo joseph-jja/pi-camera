@@ -7,7 +7,10 @@ const {
     getConfig,
     listImageCaptures,
     shutdown,
-    executeServerCommand
+    executeServerCommand,
+    stopPreview,
+    startPreview,
+    videoUpdate
 } = formUtils;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -28,33 +31,11 @@ window.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         const name = target.nodeName;
         if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
-            const options = getFormOptions(videoFormObj);
-            fetch('/update', {
-                method: 'POST',
-                cache: 'no-cache',
-                referrerPolicy: 'no-referrer',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: options
-            }).then(async resp => {
-                setMessage(resp);
-                getConfig();
-            }).catch(e => {
-                console.log(e);
-            });
+            videoUpdate();
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
-            runPreview();
+            startPreview();
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
-            const iframe = document.getElementById('videoDisplay');
-            iframe.src = '';
-            fetch('/stopPreview', {
-                method: 'GET'
-            }).then(resp => {
-                setMessage(resp);
-            }).catch(e => {
-                console.log(e);
-            });
+            stopPreview();
         } else if (name.toLowerCase() === 'button' && target.id === 'imageUpdate') {
             const options = getFormOptions(imageFormObj);
             fetch('/imageUpdate', {

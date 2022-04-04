@@ -77,3 +77,40 @@ export function executeServerCommand(url) {
         console.log(e);
     });
 }
+
+export function stopPreview() {
+    const iframe = document.getElementById('videoDisplay');
+    iframe.src = '';
+    fetch('/stopPreview', {
+        method: 'GET'
+    }).then(resp => {
+        setMessage(resp);
+    }).catch(e => {
+        console.log(e);
+    });
+}
+
+export function startPreview() {
+    const iframe = document.getElementById('videoDisplay');
+    iframe.src = '/preview';
+}
+
+export function videoUpdate() {
+    stopPreview();
+    const videoFormObj = document.forms['videoOptions'];
+    const options = getFormOptions(videoFormObj);
+    fetch('/update', {
+        method: 'POST',
+        cache: 'no-cache',
+        referrerPolicy: 'no-referrer',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: options
+    }).then(async resp => {
+        setMessage(resp);
+        getConfig();
+    }).catch(e => {
+        console.log(e);
+    });
+}
