@@ -1,31 +1,11 @@
 import bitrate from '/js/libs/bitrate.js';
+import * as formUtils from '/js/libs/formUtils.js';
 
 window.addEventListener('DOMContentLoaded', () => {
 
     const videoFormObj = document.forms['videoOptions'];
     const imageFormObj = document.forms['imageOptions'];
     const serverMsg = document.getElementById('server-messages');
-
-    function getFormOptions(formObj) {
-
-        const formElements = Array.from(formObj);
-        //const bitrate = setBitrate(formElements);
-
-        const options = formElements.filter(element => {
-            const nodeName = element.nodeName.toLowerCase();
-            return (nodeName !== 'button' && nodeName !== 'input');
-        }).map(element => {
-            const tagName = element.tagName.toLowerCase();
-            if (tagName === 'select') {
-                return element.selectedOptions[0].value;
-            } else {
-                return '';
-            }
-        }).reduce((acc, next) => {
-            return `${acc} ${next}`.trim();
-        });
-        return options; //`${options} ${bitrate}`;
-    }
 
     async function setMessage(resp) {
         const msg = await resp.text();
@@ -81,7 +61,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         const name = target.nodeName;
         if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
-            const options = getFormOptions(videoFormObj);
+            const options = formUtils.getFormOptions(videoFormObj);
             fetch('/update', {
                 method: 'POST',
                 cache: 'no-cache',
@@ -109,7 +89,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'imageUpdate') {
-            const options = getFormOptions(imageFormObj);
+            const options = formUtils.getFormOptions(imageFormObj);
             fetch('/imageUpdate', {
                 method: 'POST',
                 cache: 'no-cache',
