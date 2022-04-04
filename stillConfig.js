@@ -40,7 +40,7 @@ module.exports = [{
     name: 'shutter_speed',
     paramName: '--shutter',
     values: [1, 2, 4, 8, 10, 20, 30, 40, 50, 100, 150, 200, 250, 500, 1000, 2000, 2500, 5000, 10000],
-    defaultvalue: '15',
+    defaultvalue: '250',
     comment: 'time in ms, 1 = 1/1000, 2 = 1/500, 4 = 1/250 = 1/125 or 8ms'
 }, {
     name: 'exposure_profile',
