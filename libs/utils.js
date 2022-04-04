@@ -64,10 +64,43 @@ async function listImageFiles(imageDir) {
     };
 }
 
+function getH264Bitrate(videoConfig, paramString) {
+
+    const videoSize = videoConfig.filter(item => {
+        return (item.name === 'videoSize');
+    });
+
+    const videoSizeValue = videoSize.values.filter(item => {
+        return (paramString.indexOf(item) > -1);
+    });
+
+    if (videoSizeValue && videoSizeValue.length > 0) {
+        const videoOption = videoSizeValue.split(' ');
+        const [width, height] = videoOption.filter(item => {
+            return parseInt(item);
+        });
+        const wxh = width * height;
+        let bitrate = 15000000;
+        if (wxh === 307200 || wxh === 480000) {
+            // 640 x 480
+            bitrate = 15000000;
+        } else if (wxh === 921600) {
+            // 1280 x 720
+            bitrate = 10000000;
+        } else {
+            // everything else
+            bitrate = 5000000;
+        }
+        return `--bitrate ${bitrate}`;
+    }
+    return '';
+}
+
 module.exports = {
     padNumber,
     getIPAddress,
     getHostname,
     promiseWrapper,
-    listImageFiles
+    listImageFiles,
+    getH264Bitrate
 };

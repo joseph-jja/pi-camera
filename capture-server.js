@@ -281,7 +281,7 @@ async function start() {
     });
 
     app.get('/saveRawStream', (request, response) => {
-        saveRawVideoData(lastUpdateOpts, response);
+        saveRawVideoData(lastUpdateOpts, response, videoConfig);
     });
 
     app.get('/config', (request, response) => {

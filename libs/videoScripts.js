@@ -13,7 +13,10 @@ module.exports = function(resolveFileLocation) {
 
     const config = require(`${resolveFileLocation}/videoConfig`);
 
-    const { padNumber } = require(`${resolveFileLocation}/libs/utils`);
+    const {
+        padNumber,
+        getH264Bitrate
+    } = require(`${resolveFileLocation}/libs/utils`);
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
@@ -66,9 +69,11 @@ module.exports = function(resolveFileLocation) {
         });
     }
 
-    function saveRawVideoData(options, response) {
+    function saveRawVideoData(options, response, videoConfig) {
 
-        const spawnOptions = [options.filter(filterOptions).join(' ')];
+        const optionsStr = options.filter(filterOptions).join(' ');
+        const bitRate = getH264Bitrate(videoConfig, optionsStr);
+        const spawnOptions = [optionsStr + ' ' + bitRate];
         spawnOptions.unshift(SAVE_RAW_CMD);
         const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'h264')}`;
         spawnOptions.push(`-o ${filename}`);
