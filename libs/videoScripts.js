@@ -28,9 +28,21 @@ function setImageUpdateOptions(opts) {
     lastImageUpdateOpts = opts;
 }
 
+let config;
+
 module.exports = function(resolveFileLocation) {
 
-    const config = require(`${resolveFileLocation}/videoConfig`);
+    if (!config) {
+        //only once
+        config = require(`${resolveFileLocation}/videoConfig`);
+        config.forEach(item => {
+            if (item.defaultvalue) {
+                item.defaultvalue.split(' ').forEach(item => {
+                    DEFAULT_OPTIONS.push(item);
+                });
+            }
+        });
+    }
 
     const {
         padNumber,
@@ -47,14 +59,6 @@ module.exports = function(resolveFileLocation) {
     const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
     const PREVIEW_PROCESS = `${resolveFileLocation}/scripts/previewStream.sh`;
-
-    config.forEach(item => {
-        if (item.defaultvalue) {
-            item.defaultvalue.split(' ').forEach(item => {
-                DEFAULT_OPTIONS.push(item);
-            });
-        }
-    });
 
     function getVideoFilename() {
         const now = new Date();
