@@ -9,6 +9,25 @@ const BASH_CMD = '/bin/bash';
 
 const DEFAULT_OPTIONS = [];
 
+let lastUpdateOpts = DEFAULT_OPTIONS,
+    lastImageUpdateOpts = [];
+
+function getVideoUpdateOptions() {
+    return lastUpdateOpts;
+}
+
+function setVideoUpdateOptions(opts) {
+    lastUpdateOpts = opts;
+}
+
+function getImageUpdateOptions() {
+    return lastImageUpdateOpts;
+}
+
+function setImageUpdateOptions(opts) {
+    lastImageUpdateOpts = opts;
+}
+
 module.exports = function(resolveFileLocation) {
 
     const config = require(`${resolveFileLocation}/videoConfig`);
@@ -208,6 +227,10 @@ module.exports = function(resolveFileLocation) {
         directStream,
         imageStream,
         previewProcess,
-        saveVideoProcess
+        saveVideoProcess,
+        getVideoUpdateOptions,
+        setVideoUpdateOptions,
+        getImageUpdateOptions,
+        setImageUpdateOptions
     };
 };

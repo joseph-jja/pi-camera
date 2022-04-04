@@ -29,7 +29,11 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         previewProcess,
         directStream,
         imageStream,
-        getVideoFilename
+        getVideoFilename,
+        getVideoUpdateOptions,
+        setVideoUpdateOptions,
+        getImageUpdateOptions,
+        setImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
 
 const app = express();
@@ -111,7 +115,6 @@ async function start() {
         });
     };
 
-    let lastUpdateOpts = DEFAULT_OPTIONS;
     app.post('/update', (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {
             const options = filterRequestBody(request.body);
@@ -119,7 +122,7 @@ async function start() {
                 const spawnOpts = options.map(item => {
                     return item.split(' ');
                 }).reduce((acc, next) => acc.concat(next));
-                lastUpdateOpts = spawnOpts;
+                setVideoUpdateOptions(spawnOpts);
                 if (global.directStreamProcess) {
                     const pid = global.directStreamProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
@@ -140,7 +143,6 @@ async function start() {
         }
     });
 
-    let lastImageUpdateOpts = [];
     app.post('/imageUpdate', (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {
             const options = filterRequestBody(request.body);
@@ -148,7 +150,7 @@ async function start() {
                 const spawnOpts = options.map(item => {
                     return item.split(' ');
                 }).reduce((acc, next) => acc.concat(next));
-                lastImageUpdateOpts = spawnOpts;
+                setImageUpdateOptions(spawnOpts);
                 if (global.imageStreamProcess) {
                     const pid = global.imageStreamProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
@@ -183,7 +185,7 @@ async function start() {
     });
 
     app.get('/saveStream', (request, response) => {
-        saveVideoProcess(lastUpdateOpts, response);
+        saveVideoProcess(getVideoUpdateOptions(), response);
     });
 
     app.get('/saveImage', (request, response) => {
@@ -281,12 +283,12 @@ async function start() {
     });
 
     app.get('/saveRawStream', (request, response) => {
-        saveRawVideoData(lastUpdateOpts, response, videoConfig);
+        saveRawVideoData(getVideoUpdateOptions(), response, videoConfig);
     });
 
     app.get('/config', (request, response) => {
         response.writeHead(200, {});
-        response.end(stringify(lastUpdateOpts));
+        response.end(stringify(getVideoUpdateOptions()) + ' ' );
     });
 
     app.get('/', (request, response) => {
