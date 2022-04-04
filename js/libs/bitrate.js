@@ -1,4 +1,4 @@
-export function setBitrate(formElements) {
+export default function setBitrate(formElements) {
     const videoSize = formElements.filter(item => {
         return (item.name === 'videoSize');
     })[0];
