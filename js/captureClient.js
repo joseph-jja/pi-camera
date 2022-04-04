@@ -1,10 +1,8 @@
-import bitrate from '/js/libs/bitrate.js';
 import * as formUtils from '/js/libs/formUtils.js';
 
 const {
     getFormOptions,
     setMessage,
-    getConfig,
     listImageCaptures,
     shutdown,
     executeServerCommand,
@@ -15,17 +13,8 @@ const {
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const videoFormObj = document.forms['videoOptions'];
     const imageFormObj = document.forms['imageOptions'];
-
     listImageCaptures();
-
-    function runPreview() {
-        const iframe = document.getElementById('videoDisplay');
-        setTimeout(() => {
-            iframe.src = '/preview';
-        }, 100);
-    }
 
     document.addEventListener('click', (event) => {
         const target = event.target;
