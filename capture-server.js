@@ -183,7 +183,7 @@ async function start() {
     });
 
     app.get('/saveImage', (request, response) => {
-        saveImagesData(lastUpdateOpts, response);
+        saveImagesData(lastImageUpdateOpts, response);
     });
 
     app.get('/canvas', (request, response) => {
