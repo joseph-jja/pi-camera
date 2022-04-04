@@ -125,7 +125,7 @@ async function start() {
                     directStream(spawnOpts);
                 }
                 response.writeHead(200, {});
-                const message = `Executed script with options ${stringify(spawnOpts)}`;
+                const message = `Executed script with options ${stringify(spawnOpts)} on ${new Date()}`;
                 response.end(message);
                 logger.info(message);
             }
@@ -195,7 +195,7 @@ async function start() {
     app.post('/startPreview', (request, response) => {
 
         response.writeHead(200, {});
-        response.end('Preview has started');
+        response.end('Preview has started on ' + new Date());
     });
 
     app.get('/preview', (request, response) => {
