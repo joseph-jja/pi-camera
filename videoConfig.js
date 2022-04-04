@@ -1,7 +1,4 @@
 module.exports = [{
-    name: 'Image_Capture',
-    value: 'image'
-},{
     name: 'ISO_Gain',
     paramName: '--gain',
     range: [1, 40],

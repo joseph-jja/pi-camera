@@ -17,6 +17,7 @@
             width: 900px;
             margin: 0 auto;
         }
+
         .full-width {
             display: block;
             margin: 0 auto;
@@ -35,19 +36,31 @@
         <div id="previewOptions"></div>
         <br>
         <br>
-        <fieldset class="full-width" style="width: 480px; height:120px">
-            <form name="imageFiles" onsubmit="return false;">
+        <fieldset class="full-width" style="width: 480px; height:200px">
+            <form name="mainForm" onsubmit="return false;">
+                <label>Image Or Video(default video)</label>
+                <input name="backendProvider" type="checkbox" value="imageOrVideo">
+                <br>
+                <br>
                 <div id="image-files"></div>
                 <br>
                 <button type="submit" id="listCaptures">
                     List Captures
+                </button>
+                <br><br>
+                <button type="submit" id="startPreview">
+                    Start Preview
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="stopPreview">
+                    Stop Preview
                 </button>
             </form>
         </fieldset>
         <div class="content-container">
             <fieldset style="width: 400px; min-height: 650px; float: left;">
                 <legend>Streaming options</legend>
-                <form name="cameraOptions" onsubmit="return false;">
+                <form name="videoOptions" onsubmit="return false;">
                     [[VIDEO_FORM]]
                     <br><br>
                     <button type="submit" id="updateButton">
@@ -59,25 +72,17 @@
                     </button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <button type="submit" id="saveRawStream">
-                        Capture RAW Stream
-                    </button>
-                    <br><br>
-                    <button type="submit" id="startPreview">
-                        Start Preview
-                    </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button type="submit" id="stopPreview">
-                        Stop Preview
+                        Capture H264 Stream
                     </button>
                 </form>
             </fieldset>
             <fieldset style="width: 400px; min-height: 650px; float: left;">
                 <legend>Image options</legend>
-                <form name="imageCapture" onsubmit="return false;">
+                <form name="imageOptions" onsubmit="return false;">
                     [[IMAGE_FORM]]
                     <br><br>
                     <button type="submit" id="listCaptures">
-                        List Captures
+                        Capture Images
                     </button>
                 </form>
             </fieldset>

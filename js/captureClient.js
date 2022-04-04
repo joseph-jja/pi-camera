@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-    /*function setBitrate(formElements) {
+    function setBitrate(formElements) {
         const videoSize = formElements.filter(item => {
             return (item.name === 'videoSize');
         })[0];
@@ -24,25 +24,21 @@ window.addEventListener('DOMContentLoaded', () => {
             return `--bitrate ${bitrate}`;
         }
         return '';
-    }*/
+    }
 
-    const formObj = document.forms['cameraOptions'];
+    const videoFormObj = document.forms['videoOptions'];
+    const imageFormObj = document.forms['imageOptions'];
+    const mainFormObj = document.forms['mainForm'];
+    const shutdownFormObj = document.forms['shutdown'];
     const serverMsg = document.getElementById('server-messages');
 
     function getImageCaptureType() {
-        const formElements = Array.from(formObj);
+        const isImageCapture = mainFormObj.backendProvider;
 
-        const checkboxes = formElements.filter(element => {
-            const nodeName = element.nodeName.toLowerCase(),
-                nodeType = element.type.toLowerCase();
-            return (nodeName === 'input' && nodeType === 'checkbox');
-        });
-
-        const isImageCapture = checkboxes.filter(item => item.name === 'Image_Capture')[0];
         return (isImageCapture && isImageCapture.checked) ? 'image' : 'stream';
     }
 
-    function getFormOptions() {
+    function getFormOptions(formObj) {
 
         const formElements = Array.from(formObj);
         //const bitrate = setBitrate(formElements);
@@ -97,6 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
             console.log(e);
         });
     }
+    listImageCaptures();
 
     function saveRawDataStream(url) {
         const imageCaptureType = getImageCaptureType();
@@ -131,7 +128,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 serverMsg.innerHTML = 'Uncheck Image_Capture to update options.';
                 return;
             }
-            const options = getFormOptions();
+            const options = getFormOptions(videoFormObj);
             fetch('/update', {
                 method: 'POST',
                 cache: 'no-cache',
