@@ -202,11 +202,18 @@ async function start() {
                     logger.error(`Error ${stringify(filedata.message)}`);
                     return;
                 }
+                if (filedata.message && filedata.message.length === 0) {
+                    response.writeHead(200, {
+                        'Content-Type': 'text/html'
+                    });
+                    response.end('No files');
+                    return;
+                }
                 const selectData = {
                     name: 'image_list',
                     paramName: '',
                     comment: 'Select an image to delete or download or rename',
-                    values: filedata.message || []
+                    values: filedata.message
                 };
                 logger.verbose(`Got select data ${stringify(selectData)}`);
                 const htmlForm = formFields.buildSelect(selectData);
