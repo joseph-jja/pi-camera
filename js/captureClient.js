@@ -6,7 +6,8 @@ const {
     setMessage,
     getConfig,
     listImageCaptures,
-    shutdown
+    shutdown,
+    executeServerCommand
 } = formUtils;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -15,18 +16,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const imageFormObj = document.forms['imageOptions'];
 
     listImageCaptures();
-
-    function executeServerCommand(url) {
-        getConfig();
-        fetch(url, {
-            method: 'GET'
-        }).then(resp => {
-            setMessage(resp);
-            listImageCaptures();
-        }).catch(e => {
-            console.log(e);
-        });
-    }
 
     function runPreview() {
         const iframe = document.getElementById('videoDisplay');

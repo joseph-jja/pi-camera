@@ -65,3 +65,15 @@ export function shutdown() {
         console.log(e);
     });
 }
+
+export function executeServerCommand(url) {
+    getConfig();
+    fetch(url, {
+        method: 'GET'
+    }).then(resp => {
+        setMessage(resp);
+        listImageCaptures();
+    }).catch(e => {
+        console.log(e);
+    });
+}
