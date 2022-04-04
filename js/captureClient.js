@@ -134,8 +134,24 @@ window.addEventListener('DOMContentLoaded', () => {
             }).catch(e => {
                 console.log(e);
             });
-        } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
+        } else if (name.toLowerCase() === 'button' && target.id === 'imageUpdate') {
+            fetch('/update', {
+                method: 'POST',
+                cache: 'no-cache',
+                referrerPolicy: 'no-referrer',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: options
+            }).then(async resp => {
+                setMessage(resp);
+            }).cacth(e => {
+                console.log(e);
+            });
+        } else if (name.toLowerCase() === 'button' && target.id === 'imageCapture') {
             saveRawDataStream('/saveStream');
+        } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
+            saveRawDataStream('/saveImage');
         } else if (name.toLowerCase() === 'button' && target.id === 'saveRawStream') {
             saveRawDataStream('/saveRawStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'listCaptures') {
