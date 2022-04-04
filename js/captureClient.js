@@ -1,41 +1,18 @@
 import bitrate from '/js/libs/bitrate.js';
 import * as formUtils from '/js/libs/formUtils.js';
 
+const {
+    getFormOptions,
+    setMessage,
+    getConfig,
+    listImageCaptures
+} = formUtils;
+
 window.addEventListener('DOMContentLoaded', () => {
 
     const videoFormObj = document.forms['videoOptions'];
     const imageFormObj = document.forms['imageOptions'];
-    const serverMsg = document.getElementById('server-messages');
 
-    async function setMessage(resp) {
-        const msg = await resp.text();
-        serverMsg.innerHTML = msg;
-    }
-
-    function getConfig() {
-        const saveOptionsObj = document.getElementById('previewOptions');
-        fetch('/config').then(resp => {
-            resp.text().then(data => {
-                saveOptionsObj.innerHTML = data;
-            }).catch(e => {
-                console.log(e);
-            });
-        }).catch(e => {
-            console.log(e);
-        });
-    }
-
-    function listImageCaptures() {
-        fetch('/imageList', {
-            method: 'GET'
-        }).then(async resp => {
-            const images = await resp.text();
-            const container = document.getElementById('image-files');
-            container.innerHTML = images;
-        }).catch(e => {
-            console.log(e);
-        });
-    }
     listImageCaptures();
 
     function saveRawDataStream(url) {
@@ -61,7 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         const name = target.nodeName;
         if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
-            const options = formUtils.getFormOptions(videoFormObj);
+            const options = getFormOptions(videoFormObj);
             fetch('/update', {
                 method: 'POST',
                 cache: 'no-cache',
@@ -89,7 +66,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'imageUpdate') {
-            const options = formUtils.getFormOptions(imageFormObj);
+            const options = getFormOptions(imageFormObj);
             fetch('/imageUpdate', {
                 method: 'POST',
                 cache: 'no-cache',

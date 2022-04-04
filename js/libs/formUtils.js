@@ -18,3 +18,36 @@ export function getFormOptions(formObj) {
     });
     return options;
 }
+
+export async function setMessage(resp) {
+    const serverMsg = document.getElementById('server-messages');
+    const msg = await resp.text();
+    serverMsg.innerHTML = msg;
+}
+
+export function getConfig() {
+    const saveOptionsObj = document.getElementById('previewOptions');
+    fetch('/config').then(resp => {
+        resp.text().then(data => {
+            saveOptionsObj.innerHTML = data;
+        }).catch(e => {
+            console.log(e);
+            saveOptionsObj.innerHTML = 'Error: ' + e;
+        });
+    }).catch(e => {
+        console.log(e);
+        saveOptionsObj.innerHTML = 'Error: ' + e;
+    });
+}
+
+export function listImageCaptures() {
+    fetch('/imageList', {
+        method: 'GET'
+    }).then(async resp => {
+        const images = await resp.text();
+        const container = document.getElementById('image-files');
+        container.innerHTML = images;
+    }).catch(e => {
+        console.log(e);
+    });
+}
