@@ -206,7 +206,7 @@ async function start() {
                     name: 'image_list',
                     paramName: '',
                     comment: 'Select an image to delete or download or rename',
-                    values: filedata.message
+                    values: filedata.message || []
                 };
                 logger.verbose(`Got select data ${stringify(selectData)}`);
                 const htmlForm = formFields.buildSelect(selectData);
@@ -220,6 +220,7 @@ async function start() {
                     'Content-Type': 'text/html'
                 });
                 response.end(stringify(e));
+                logger.error(`Error thrown ${stringify(e)}`);
             });
     });
 
