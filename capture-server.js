@@ -29,6 +29,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
+    previewStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/previewStream`)(RESOLVED_FILE_LOCATION),
     stopPreviewAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/stopPreview`)(RESOLVED_FILE_LOCATION),
     imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`)(RESOLVED_FILE_LOCATION),
     jsFilesAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/jsFiles`),
@@ -139,44 +140,7 @@ async function start() {
 
     app.get('/imageList', imageListAction);
 
-    app.get('/preview', (request, response) => {
-        if (!global.directStreamProcess) {
-            response.writeHead(200, {});
-            response.end('Preview service is not running!');
-            return;
-        }
-        //const uuid = randomUUID();
-        //previewProcesses[uid] = {};
-        response.writeHead(200, {
-            //'Content-Type': 'video/webm',
-            'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-            'Cache-Control': 'no-cache'
-            //'x-user-id': uuid
-        });
-
-        const previewCmd = previewProcess();
-        const previewCmdCB = (d) => {
-            response.write(d);
-        };
-        const globalStreamPreview = (d) => {
-            previewCmd.stdin.write(d);
-        };
-        response.on('close', () => {
-            global.directStreamProcess.stdout.off('data', globalStreamPreview);
-            previewCmd.stdout.off('data', previewCmdCB);
-            childProcess.exec(`kill -9 ${previewCmd.pid}`);
-        });
-        previewCmd.stdout.on('data', previewCmdCB);
-
-        global.directStreamProcess.stdout.on('data', globalStreamPreview);
-
-        global.directStreamProcess.stdout.once('error', (e) => {
-            logger.error(`Stream error ${stringify(e)}`);
-        });
-        global.directStreamProcess.stdout.once('close', () => {
-            logger.info('Stream closed');
-        });
-    });
+    app.get('/preview', previewStreamAction);
 
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), response, videoConfig);
