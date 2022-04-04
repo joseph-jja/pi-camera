@@ -68,7 +68,7 @@ function getH264Bitrate(videoConfig, paramString) {
 
     const videoSize = videoConfig.filter(item => {
         return (item.name === 'videoSize');
-    });
+    })[0];
 
     const videoSizeValue = videoSize.values.filter(item => {
         return (paramString.indexOf(item) > -1);
