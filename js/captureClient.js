@@ -146,7 +146,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 body: options
             }).then(async resp => {
                 setMessage(resp);
-            }).cacth(e => {
+            }).catch(e => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'imageCapture') {
