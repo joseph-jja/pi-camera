@@ -75,7 +75,7 @@ function getH264Bitrate(videoConfig, paramString) {
     });
 
     if (videoSizeValue && videoSizeValue.length > 0) {
-        const videoOption = videoSizeValue.split(' ');
+        const videoOption = videoSizeValue[0].split(' ');
         const [width, height] = videoOption.filter(item => {
             return parseInt(item);
         });
