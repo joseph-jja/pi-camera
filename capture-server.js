@@ -117,18 +117,13 @@ async function start() {
 
     app.post('/imageUpdate', imageUpdateAction);
 
-    app.get('/stopPreview', (request, response) => {
-        try {
-            childProcess.execSync(`kill -9 \`ps -ef | grep previewStream | awk '{print $2}' | grep -v grep \``);
-            childProcess.exec(`kill -9 \`ps -ef | grep "filter:v fps" | awk '{print $2}' | grep -v grep \``);
-            logger.info('Killed all preview processes');
-        } catch(e) {
-            logger.info('Nothing happened!');
-        }
+    app.post('/startPreview', (request, response) => {
+
         response.writeHead(200, {});
-        response.end('Preview should have stopped.');
-        logger.info('Preview should have stopped.');
+        response.end('Preview has started on ' + new Date());
     });
+
+    app.get('/stopPreview', stopPreviewAction);
 
     app.get('/saveStream', (request, response) => {
         saveVideoProcess(getVideoUpdateOptions(), response);
@@ -143,12 +138,6 @@ async function start() {
     });
 
     app.get('/imageList', imageListAction);
-
-    app.post('/startPreview', (request, response) => {
-
-        response.writeHead(200, {});
-        response.end('Preview has started on ' + new Date());
-    });
 
     app.get('/preview', (request, response) => {
         if (!global.directStreamProcess) {
