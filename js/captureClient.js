@@ -32,18 +32,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const shutdownFormObj = document.forms['shutdown'];
     const serverMsg = document.getElementById('server-messages');
 
-    function getImageCaptureType() {
-        const isImageCapture = mainFormObj.backendProvider;
-
-        return (isImageCapture && isImageCapture.checked) ? 'image' : 'stream';
-    }
-
     function getFormOptions(formObj) {
 
         const formElements = Array.from(formObj);
         //const bitrate = setBitrate(formElements);
-
-        const imageCaptureType = getImageCaptureType();
 
         const options = formElements.filter(element => {
             const nodeName = element.nodeName.toLowerCase();
@@ -51,9 +43,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }).map(element => {
             const tagName = element.tagName.toLowerCase();
             if (tagName === 'select') {
-                if (imageCaptureType === 'stream' && element.name === 'quality') {
-                    return '';
-                }
                 return element.selectedOptions[0].value;
             } else {
                 return '';
@@ -96,11 +85,6 @@ window.addEventListener('DOMContentLoaded', () => {
     listImageCaptures();
 
     function saveRawDataStream(url) {
-        const imageCaptureType = getImageCaptureType();
-        if (imageCaptureType === 'image') {
-            serverMsg.innerHTML = 'Uncheck Image_Capture to save data.';
-            return;
-        }
         getConfig();
         fetch(url, {
             method: 'GET'
@@ -123,11 +107,6 @@ window.addEventListener('DOMContentLoaded', () => {
         const target = event.target;
         const name = target.nodeName;
         if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
-            const imageCaptureType = getImageCaptureType();
-            if (imageCaptureType === 'image') {
-                serverMsg.innerHTML = 'Uncheck Image_Capture to update options.';
-                return;
-            }
             const options = getFormOptions(videoFormObj);
             fetch('/update', {
                 method: 'POST',
@@ -144,11 +123,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
-            const imageCaptureType = getImageCaptureType();
-            if (imageCaptureType === 'image') {
-                serverMsg.innerHTML = 'Uncheck Image_Capture to start preview.';
-                return;
-            }
             runPreview();
         } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
             const iframe = document.getElementById('videoDisplay');
