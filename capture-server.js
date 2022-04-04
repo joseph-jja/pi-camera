@@ -50,9 +50,13 @@ const previewProcesses = {};
 
 async function start() {
 
-    const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
+    const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
         return `/js/${item}`;
     });
+
+    const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
+        return `/js/${item}`;
+    }).concat(jsLibFiles);
 
     const videoConfig = require(`${RESOLVED_FILE_LOCATION}/videoConfig`),
         imageConfig = require(`${RESOLVED_FILE_LOCATION}/stillConfig`);
