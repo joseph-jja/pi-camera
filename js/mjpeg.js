@@ -38,7 +38,7 @@ class MJPEGStream {
                 this.onStart();
             }
         } else {
-            this.img.src = "#";
+            this.img.src = '#';
             clearInterval(this.frameTimer);
             if (this.onStop) {
                 this.onStop();
@@ -64,10 +64,10 @@ class MJPEGPlayer {
 
     constructor(canvas, url, options = {}) {
 
-        if (typeof canvas === "string" || canvas instanceof String) {
+        if (typeof canvas === 'string' || canvas instanceof String) {
             this.canvas = document.getElementById(canvas);
         }
-        this.context = this.canvas.getContext("2d");
+        this.context = this.canvas.getContext('2d');
 
         this.options = Object.assign({}, options);
 
@@ -81,17 +81,17 @@ class MJPEGPlayer {
         this.options.onFrameCaller = this;
 
         this.options.onStart = () => {
-            console.log("started");
+            console.log('started');
         };
 
         this.options.onStop = () => {
-            console.log("stopped");
+            console.log('stopped');
         };
 
         this.stream = new MJPEGStream(this.options);
 
         const self = this;
-        this.canvas.addEventListener("click", function() {
+        this.canvas.addEventListener('click', function() {
             if (self.stream.running) {
                 self.stop();
             } else {
@@ -136,11 +136,11 @@ class MJPEGPlayer {
                 dstRect.width,
                 dstRect.height
             );
-            console.log(".");
+            console.log('.');
         } catch (e) {
             // if we can't draw, don't bother updating anymore
             this.stop();
-            console.log("!");
+            console.log('stopped! ', e);
             this.options.errorHandler(e);
         }
     };
