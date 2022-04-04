@@ -28,13 +28,11 @@ function setImageUpdateOptions(opts) {
     lastImageUpdateOpts = opts;
 }
 
-let config;
-
 module.exports = function(resolveFileLocation) {
 
-    if (!config) {
-        //only once
-        config = require(`${resolveFileLocation}/videoConfig`);
+    //only once
+    const config = require(`${resolveFileLocation}/videoConfig`);
+    if (DEFAULT_OPTIONS.length === 0) {
         config.forEach(item => {
             if (item.defaultvalue) {
                 item.defaultvalue.split(' ').forEach(item => {
