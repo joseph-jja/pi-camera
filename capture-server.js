@@ -29,11 +29,10 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
-    imageListAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`),
-    imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`),
+    imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`)(RESOLVED_FILE_LOCATION),
     jsFilesAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/jsFiles`),
     shutdownAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/shutdown`),
-    updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`);
+    updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`)(RESOLVED_FILE_LOCATION);
 
 const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
     return `/js/libs/${item}`;
@@ -90,7 +89,8 @@ async function getFormData() {
 
     return {
         fields,
-        imageFields
+        imageFields,
+        formFields
     };
 }
 
@@ -102,8 +102,11 @@ async function start() {
 
     const {
         fields,
-        imageFields
+        imageFields,
+        formFields
     } = await getFormData();
+
+    const imageListAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`)(RESOLVED_FILE_LOCATION, formFields);
 
     app.get(jsFiles, jsFilesAction);
 

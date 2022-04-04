@@ -1,3 +1,3 @@
 module.exports = async function(importFile) {
-    return import('../' + importFile);
+    return import(importFile);
 }

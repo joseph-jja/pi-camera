@@ -1,12 +1,10 @@
-module.exports = async function(resolveFileLocation) {
+module.exports = function(resolveFileLocation, formFields) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
             listImageFiles
         } = require(`${resolveFileLocation}/libs/utils`);
-
-    const formFields = await import('../libs/form.mjs');
 
     return (request, response) => {
 
