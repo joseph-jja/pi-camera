@@ -7,7 +7,8 @@ global.imageStreamProcess;
 
 const BASH_CMD = '/bin/bash';
 
-const DEFAULT_OPTIONS = [];
+const DEFAULT_OPTIONS = [],
+    DEFAULT_IMAGE_CONFIG = [];
 
 let lastUpdateOpts = DEFAULT_OPTIONS,
     lastImageUpdateOpts = [];
@@ -28,8 +29,7 @@ function setImageUpdateOptions(opts) {
     lastImageUpdateOpts = opts;
 }
 
-module.exports = function(resolveFileLocation) {
-
+function updateConfigs(resolveFileLocation) {
     //only once
     const config = require(`${resolveFileLocation}/videoConfig`);
     if (DEFAULT_OPTIONS.length === 0) {
@@ -42,6 +42,22 @@ module.exports = function(resolveFileLocation) {
         });
     }
 
+    const imageConfig = require(`${resolveFileLocation}/stillConfig`);
+    if (DEFAULT_IMAGE_CONFIG.length === 0) {
+        imageConfig.forEach(item => {
+            if (item.defaultvalue) {
+                item.defaultvalue.split(' ').forEach(item => {
+                    DEFAULT_IMAGE_CONFIG.push(item);
+                });
+            }
+        });
+    }
+}
+
+module.exports = function(resolveFileLocation) {
+
+    updateConfigs(resolveFileLocation);
+    
     const {
         padNumber,
         getH264Bitrate
@@ -127,7 +143,7 @@ module.exports = function(resolveFileLocation) {
 
         const spawnOptions = [options.filter(filterOptions).join(' ')];
         if (spawnOptions.length === 0) {
-            const filtered =  DEFAULT_OPTIONS.filter(filterOptions).join(' ');
+            const filtered =  DEFAULT_IMAGE_CONFIG.filter(filterOptions).join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_IMAGE_CMD);
