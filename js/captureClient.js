@@ -1,4 +1,4 @@
-import bitrate from '/js/libs/bitrate';
+import bitrate from '/js/libs/bitrate.js';
 
 window.addEventListener('DOMContentLoaded', () => {
 
