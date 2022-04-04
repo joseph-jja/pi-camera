@@ -29,7 +29,6 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
-    importWrapper = require(`${RESOLVED_FILE_LOCATION}/libs/importWrapper`),
     imageListAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`),
     imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`),
     jsFilesAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/jsFiles`),
@@ -62,7 +61,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 async function getFormData() {
-    const formFields = await importWrapper('./libs/form.mjs');
+    const formFields = await import('./libs/form.mjs');
 
     const formBuilder = item => {
 

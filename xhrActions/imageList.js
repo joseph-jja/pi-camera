@@ -4,10 +4,9 @@ module.exports = async function(resolveFileLocation) {
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
             listImageFiles
-        } = require(`${resolveFileLocation}/libs/utils`),
-        importWrapper = require(`${resolveFileLocation}/libs/importWrapper`);
+        } = require(`${resolveFileLocation}/libs/utils`);
 
-    const formFields = await importWrapper('./libs/form.mjs');
+    const formFields = await import('../libs/form.mjs');
 
     return (request, response) => {
 
