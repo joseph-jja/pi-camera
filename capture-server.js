@@ -29,6 +29,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
+    stopPreviewAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/stopPreview`)(RESOLVED_FILE_LOCATION),
     imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`)(RESOLVED_FILE_LOCATION),
     jsFilesAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/jsFiles`),
     shutdownAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/shutdown`),
