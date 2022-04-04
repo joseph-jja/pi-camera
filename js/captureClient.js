@@ -135,7 +135,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'imageUpdate') {
-            fetch('/update', {
+            const options = getFormOptions(imageFormObj);
+            fetch('/imageUpdate', {
                 method: 'POST',
                 cache: 'no-cache',
                 referrerPolicy: 'no-referrer',
