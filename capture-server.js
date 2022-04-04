@@ -51,7 +51,7 @@ const previewProcesses = {};
 async function start() {
 
     const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
-        return `/js/${item}`;
+        return `/js/libs/${item}`;
     });
 
     const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
