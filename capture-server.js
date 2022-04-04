@@ -52,7 +52,6 @@ async function start() {
     const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
         return `/js/${item}`;
     });
-    console.log(jsFiles);
 
     const videoConfig = require(`${RESOLVED_FILE_LOCATION}/videoConfig`),
         imageConfig = require(`${RESOLVED_FILE_LOCATION}/stillConfig`);

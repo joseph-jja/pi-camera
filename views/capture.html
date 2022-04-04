@@ -5,10 +5,16 @@
     <title>PI Camera</title>
     <style type="text/css">
         #center-aligner {
-            width : 100%;
+            width: 100%;
         }
+
         #videoDisplay {
             display: block;
+            margin: 0 auto;
+        }
+
+        div.content-container {
+            width: 900px;
             margin: 0 auto;
         }
         .full-width {
@@ -39,45 +45,45 @@
             </form>
         </fieldset>
         <div class="content-container">
-        <fieldset style="width: 450px; min-height: 650px; float: left;">
-            <legend>Streaming options</legend>
-            <form name="cameraOptions" onsubmit="return false;">
-                [[VIDEO_FORM]]
-                <br><br>
-                <button type="submit" id="updateButton">
-                    Update
-                </button>
-                <br><br>
-                <button type="submit" id="saveStream">
-                    Capture Stream
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="saveRawStream">
-                    Capture RAW Stream
-                </button>
-                <br><br>
-                <button type="submit" id="startPreview">
-                    Start Preview
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="stopPreview">
-                    Stop Preview
-                </button>
-            </form>
-        </fieldset>
-        <fieldset style="width: 450px; min-height: 650px; float: left;">
-            <legend>Image options</legend>
-            <form name="imageCapture" onsubmit="return false;">
-                [[IMAGE_FORM]]
-                <br><br>
-                <button type="submit" id="listCaptures">
-                    List Captures
-                </button>
-            </form>
-        </fieldset>
+            <fieldset style="width: 400px; min-height: 650px; float: left;">
+                <legend>Streaming options</legend>
+                <form name="cameraOptions" onsubmit="return false;">
+                    [[VIDEO_FORM]]
+                    <br><br>
+                    <button type="submit" id="updateButton">
+                        Update
+                    </button>
+                    <br><br>
+                    <button type="submit" id="saveStream">
+                        Capture Stream
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" id="saveRawStream">
+                        Capture RAW Stream
+                    </button>
+                    <br><br>
+                    <button type="submit" id="startPreview">
+                        Start Preview
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" id="stopPreview">
+                        Stop Preview
+                    </button>
+                </form>
+            </fieldset>
+            <fieldset style="width: 400px; min-height: 650px; float: left;">
+                <legend>Image options</legend>
+                <form name="imageCapture" onsubmit="return false;">
+                    [[IMAGE_FORM]]
+                    <br><br>
+                    <button type="submit" id="listCaptures">
+                        List Captures
+                    </button>
+                </form>
+            </fieldset>
         </div>
         <br clear="both">
-        <fieldset style="width: 90%; float: none;">
+        <fieldset class="full-width" style="width: 480px; height:120px">
             <form name="shutdown" onsubmit="return false;">
                 <button type="submit" id="shutdownButton">
                     Shutdown
