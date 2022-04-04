@@ -31,8 +31,20 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
+    importWrapper = require(`${RESOLVED_FILE_LOCATION}/libs/importWrapper`),
     imageList = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`),
     updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`);
+
+const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
+    return `/js/libs/${item}`;
+});
+
+const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
+    return `/js/${item}`;
+}).concat(jsLibFiles);
+
+const videoConfig = require(`${RESOLVED_FILE_LOCATION}/videoConfig`),
+    imageConfig = require(`${RESOLVED_FILE_LOCATION}/stillConfig`);
 
 const app = express();
 app.disable('x-powered-by');
@@ -50,18 +62,7 @@ app.use(bodyParser.urlencoded({
 
 async function start() {
 
-    const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
-        return `/js/libs/${item}`;
-    });
-
-    const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
-        return `/js/${item}`;
-    }).concat(jsLibFiles);
-
-    const videoConfig = require(`${RESOLVED_FILE_LOCATION}/videoConfig`),
-        imageConfig = require(`${RESOLVED_FILE_LOCATION}/stillConfig`);
-
-    const formFields = await import('./libs/form.mjs');
+    const formFields = await importWrapper('./libs/form.mjs');
 
     const hostname = (await getHostname()).trim();
     const ipaddr = await getIPAddress(hostname);
