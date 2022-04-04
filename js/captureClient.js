@@ -150,9 +150,9 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'imageCapture') {
-            saveRawDataStream('/saveStream');
-        } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
             saveRawDataStream('/saveImage');
+        } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
+            saveRawDataStream('/saveStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'saveRawStream') {
             saveRawDataStream('/saveRawStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'listCaptures') {
