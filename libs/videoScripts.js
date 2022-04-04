@@ -212,6 +212,7 @@ module.exports = function(resolveFileLocation) {
         saveRawVideoData,
         saveImagesData,
         directStream,
+        imageStream,
         previewProcess,
         saveVideoProcess
     };
