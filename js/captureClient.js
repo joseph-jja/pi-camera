@@ -5,7 +5,8 @@ const {
     getFormOptions,
     setMessage,
     getConfig,
-    listImageCaptures
+    listImageCaptures,
+    shutdown
 } = formUtils;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -15,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     listImageCaptures();
 
-    function saveRawDataStream(url) {
+    function executeServerCommand(url) {
         getConfig();
         fetch(url, {
             method: 'GET'
@@ -81,25 +82,15 @@ window.addEventListener('DOMContentLoaded', () => {
                 console.log(e);
             });
         } else if (name.toLowerCase() === 'button' && target.id === 'imageCapture') {
-            saveRawDataStream('/saveImage');
+            executeServerCommand('/saveImage');
         } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
-            saveRawDataStream('/saveStream');
+            executeServerCommand('/saveStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'saveRawStream') {
-            saveRawDataStream('/saveRawStream');
+            executeServerCommand('/saveRawStream');
         } else if (name.toLowerCase() === 'button' && target.id === 'listCaptures') {
             listImageCaptures();
         } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
-            fetch('/shutdown', {
-                method: 'POST',
-                cache: 'no-cache',
-                referrerPolicy: 'no-referrer',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: ''
-            }).catch(e => {
-                console.log(e);
-            });
+            shutdown();
         }
     });
 });

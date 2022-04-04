@@ -51,3 +51,17 @@ export function listImageCaptures() {
         console.log(e);
     });
 }
+
+export function shutdown() {
+    fetch('/shutdown', {
+        method: 'POST',
+        cache: 'no-cache',
+        referrerPolicy: 'no-referrer',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: ''
+    }).catch(e => {
+        console.log(e);
+    });
+}
