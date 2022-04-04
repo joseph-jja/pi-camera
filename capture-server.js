@@ -18,8 +18,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         getIPAddress,
         getHostname,
-        listImageFiles,
-        filterRequestBody
+        listImageFiles
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename),
     {
@@ -29,11 +28,8 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         saveImagesData,
         previewProcess,
         directStream,
-        imageStream,
-        getVideoFilename,
         getVideoUpdateOptions,
-        getImageUpdateOptions,
-        setImageUpdateOptions
+        getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
     imageList = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`),
     updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`);
@@ -51,8 +47,6 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: 100000
 }));
-
-const previewProcesses = {};
 
 async function start() {
 
@@ -133,7 +127,7 @@ async function start() {
     });
 
     app.get('/saveImage', (request, response) => {
-        saveImagesData(lastImageUpdateOpts, response);
+        saveImagesData(getImageUpdateOptions(), response);
     });
 
     app.get('/canvas', (request, response) => {
