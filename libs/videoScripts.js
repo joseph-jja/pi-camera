@@ -57,7 +57,7 @@ function updateConfigs(resolveFileLocation) {
 module.exports = function(resolveFileLocation) {
 
     updateConfigs(resolveFileLocation);
-    
+
     const {
         padNumber,
         getH264Bitrate
