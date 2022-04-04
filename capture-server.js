@@ -199,6 +199,7 @@ async function start() {
                         'Content-Type': 'text/html'
                     });
                     response.end(stringify(filedata.message));
+                    logger.error(`Error ${stringify(filedata.message)}`);
                     return;
                 }
                 const selectData = {
