@@ -43,6 +43,11 @@ module.exports = [{
     defaultvalue: '--shutter 250',
     comment: 'time in ms, 1 = 1/1000, 2 = 1/500, 4 = 1/250 = 1/125 or 8ms'
 }, {
+    name: 'framerate',
+    paramName: '--framerate',
+    values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
+    comment: '0.2 = 5 seconds frame and 0.5 = 2 second frame'
+}, {
     name: 'exposure_profile',
     paramName: '--exposure',
     values: ['normal', 'sport', 'long'],
