@@ -96,11 +96,18 @@ function getH264Bitrate(videoConfig, paramString) {
     return '';
 }
 
+const filterRequestBody = (body) => {
+    return Object.keys(body).filter(item => {
+        return (item && item.length > 0);
+    });
+};
+
 module.exports = {
     padNumber,
     getIPAddress,
     getHostname,
     promiseWrapper,
     listImageFiles,
-    getH264Bitrate
+    getH264Bitrate,
+    filterRequestBody
 };

@@ -18,7 +18,8 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         getIPAddress,
         getHostname,
-        listImageFiles
+        listImageFiles,
+        filterRequestBody
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename),
     {
@@ -34,7 +35,8 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         setVideoUpdateOptions,
         getImageUpdateOptions,
         setImageUpdateOptions
-    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION);
+    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
+    updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`);
 
 const app = express();
 app.disable('x-powered-by');
@@ -109,39 +111,7 @@ async function start() {
         childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
     });
 
-    const filterRequestBody = (body) => {
-        return Object.keys(body).filter(item => {
-            return (item && item.length > 0);
-        });
-    };
-
-    app.post('/update', (request, response) => {
-        if (request.body && Object.keys(request.body).length > 0) {
-            const options = filterRequestBody(request.body);
-            if (options.length > 0) {
-                const spawnOpts = options.map(item => {
-                    return item.split(' ');
-                }).reduce((acc, next) => acc.concat(next));
-                setVideoUpdateOptions(spawnOpts);
-                if (global.directStreamProcess) {
-                    const pid = global.directStreamProcess.pid;
-                    childProcess.exec(`kill -9 ${pid}`, () => {
-                        global.directStreamProcess = undefined;
-                        directStream(spawnOpts);
-                    });
-                } else {
-                    directStream(spawnOpts);
-                }
-                response.writeHead(200, {});
-                const message = `Executed script with options ${stringify(spawnOpts)} on ${new Date()}`;
-                response.end(message);
-                logger.info(message);
-            }
-        } else {
-            response.writeHead(200, {});
-            response.end('No changes applied!');
-        }
-    });
+    app.post('/update', updateXHRAction);
 
     app.post('/imageUpdate', (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {
