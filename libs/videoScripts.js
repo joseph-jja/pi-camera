@@ -81,21 +81,9 @@ module.exports = function(resolveFileLocation) {
         });
     }
 
-    let replaceFlag = false;
-    function replaceOption(item) {
-        if (item === '--framerate') {
-            replaceFlag = true;
-            return '---shutter';
-        } else if (replaceFlag) {
-            replaceFlag = false;
-            return (1 / item); // convert framerate to how long we want to capture the image
-        }
-        return item;
-    }
-
     function saveImagesData(options, response) {
 
-        const spawnOptions = options.map(replaceOption).concat();
+        const spawnOptions = options.concat();
         spawnOptions.unshift(SAVE_IMAGES_CMD);
         const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'png')}`;
         spawnOptions.push(`-o ${filename}`);
@@ -106,6 +94,7 @@ module.exports = function(resolveFileLocation) {
             response.writeHead(200, {});
             response.end(`Saved raw data with status code ${code}.`);
         });
+        logger.info(`${SAVE_IMAGES_CMD}: ${stringify(spawnOptions)}`);
     }
 
     function imageStream(options) {

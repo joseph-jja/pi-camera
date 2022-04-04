@@ -136,7 +136,7 @@ async function start() {
         }
     });
 
-    let lastImageUpdateOpts = DEFAULT_OPTIONS;
+    let lastImageUpdateOpts = [];
     app.post('/imageUpdate', (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {
             const options = filterRequestBody(request.body);

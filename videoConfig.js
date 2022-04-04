@@ -29,7 +29,7 @@ module.exports = [{
     name: 'metering',
     paramName: '--metering',
     values: ['centre', 'spot', 'average'], // 'custom'
-    defaultValue: 'centre'
+    defaultValue: '--metering centre'
 }, {
     name: 'quality',
     paramName: '--quality',
@@ -39,13 +39,13 @@ module.exports = [{
     name: 'framerate',
     paramName: '--framerate',
     values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
-    defaultvalue: '15',
+    defaultvalue: '--framerate 15',
     comment: '0.2 = 5 seconds frame and 0.5 = 2 second frame'
 }, {
     name: 'exposure_profile',
     paramName: '--exposure',
     values: ['normal', 'sport', 'long'],
-    defaultvalue: 'normal'
+    defaultvalue: '--exposure normal'
 }, {
     name: 'contrast',
     paramName: '--contrast',
