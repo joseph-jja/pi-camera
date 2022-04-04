@@ -32,7 +32,10 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
     importWrapper = require(`${RESOLVED_FILE_LOCATION}/libs/importWrapper`),
-    imageList = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`),
+    imageListAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`),
+    imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`),
+    jsFilesAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/jsFiles`),
+    shutdownAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/shutdown`),
     updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`);
 
 const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
@@ -60,13 +63,8 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
-async function start() {
-
+async function getFormData() {
     const formFields = await importWrapper('./libs/form.mjs');
-
-    const hostname = (await getHostname()).trim();
-    const ipaddr = await getIPAddress(hostname);
-    process.env.IP_ADDR = ipaddr;
 
     const formBuilder = item => {
 
@@ -85,6 +83,7 @@ async function start() {
             return '';
         }
     };
+
     const fields = videoConfig.map(formBuilder).reduce((acc, next) => {
         return `${acc}<br><br>${os.EOL}${next}`;
     });
@@ -92,23 +91,30 @@ async function start() {
         return `${acc}<br><br>${os.EOL}${next}`;
     });
 
-    app.get(jsFiles, (request, response) => {
-        const baseFileName = request.url.replace(/\/js\//, '');
-        response.writeHead(200, {
-            'Content-Type': 'text/javascript; charset=utf-8'
-        });
-        fs.createReadStream(`js/${baseFileName}`).pipe(response);
-    });
+    return {
+        fields,
+        imageFields
+    };
+}
 
-    app.post('/shutdown', (request, response) => {
-        response.writeHead(200, {});
-        response.end('');
-        childProcess.spawn('sudo', ['shutdown', '-P', 'now']);
-    });
+async function start() {
+
+    const hostname = (await getHostname()).trim();
+    const ipaddr = await getIPAddress(hostname);
+    process.env.IP_ADDR = ipaddr;
+
+    const {
+        fields,
+        imageFields
+    } = await getFormData();
+
+    app.get(jsFiles, jsFilesAction);
+
+    app.post('/shutdown', shutdownAction);
 
     app.post('/update', updateXHRAction);
 
-    app.post('/imageUpdate', imageList);
+    app.post('/imageUpdate', imageUpdateAction);
 
     app.get('/stopPreview', (request, response) => {
         try {
@@ -135,46 +141,7 @@ async function start() {
         fs.createReadStream(`${RESOLVED_FILE_LOCATION}/views/video.html`).pipe(response);
     });
 
-    app.get('/imageList', (request, response) => {
-
-        listImageFiles(`${process.env.HOME}/images/`)
-            .then(filedata => {
-                if (filedata.hasError) {
-                    response.writeHead(500, {
-                        'Content-Type': 'text/html'
-                    });
-                    response.end(stringify(filedata.message));
-                    logger.error(`Error ${stringify(filedata.message)}`);
-                    return;
-                }
-                if (filedata.message && filedata.message.length === 0) {
-                    response.writeHead(200, {
-                        'Content-Type': 'text/html'
-                    });
-                    response.end('No files');
-                    return;
-                }
-                const selectData = {
-                    name: 'image_list',
-                    paramName: '',
-                    comment: 'Select an image to delete or download or rename',
-                    values: filedata.message
-                };
-                logger.verbose(`Got select data ${stringify(selectData)}`);
-                const htmlForm = formFields.buildSelect(selectData);
-                logger.verbose(`Got html form data ${stringify(htmlForm)}`);
-                response.writeHead(200, {
-                    'Content-Type': 'text/html'
-                });
-                response.end(htmlForm);
-            }).catch(e => {
-                response.writeHead(500, {
-                    'Content-Type': 'text/html'
-                });
-                response.end(stringify(e));
-                logger.error(`Error thrown ${stringify(e)}`);
-            });
-    });
+    app.get('/imageList', imageListAction);
 
     app.post('/startPreview', (request, response) => {
 
