@@ -1,6 +1,5 @@
 const os = require('os'),
     fs = require('fs'),
-    { randomUUID } = require('crypto'),
     http = require('http'),
     {
         resolve,
@@ -17,8 +16,7 @@ const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         getIPAddress,
-        getHostname,
-        listImageFiles
+        getHostname
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename),
     {
