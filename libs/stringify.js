@@ -1,7 +1,7 @@
 function stringify(m) {
     try {
         return JSON.stringify(m);
-    } catch(e) {
+    } catch (e) {
         return m;
     }
 }

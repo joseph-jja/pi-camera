@@ -32,6 +32,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     previewStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/previewStream`)(RESOLVED_FILE_LOCATION),
     stopPreviewAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/stopPreview`)(RESOLVED_FILE_LOCATION),
     imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`)(RESOLVED_FILE_LOCATION),
+    renameFileAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/renameFile`)(RESOLVED_FILE_LOCATION),
     jsFilesAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/jsFiles`),
     shutdownAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/shutdown`),
     updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`)(RESOLVED_FILE_LOCATION);
@@ -142,13 +143,7 @@ async function start() {
 
     app.get('/preview', previewStreamAction);
 
-    app.get('/renameFile', (request, response) => {
-        const query = (request.query || {});
-        const filename = query.name;
-        const oldFilename = query.oldname;
-        response.writeHead(200, {});
-        response.end('Done!');
-    });
+    app.get('/renameFile', renameFileAction);
 
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), response, videoConfig);

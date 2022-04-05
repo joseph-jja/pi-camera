@@ -7,6 +7,9 @@ global.imageStreamProcess;
 
 const BASH_CMD = '/bin/bash';
 
+const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
+    BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
+
 const DEFAULT_OPTIONS = [],
     DEFAULT_IMAGE_CONFIG = [];
 
@@ -56,13 +59,13 @@ function updateConfigs(resolveFileLocation) {
 
 function initSystem(logger) {
     try {
-        fs.mkdirSync(`${process.env.HOME}/images`);
-    } catch(e) {
+        fs.mkdirSync(BASE_IMAGE_PATH);
+    } catch (e) {
         logger.verbose(e);
     }
     try {
-        fs.mkdirSync(`${process.env.HOME}/imageConfig`);
-    } catch(e) {
+        fs.mkdirSync(BASE_CONFIG_PATH);
+    } catch (e) {
         logger.verbose(e);
     }
 }
@@ -97,9 +100,10 @@ module.exports = function(resolveFileLocation) {
     }
 
     let keep = true;
+
     function filterOptions(item) {
-        if ( item === '--profile' || item === '--bitrate' ||
-            item === '--quality' ) {
+        if (item === '--profile' || item === '--bitrate' ||
+            item === '--quality') {
             keep = false;
             return false;
         } else if (!keep) {
@@ -111,7 +115,7 @@ module.exports = function(resolveFileLocation) {
 
     function saveConfig(options, ext = 'mjpeg') {
 
-        const filename = `${process.env.HOME}/imageConfig/${getVideoFilename(ext + '.cfg')}`;
+        const filename = `${BASE_CONFIG_PATH}/${getVideoFilename(ext + '.cfg')}`;
         fs.writeFile(filename, options, (err, res) => {
             if (err) {
                 logger.error(stringify(err));
@@ -139,7 +143,7 @@ module.exports = function(resolveFileLocation) {
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
         const spawnOptions = [optionsStr + ' ' + bitRate];
         spawnOptions.unshift(SAVE_RAW_CMD);
-        const filename = `${process.env.HOME}/images/${getVideoFilename('h264')}`;
+        const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('h264')}`;
         spawnOptions.push(`-o ${filename}`);
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
@@ -155,7 +159,7 @@ module.exports = function(resolveFileLocation) {
 
         const spawnOptions = options.concat();
         spawnOptions.unshift(SAVE_IMAGES_CMD);
-        const filename = `${process.env.HOME}/images/${getVideoFilename('png')}`;
+        const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
         spawnOptions.push(`-o ${filename}`);
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
@@ -172,21 +176,21 @@ module.exports = function(resolveFileLocation) {
 
         const spawnOptions = [options.filter(filterOptions).join(' ')];
         if (spawnOptions.length === 0) {
-            const filtered =  DEFAULT_IMAGE_CONFIG.filter(filterOptions).join(' ');
+            const filtered = DEFAULT_IMAGE_CONFIG.filter(filterOptions).join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_IMAGE_CMD);
         global.imageStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
-        const listeners = global.imageStreamProcess .stdout.listeners('data');
-        for (let i =0, end = listeners.length; i < end; i++) {
-            global.imageStreamProcess .stdout.removeListener('data', listeners[i]);
+        const listeners = global.imageStreamProcess.stdout.listeners('data');
+        for (let i = 0, end = listeners.length; i < end; i++) {
+            global.imageStreamProcess.stdout.removeListener('data', listeners[i]);
         }
         const DevNull = new NullStream();
-        global.imageStreamProcess .stdout.pipe(DevNull);
-        global.imageStreamProcess .stderr.on('error', (err) => {
+        global.imageStreamProcess.stdout.pipe(DevNull);
+        global.imageStreamProcess.stderr.on('error', (err) => {
             console.error('Error', err);
         });
-        global.imageStreamProcess .on('close', () => {
+        global.imageStreamProcess.on('close', () => {
             logger.info('Video stream has ended!');
             DevNull.destroy();
         });
@@ -205,13 +209,13 @@ module.exports = function(resolveFileLocation) {
 
         const spawnOptions = [options.filter(filterOptions).join(' ')];
         if (spawnOptions.length === 0) {
-            const filtered =  DEFAULT_OPTIONS.filter(filterOptions).join(' ');
+            const filtered = DEFAULT_OPTIONS.filter(filterOptions).join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_VIDEO_CMD);
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         const listeners = global.directStreamProcess.stdout.listeners('data');
-        for (let i =0, end = listeners.length; i < end; i++) {
+        for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
         }
         const DevNull = new NullStream();
@@ -240,7 +244,7 @@ module.exports = function(resolveFileLocation) {
             directStream(options);
         }
 
-        const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
+        const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
         const fileout = fs.createWriteStream(filename);
         const callback = (d) => {
             fileout.write(d);
@@ -260,6 +264,8 @@ module.exports = function(resolveFileLocation) {
     }
 
     return {
+        BASE_IMAGE_PATH,
+        BASE_CONFIG_PATH,
         DEFAULT_OPTIONS,
         BASH_CMD,
         VIDEO_CMD,

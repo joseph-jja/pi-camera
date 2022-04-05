@@ -1,6 +1,8 @@
-const dns  = require('dns').promises,
+const dns = require('dns').promises,
     childProcess = require('child_process'),
-    { readdir } = require('fs');
+    {
+        readdir
+    } = require('fs');
 
 function padNumber(num) {
     return new String(num).padStart(2, 0);
@@ -11,7 +13,7 @@ async function getIPAddress(hostname) {
     let ipaddr;
     try {
         ipaddr = (await dns.resolve4(hostname))[0];
-    } catch(e) {
+    } catch (e) {
         ipaddr = childProcess.execSync('ifconfig |grep inet|grep -v inet6 |grep broadcast | awk \'{print $2}\'');
     }
     return `${ipaddr}`.trim();
