@@ -20,6 +20,12 @@ module.exports = function(resolveFileLocation) {
                     return item.split(' ');
                 }).reduce((acc, next) => acc.concat(next));
                 setImageUpdateOptions(spawnOpts);
+                if (global.directStreamProcess) {
+                    const pid = global.directStreamProcess.pid;
+                    childProcess.exec(`kill -9 ${pid}`, () => {
+                        global.directStreamProcess = undefined;
+                    });
+                }
                 if (global.imageStreamProcess) {
                     const pid = global.imageStreamProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
