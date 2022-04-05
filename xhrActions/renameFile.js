@@ -2,6 +2,9 @@ const {
     rename
 } = require('fs');
 
+const VALID_CHARACTERS = /[a-zA-Z]/g,
+    OLD_FILENAME_MATCH = /^[a-zA-Z]*-(\d)*\.[a-z]*$/;
+
 module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
@@ -20,7 +23,14 @@ module.exports = function(resolveFileLocation) {
             response.end('Missing parameters, nothing done!');
             return;
         }
-        const newName = oldFilename.replace('capture', filename);
+        const filteredFilename = filename.match(VALID_CHARACTERS).join('');
+        const filteredOldFilename = oldFilename.match(OLD_FILENAME_MATCH);
+        if (!filteredOldFilename) {
+            response.writeHead(200, {});
+            response.end('Invalid oldfile name, nothing done!');
+            return;
+        }
+        const newName = oldFilename.replace('capture', filteredFilename);
         rename(`${BASE_IMAGE_PATH}/${oldFilename}`, `${BASE_IMAGE_PATH}/${newName}`, (err, success) => {
             if (err) {
                 response.writeHead(200, {});
