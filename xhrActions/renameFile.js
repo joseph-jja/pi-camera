@@ -27,10 +27,10 @@ module.exports = function(resolveFileLocation) {
                 response.end('Error: ' + stringify(err));
                 return;
             }
-            rename(`${BASE_CONFIG_PATH}/${oldFilename}.cfg`, `${BASE_CONFIG_PATH}/${newName}.cfg`, (err, success) => {
-                if (err) {
+            rename(`${BASE_CONFIG_PATH}/${oldFilename}.cfg`, `${BASE_CONFIG_PATH}/${newName}.cfg`, (xerr, success) => {
+                if (xerr) {
                     response.writeHead(200, {});
-                    response.end('Error: ' + stringify(err));
+                    response.end('Error: ' + stringify(xerr));
                     return;
                 }
 
