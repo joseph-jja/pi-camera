@@ -24,5 +24,5 @@ echo "Running script ... " >> $FOREVER_LOG
 echo "IP Address: $IP_ADDRESS ..." >> $FOREVER_LOG
 echo "Options: $EXTRA_ARGS ..." >> $FOREVER_LOG
 
-/usr/bin/libcamera-still $EXTRA_ARGS --nopreview -t 0 -o - |
+/usr/bin/libcamera-still $EXTRA_ARGS --nopreview -t 0 --timelapse 10 --immediate -o - |
     ffmpeg -i pipe: -an -filter_threads 1 -c:v copy -f mpjpeg -
