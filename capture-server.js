@@ -142,6 +142,14 @@ async function start() {
 
     app.get('/preview', previewStreamAction);
 
+    app.get('/renameFile', (request, response) => {
+        const query = (request.query || {});
+        const filename = query.name;
+        const oldFilename = query.oldname;
+        response.writeHead(200, {});
+        response.end('Done!');
+    });
+
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), response, videoConfig);
     });
