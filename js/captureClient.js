@@ -19,13 +19,16 @@ window.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (event) => {
         const target = event.target;
         const name = target.nodeName;
-        if (name.toLowerCase() === 'button' && target.id === 'updateButton') {
+        if (name.toLowerCase() !== 'button') {
+            return;
+        }
+        if (target.id === 'updateButton') {
             videoUpdate();
-        } else if (name.toLowerCase() === 'button' && target.id === 'startPreview') {
+        } else if (target.id === 'startPreview') {
             startPreview();
-        } else if (name.toLowerCase() === 'button' && target.id === 'stopPreview') {
+        } else if (target.id === 'stopPreview') {
             stopPreview();
-        } else if (name.toLowerCase() === 'button' && target.id === 'imageUpdate') {
+        } else if (target.id === 'imageUpdate') {
             const options = getFormOptions(imageFormObj);
             fetch('/imageUpdate', {
                 method: 'POST',
@@ -40,15 +43,20 @@ window.addEventListener('DOMContentLoaded', () => {
             }).catch(e => {
                 console.log(e);
             });
-        } else if (name.toLowerCase() === 'button' && target.id === 'imageCapture') {
+        } else if (target.id === 'renameFile') {
+            const invalidChars = /\.|&|\^|%|\$|#|@|\!|~|\+|=|~|-|_/g;
+            const formObj = document.forms('mainForm');
+            const fname = (formObj['new-name'].value || '').replace(invalidChars, '');
+            executeServerCommand(`/renameFile?name=${fname}`);
+        } else if (target.id === 'imageCapture') {
             executeServerCommand('/saveImage');
-        } else if (name.toLowerCase() === 'button' && target.id === 'saveStream') {
+        } else if (target.id === 'saveStream') {
             executeServerCommand('/saveStream');
-        } else if (name.toLowerCase() === 'button' && target.id === 'saveRawStream') {
+        } else if (target.id === 'saveRawStream') {
             executeServerCommand('/saveRawStream');
-        } else if (name.toLowerCase() === 'button' && target.id === 'listCaptures') {
+        } else if (target.id === 'listCaptures') {
             listImageCaptures();
-        } else if (name.toLowerCase() === 'button' && target.id === 'shutdownButton') {
+        } else if (target.id === 'shutdownButton') {
             shutdown();
         }
     });
