@@ -4,7 +4,9 @@ module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
-        { filterRequestBody } = require(`${resolveFileLocation}/libs/utils`),
+        {
+            filterRequestBody
+        } = require(`${resolveFileLocation}/libs/utils`),
         {
             setImageUpdateOptions,
             imageStream
