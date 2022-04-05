@@ -21,6 +21,12 @@ module.exports = function(resolveFileLocation) {
             response.end('Missing parameters, nothing done!');
             return;
         }
+        const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
+        if (!filteredOldFilename) {
+            response.writeHead(200, {});
+            response.end('Invalid oldfile name, nothing done!');
+            return;
+        }
         unlink(`${BASE_IMAGE_PATH}/${filename}`, (err, success) => {
             if (err) {
                 response.writeHead(200, {});
