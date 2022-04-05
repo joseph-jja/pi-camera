@@ -54,6 +54,19 @@ function updateConfigs(resolveFileLocation) {
     }
 }
 
+function initSystem(logger) {
+    try {
+        fs.mkdirSync(`${process.env.HOME}/images`);
+    } catch(e) {
+        logger.verbose(e);
+    }
+    try {
+        fs.mkdirSync(`${process.env.HOME}/imageConfig`);
+    } catch(e) {
+        logger.verbose(e);
+    }
+}
+
 module.exports = function(resolveFileLocation) {
 
     updateConfigs(resolveFileLocation);
@@ -74,11 +87,13 @@ module.exports = function(resolveFileLocation) {
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
     const PREVIEW_PROCESS = `${resolveFileLocation}/scripts/previewStream.sh`;
 
-    function getVideoFilename() {
+    initSystem(logger);
+
+    function getVideoFilename(ext = 'mjpeg') {
         const now = new Date();
         const datePart = `${now.getFullYear()}${padNumber(now.getMonth()+1)}${padNumber(now.getDate())}`;
         const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
-        return `capture-${datePart}${timePart}.mjpeg`;
+        return `capture-${datePart}${timePart}.${ext}`;
     }
 
     let keep = true;
@@ -92,6 +107,18 @@ module.exports = function(resolveFileLocation) {
             return false;
         }
         return true;
+    }
+
+    function saveConfig(options, ext = 'mjpeg') {
+
+        const filename = `${process.env.HOME}/imageConfig/${getVideoFilename(ext + '.cfg')}`;
+        fs.writeFile(filename, options, (err, res) => {
+            if (err) {
+                logger.error(stringify(err));
+            } else {
+                logger.verbose(stringify(res));
+            }
+        });
     }
 
     function spawnVideoProcess(options) {
@@ -112,7 +139,7 @@ module.exports = function(resolveFileLocation) {
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
         const spawnOptions = [optionsStr + ' ' + bitRate];
         spawnOptions.unshift(SAVE_RAW_CMD);
-        const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'h264')}`;
+        const filename = `${process.env.HOME}/images/${getVideoFilename('h264')}`;
         spawnOptions.push(`-o ${filename}`);
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
@@ -121,13 +148,14 @@ module.exports = function(resolveFileLocation) {
             response.writeHead(200, {});
             response.end(`Saved raw data with status code ${code}.`);
         });
+        saveConfig(stringify(spawnOptions), 'h264');
     }
 
     function saveImagesData(options, response) {
 
         const spawnOptions = options.concat();
         spawnOptions.unshift(SAVE_IMAGES_CMD);
-        const filename = `${process.env.HOME}/images/${getVideoFilename().replace('mjpeg', 'png')}`;
+        const filename = `${process.env.HOME}/images/${getVideoFilename('png')}`;
         spawnOptions.push(`-o ${filename}`);
         const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
             env: process.env
@@ -137,6 +165,7 @@ module.exports = function(resolveFileLocation) {
             response.end(`Saved raw data with status code ${code}.`);
         });
         logger.info(`${SAVE_IMAGES_CMD}: ${stringify(spawnOptions)}`);
+        saveConfig(stringify(spawnOptions), 'png');
     }
 
     function imageStream(options) {
@@ -210,16 +239,13 @@ module.exports = function(resolveFileLocation) {
         if (!global.directStreamProcess) {
             directStream(options);
         }
-        try {
-            fs.mkdirSync(`${process.env.HOME}/images`);
-        } catch(e) {
-            console.error(e);
-        }
+
         const filename = `${process.env.HOME}/images/${getVideoFilename()}`;
         const fileout = fs.createWriteStream(filename);
         const callback = (d) => {
             fileout.write(d);
         };
+        saveConfig(stringify(options));
         global.directStreamProcess.stdout.on('data', callback);
         setTimeout(() => {
             global.directStreamProcess.stdout.off('data', callback);

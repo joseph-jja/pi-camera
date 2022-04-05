@@ -3,7 +3,7 @@ import {
 } from 'os';
 
 export function makeLabel(name) {
-    return `<label>${name}</label>${EOL}`;
+    return `<label>${name}:</label>&nbsp;${EOL}`;
 }
 
 function getComment(item) {
