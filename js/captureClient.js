@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'renameFile') {
             const invalidChars = /\.|&|\^|%|\$|#|@|\!|~|\+|=|~|-|_/g;
             const formObj = document.forms['mainForm'];
-            const currentItem = formObj['image_list'].selectedOptions[0].value;
+            const currentItem = formObj['image_list'].selectedOptions[0].value.trim();
             const fname = (formObj['new-name'].value || '').replace(invalidChars, '');
             executeServerCommand(`/renameFile?oldname=${currentItem}&name=${fname}`);
         } else if (target.id === 'imageCapture') {
