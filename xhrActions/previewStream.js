@@ -26,7 +26,11 @@ module.exports = function(resolveFileLocation) {
             response.write(d);
         };
         const globalStreamPreview = (d) => {
-            previewCmd.stdin.write(d);
+            try {
+                previewCmd.stdin.write(d);
+            } catch(e) {
+                logger.error(`Stream error with type of ${typeof streamObject} => ${stringify(e)}`);
+            }
         };
         writeHeaders(response);
         response.on('close', () => {
