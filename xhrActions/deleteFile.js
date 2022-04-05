@@ -1,5 +1,5 @@
 const {
-    rename
+    unlink
 } = require('fs');
 
 module.exports = function(resolveFileLocation) {
@@ -14,14 +14,12 @@ module.exports = function(resolveFileLocation) {
     return (request, response) => {
         const query = (request.query || {});
         const filename = query.name;
-        const oldFilename = query.oldname;
-        if (!filename || !oldFilename) {
+        if (!filename) {
             response.writeHead(200, {});
             response.end('Missing parameters, nothing done!');
             return;
         }
-        const newName = oldFilename.replace('capture', filename);
-        rename(`${BASE_IMAGE_PATH}/${oldFilename}`, `${BASE_IMAGE_PATH}/${newName}`, (err, success) => {
+        unlink(`${BASE_IMAGE_PATH}/${filename}`, (err, success) => {
             if (err) {
                 response.writeHead(200, {});
                 response.end('Error: ' + stringify(err));
@@ -29,7 +27,7 @@ module.exports = function(resolveFileLocation) {
                 return;
             }
             const successMsg = stringify(success);
-            rename(`${BASE_CONFIG_PATH}/${oldFilename}.cfg`, `${BASE_CONFIG_PATH}/${newName}.cfg`, (xerr, xsuccess) => {
+            unlink(`${BASE_CONFIG_PATH}/${filename}.cfg`, (xerr, xsuccess) => {
                 if (xerr) {
                     const message = 'Error: ' + stringify(xerr) + ' and success: ' + successMsg;
                     response.writeHead(200, {});
