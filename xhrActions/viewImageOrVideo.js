@@ -23,14 +23,19 @@ module.exports = function(resolveFileLocation) {
         }
         const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
         if (!filteredOldFilename) {
-            response.writeHead(200, {});
+            response.writeHead(200, {
+                'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+                'Cache-Control': 'no-cache'
+            });
             response.end('Invalid oldfile name, nothing done!');
             return;
         }
         if (filename.endsWith('.png')) {
-            response.writeHead(200, {});
+            response.writeHead(200, {
+                'Content-type': 'image/png'
+            });
             readFile(`${BASE_IMAGE_PATH}/${filename}`, (err, data) => {
-                
+                response.end(data);
             });
         } else if (filename.endsWith('.mjpeg')) {
             response.writeHead(200, {});
