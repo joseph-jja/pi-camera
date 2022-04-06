@@ -9,8 +9,7 @@ module.exports = function(resolveFileLocation) {
 
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
-            BASE_IMAGE_PATH,
-            BASE_CONFIG_PATH
+            BASE_IMAGE_PATH
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
 
     return (request, response) => {
