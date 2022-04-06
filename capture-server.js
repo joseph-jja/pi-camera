@@ -70,6 +70,28 @@ async function getFormData() {
 
         if (item.values) {
             return formFields.buildSelect(item);
+        } else if (item.multiRange) {
+            const ranges = item.multiRange.ranges.map((range, index) => {
+                const rangeItem = {
+                    step: item.step,
+                    decimalPlaces: item.decimalPlaces,
+                    range: range
+                };
+                const values = formFields.getRangeValues(rangeItem);
+                if (index === 0) {
+                    const ritem = Object.assign({}, item, {values});
+                    delete ritem.comment;
+                    return formFields.buildSelect(ritem);
+                } else {
+                    const ritem = Object.assign({}, item, {values});
+                    delete ritem.name;
+                    ritem.paramName = item.multiRange.joinedBy;
+                    return formFields.buildSelect(ritem);
+                }
+            }).reduce((acc, next) => {
+                return `${acc} ${next}`;
+            });
+            return ranges;
         } else if (item.range) {
             const values = formFields.getRangeValues(item);
             const ritem = Object.assign({}, item, {values});

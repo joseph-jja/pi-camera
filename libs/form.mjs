@@ -3,7 +3,7 @@ import {
 } from 'os';
 
 export function makeLabel(name) {
-    return `<label>${name}:</label>&nbsp;${EOL}`;
+    return (name ? `<label>${name}:</label>&nbsp;${EOL}`: '');
 }
 
 function getComment(item) {
@@ -22,7 +22,7 @@ export function buildSelect(item) {
     } = item;
 
     const options = values.map(element => {
-        const selectedValue = `${paramName} ${element}`;
+        const selectedValue = (paramName.startsWith('-') ? `${paramName} ${element}` : `${paramName}${element}`);
         const selected = (defaultvalue && defaultvalue.trim() === selectedValue.trim() ? 'selected' : '');
         return `<option value="${selectedValue}" ${selected}>${element}</option>`;
     }).reduce((acc, next) => {

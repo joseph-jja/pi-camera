@@ -14,7 +14,7 @@ export function getFormOptions(formObj) {
             return '';
         }
     }).reduce((acc, next) => {
-        return `${acc} ${next}`.trim();
+        return `${acc}${next.startsWith('-') ? ' ': ''}${next}`.trim();
     });
     return options;
 }
