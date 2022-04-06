@@ -99,20 +99,6 @@ module.exports = function(resolveFileLocation) {
         return `capture-${datePart}${timePart}.${ext}`;
     }
 
-    let keep = true;
-
-    function filterOptions(item) {
-        if (item === '--profile' || item === '--bitrate' ||
-            item === '--quality') {
-            keep = false;
-            return false;
-        } else if (!keep) {
-            keep = true;
-            return false;
-        }
-        return true;
-    }
-
     function saveConfig(options, ext = 'mjpeg') {
 
         const filename = `${BASE_CONFIG_PATH}/${getVideoFilename(ext + '.cfg')}`;
@@ -139,7 +125,7 @@ module.exports = function(resolveFileLocation) {
 
     function saveRawVideoData(options, response, videoConfig) {
 
-        const optionsStr = options.filter(filterOptions).join(' ');
+        const optionsStr = options.join(' ');
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
         const spawnOptions = [optionsStr + ' ' + bitRate];
         spawnOptions.unshift(SAVE_RAW_CMD);
@@ -158,6 +144,10 @@ module.exports = function(resolveFileLocation) {
     function saveImagesData(options, response) {
 
         const spawnOptions = options.concat();
+        if (spawnOptions.length === 0) {
+            const filtered = DEFAULT_IMAGE_CONFIG.join(' ');
+            spawnOptions.push(filtered);
+        }
         spawnOptions.unshift(SAVE_IMAGES_CMD);
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
         spawnOptions.push(`-o ${filename}`);
@@ -174,9 +164,9 @@ module.exports = function(resolveFileLocation) {
 
     function imageStream(options) {
 
-        const spawnOptions = [options.filter(filterOptions).join(' ')];
+        const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
-            const filtered = DEFAULT_IMAGE_CONFIG.filter(filterOptions).join(' ');
+            const filtered = DEFAULT_IMAGE_CONFIG.join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_IMAGE_CMD);
@@ -207,9 +197,9 @@ module.exports = function(resolveFileLocation) {
 
     function directStream(options) {
 
-        const spawnOptions = [options.filter(filterOptions).join(' ')];
+        const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
-            const filtered = DEFAULT_OPTIONS.filter(filterOptions).join(' ');
+            const filtered = DEFAULT_OPTIONS.join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_VIDEO_CMD);
