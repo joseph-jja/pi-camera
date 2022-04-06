@@ -136,7 +136,7 @@ module.exports = function(resolveFileLocation) {
         });
         rawDataProcess.on('close', (code) => {
             response.writeHead(200, {});
-            response.end(`Saved raw data with status code ${code}.`);
+            response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
         });
         saveConfig(stringify(spawnOptions), 'h264');
     }
@@ -156,7 +156,7 @@ module.exports = function(resolveFileLocation) {
         });
         rawDataProcess.on('close', (code) => {
             response.writeHead(200, {});
-            response.end(`Saved raw data with status code ${code}.`);
+            response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
         });
         logger.info(`${SAVE_IMAGES_CMD}: ${stringify(spawnOptions)}`);
         saveConfig(stringify(spawnOptions), 'png');
@@ -245,7 +245,7 @@ module.exports = function(resolveFileLocation) {
             global.directStreamProcess.stdout.off('data', callback);
             logger.info(`Finished writing file ${filename}`);
             response.writeHead(200, {});
-            response.end('Finished writing file to disk');
+            response.end(`Finished writing file to disk using options ${stringify(options)}`);
         }, 60000);
     }
 
