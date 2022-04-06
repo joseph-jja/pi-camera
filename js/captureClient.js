@@ -49,6 +49,10 @@ window.addEventListener('DOMContentLoaded', () => {
             const currentItem = formObj['image_list'].selectedOptions[0].value.trim();
             const fname = (formObj['new-name'].value || '').match(VALID_CHARACTERS)[0].join('');
             executeServerCommand(`/renameFile?oldname=${currentItem}&name=${fname}`);
+        } else if (target.id === 'deleteFile') {
+            const formObj = document.forms['mainForm'];
+            const currentItem = formObj['image_list'].selectedOptions[0].value.trim();
+            executeServerCommand(`/deleteFile?name=${currentItem}`);
         } else if (target.id === 'imageCapture') {
             executeServerCommand('/saveImage');
         } else if (target.id === 'saveStream') {
