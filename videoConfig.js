@@ -23,7 +23,7 @@ module.exports = [{
     paramName: '--awbgains',
     multiRange: {
         joinedBy: ',',
-        ranges: [[0,100], [0,100]]
+        ranges: [[0,50], [0,50]]
     },
     step: 0.5,
     decimalPlaces: 1,
