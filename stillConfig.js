@@ -1,11 +1,4 @@
 module.exports = [{
-    name: 'ISO_Gain',
-    paramName: '--gain',
-    range: [1, 40],
-    step: 0.5,
-    decimalPlaces: 1,
-    comment: 'Higher value is higher ISO'
-}, {
     name: 'imageSize',
     paramName: '',
     values: [
@@ -19,6 +12,23 @@ module.exports = [{
     ],
     comment: '1640x1232 uses full sensor with binning',
     defaultvalue: '--width 1640 --height 1232'
+}, {
+    name: 'ISO_Gain',
+    paramName: '--gain',
+    range: [1, 40],
+    step: 0.5,
+    decimalPlaces: 1,
+    comment: 'Higher value is higher ISO'
+}, {
+    name: 'AWB_Gain',
+    paramName: '--awbgains',
+    multiRange: {
+        joinedBy: ',',
+        ranges: [[0,50], [0,50]]
+    },
+    step: 0.5,
+    decimalPlaces: 1,
+    comment: 'Change amount of red and blue, higer means more'
 }, {
     name: 'EV_compensation',
     comment: 'higher is brighter',
