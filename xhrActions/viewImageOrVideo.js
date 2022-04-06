@@ -19,6 +19,7 @@ module.exports = function(resolveFileLocation) {
         if (!filename) {
             response.writeHead(200, {});
             response.end('Missing parameters, nothing done!');
+            logger.info('Missing parameters, nothing done!');
             return;
         }
         const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
@@ -28,6 +29,7 @@ module.exports = function(resolveFileLocation) {
                 'Cache-Control': 'no-cache'
             });
             response.end('Invalid oldfile name, nothing done!');
+            logger.info('Invalid oldfile name, nothing done!');
             return;
         }
         if (filename.endsWith('.png')) {
