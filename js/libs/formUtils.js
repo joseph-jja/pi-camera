@@ -66,6 +66,15 @@ export function shutdown() {
     });
 }
 
+export function displayImages(url, isImage) {
+    if (isImage) {
+        window.open(url);
+        return;
+    }
+    const videoDisplay = document.getElementById('videoDisplay');
+    videoDisplay.src = url;
+}
+
 export function executeServerCommand(url) {
     getConfig();
     fetch(url, {
