@@ -15,7 +15,7 @@ echo "Running script ... "
 echo "IP Address: $IP_ADDRESS ..."
 echo "Options: $EXTRA_ARGS ..."
 
-/usr/bin/libcamera-vid --codec h264 $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \
+/usr/bin/libcamera-vid --codec h264 $EXTRA_ARGS -t 0 --inline -o - | /usr/bin/cvlc \
     --no-audio stream:///dev/stdin --sout '#rtp{sdp=rtsp://0.0.0.0:10000/stream1}' :demux=h264
 
 #/usr/bin/libcamera-vid --codec mjpeg $EXTRA_ARGS --nopreview -t 0 --inline -o - | /usr/bin/cvlc \

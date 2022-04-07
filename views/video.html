@@ -21,6 +21,7 @@
     var player = new MJPEGPlayer("player", "/preview", {
         errorHandler: (err) => {
             player.stream = new MJPEGStream(player.options);
+            player.start();
         },
         refreshRate: 250
     });

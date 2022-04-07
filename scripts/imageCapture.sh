@@ -18,4 +18,4 @@ echo "IP Address: $IP_ADDRESS ..." >> $FOREVER_LOG
 echo "Options: $EXTRA_ARGS ..." >> $FOREVER_LOG
 
 # needs -o FILENAME.raw also -t 2000 ?
-/usr/bin/libcamera-still -r --nopreview $EXTRA_ARGS
+/usr/bin/libcamera-still -r $EXTRA_ARGS

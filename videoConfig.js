@@ -1,4 +1,8 @@
 module.exports = [{
+    name: 'preview',
+    paramName: '',
+    values: ['--nopreview']
+}, {
     name: 'videoSize',
     paramName: '',
     values: [
