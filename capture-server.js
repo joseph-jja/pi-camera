@@ -202,7 +202,7 @@ async function start() {
         logger.info(`Socket has connected with ID: ${socket.id}`);
         const previewCmd = previewProcess();
         const previewCmdCB = (d) => {
-            socket.emit(d);
+            socket.emit('image', d);
         };
         previewCmd.stdout.on('data', previewCmdCB);
         socket.conn.on("close", (reason) => {
