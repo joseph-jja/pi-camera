@@ -1,6 +1,6 @@
-const socket = io();
-socket.on("connect", () => {
-     console.log('Socket connected ', socket.id); // x8WIv7-mJelg7on_ALbx
+const socket = io(); /* eslint-disable-line */
+socket.on('connect', () => {
+    console.log('Socket connected ', socket.id); 
 });
 
 class MJPEGStream {
