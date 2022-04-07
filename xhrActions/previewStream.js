@@ -22,22 +22,31 @@ module.exports = function(resolveFileLocation) {
     const setupPreviewStream = (streamObject, response) => {
 
         const previewCmd = previewProcess();
-        const previewCmdCB = (d) => {
-            response.write(d);
-        };
 
         writeHeaders(response);
         response.on('close', () => {
-            previewCmd.stdout.off('data', previewCmdCB);
+            try {
+                previewCmd.stdout.unpipe(response);
+            } catch(e) {
+                logger.error(`Unpipe error ${stringify(e)}`);
+            }
+            try {
+                streamObject.stdout.unpipe(previewCmd.stdin);
+            } catch(e) {
+                logger.error(`Unpipe error ${stringify(e)}`);
+            }
             childProcess.exec(`kill -9 ${previewCmd.pid}`);
         });
-        previewCmd.stdout.on('data', previewCmdCB);
 
         streamObject.stdout.pipe(previewCmd.stdin);
+        previewCmd.stdout.pipe(response);
 
         streamObject.stdout.once('error', (e) => {
+            previewCmd.stdout.unpipe(response);
+            streamObject.stdout.unpipe(previewCmd.stdin);
             logger.error(`Stream error ${stringify(e)}`);
         });
+
         streamObject.stdout.once('close', () => {
             logger.info('Stream closed');
         });
