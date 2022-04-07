@@ -25,22 +25,15 @@ module.exports = function(resolveFileLocation) {
         const previewCmdCB = (d) => {
             response.write(d);
         };
-        const globalStreamPreview = (d) => {
-            try {
-                previewCmd.stdin.write(d);
-            } catch(e) {
-                logger.error(`Stream error with type of ${typeof streamObject} => ${stringify(e)}`);
-            }
-        };
+
         writeHeaders(response);
         response.on('close', () => {
-            streamObject.stdout.off('data', globalStreamPreview);
             previewCmd.stdout.off('data', previewCmdCB);
             childProcess.exec(`kill -9 ${previewCmd.pid}`);
         });
         previewCmd.stdout.on('data', previewCmdCB);
 
-        streamObject.stdout.on('data', globalStreamPreview);
+        streamObject.stdout.pipe(previewCmd.stdin);
 
         streamObject.stdout.once('error', (e) => {
             logger.error(`Stream error ${stringify(e)}`);
