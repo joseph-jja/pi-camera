@@ -37,7 +37,7 @@
         console.log('Socket connected ', socket.id);
     });
     socket.on('image', (data) => {
-        image.attr('src', data);
+        image.src = data;
     });
   </script>
 </html>
