@@ -1,7 +1,3 @@
-const socket = io(); /* eslint-disable-line */
-socket.on('connect', () => {
-    console.log('Socket connected ', socket.id); 
-});
 
 class MJPEGStream {
 

@@ -8,6 +8,10 @@
     <canvas id="player" style="background: #000;" width="640px" height="480px">
       Your browser sucks.
     </canvas>
+    <canvas id="new-player" style="background: #000;" width="640px" height="480px">
+      Your browser sucks.
+    </canvas>
+    <img id="stream-image">
   </body>
   <script src="/js/socket.io.js"></script>
   <script src="/js/mjpeg.js"></script>
@@ -16,8 +20,24 @@
     var player = new MJPEGPlayer("player", "/preview", {
         errorHandler: (err) => {
             player.stream = new MJPEGStream(player.options);
-        }
+        },
+        refreshRate: 250
     });
     player.start();
+
+    const image = document.getElementById('stream-image');
+    const xcanvas = document.getElementById('new-player');
+    const context = xcanvas.getContext('2d');
+    xcanvas.width = 640;
+    xcanvas.height = 480;
+    context.width = xcanvas.width;
+    context.height = xcanvas.height;
+    const socket = io(); /* eslint-disable-line */
+    socket.on('connect', () => {
+        console.log('Socket connected ', socket.id);
+    });
+    socket.on('image', (data) => {
+        image.attr('src', data);
+    });
   </script>
 </html>
