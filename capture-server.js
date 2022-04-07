@@ -200,6 +200,7 @@ async function start() {
 
     io.on('connection', (socket) => {
         logger.info(`Socket has connected with ID: ${socket.id}`);
+        
         const previewCmd = previewProcess();
         const previewCmdCB = (d) => {
             socket.emit('image', d);
@@ -208,6 +209,7 @@ async function start() {
         global.directStreamProcess.stdout.pipe(previewCmd.stdin);
 
         global.directStreamProcess.stdout.once('error', (e) => {
+            global.directStreamProcess.stdout.unpipe(previewCmd.stdin);
             logger.error(`Stream error ${stringify(e)}`);
         });
         global.directStreamProcess.stdout.once('close', () => {
@@ -215,6 +217,7 @@ async function start() {
         });
 
         socket.conn.on("close", (reason) => {
+            global.directStreamProcess.stdout.unpipe(previewCmd.stdin);
             logger.info(`Socket connection closed ${reason}`);
         });
     });
