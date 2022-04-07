@@ -8,7 +8,8 @@ const os = require('os'),
     childProcess = require('child_process');
 
 const express = require('express'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    { Server } = require("socket.io");
 
 const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
@@ -39,6 +40,13 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     shutdownAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/shutdown`),
     updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`)(RESOLVED_FILE_LOCATION);
 
+const app = express();
+app.disable('x-powered-by');
+
+const port = 20000;
+const server = http.createServer(app);
+const io = new Server(server);
+
 const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
     return `/js/libs/${item}`;
 });
@@ -49,9 +57,6 @@ const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
 
 const videoConfig = require(`${RESOLVED_FILE_LOCATION}/videoConfig`),
     imageConfig = require(`${RESOLVED_FILE_LOCATION}/stillConfig`);
-
-const app = express();
-app.disable('x-powered-by');
 
 const VIDEO_HTML = fs.readFileSync(`${RESOLVED_FILE_LOCATION}/views/capture.html`).toString();
 
@@ -189,8 +194,22 @@ async function start() {
         response.end(getHTML(fields, imageFields));
     });
 
-    const port = 20000;
-    const server = http.createServer(app);
+    app.get('/js/socket.io.js', (request, response) => {
+        fs.createReadStream('node_modules/socket.io/client-dist/socket.io.min.js').pipe(response);
+    });
+
+    io.on('connection', (socket) => {
+        logger.info(`Socket has connected with ID: ${socket.id}`);
+        const previewCmd = previewProcess();
+        const previewCmdCB = (d) => {
+            socket.emit(d);
+        };
+        previewCmd.stdout.on('data', previewCmdCB);
+        socket.conn.on("close", (reason) => {
+            logger.info(`Socket connection closed ${reason}`);
+        });
+    });
+
     server.listen(port);
 
     logger.info(`Listening on IP: ${ipaddr} and port ${port}`);

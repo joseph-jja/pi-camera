@@ -9,10 +9,15 @@
       Your browser sucks.
     </canvas>
   </body>
+  <script src="/js/socket.io.js"></script>
   <script src="/js/mjpeg.js"></script>
   <script>
     //Leave your .mjpeg video URL here.
-    var player = new MJPEGPlayer("player", "/preview");
+    var player = new MJPEGPlayer("player", "/preview", {
+        errorHandler: (err) => {
+            player.stream = new MJPEGStream(player.options);
+        }
+    });
     player.start();
   </script>
 </html>

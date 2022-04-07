@@ -1,3 +1,8 @@
+const socket = io();
+socket.on("connect", () => {
+     console.log('Socket connected ', socket.id); // x8WIv7-mJelg7on_ALbx
+});
+
 class MJPEGStream {
 
     constructor(args) {
