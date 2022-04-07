@@ -14,6 +14,7 @@
     <img id="stream-image">
   </body>
   <script src="/js/socket.io.js"></script>
+  <script src="/js/sockImage.js"></script>
   <script src="/js/mjpeg.js"></script>
   <script>
     //Leave your .mjpeg video URL here.
@@ -24,20 +25,5 @@
         refreshRate: 250
     });
     player.start();
-
-    const image = document.getElementById('stream-image');
-    const xcanvas = document.getElementById('new-player');
-    const context = xcanvas.getContext('2d');
-    xcanvas.width = 640;
-    xcanvas.height = 480;
-    context.width = xcanvas.width;
-    context.height = xcanvas.height;
-    const socket = io(); /* eslint-disable-line */
-    socket.on('connect', () => {
-        console.log('Socket connected ', socket.id);
-    });
-    socket.on('image', (data) => {
-        image.src = data;
-    });
   </script>
 </html>
