@@ -10,5 +10,5 @@ socket.on('connect', () => {
     console.log('Socket connected ', socket.id);
 });
 socket.on('image', (data) => {
-    image.src = data;
+    //image.src = data;
 });
