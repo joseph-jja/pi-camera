@@ -205,6 +205,15 @@ async function start() {
             socket.emit('image', d);
         };
         previewCmd.stdout.on('data', previewCmdCB);
+        global.directStreamProcess.stdout.pipe(previewCmd.stdin);
+
+        global.directStreamProcess.stdout.once('error', (e) => {
+            logger.error(`Stream error ${stringify(e)}`);
+        });
+        global.directStreamProcess.stdout.once('close', () => {
+            logger.info('Stream closed');
+        });
+
         socket.conn.on("close", (reason) => {
             logger.info(`Socket connection closed ${reason}`);
         });
