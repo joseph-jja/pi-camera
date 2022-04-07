@@ -5,10 +5,10 @@ xcanvas.width = 640;
 xcanvas.height = 480;
 context.width = xcanvas.width;
 context.height = xcanvas.height;
-const socket = io(); /* eslint-disable-line */
-socket.on('connect', () => {
+/*const socket = io();*/ /* eslint-disable-line */
+/*socket.on('connect', () => {
     console.log('Socket connected ', socket.id);
 });
 socket.on('image', (data) => {
     //image.src = data;
-});
+});*/
