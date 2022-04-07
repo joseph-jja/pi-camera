@@ -23,10 +23,7 @@ module.exports = function(resolveFileLocation) {
         }
         const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
         if (!filteredOldFilename) {
-            response.writeHead(200, {
-                'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-                'Cache-Control': 'no-cache'
-            });
+            response.writeHead(200, {});
             response.end('Invalid oldfile name, nothing done!');
             logger.info('Invalid oldfile name, nothing done!');
             return;
@@ -39,7 +36,10 @@ module.exports = function(resolveFileLocation) {
                 response.end(data);
             });
         } else if (filename.endsWith('.mjpeg')) {
-            response.writeHead(200, {});
+            response.writeHead(200, {
+                'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+                'Cache-Control': 'no-cache'
+            });
             createReadStream(`${BASE_IMAGE_PATH}/${filename}`).pipe(response);
         } else {
             response.writeHead(200, {});
