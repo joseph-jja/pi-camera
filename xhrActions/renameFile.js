@@ -30,7 +30,7 @@ module.exports = function(resolveFileLocation) {
             response.end('Invalid oldfile name, nothing done!');
             return;
         }
-        const firstpart = filteredFilename.split('-')[0];
+        const firstpart = oldFilename.split('-')[0];
         const newName = oldFilename.replace(firstpart, filteredFilename);
         rename(`${BASE_IMAGE_PATH}/${oldFilename}`, `${BASE_IMAGE_PATH}/${newName}`, (err, success) => {
             if (err) {
