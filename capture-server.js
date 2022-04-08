@@ -31,6 +31,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         getImageUpdateOptions
     } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
     previewStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/previewStream`)(RESOLVED_FILE_LOCATION),
+    socketStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/socketStream`)(RESOLVED_FILE_LOCATION),
     stopPreviewAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/stopPreview`)(RESOLVED_FILE_LOCATION),
     imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`)(RESOLVED_FILE_LOCATION),
     renameFileAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/renameFile`)(RESOLVED_FILE_LOCATION),
@@ -200,26 +201,7 @@ async function start() {
 
     io.on('connection', (socket) => {
         logger.info(`Socket has connected with ID: ${socket.id}`);
-        
-        const previewCmd = previewProcess();
-        const previewCmdCB = (d) => {
-            socket.emit('image', d);
-        };
-        previewCmd.stdout.on('data', previewCmdCB);
-        global.directStreamProcess.stdout.pipe(previewCmd.stdin);
-
-        global.directStreamProcess.stdout.once('error', (e) => {
-            global.directStreamProcess.stdout.unpipe(previewCmd.stdin);
-            logger.error(`Stream error ${stringify(e)}`);
-        });
-        global.directStreamProcess.stdout.once('close', () => {
-            logger.info('Stream closed');
-        });
-
-        socket.conn.on("close", (reason) => {
-            global.directStreamProcess.stdout.unpipe(previewCmd.stdin);
-            logger.info(`Socket connection closed ${reason}`);
-        });
+        socketStreamAction(socket);
     });
 
     server.listen(port);
