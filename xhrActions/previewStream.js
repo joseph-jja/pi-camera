@@ -59,11 +59,11 @@ module.exports = function(resolveFileLocation) {
         } else if (global.imageStreamProcess) {
             logger.info('Running via imageStreamProcess doing jpeg images');
             setupPreviewStream(global.imageStreamProcess, response);
-            global.imageStreamProcess.stdout.on('data', d => {
+            /*global.imageStreamProcess.stderr.on('data', d => {
                 if (d.indexOf('Still') > -1) {
                     logger.info('Still image started');
                 }
-            });
+            });*/
         } else {
             response.writeHead(200, {});
             response.end('Preview service is not running!');
