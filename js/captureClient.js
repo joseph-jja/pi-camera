@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'renameFile') {
             const VALID_CHARACTERS = /[a-zA-Z]/g;
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
-            const fname = (mainForm['new-name'].value || '').match(VALID_CHARACTERS)[0].join('');
+            const fname = (mainForm['new-name'].value || '').match(VALID_CHARACTERS).join('');
             executeServerCommand(`/renameFile?oldname=${currentItem}&name=${fname}`);
         } else if (target.id === 'deleteFile') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
