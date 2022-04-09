@@ -81,6 +81,9 @@ module.exports = function(resolveFileLocation) {
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
+    const {
+        streamMjpeg
+    } = require(`${resolveFileLocation}/libs/libcamera/video`);
 
     const MJPEG_VIDEO_CMD = `${resolveFileLocation}/scripts/videoStream.sh`;
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
@@ -171,26 +174,21 @@ module.exports = function(resolveFileLocation) {
             logger.info('Video stream has ended!');
             DevNull.destroy();
         });
-        let isRtpsHost = false;
-        const rptsHost = spawnOptions.filter(item => {
-            if (item === '--rtspHost') {
-                isRtpsHost = true;
-                return false;
-            }
-            return isRtpsHost;
-        });
-        logger.info(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
+        logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
-    function directStream(options) {
+    function directStream(options = []) {
 
-        const spawnOptions = [options.join(' ')];
+        /*const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
             const filtered = DEFAULT_OPTIONS.join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_VIDEO_CMD);
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
+        */
+        const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
+        global.directStreamProcess = streamMjpeg(spawnOptions);
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
@@ -204,15 +202,7 @@ module.exports = function(resolveFileLocation) {
             logger.info('Video stream has ended!');
             DevNull.destroy();
         });
-        let isRtpsHost = false;
-        const rptsHost = spawnOptions.filter(item => {
-            if (item === '--rtspHost') {
-                isRtpsHost = true;
-                return false;
-            }
-            return isRtpsHost;
-        });
-        logger.info(`Should be streaming now from ${rptsHost} with options: ${stringify(spawnOptions)}...`);
+        logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
     function saveVideoProcess(options, response) {
