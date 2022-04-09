@@ -82,7 +82,8 @@ module.exports = function(resolveFileLocation) {
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
     const {
-        streamMjpeg
+        streamMjpeg,
+        saveH264
     } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
     const {
         getFfmpegStream,
@@ -114,17 +115,20 @@ module.exports = function(resolveFileLocation) {
         });
     }
 
-    function saveRawVideoData(options, response, videoConfig) {
+    function saveRawVideoData(options = [], response, videoConfig) {
 
         const optionsStr = options.join(' ');
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
-        const spawnOptions = [optionsStr + ' ' + bitRate];
-        spawnOptions.unshift(SAVE_RAW_CMD);
+        const spawnOptions = options;
+        if (bitRate && bitRate.length > 0) {
+            bitRate.split(' ').forEach(x => {        
+                spawnOptions.push(x);
+            });
+        }
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('h264')}`;
-        spawnOptions.push(`-o ${filename}`);
-        const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
-            env: process.env
-        });
+        spawnOptions.push('-o'));
+        spawnOptions.push(filename);
+        const rawDataProcess = saveH264(spawnOptions);
         rawDataProcess.on('close', (code) => {
             response.writeHead(200, {});
             response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
