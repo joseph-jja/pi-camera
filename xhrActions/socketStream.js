@@ -35,7 +35,7 @@ module.exports = function(resolveFileLocation) {
         } else if (global.imageStreamProcess) {
             logger.info('Running via imageStreamProcess doing jpeg images');
             setupPreviewStream(global.imageStreamProcess, socket);
-            *//*global.imageStreamProcess.stderr.on('data', d => {
+            /*global.imageStreamProcess.stderr.on('data', d => {
                 if (d.indexOf('Still') > -1) {
                     logger.info('Still image started');
                 }
