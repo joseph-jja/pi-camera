@@ -1,4 +1,4 @@
-const { spawn } = require('childProcess');
+const { spawn } = require('child_process');
 
 const FFMPEG = 'ffmpeg';
 
