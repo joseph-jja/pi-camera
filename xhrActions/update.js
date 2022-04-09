@@ -5,7 +5,7 @@ module.exports = function(resolveFileLocation) {
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
-            filterRequestBody
+            getOptions
         } = require(`${resolveFileLocation}/libs/utils`),
         {
             directStream,
@@ -14,12 +14,9 @@ module.exports = function(resolveFileLocation) {
 
     return (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {
-            const options = filterRequestBody(request.body);
+            const options = getOptions(request.body);
             if (options.length > 0) {
-                const spawnOpts = options.map(item => {
-                    return item.split(' ');
-                }).reduce((acc, next) => acc.concat(next));
-                setVideoUpdateOptions(spawnOpts);
+                setVideoUpdateOptions(options);
                 if (global.imageStreamProcess) {
                     const pid = global.imageStreamProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
@@ -30,13 +27,13 @@ module.exports = function(resolveFileLocation) {
                     const pid = global.directStreamProcess.pid;
                     childProcess.exec(`kill -9 ${pid}`, () => {
                         global.directStreamProcess = undefined;
-                        directStream(spawnOpts);
+                        directStream(options);
                     });
                 } else {
-                    directStream(spawnOpts);
+                    directStream(options);
                 }
                 response.writeHead(200, {});
-                const message = `Executed script with options ${stringify(spawnOpts)} on ${new Date()}`;
+                const message = `Executed script with options ${stringify(options)} on ${new Date()}`;
                 response.end(message);
                 logger.info(message);
             }

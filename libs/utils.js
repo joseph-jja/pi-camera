@@ -104,6 +104,16 @@ const filterRequestBody = (body) => {
     });
 };
 
+const getOptions = (body) => {
+    const options = filterRequestBody(body);
+    if (options.length > 0) {
+        return options.map(item => {
+            return item.split(' ');
+        }).reduce((acc, next) => acc.concat(next));
+    }
+    return options;
+};
+
 module.exports = {
     padNumber,
     getIPAddress,
@@ -111,5 +121,5 @@ module.exports = {
     promiseWrapper,
     listImageFiles,
     getH264Bitrate,
-    filterRequestBody
+    getOptions
 };
