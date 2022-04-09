@@ -82,11 +82,11 @@ module.exports = function(resolveFileLocation) {
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
     const {
-        streamMjpeg,
-        previewStream
+        streamMjpeg
     } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
     const {
-        getFfmpegStream
+        getFfmpegStream,
+        previewStream
     } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
