@@ -15,14 +15,18 @@ module.exports = function(resolveFileLocation) {
         spawnOptions.push('-o');
         spawnOptions.push('-');
         logger.info(`Libcamera spawn options ${stringify(spawnOptions)}`);
-        return spawn(LIBCAMERA_VIDEO, spawnOptions);
+        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+            env: process.env
+        });
     }
 
     function saveH264(options = []) {
 
         const spawnOptions = ['--codec', 'h264', '-t', '60000'].concat(options);
  
-        return spawn(LIBCAMERA_VIDEO, spawnOptions);
+        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+            env: process.env
+        });
     }
 
     return  {
