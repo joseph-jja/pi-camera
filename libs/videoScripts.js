@@ -70,6 +70,21 @@ function initSystem(logger) {
     }
 }
 
+funciton getAllRunning() {
+    const results = [];
+    if (global.libcameraProcess) {
+        results.push(global.libcameraProcess.pid);   
+    }
+    if (global.directStreamProcess) {
+        results.push(global.directStreamProcess.pid);   
+    }
+    if (global.imageStreamProcess) {
+        results.push(global.imageStreamProcess.pid);   
+    }
+    return results.join(' ');
+}
+    
+
 module.exports = function(resolveFileLocation) {
 
     updateConfigs(resolveFileLocation);
@@ -128,12 +143,24 @@ module.exports = function(resolveFileLocation) {
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('h264')}`;
         spawnOptions.push('-o');
         spawnOptions.push(filename);
-        const rawDataProcess = saveH264(spawnOptions);
-        rawDataProcess.on('close', (code) => {
-            response.writeHead(200, {});
-            response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
-        });
-        saveConfig(stringify(spawnOptions), 'h264');
+        const running = getAllRunning();
+        if (running.length > 0) {
+            childProcess.exec(`kill -9 ${running}`, (err, success) => {
+                const rawDataProcess = saveH264(spawnOptions);
+                rawDataProcess.on('close', (code) => {
+                    response.writeHead(200, {});
+                    response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+                });
+                saveConfig(stringify(spawnOptions), 'h264');            
+            });
+        } else {
+            const rawDataProcess = saveH264(spawnOptions);
+            rawDataProcess.on('close', (code) => {
+                response.writeHead(200, {});
+                response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+            });
+            saveConfig(stringify(spawnOptions), 'h264');            
+        }
     }
 
     function saveImagesData(options, response) {
