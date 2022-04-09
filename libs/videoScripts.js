@@ -2,7 +2,6 @@ const childProcess = require('child_process'),
     fs = require('fs');
 
 global.libcameraVideoProcess;
-global.ffmpegProcess;
 global.directStreamProcess;
 global.imageStreamProcess;
 
@@ -194,9 +193,8 @@ module.exports = function(resolveFileLocation) {
         /*const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraVideoProcess = streamMjpeg(spawnOptions);
-        global.ffmpegProcess = getFfmpegStream();
-        stream.pipe(ffmpeg.stdin);
-        global.directStreamProcess = ffmpeg;
+        global.directStreamProcess = getFfmpegStream();
+        global.libcameraVideoProcess.stdout.pipe(global.directStreamProcess.stdin);
         */
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
