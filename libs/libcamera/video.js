@@ -27,7 +27,7 @@ module.exports = function(resolveFileLocation) {
 
     function saveH264(options = []) {
 
-        const spawnOptions = ['--codec', 'h264'].concat(options);
+        const spawnOptions = ['--codec', 'h264', '-t', '60000'].concat(options);
  
         return spawn(LIBCAMERA_VIDEO, spawnOptions);
     }
