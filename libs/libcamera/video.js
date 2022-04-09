@@ -4,7 +4,7 @@ module.exports = function(resolveFileLocation) {
 
     const { LIBCAMERA_STILL } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
 
-    function streamMjpeg(options = []1) {
+    function streamMjpeg(options = []) {
 
         // default image streaming options
         const spawnOptions = ['--codec', 'mjpeg', '-t', '0'];
