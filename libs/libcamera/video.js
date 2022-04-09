@@ -24,15 +24,9 @@ module.exports = function(resolveFileLocation) {
  
         return spawn(LIBCAMERA_VIDEO, spawnOptions);
     }
-    
-    function previewStream() {
-        const spawnOptions = ['-i', 'pipe:', '-an', '-filter_threads', '1', '-s', '640x480', '-f', 'mpjpeg'];
-        return spawn(LIBCAMERA_VIDEO, spawnOptions);
-    }
 
     return  {
         streamMjpeg,
-        saveH264,
-        previewStream
+        saveH264
     };
 };
