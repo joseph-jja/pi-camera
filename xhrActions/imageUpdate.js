@@ -17,15 +17,16 @@ module.exports = function(resolveFileLocation) {
             const options = getOptions(request.body);
             if (options.length > 0) {
                 setImageUpdateOptions(options);
+                const libcameraPid = (global.libcameraProcess ? global.libcameraProcess.pid : ''); 
                 if (global.directStreamProcess) {
                     const pid = global.directStreamProcess.pid;
-                    childProcess.exec(`kill -9 ${pid}`, () => {
+                    childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
                         global.directStreamProcess = undefined;
                     });
                 }
                 if (global.imageStreamProcess) {
                     const pid = global.imageStreamProcess.pid;
-                    childProcess.exec(`kill -9 ${pid}`, () => {
+                    childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
                         global.imageStreamProcess = undefined;
                         imageStream(options);
                     });
