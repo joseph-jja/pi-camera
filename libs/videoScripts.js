@@ -226,7 +226,7 @@ module.exports = function(resolveFileLocation) {
     }
 
     function previewProcess() {
-        return previewStream();
+        return childProcess.spawn(BASH_CMD, [PREVIEW_PROCESS]); //previewStream();
     }
 
     return {
