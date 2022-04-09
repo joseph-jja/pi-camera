@@ -84,6 +84,9 @@ module.exports = function(resolveFileLocation) {
     const {
         streamMjpeg
     } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
+    const {
+        getFfmpegStream
+    } = require(`${resolveFileLocation}/libs/ffmpeg`)(resolveFileLocation);
 
     const MJPEG_VIDEO_CMD = `${resolveFileLocation}/scripts/videoStream.sh`;
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
@@ -188,7 +191,10 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         */
         const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
-        global.directStreamProcess = streamMjpeg(spawnOptions);
+        const stream = streamMjpeg(spawnOptions);
+        console.log(stream);
+        global.directStreamProcess = stream.pipe(getFfmpegStream());
+        console.log(global.directStreamProcess);
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
