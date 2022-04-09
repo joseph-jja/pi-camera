@@ -1,4 +1,5 @@
 const {
+    resolve,
     basename
 } = require('path');
 const FILENAME = basename(__filename);
