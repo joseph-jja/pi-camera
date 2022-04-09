@@ -4,7 +4,7 @@ module.exports = function(resolveFileLocation) {
 
     const { LIBCAMERA_VIDEO } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
 
-    function streamMjpeg(options) {
+    function streamJpeg(options) {
 
         // default image streaming options
         const spawnOptions = ['-e', 'jpg', '-t', '0', '--timelapse', '10', '--immediate'];
@@ -18,12 +18,13 @@ module.exports = function(resolveFileLocation) {
     }
 
     function saveImage(options) {
+        const spawnOptions = ['r'];
 
+        return spawn(LIBCAMERA_VIDEO, spawnOptions);
     }
 
     return  {
-        streamMjpeg,
-        saveImage,
-        saveH264
+        streamJpeg,
+        saveImage
     };
 };

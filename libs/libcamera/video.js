@@ -27,7 +27,7 @@ module.exports = function(resolveFileLocation) {
 
     return  {
         streamMjpeg,
-        saveImage,
+        saveMjpeg,
         saveH264
     };
 };
