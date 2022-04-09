@@ -83,7 +83,7 @@ module.exports = function(resolveFileLocation) {
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
     const {
         streamMjpeg
-    } = require(`${resolveFileLocation}/libs/libcamera/video`);
+    } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
 
     const MJPEG_VIDEO_CMD = `${resolveFileLocation}/scripts/videoStream.sh`;
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
