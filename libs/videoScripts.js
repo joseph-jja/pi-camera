@@ -1,7 +1,7 @@
 const childProcess = require('child_process'),
     fs = require('fs');
 
-global.libcameraVideoProcess;
+global.libcameraProcess;
 global.directStreamProcess;
 global.imageStreamProcess;
 
@@ -182,20 +182,20 @@ module.exports = function(resolveFileLocation) {
 
     function directStream(options = []) {
 
-        const spawnOptions = [options.join(' ')];
+        /*const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
             const filtered = DEFAULT_OPTIONS.join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_VIDEO_CMD);
-        global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
+        global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions); */
         
-        /*const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
+        const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
         // stream libcamera stdout to ffmpeg stdin
-        global.libcameraVideoProcess = streamMjpeg(spawnOptions);
+        global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
-        global.libcameraVideoProcess.stdout.pipe(global.directStreamProcess.stdin);
-        */
+        global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
+        
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
@@ -206,6 +206,7 @@ module.exports = function(resolveFileLocation) {
             console.error('Error', err);
         });
         global.directStreamProcess.on('close', () => {
+            global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
             logger.info('Video stream has ended!');
             DevNull.destroy();
         });
