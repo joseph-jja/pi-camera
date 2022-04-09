@@ -3,6 +3,7 @@ const { spawn } = require('child_process');
 module.exports = function(resolveFileLocation) {
 
     const { LIBCAMERA_STILL } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
+    const logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename);
 
     function streamMjpeg(options = []) {
 
@@ -12,6 +13,7 @@ module.exports = function(resolveFileLocation) {
         // stream to stdout
         spawnOptions.push('-o');
         spawnOptions.push('-');
+        console.log('Libcamera spawn options ', spawnOptions);
         return spawn(LIBCAMERA_STILL, spawnOptions);
     }
 
