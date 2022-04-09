@@ -191,10 +191,10 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         */
         const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
-        const stream = streamMjpeg(spawnOptions);
-        console.log(stream);
-        global.directStreamProcess = stream.pipe(getFfmpegStream());
-        console.log(global.directStreamProcess);
+        const stream = streamMjpeg(spawnOptions).stdout;
+        const ffmpeg = getFfmpegStream();
+        stream.pipe(ffmpeg.stdin);
+        global.directStreamProcess = ffmpeg.stdout;
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
