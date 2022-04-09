@@ -182,20 +182,21 @@ module.exports = function(resolveFileLocation) {
 
     function directStream(options = []) {
 
-        /*const spawnOptions = [options.join(' ')];
+        const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
             const filtered = DEFAULT_OPTIONS.join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_VIDEO_CMD);
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
-        */
-        const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
+        
+        /*const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
         // stream libcamera stdout to ffmpeg stdin
         const stream = streamMjpeg(spawnOptions).stdout;
         const ffmpeg = getFfmpegStream();
         stream.pipe(ffmpeg.stdin);
         global.directStreamProcess = ffmpeg;
+        */
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
