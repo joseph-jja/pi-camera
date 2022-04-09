@@ -1,3 +1,6 @@
+const {
+    basename
+} = require('path');
 const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 
