@@ -106,7 +106,6 @@ module.exports = function(resolveFileLocation) {
     } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
-    const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
 
     initSystem(logger);
