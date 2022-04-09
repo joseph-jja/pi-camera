@@ -1,4 +1,4 @@
-const { spawn } = require('childProcess');
+const { spawn } = require('child_process');
 
 module.exports = function(resolveFileLocation) {
 
