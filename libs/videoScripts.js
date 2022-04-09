@@ -92,7 +92,6 @@ module.exports = function(resolveFileLocation) {
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
     const SAVE_RAW_CMD = `${resolveFileLocation}/scripts/saveRawStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
-    const PREVIEW_PROCESS = `${resolveFileLocation}/scripts/previewStream.sh`;
 
     initSystem(logger);
 
@@ -226,7 +225,6 @@ module.exports = function(resolveFileLocation) {
     }
 
     function previewProcess() {
-        //return childProcess.spawn(BASH_CMD, [PREVIEW_PROCESS]); 
         return previewStream();
     }
 
