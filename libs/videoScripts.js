@@ -86,7 +86,7 @@ module.exports = function(resolveFileLocation) {
     } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
     const {
         getFfmpegStream
-    } = require(`${resolveFileLocation}/libs/ffmpeg`)(resolveFileLocation);
+    } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
     const MJPEG_VIDEO_CMD = `${resolveFileLocation}/scripts/videoStream.sh`;
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
