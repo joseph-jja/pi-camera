@@ -9,7 +9,7 @@ function getFfmpegStream() {
 }
 
 function previewStream() {
-    const spawnOptions = ['-i', 'pipe:', '-an', '-filter_threads', '1', '-s', '640x480', '-f', 'mpjpeg'];
+    const spawnOptions = ['-i', 'pipe:', '-an', '-filter_threads', '1', '-s', '640x480', '-f', 'mpjpeg', '-'];
     return spawn(FFMPEG, spawnOptions);
 }
 
