@@ -70,7 +70,7 @@ function initSystem(logger) {
     }
 }
 
-funciton getAllRunning() {
+function getAllRunning() {
     const results = [];
     if (global.libcameraProcess) {
         results.push(global.libcameraProcess.pid);   
