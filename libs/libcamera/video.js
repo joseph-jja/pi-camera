@@ -7,9 +7,7 @@ module.exports = function(resolveFileLocation) {
     function streamMjpeg(options = []) {
 
         // default image streaming options
-        const spawnOptions = ['--codec', 'mjpeg', '-t', '0'];
-
-        // process input options
+        const spawnOptions = ['--codec', 'mjpeg', '-t', '0'].concat(options);
 
         // stream to stdout
         spawnOptions.push('-o');
