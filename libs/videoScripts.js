@@ -82,7 +82,8 @@ module.exports = function(resolveFileLocation) {
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
     const {
-        streamMjpeg
+        streamMjpeg,
+        previewStream
     } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
     const {
         getFfmpegStream
@@ -225,7 +226,7 @@ module.exports = function(resolveFileLocation) {
     }
 
     function previewProcess() {
-        return childProcess.spawn(BASH_CMD, [PREVIEW_PROCESS]);
+        return previewStream();
     }
 
     return {
