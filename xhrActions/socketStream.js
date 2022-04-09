@@ -29,19 +29,19 @@ module.exports = function(resolveFileLocation) {
     };
 
     return (socket) => {
-        if (global.directStreamProcess) {
+        /*if (global.directStreamProcess) {
             logger.info('Running via directStreamProcess doing mjpeg video');
             setupPreviewStream(global.directStreamProcess, socket);
         } else if (global.imageStreamProcess) {
             logger.info('Running via imageStreamProcess doing jpeg images');
             setupPreviewStream(global.imageStreamProcess, socket);
-            /*global.imageStreamProcess.stderr.on('data', d => {
+            *//*global.imageStreamProcess.stderr.on('data', d => {
                 if (d.indexOf('Still') > -1) {
                     logger.info('Still image started');
                 }
-            });*/
+            });*//*
         } else {
             socket.emit('error!', { message: 'No preview service running!' } );
-        }
+        }*/
     };
 };
