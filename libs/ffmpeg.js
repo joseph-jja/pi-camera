@@ -8,8 +8,12 @@ function getFfmpegStream() {
     return spawn(FFMPEG, DIRECT_STREAM_OPTS);
 }
 
-
+function previewStream() {
+    const spawnOptions = ['-i', 'pipe:', '-an', '-filter_threads', '1', '-s', '640x480', '-f', 'mpjpeg'];
+    return spawn(FFMPEG, spawnOptions);
+}
 
 module.exports = {
-    getFfmpegStream
+    getFfmpegStream,
+    previewStream
 };
