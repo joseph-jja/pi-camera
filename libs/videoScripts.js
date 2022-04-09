@@ -126,7 +126,7 @@ module.exports = function(resolveFileLocation) {
             });
         }
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('h264')}`;
-        spawnOptions.push('-o'));
+        spawnOptions.push('-o');
         spawnOptions.push(filename);
         const rawDataProcess = saveH264(spawnOptions);
         rawDataProcess.on('close', (code) => {
