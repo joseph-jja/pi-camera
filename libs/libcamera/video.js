@@ -2,6 +2,7 @@ const { spawn } = require('child_process');
 
 module.exports = function(resolveFileLocation) {
 
+    const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const { LIBCAMERA_VIDEO } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
 
@@ -13,21 +14,21 @@ module.exports = function(resolveFileLocation) {
         // stream to stdout
         spawnOptions.push('-o');
         spawnOptions.push('-');
-        console.log('Libcamera spawn options ', spawnOptions);
+        logger.info(`Libcamera spawn options ${stringify(spawnOptions)}`);
         return spawn(LIBCAMERA_VIDEO, spawnOptions);
     }
 
     function saveMjpeg(options = []) {
 
-        const spawnOptions = ['--codec', 'mjpeg'];
+        const spawnOptions = ['--codec', 'mjpeg'].concat(options);
 
         return spawn(LIBCAMERA_VIDEO, spawnOptions);
     }
 
     function saveH264(options = []) {
 
-        const spawnOptions = ['--codec', 'h264'];
-
+        const spawnOptions = ['--codec', 'h264'].concat(options);
+ 
         return spawn(LIBCAMERA_VIDEO, spawnOptions);
     }
 
