@@ -18,13 +18,6 @@ module.exports = function(resolveFileLocation) {
         return spawn(LIBCAMERA_VIDEO, spawnOptions);
     }
 
-    function saveMjpeg(options = []) {
-
-        const spawnOptions = ['--codec', 'mjpeg'].concat(options);
-
-        return spawn(LIBCAMERA_VIDEO, spawnOptions);
-    }
-
     function saveH264(options = []) {
 
         const spawnOptions = ['--codec', 'h264', '-t', '60000'].concat(options);
@@ -39,7 +32,6 @@ module.exports = function(resolveFileLocation) {
 
     return  {
         streamMjpeg,
-        saveMjpeg,
         saveH264,
         previewStream
     };
