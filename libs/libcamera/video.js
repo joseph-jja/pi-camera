@@ -18,11 +18,15 @@ module.exports = function(resolveFileLocation) {
     }
 
     function saveMjpeg(options) {
+        const spawnOptions = ['--codec', 'mjpeg'];
 
+        return spawn(LIBCAMERA_STILL, spawnOptions);
     }
 
     function saveH264(options) {
+        const spawnOptions = ['--codec', 'h264'];
 
+        return spawn(LIBCAMERA_STILL, spawnOptions);
     }
 
     return  {
