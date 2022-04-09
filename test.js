@@ -20,8 +20,12 @@ const spawnOptions = [
 ];
 
 // stream libcamera stdout to ffmpeg stdin
-const stream = streamMjpeg(spawnOptions).stdout;
+const stream = streamMjpeg(spawnOptions);
 console.log(stream);
 const ffmpeg = getFfmpegStream();
-stream.pipe(ffmpeg.stdin);
+stream.stdout.pipe(ffmpeg.stdin);
 console.log(ffmpeg);
+
+stream.on('close', e => {
+    console.log(e);
+});
