@@ -209,7 +209,6 @@ async function start() {
     logger.info(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
-    //spawnVideoProcess(DEFAULT_OPTIONS);
     directStream(DEFAULT_OPTIONS);
 }
 

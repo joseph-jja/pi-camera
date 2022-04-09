@@ -82,7 +82,6 @@ module.exports = function(resolveFileLocation) {
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
 
-    const VIDEO_CMD = `${resolveFileLocation}/scripts/streamServer.sh`;
     const MJPEG_VIDEO_CMD = `${resolveFileLocation}/scripts/videoStream.sh`;
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
     const SAVE_CMD = `${resolveFileLocation}/scripts/saveStream.sh`;
@@ -108,18 +107,6 @@ module.exports = function(resolveFileLocation) {
             } else {
                 logger.verbose(stringify(res));
             }
-        });
-    }
-
-    function spawnVideoProcess(options) {
-
-        const spawnOptions = options.concat();
-        spawnOptions.unshift(VIDEO_CMD);
-        global.videoProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
-            env: process.env
-        });
-        global.videoProcess.stdout.on('data', (data) => {
-            logger.info(`${VIDEO_CMD}: ${data}`);
         });
     }
 
@@ -258,10 +245,8 @@ module.exports = function(resolveFileLocation) {
         BASE_CONFIG_PATH,
         DEFAULT_OPTIONS,
         BASH_CMD,
-        VIDEO_CMD,
         SAVE_CMD,
         getVideoFilename,
-        spawnVideoProcess,
         saveRawVideoData,
         saveImagesData,
         directStream,
