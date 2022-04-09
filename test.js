@@ -7,7 +7,7 @@ const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 
 const {
     streamMjpeg
-} = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/video`)(resolveFileLocation);
+} = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/video`)(RESOLVED_FILE_LOCATION);
 const {
     getFfmpegStream
 } = require(`${RESOLVED_FILE_LOCATION}/libs/ffmpeg`);
