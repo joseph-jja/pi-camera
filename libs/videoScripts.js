@@ -191,10 +191,11 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
         */
         const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
+        // stream libcamera stdout to ffmpeg stdin
         const stream = streamMjpeg(spawnOptions).stdout;
         const ffmpeg = getFfmpegStream();
         stream.pipe(ffmpeg.stdin);
-        global.directStreamProcess = ffmpeg.stdout;
+        global.directStreamProcess = ffmpeg;
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
