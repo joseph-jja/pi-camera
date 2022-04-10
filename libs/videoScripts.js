@@ -1,11 +1,13 @@
 const childProcess = require('child_process'),
+    os = require('os'),
     fs = require('fs');
 
 global.libcameraProcess;
 global.directStreamProcess;
 global.imageStreamProcess;
 
-const BASH_CMD = '/bin/bash';
+const BASH_CMD = '/bin/bash',
+    KILL_ALL = `${BASH_CMD} $HOME/pi-camera/scripts/killall.sh`;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -265,8 +267,8 @@ module.exports = function(resolveFileLocation) {
         const running = getAllRunning();
         const spawnFn = () => {
             // stream libcamera stdout to ffmpeg stdin
-            //global.libcameraProcess = streamMjpeg(spawnOptions);
-            fs.writeFileSync('/tmp/videoStream.sh', streamMjpeg(spawnOptions));
+            const streamScript = `#! /bin/bash ${os.EOL}${KILL_ALL}${os.EOL}${ streamMjpeg(spawnOptions)}${os.EOL}`;
+            fs.writeFileSync('/tmp/videoStream.sh', streamScript);
             global.libcameraProcess = childProcess.spawn(BASH_CMD, ['/tmp/videoStream.sh']);
             global.directStreamProcess = getFfmpegStream();
             global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
