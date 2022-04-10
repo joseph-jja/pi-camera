@@ -147,22 +147,20 @@ module.exports = function(resolveFileLocation) {
         spawnOptions.push('-o');
         spawnOptions.push(filename);
         const running = getAllRunning();
-        if (running.length > 0) {
-            childProcess.exec(`kill -9 ${running}`, (err, success) => {
-                const rawDataProcess = saveH264(spawnOptions);
-                rawDataProcess.on('close', (code) => {
-                    response.writeHead(200, {});
-                    response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
-                });
-                saveConfig(stringify(spawnOptions), 'h264');
-            });
-        } else {
+        const spawnFn = () => {
             const rawDataProcess = saveH264(spawnOptions);
             rawDataProcess.on('close', (code) => {
                 response.writeHead(200, {});
                 response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
             });
             saveConfig(stringify(spawnOptions), 'h264');
+        };
+        if (running.length > 0) {
+            childProcess.exec(`kill -9 ${running}`, (err, success) => {
+                spawnFn();
+            });
+        } else {
+            spawnFn();
         }
     }
 
@@ -216,26 +214,37 @@ module.exports = function(resolveFileLocation) {
     function directStream(options = []) {
 
         const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
-        // stream libcamera stdout to ffmpeg stdin
-        global.libcameraProcess = streamMjpeg(spawnOptions);
-        global.directStreamProcess = getFfmpegStream();
-        global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
 
-        const listeners = global.directStreamProcess.stdout.listeners('data');
-        for (let i = 0, end = listeners.length; i < end; i++) {
-            global.directStreamProcess.stdout.removeListener('data', listeners[i]);
+        const running = getAllRunning();
+        const spawnFn = () => {
+            // stream libcamera stdout to ffmpeg stdin
+            global.libcameraProcess = streamMjpeg(spawnOptions);
+            global.directStreamProcess = getFfmpegStream();
+            global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
+
+            const listeners = global.directStreamProcess.stdout.listeners('data');
+            for (let i = 0, end = listeners.length; i < end; i++) {
+                global.directStreamProcess.stdout.removeListener('data', listeners[i]);
+            }
+            const DevNull = new NullStream();
+            global.directStreamProcess.stdout.pipe(DevNull);
+            global.directStreamProcess.stderr.on('error', (err) => {
+                console.error('Error', err);
+            });
+            global.directStreamProcess.on('close', () => {
+                global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
+                logger.info('Video stream has ended!');
+                DevNull.destroy();
+            });
+            logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
+        };
+        if (running.length > 0) {
+            childProcess.exec(`kill -9 ${running}`, (err, success) => {
+                spawnFn();
+            });
+        } else {
+            spawnFn();
         }
-        const DevNull = new NullStream();
-        global.directStreamProcess.stdout.pipe(DevNull);
-        global.directStreamProcess.stderr.on('error', (err) => {
-            console.error('Error', err);
-        });
-        global.directStreamProcess.on('close', () => {
-            global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
-            logger.info('Video stream has ended!');
-            DevNull.destroy();
-        });
-        logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
     function saveVideoProcess(options, response) {
