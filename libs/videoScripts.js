@@ -240,18 +240,21 @@ module.exports = function(resolveFileLocation) {
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
-        global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
 
         const DevNull = new NullStream();
+        global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
         global.directStreamProcess.stdout.pipe(DevNull);
+
         global.directStreamProcess.stderr.on('error', (err) => {
             console.error('Error', err);
         });
+        global.libcameraProcess.stderr.on('error', (err) => {
+            console.error('Error', err);
+        });
+
         global.directStreamProcess.on('close', () => {
-            global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
             global.directStreamProcess = undefined;
             logger.info('Video stream has ended!');
-            DevNull.destroy();
         });
         global.libcameraProcess.on('close', () => {
             global.libcameraProcess = undefined;
