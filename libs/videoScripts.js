@@ -255,6 +255,7 @@ module.exports = function(resolveFileLocation) {
         });
         global.libcameraProcess.on('close', () => {
             global.libcameraProcess = undefined;
+            logger.info('libcamera has ended!');
         });
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
