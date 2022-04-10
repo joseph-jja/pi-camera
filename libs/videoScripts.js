@@ -271,7 +271,8 @@ module.exports = function(resolveFileLocation) {
             fs.writeFileSync('/tmp/videoStream.sh', streamScript);
             global.libcameraProcess = childProcess.spawn(BASH_CMD, ['/tmp/videoStream.sh'], {
                 env: process.env,
-                detached: true
+                shell: true,
+                cwd: process.cwd()
             });
             global.directStreamProcess = getFfmpegStream();
             global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
