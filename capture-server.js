@@ -14,6 +14,10 @@ const express = require('express'),
 const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 
+process.on('uncaughtException', (e) => {
+    console.error(e);
+});
+
 const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     {
         getIPAddress,
