@@ -208,7 +208,7 @@ module.exports = function(resolveFileLocation) {
 
     function imageStream(options) {
 
-        const running = getAllRunning();
+        /*const running = getAllRunning();
         const spawnFn = () => {
             global.imageStreamProcess = streamMjpeg(options);
             const listeners = global.imageStreamProcess.stdout.listeners('data');
@@ -225,7 +225,7 @@ module.exports = function(resolveFileLocation) {
                 DevNull.destroy();
             });
             logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
-        };
+        };*/
         /*if (running.length > 0) {
             childProcess.exec(`kill -9 ${running}`, (err, success) => {
                 spawnFn();
