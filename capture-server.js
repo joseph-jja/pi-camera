@@ -28,7 +28,6 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         saveRawVideoData,
         saveVideoProcess,
         saveImagesData,
-        previewProcess,
         directStream,
         getVideoUpdateOptions,
         getImageUpdateOptions
