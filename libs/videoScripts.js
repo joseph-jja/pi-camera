@@ -251,10 +251,13 @@ module.exports = function(resolveFileLocation) {
         });
         global.directStreamProcess.on('close', () => {
             global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
-            global.libcameraProcess = undefined;
             global.directStreamProcess = undefined;
             logger.info('Video stream has ended!');
             DevNull.destroy();
+        });
+        global.libcameraProcess.on('close', () => {
+            global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
+            global.libcameraProcess = undefined;
         });
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
