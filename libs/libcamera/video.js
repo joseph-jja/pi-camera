@@ -9,7 +9,8 @@ module.exports = function(resolveFileLocation) {
     function streamMjpeg(options = []) {
 
         // default image streaming options
-        const spawnOptions = [LIBCAMERA_VIDEO, '--codec', 'mjpeg', '-t', '0'].concat(options);
+        //const spawnOptions = [LIBCAMERA_VIDEO, '--codec', 'mjpeg', '-t', '0'].concat(options);
+        const spawnOptions = ['--codec', 'mjpeg', '-t', '0'].concat(options);
 
         // stream to stdout
         spawnOptions.push('-o');
@@ -17,10 +18,10 @@ module.exports = function(resolveFileLocation) {
 
         logger.info(`Libcamera video: ${LIBCAMERA_VIDEO} options: ${stringify(spawnOptions)}`);
 
-        return spawnOptions.join(' ');
-        /*return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+        //return spawnOptions.join(' ');
+        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
             env: process.env
-        });*/
+        });
     }
 
     function saveH264(options = []) {
