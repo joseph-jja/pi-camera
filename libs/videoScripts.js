@@ -106,9 +106,6 @@ module.exports = function(resolveFileLocation) {
 
     function killAllRunning() {
         const results = childProcess.execSync(`${BASH_CMD} ${KILL_ALL_CMD}`);
-        global.directStreamProcess = undefined;
-        global.libcameraProcess = undefined;
-        global.imageStreamProcess = undefined;
         return results;
     }
 
@@ -254,6 +251,8 @@ module.exports = function(resolveFileLocation) {
         });
         global.directStreamProcess.on('close', () => {
             global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
+            global.libcameraProcess = undefined;
+            global.directStreamProcess = undefined;
             logger.info('Video stream has ended!');
             DevNull.destroy();
         });
