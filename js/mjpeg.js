@@ -1,4 +1,3 @@
-
 class MJPEGStream {
 
     constructor(args) {

@@ -8,7 +8,6 @@ module.exports = function(resolveFileLocation) {
             getOptions
         } = require(`${resolveFileLocation}/libs/utils`),
         {
-            killAllRunning,
             directStream,
             setVideoUpdateOptions
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);

@@ -1,10 +1,14 @@
-const { spawn } = require('child_process');
+const {
+    spawn
+} = require('child_process');
 
 module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
-    const { LIBCAMERA_VIDEO } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
+    const {
+        LIBCAMERA_VIDEO
+    } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
 
     function streamJpeg(options) {
 
@@ -33,7 +37,7 @@ module.exports = function(resolveFileLocation) {
         });
     }
 
-    return  {
+    return {
         streamJpeg,
         saveImage
     };

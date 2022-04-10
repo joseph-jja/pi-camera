@@ -35,7 +35,7 @@ module.exports = function(resolveFileLocation) {
             } catch(e) {
                 logger.error(`Unpipe error ${stringify(e)}`);
             }
-            childProcess.exec(`kill -9 ${previewCmd.pid}`);
+            previewCmd.kill();
         });
 
         streamObject.stdout.pipe(previewCmd.stdin);

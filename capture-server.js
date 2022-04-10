@@ -9,7 +9,9 @@ const os = require('os'),
 
 const express = require('express'),
     bodyParser = require('body-parser'),
-    { Server } = require("socket.io");
+    {
+        Server
+    } = require("socket.io");
 
 const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
@@ -88,11 +90,15 @@ async function getFormData() {
                 };
                 const values = formFields.getRangeValues(rangeItem);
                 if (index === 0) {
-                    const ritem = Object.assign({}, item, {values});
+                    const ritem = Object.assign({}, item, {
+                        values
+                    });
                     delete ritem.comment;
                     return formFields.buildSelect(ritem);
                 } else {
-                    const ritem = Object.assign({}, item, {values});
+                    const ritem = Object.assign({}, item, {
+                        values
+                    });
                     delete ritem.name;
                     ritem.paramName = item.multiRange.joinedBy;
                     return formFields.buildSelect(ritem);
@@ -103,7 +109,9 @@ async function getFormData() {
             return ranges;
         } else if (item.range) {
             const values = formFields.getRangeValues(item);
-            const ritem = Object.assign({}, item, {values});
+            const ritem = Object.assign({}, item, {
+                values
+            });
             return formFields.buildSelect(ritem);
         } else if (item.fieldValue) {
             return formFields.textField(item);
@@ -187,7 +195,7 @@ async function start() {
 
     app.get('/config', (request, response) => {
         response.writeHead(200, {});
-        response.end(stringify(getVideoUpdateOptions()) + ' ' );
+        response.end(stringify(getVideoUpdateOptions()) + ' ');
     });
 
     app.get('/', (request, response) => {

@@ -1,4 +1,6 @@
 #! /bin/sh
 
-find ./ -depth 1 -name '*.js' -exec npx js-beautify -r {} \;
-find ./ -depth 1 -name 'ijs/*.js' -exec npx js-beautify -r {} \;
+npx js-beautify -r *.js
+
+find ./ -type f -name 'libs/*.js' -exec npx js-beautify -r {} \;
+find ./ -type f -name 'xhrActions/*.js' -exec npx js-beautify -r {} \;
