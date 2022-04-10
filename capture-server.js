@@ -209,7 +209,11 @@ async function start() {
     logger.info(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
-    directStream(DEFAULT_OPTIONS);
+    try {
+        directStream(DEFAULT_OPTIONS);
+    } catch (e) {
+        logger.error(`Error starting directStream: ${stringify(e)}`);
+    }
 }
 
 start();
