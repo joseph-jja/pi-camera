@@ -13,8 +13,8 @@ const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
 const DEFAULT_OPTIONS = [],
     DEFAULT_IMAGE_CONFIG = [];
 
-let lastUpdateOpts = DEFAULT_OPTIONS,
-    lastImageUpdateOpts = [];
+let lastUpdateOpts,
+    lastImageUpdateOpts;
 
 function getVideoUpdateOptions() {
     return lastUpdateOpts;
@@ -43,6 +43,7 @@ function updateConfigs(resolveFileLocation) {
                 });
             }
         });
+        setVideoUpdateOptions(DEFAULT_OPTIONS);
     }
 
     const imageConfig = require(`${resolveFileLocation}/libs/libcamera/stillConfig`);
@@ -54,6 +55,7 @@ function updateConfigs(resolveFileLocation) {
                 });
             }
         });
+        setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
     }
 }
 
