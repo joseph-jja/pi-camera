@@ -105,20 +105,10 @@ module.exports = function(resolveFileLocation) {
     initSystem(logger);
 
     function killAllRunning() {
-        const results = [];
-        if (global.libcameraProcess) {
-            results.push(global.libcameraProcess.kill());
-            global.libcameraProcess = undefined;
-        }
-        if (global.directStreamProcess) {
-            results.push(global.directStreamProcess.kill());
-            global.directStreamProcess = undefined;
-        }
-        if (global.imageStreamProcess) {
-            results.push(global.imageStreamProcess.kill());
-            global.imageStreamProcess = undefined;
-        }
-        childProcess.execSync(`${BASH_CMD} ${KILL_ALL_CMD}`);
+        const results = childProcess.execSync(`${BASH_CMD} ${KILL_ALL_CMD}`);
+        global.directStreamProcess = undefined;
+        global.libcameraProcess = undefined;
+        global.imageStreamProcess = undefined;
         return results;
     }
 
@@ -305,7 +295,6 @@ module.exports = function(resolveFileLocation) {
         imageStream,
         previewProcess,
         saveVideoProcess,
-        killAllRunning,
         getVideoUpdateOptions,
         setVideoUpdateOptions,
         getImageUpdateOptions,
