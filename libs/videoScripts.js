@@ -261,8 +261,6 @@ module.exports = function(resolveFileLocation) {
     return {
         BASE_IMAGE_PATH,
         BASE_CONFIG_PATH,
-        DEFAULT_OPTIONS,
-        BASH_CMD,
         getVideoFilename,
         saveRawVideoData,
         saveImagesData,

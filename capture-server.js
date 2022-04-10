@@ -25,7 +25,6 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
     } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
     logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename),
     {
-        DEFAULT_OPTIONS,
         saveRawVideoData,
         saveVideoProcess,
         saveImagesData,
@@ -213,7 +212,7 @@ async function start() {
     logger.info(`Listening on IP: ${ipaddr} and port ${port}`);
 
     // start rtps streaming
-    directStream(DEFAULT_OPTIONS);
+    directStream(getVideoUpdateOptions());
 }
 
 start();
