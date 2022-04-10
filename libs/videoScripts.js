@@ -252,9 +252,6 @@ module.exports = function(resolveFileLocation) {
         }
         const running = killAllRunning();
         // stream libcamera stdout to ffmpeg stdin
-        //const streamScript = `#! /bin/bash ${os.EOL}${KILL_ALL}${os.EOL}${ streamMjpeg(spawnOptions)}${os.EOL}`;
-        //fs.writeFileSync('/tmp/videoStream.sh', streamScript);
-        //global.libcameraProcess = childProcess.spawn(BASH_CMD, ['/tmp/videoStream.sh']);
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
         global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
