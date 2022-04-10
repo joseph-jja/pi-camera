@@ -166,6 +166,27 @@ module.exports = function(resolveFileLocation) {
 
     function saveImagesData(options, response) {
 
+        const running = getAllRunning();
+        const spawnFn = () => {
+            const spawnOptions = options.concat();
+            const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
+            spawnOptions.push('-o');
+            spawnOptions.push(filename);
+            const rawDataProcess = saveImage(spawnOptions);
+            rawDataProcess.on('close', (code) => {
+                response.writeHead(200, {});
+                response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
+            });
+            logger.info(`${SAVE_IMAGES_CMD}: ${stringify(spawnOptions)}`);
+            saveConfig(stringify(spawnOptions), 'png');
+        };
+        /*if (running.length > 0) {
+            childProcess.exec(`kill -9 ${running}`, (err, success) => {
+                spawnFn();
+            });
+        } else {
+            spawnFn();
+        }*/
         const spawnOptions = options.concat();
         if (spawnOptions.length === 0) {
             const filtered = DEFAULT_IMAGE_CONFIG.join(' ');
@@ -187,7 +208,31 @@ module.exports = function(resolveFileLocation) {
 
     function imageStream(options) {
 
-        //streamMjpeg(options);
+        const running = getAllRunning();
+        const spawnFn = () => {
+            global.imageStreamProcess = streamMjpeg(options);
+            const listeners = global.imageStreamProcess.stdout.listeners('data');
+            for (let i = 0, end = listeners.length; i < end; i++) {
+                global.imageStreamProcess.stdout.removeListener('data', listeners[i]);
+            }
+            const DevNull = new NullStream();
+            global.imageStreamProcess.stdout.pipe(DevNull);
+            global.imageStreamProcess.stderr.on('error', (err) => {
+                console.error('Error', err);
+            });
+            global.imageStreamProcess.on('close', () => {
+                logger.info('Video stream has ended!');
+                DevNull.destroy();
+            });
+            logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
+        };
+        /*if (running.length > 0) {
+            childProcess.exec(`kill -9 ${running}`, (err, success) => {
+                spawnFn();
+            });
+        } else {
+            spawnFn();
+        }*/
         const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
             const filtered = DEFAULT_IMAGE_CONFIG.join(' ');
