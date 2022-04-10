@@ -85,7 +85,7 @@ function getAllRunning() {
     if (global.imageStreamProcess) {
         results.push(global.imageStreamProcess.pid);
     }
-    return results.join(' ');
+    return results.join(' ').trim();
 }
 
 
@@ -334,6 +334,7 @@ module.exports = function(resolveFileLocation) {
         imageStream,
         previewProcess,
         saveVideoProcess,
+        getAllRunning,
         getVideoUpdateOptions,
         setVideoUpdateOptions,
         getImageUpdateOptions,

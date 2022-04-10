@@ -8,6 +8,7 @@ module.exports = function(resolveFileLocation) {
             getOptions
         } = require(`${resolveFileLocation}/libs/utils`),
         {
+            getAllRunning,
             directStream,
             setVideoUpdateOptions
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
@@ -17,17 +18,12 @@ module.exports = function(resolveFileLocation) {
             const options = getOptions(request.body);
             if (options.length > 0) {
                 setVideoUpdateOptions(options);
-                const libcameraPid = (global.libcameraProcess ? global.libcameraProcess.pid : ''); 
-                if (global.imageStreamProcess) {
-                    const pid = global.imageStreamProcess.pid;
-                    childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
-                        global.imageStreamProcess = undefined;
-                    });
-                }
-                if (global.directStreamProcess) {
-                    const pid = global.directStreamProcess.pid;
-                    childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
+                const running = getAllRunning();
+                if (running.length > 0) {
+                    childProcess.exec(`kill -9 ${running} ${libcameraPid}`, () => {
+                        global.libcameraProcess = undefined;
                         global.directStreamProcess = undefined;
+                        global.imageStreamProcess = undefined;
                         directStream(options);
                     });
                 } else {
