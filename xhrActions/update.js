@@ -24,10 +24,10 @@ module.exports = function(resolveFileLocation) {
                 const message = `Executed script with options ${stringify(options)} on ${new Date()}`;
                 response.end(message);
                 logger.info(message);
+                return;
             }
-        } else {
-            response.writeHead(200, {});
-            response.end('No changes applied!');
         }
+        response.writeHead(200, {});
+        response.end('No changes applied!');
     };
 };
