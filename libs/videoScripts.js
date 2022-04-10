@@ -235,8 +235,6 @@ module.exports = function(resolveFileLocation) {
             for (let i = 0, end = listeners.length; i < end; i++) {
                 global.directStreamProcess.stdout.removeListener('data', listeners[i]);
             }
-            //global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
-            //global.directStreamProcess.stdout.unpipe();
         }
         const running = killAllRunning();
         // stream libcamera stdout to ffmpeg stdin
@@ -256,7 +254,6 @@ module.exports = function(resolveFileLocation) {
             DevNull.destroy();
         });
         global.libcameraProcess.on('close', () => {
-            global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
             global.libcameraProcess = undefined;
         });
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
