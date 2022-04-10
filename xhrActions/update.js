@@ -18,7 +18,6 @@ module.exports = function(resolveFileLocation) {
             const options = getOptions(request.body);
             if (options.length > 0) {
                 setVideoUpdateOptions(options);
-                const running = killAllRunning();
                 directStream(options);
                 response.writeHead(200, {});
                 const message = `Executed script with options ${stringify(options)} on ${new Date()}`;
