@@ -248,7 +248,7 @@ module.exports = function(resolveFileLocation) {
                 global.directStreamProcess.stdout.removeListener('data', listeners[i]);
             }
             global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
-            global.directStreamProcess.stdout.unpipe(DevNull);
+            global.directStreamProcess.stdout.unpipe();
         }
         const running = killAllRunning();
         // stream libcamera stdout to ffmpeg stdin
