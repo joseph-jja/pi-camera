@@ -2,7 +2,7 @@ const {
     unlink
 } = require('fs');
 
-const OLD_FILENAME_MATCH = /^[a-zA-Z]*-(\d)*\.[a-z]*$/;
+const OLD_FILENAME_MATCH = /^[a-zA-Z]*-(\d)*\.[a-z0-9]*$/;
 
 module.exports = function(resolveFileLocation) {
 
