@@ -2,12 +2,13 @@ const {
     rename
 } = require('fs');
 
-const VALID_CHARACTERS = /[a-zA-Z]/g,
-    OLD_FILENAME_MATCH = /^[a-zA-Z]*-(\d)*\.[a-z]*$/;
-
 module.exports = function(resolveFileLocation) {
 
-    const stringify = require(`${resolveFileLocation}/libs/stringify`),
+    const {
+            OLD_FILENAME_MATCH,
+            VALID_CHARACTERS
+        } = require(`${resolveFileLocation}/xhrActions/Constants`),
+        stringify = require(`${resolveFileLocation}/libs/stringify`),
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
             BASE_IMAGE_PATH,

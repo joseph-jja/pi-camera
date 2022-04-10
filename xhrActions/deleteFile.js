@@ -2,11 +2,10 @@ const {
     unlink
 } = require('fs');
 
-const OLD_FILENAME_MATCH = /^[a-zA-Z]*-(\d)*\.[a-z0-9]*$/;
-
 module.exports = function(resolveFileLocation) {
 
-    const stringify = require(`${resolveFileLocation}/libs/stringify`),
+    const { OLD_FILENAME_MATCH } = require(`${resolveFileLocation}/xhrActions/Constants`),
+        stringify = require(`${resolveFileLocation}/libs/stringify`),
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
             BASE_IMAGE_PATH,
