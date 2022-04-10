@@ -8,7 +8,7 @@ module.exports = function(resolveFileLocation) {
             getOptions
         } = require(`${resolveFileLocation}/libs/utils`),
         {
-            getAllRunning,
+            killAllRunning,
             directStream,
             setVideoUpdateOptions
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
@@ -18,17 +18,8 @@ module.exports = function(resolveFileLocation) {
             const options = getOptions(request.body);
             if (options.length > 0) {
                 setVideoUpdateOptions(options);
-                const running = getAllRunning();
-                if (running.length > 0) {
-                    childProcess.exec(`kill -9 ${running} ${libcameraPid}`, () => {
-                        global.libcameraProcess = undefined;
-                        global.directStreamProcess = undefined;
-                        global.imageStreamProcess = undefined;
-                        directStream(options);
-                    });
-                } else {
-                    directStream(options);
-                }
+                const running = killAllRunning();
+                directStream(options);
                 response.writeHead(200, {});
                 const message = `Executed script with options ${stringify(options)} on ${new Date()}`;
                 response.end(message);
