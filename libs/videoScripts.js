@@ -235,8 +235,8 @@ module.exports = function(resolveFileLocation) {
             for (let i = 0, end = listeners.length; i < end; i++) {
                 global.directStreamProcess.stdout.removeListener('data', listeners[i]);
             }
-            global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
-            global.directStreamProcess.stdout.unpipe();
+            //global.libcameraProcess.stdout.unpipe(global.directStreamProcess.stdin);
+            //global.directStreamProcess.stdout.unpipe();
         }
         const running = killAllRunning();
         // stream libcamera stdout to ffmpeg stdin
