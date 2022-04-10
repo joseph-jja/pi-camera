@@ -97,6 +97,10 @@ module.exports = function(resolveFileLocation) {
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
     const {
+        streamJpeg,
+        saveImage
+    } = require(`${resolveFileLocation}/libs/libcamera/still`)(resolveFileLocation);
+    const {
         streamMjpeg,
         saveH264
     } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
@@ -185,6 +189,7 @@ module.exports = function(resolveFileLocation) {
 
     function imageStream(options) {
 
+        //streamMjpeg(options);
         const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
             const filtered = DEFAULT_IMAGE_CONFIG.join(' ');

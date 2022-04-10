@@ -11,8 +11,6 @@ module.exports = function(resolveFileLocation) {
         // default image streaming options
         const spawnOptions = ['-e', 'jpg', '-t', '0', '--timelapse', '10', '--immediate'].concat(options);
 
-        // process input options
-
         // stream to stdout
         spawnOptions.push('-o');
         spawnOptions.push('-');
