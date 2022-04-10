@@ -56,8 +56,8 @@ const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
     return `/js/${item}`;
 }).concat(jsLibFiles);
 
-const videoConfig = require(`${RESOLVED_FILE_LOCATION}/videoConfig`),
-    imageConfig = require(`${RESOLVED_FILE_LOCATION}/stillConfig`);
+const videoConfig = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/videoConfig`),
+    imageConfig = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/stillConfig`);
 
 const VIDEO_HTML = fs.readFileSync(`${RESOLVED_FILE_LOCATION}/views/capture.html`).toString();
 

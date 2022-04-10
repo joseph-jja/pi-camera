@@ -34,7 +34,7 @@ function setImageUpdateOptions(opts) {
 
 function updateConfigs(resolveFileLocation) {
     //only once
-    const config = require(`${resolveFileLocation}/videoConfig`);
+    const config = require(`${resolveFileLocation}/libs/libcamera/videoConfig`);
     if (DEFAULT_OPTIONS.length === 0) {
         config.forEach(item => {
             if (item.defaultvalue) {
@@ -45,7 +45,7 @@ function updateConfigs(resolveFileLocation) {
         });
     }
 
-    const imageConfig = require(`${resolveFileLocation}/stillConfig`);
+    const imageConfig = require(`${resolveFileLocation}/libs/libcamera/stillConfig`);
     if (DEFAULT_IMAGE_CONFIG.length === 0) {
         imageConfig.forEach(item => {
             if (item.defaultvalue) {
@@ -73,17 +73,17 @@ function initSystem(logger) {
 function getAllRunning() {
     const results = [];
     if (global.libcameraProcess) {
-        results.push(global.libcameraProcess.pid);   
+        results.push(global.libcameraProcess.pid);
     }
     if (global.directStreamProcess) {
-        results.push(global.directStreamProcess.pid);   
+        results.push(global.directStreamProcess.pid);
     }
     if (global.imageStreamProcess) {
-        results.push(global.imageStreamProcess.pid);   
+        results.push(global.imageStreamProcess.pid);
     }
     return results.join(' ');
 }
-    
+
 
 module.exports = function(resolveFileLocation) {
 
@@ -135,7 +135,7 @@ module.exports = function(resolveFileLocation) {
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
         const spawnOptions = options;
         if (bitRate && bitRate.length > 0) {
-            bitRate.split(' ').forEach(x => {        
+            bitRate.split(' ').forEach(x => {
                 spawnOptions.push(x);
             });
         }
@@ -150,7 +150,7 @@ module.exports = function(resolveFileLocation) {
                     response.writeHead(200, {});
                     response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
                 });
-                saveConfig(stringify(spawnOptions), 'h264');            
+                saveConfig(stringify(spawnOptions), 'h264');
             });
         } else {
             const rawDataProcess = saveH264(spawnOptions);
@@ -158,7 +158,7 @@ module.exports = function(resolveFileLocation) {
                 response.writeHead(200, {});
                 response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
             });
-            saveConfig(stringify(spawnOptions), 'h264');            
+            saveConfig(stringify(spawnOptions), 'h264');
         }
     }
 
@@ -215,7 +215,7 @@ module.exports = function(resolveFileLocation) {
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
         global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
-        
+
         const listeners = global.directStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.directStreamProcess.stdout.removeListener('data', listeners[i]);
