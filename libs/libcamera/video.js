@@ -15,11 +15,13 @@ module.exports = function(resolveFileLocation) {
         spawnOptions.push('-o');
         spawnOptions.push('-');
 
-        logger.info(`Libcamera video spawn options: ${stringify(spawnOptions)}`);
+        logger.info(`Libcamera video: ${LIBCAMERA_VIDEO} options: ${stringify(spawnOptions)}`);
 
-        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+        spawnOptions.shift(LIBCAMERA_VIDEO);
+        return spawnOptions.join(' ');
+        /*return spawn(LIBCAMERA_VIDEO, spawnOptions, {
             env: process.env
-        });
+        });*/
     }
 
     function saveH264(options = []) {
