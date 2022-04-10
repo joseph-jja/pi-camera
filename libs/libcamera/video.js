@@ -14,7 +14,9 @@ module.exports = function(resolveFileLocation) {
         // stream to stdout
         spawnOptions.push('-o');
         spawnOptions.push('-');
-        logger.info(`Libcamera spawn options ${stringify(spawnOptions)}`);
+
+        logger.info(`Libcamera video spawn options: ${stringify(spawnOptions)}`);
+
         return spawn(LIBCAMERA_VIDEO, spawnOptions, {
             env: process.env
         });
@@ -23,7 +25,9 @@ module.exports = function(resolveFileLocation) {
     function saveH264(options = []) {
 
         const spawnOptions = ['--codec', 'h264', '-t', '60000'].concat(options);
- 
+
+        logger.info(`Libcamera video save h264 options: ${stringify(spawnOptions)}`);
+
         return spawn(LIBCAMERA_VIDEO, spawnOptions, {
             env: process.env
         });

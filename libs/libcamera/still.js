@@ -14,13 +14,19 @@ module.exports = function(resolveFileLocation) {
         // stream to stdout
         spawnOptions.push('-o');
         spawnOptions.push('-');
+
+        logger.info(`Libcamera still spawn options: ${stringify(spawnOptions)}`);
+
         return spawn(LIBCAMERA_VIDEO, spawnOptions, {
             env: process.env
         });
     }
 
     function saveImage(options) {
+
         const spawnOptions = ['-r'].concat(options);
+
+        logger.info(`Libcamera still save image options: ${stringify(spawnOptions)}`);
 
         return spawn(LIBCAMERA_VIDEO, spawnOptions, {
             env: process.env
