@@ -264,7 +264,7 @@ module.exports = function(resolveFileLocation) {
             console.error('Error', err);
         });
 
-        global.directStreamProcess.on('close', () => {
+        /*global.directStreamProcess.on('close', () => {
             removeListeners(global.directStreamProcess);
             //global.directStreamProcess = undefined;
             logger.info('Video stream has ended!');
@@ -273,7 +273,7 @@ module.exports = function(resolveFileLocation) {
             removeListeners(global.libcameraProcess);
             //global.libcameraProcess = undefined;
             logger.info('libcamera has ended!');
-        });
+        });*/
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
