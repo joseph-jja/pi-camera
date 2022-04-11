@@ -1,6 +1,7 @@
 const os = require('os'),
     fs = require('fs'),
     http = require('http'),
+    { randomUUID } = require('crypto'),
     {
         resolve,
         basename
@@ -73,6 +74,13 @@ app.use(bodyParser.urlencoded({
     extended: false,
     limit: 100000
 }));
+
+app.use((request, response, next) => {
+    const uuid = randomUUID();
+    request.uuid = uuid;
+    response.setHeader('uuid', uuid);
+    next();
+});
 
 async function getFormData() {
     const formFields = await import('./libs/form.mjs');
