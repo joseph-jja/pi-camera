@@ -75,7 +75,7 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
-app.use('/preview', (request, response, next) => {
+app.use('/', (request, response, next) => {
     const uuid = (request.headers['x-uuid'] ?
         request.headers['x-uuid'] :
         randomBytes(26).toString('hex'));
@@ -212,7 +212,7 @@ async function start() {
         response.writeHead(200, {
             'Content-Type': 'text/html'
         });
-        response.end(getHTML(fields, imageFields));
+        response.end(getHTML(fields, imageFields).replace('[[PAGE_UU_ID]]', request.uuid));
     });
 
     app.get('/js/socket.io.js', (request, response) => {
