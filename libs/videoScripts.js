@@ -216,12 +216,12 @@ module.exports = function(resolveFileLocation) {
             global.directStreamProcess.stdin.write(d);
         });
 
-        /*global.directStreamProcess.stderr.on('error', (err) => {
+        global.directStreamProcess.stderr.on('data', (err) => {
             console.error('Error', err);
         });
-        global.libcameraProcess.stderr.on('error', (err) => {
+        global.libcameraProcess.stderr.on('data', (err) => {
             console.error('Error', err);
-        });*/
+        });
 
         //global.directStreamProcess.once('close', () => {
         //removeListeners(oldvideo);
