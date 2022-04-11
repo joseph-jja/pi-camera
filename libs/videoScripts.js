@@ -269,16 +269,16 @@ module.exports = function(resolveFileLocation) {
         });
 
         global.directStreamProcess.once('close', () => {
-            //removeListeners(global.directStreamProcess);
+            removeListeners(global.directStreamProcess);
+            logger.info('Video stream has ended! ' + global.directStreamProcess.pid);
             //global.directStreamProcess = undefined;
-            logger.info('Video stream has ended!');
         });
         global.libcameraProcess.once('close', () => {
-            //removeListeners(global.libcameraProcess);
+            removeListeners(global.libcameraProcess);
+            logger.info('libcamera has ended! ' + global.libcameraProcess.pid);
             //global.libcameraProcess = undefined;
-            //logger.info('libcamera has ended!');
         });
-        logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
+        logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${global.libcameraProcess.pid} ${global.directStreamProcess.pid}`);
     }
 
     function saveVideoProcess(options, response) {
