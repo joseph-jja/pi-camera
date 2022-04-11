@@ -3,14 +3,15 @@ const {
     readFile
 } = require('fs');
 
-const OLD_FILENAME_MATCH = /^[a-zA-Z]*-(\d)*\.[a-z]*$/;
-
 module.exports = function(resolveFileLocation) {
 
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
             BASE_IMAGE_PATH
-        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
+        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation),
+        {
+            OLD_FILENAME_MATCH
+        } = require(`${resolveFileLocation}/xhrActions/Constants`)(resolveFileLocation);
 
     return (request, response) => {
         const query = (request.query || {});
