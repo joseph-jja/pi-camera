@@ -233,7 +233,7 @@ module.exports = function(resolveFileLocation) {
                 streamObject.stdout.removeListener('data', listeners[i]);
             }
             const elisteners = streamObject.stdout.listeners('error');
-            for (let i = 0, end = listeners.length; i < end; i++) {
+            for (let i = 0, end = elisteners.length; i < end; i++) {
                 streamObject.stdout.removeListener('error', elisteners[i]);
             }
         }
