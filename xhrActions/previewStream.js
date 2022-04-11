@@ -18,9 +18,8 @@ module.exports = function(resolveFileLocation) {
             previewProcess
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
 
-    const setupPreviewStream = (streamObject, response) => {
+    const setupPreviewStream = (streamObject, response, uuid) => {
 
-        const uuid = response.getHeader('x-uuid');
         if (previewProcessMap[uuid]) {
             previewProcessMap[uuid].kill('SIGKILL');
         }
@@ -50,12 +49,13 @@ module.exports = function(resolveFileLocation) {
     };
 
     return (request, response) => {
+        const uuid = request.params['x-uuid'];
         if (global.directStreamProcess) {
             logger.info('Running via directStreamProcess doing mjpeg video');
-            setupPreviewStream(global.directStreamProcess, response);
+            setupPreviewStream(global.directStreamProcess, response, uuid);
         } else if (global.imageStreamProcess) {
             logger.info('Running via imageStreamProcess doing jpeg images');
-            setupPreviewStream(global.imageStreamProcess, response);
+            setupPreviewStream(global.imageStreamProcess, response, uuid);
         } else {
             response.writeHead(200, {});
             response.end('Preview service is not running!');
