@@ -226,16 +226,19 @@ module.exports = function(resolveFileLocation) {
     }
 
     function removeListeners(streamObject) {
-        if (streamObject && streamObject.stdout &&
-            streamObject.stdout.listeners('data')) {
-            const listeners = streamObject.stdout.listeners('data');
-            for (let i = 0, end = listeners.length; i < end; i++) {
-                streamObject.stdout.removeListener('data', listeners[i]);
-            }
-            const elisteners = streamObject.stderr.listeners('error');
-            for (let i = 0, end = elisteners.length; i < end; i++) {
-                streamObject.stderr.removeListener('error', elisteners[i]);
-            }
+        if (streamObject && streamObject.stdout) {
+            if (streamObject.stdout.listeners('data')) {
+                const listeners = streamObject.stdout.listeners('data');
+                for (let i = 0, end = listeners.length; i < end; i++) {
+                    streamObject.stdout.removeListener('data', listeners[i]);
+                }
+            } 
+            if (streamObject.stderr.listeners('data')) {
+                const listeners = streamObject.stderr.listeners('data');
+                for (let i = 0, end = listeners.length; i < end; i++) {
+                    streamObject.stderr.removeListener('data', listeners[i]);
+                }
+            } 
         }
     }
 
