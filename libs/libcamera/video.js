@@ -15,13 +15,13 @@ function setVideoUpdateOptions(opts) {
 }
 module.exports = function(resolveFileLocation) {
 
-    const stringify = require(`${resolveFileLocation}/libs/stringify`);
-    const {
-        LIBCAMERA_VIDEO
-    } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
-    const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
+    const stringify = require(`${resolveFileLocation}/libs/stringify`),
+        {
+            LIBCAMERA_VIDEO
+        } = require(`${resolveFileLocation}/libs/libcamera/Constants`),
+        logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
+        config = require(`${resolveFileLocation}/libs/libcamera/videoConfig`);
 
-    const config = require(`${resolveFileLocation}/libs/libcamera/videoConfig`);
     if (DEFAULT_OPTIONS.length === 0) {
         config.forEach(item => {
             if (item.defaultvalue) {

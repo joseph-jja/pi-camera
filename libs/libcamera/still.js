@@ -2,13 +2,37 @@ const {
     spawn
 } = require('child_process');
 
+const DEFAULT_IMAGE_CONFIG = [];
+
+let lastImageUpdateOpts;
+
+function getImageUpdateOptions() {
+    return lastImageUpdateOpts;
+}
+
+function setImageUpdateOptions(opts) {
+    lastImageUpdateOpts = opts;
+}
+
 module.exports = function(resolveFileLocation) {
 
-    const stringify = require(`${resolveFileLocation}/libs/stringify`);
-    const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
-    const {
-        LIBCAMERA_VIDEO
-    } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
+    const stringify = require(`${resolveFileLocation}/libs/stringify`),
+        logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
+        {
+            LIBCAMERA_VIDEO
+        } = require(`${resolveFileLocation}/libs/libcamera/Constants`),
+        imageConfig = require(`${resolveFileLocation}/libs/libcamera/stillConfig`);
+
+    if (DEFAULT_IMAGE_CONFIG.length === 0) {
+        imageConfig.forEach(item => {
+            if (item.defaultvalue) {
+                item.defaultvalue.split(' ').forEach(item => {
+                    DEFAULT_IMAGE_CONFIG.push(item);
+                });
+            }
+        });
+        setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
+    }
 
     function streamJpeg(options) {
 
@@ -38,6 +62,8 @@ module.exports = function(resolveFileLocation) {
     }
 
     return {
+        getImageUpdateOptions,
+        setImageUpdateOptions,
         streamJpeg,
         saveImage
     };

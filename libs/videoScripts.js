@@ -10,33 +10,6 @@ const BASH_CMD = '/bin/bash';
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
 
-const DEFAULT_IMAGE_CONFIG = [];
-
-let lastImageUpdateOpts;
-
-function getImageUpdateOptions() {
-    return lastImageUpdateOpts;
-}
-
-function setImageUpdateOptions(opts) {
-    lastImageUpdateOpts = opts;
-}
-
-function updateConfigs(resolveFileLocation) {
-
-    const imageConfig = require(`${resolveFileLocation}/libs/libcamera/stillConfig`);
-    if (DEFAULT_IMAGE_CONFIG.length === 0) {
-        imageConfig.forEach(item => {
-            if (item.defaultvalue) {
-                item.defaultvalue.split(' ').forEach(item => {
-                    DEFAULT_IMAGE_CONFIG.push(item);
-                });
-            }
-        });
-        setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
-    }
-}
-
 function initSystem(logger) {
     try {
         fs.mkdirSync(BASE_IMAGE_PATH);
@@ -71,29 +44,29 @@ module.exports = function(resolveFileLocation) {
 
     const KILL_ALL_CMD = `${resolveFileLocation}/scripts/killall.sh`;
 
-    updateConfigs(resolveFileLocation);
-
-    const {
-        padNumber,
-        getH264Bitrate
-    } = require(`${resolveFileLocation}/libs/utils`);
-    const stringify = require(`${resolveFileLocation}/libs/stringify`);
-    const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
-    const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
-    /*const {
-        streamJpeg,
-        saveImage
-    } = require(`${resolveFileLocation}/libs/libcamera/still`)(resolveFileLocation);*/
-    const {
-        getVideoUpdateOptions,
-        setVideoUpdateOptions,
-        streamMjpeg,
-        saveH264
-    } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
-    const {
-        getFfmpegStream,
-        previewStream
-    } = require(`${resolveFileLocation}/libs/ffmpeg`);
+    const stringify = require(`${resolveFileLocation}/libs/stringify`),
+        {
+            padNumber,
+            getH264Bitrate
+        } = require(`${resolveFileLocation}/libs/utils`),
+        NullStream = require(`${resolveFileLocation}/libs/NullStream.js`),
+        logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
+        {
+            getImageUpdateOptions,
+            setImageUpdateOptions //,
+            //streamJpeg,
+            //saveImage
+        } = require(`${resolveFileLocation}/libs/libcamera/still`)(resolveFileLocation),
+        {
+            getVideoUpdateOptions,
+            setVideoUpdateOptions,
+            streamMjpeg,
+            saveH264
+        } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation),
+        {
+            getFfmpegStream,
+            previewStream
+        } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
     const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
@@ -162,7 +135,7 @@ module.exports = function(resolveFileLocation) {
         */
         const spawnOptions = options.concat();
         if (spawnOptions.length === 0) {
-            const filtered = DEFAULT_IMAGE_CONFIG.join(' ');
+            const filtered = getImageUpdateOptions().join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(SAVE_IMAGES_CMD);
@@ -200,7 +173,7 @@ module.exports = function(resolveFileLocation) {
         */
         const spawnOptions = [options.join(' ')];
         if (spawnOptions.length === 0) {
-            const filtered = DEFAULT_IMAGE_CONFIG.join(' ');
+            const filtered = getImageUpdateOptions().join(' ');
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_IMAGE_CMD);
@@ -251,14 +224,14 @@ module.exports = function(resolveFileLocation) {
         });*/
 
         //global.directStreamProcess.once('close', () => {
-            //removeListeners(oldvideo);
-            //logger.info('Video stream has ended! ' + oldvideo.pid);
-            //global.directStreamProcess = undefined;
+        //removeListeners(oldvideo);
+        //logger.info('Video stream has ended! ' + oldvideo.pid);
+        //global.directStreamProcess = undefined;
         //});
         //global.libcameraProcess.once('close', () => {
-            //removeListeners(oldlibcamera);
-            //logger.info('libcamera has ended! ' + oldlibcamera.pid);
-            //global.libcameraProcess = undefined;
+        //removeListeners(oldlibcamera);
+        //logger.info('libcamera has ended! ' + oldlibcamera.pid);
+        //global.libcameraProcess = undefined;
         //});
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${global.libcameraProcess.pid} ${global.directStreamProcess.pid}`);
     }
