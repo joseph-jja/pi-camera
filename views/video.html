@@ -20,16 +20,16 @@
     let player;
     fetch('/config').then(async resp => {
         const headers = await resp.headers;
-        console.log(resp.headers);
+        const uuid = headers.get('x-uuid');
         //Leave your .mjpeg video URL here.
-        /*player = new MJPEGPlayer("player", "/preview", {
+        player = new MJPEGPlayer('player', `/preview?x-uuid=${uuid}`, {
             errorHandler: (err) => {
                 player.stream = new MJPEGStream(player.options);
                 player.start();
             },
             refreshRate: 250
         });
-        player.start();*/
+        player.start();
     });
   </script>
 </html>
