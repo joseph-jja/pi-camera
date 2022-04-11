@@ -249,9 +249,6 @@ module.exports = function(resolveFileLocation) {
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
 
-        const oldlibcamera = (global.libcameraProcess || {});
-        const oldvideo = (global.directStreamProcess || {});
-
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
@@ -264,23 +261,23 @@ module.exports = function(resolveFileLocation) {
             global.directStreamProcess.stdin.write(d);
         });
 
-        global.directStreamProcess.stderr.on('error', (err) => {
+        /*global.directStreamProcess.stderr.on('error', (err) => {
             console.error('Error', err);
         });
         global.libcameraProcess.stderr.on('error', (err) => {
             console.error('Error', err);
-        });
+        });*/
 
-        global.directStreamProcess.once('close', () => {
-            removeListeners(oldvideo);
-            logger.info('Video stream has ended! ' + oldvideo.pid);
+        //global.directStreamProcess.once('close', () => {
+            //removeListeners(oldvideo);
+            //logger.info('Video stream has ended! ' + oldvideo.pid);
             //global.directStreamProcess = undefined;
-        });
-        global.libcameraProcess.once('close', () => {
-            removeListeners(oldlibcamera);
-            logger.info('libcamera has ended! ' + oldlibcamera.pid);
+        //});
+        //global.libcameraProcess.once('close', () => {
+            //removeListeners(oldlibcamera);
+            //logger.info('libcamera has ended! ' + oldlibcamera.pid);
             //global.libcameraProcess = undefined;
-        });
+        //});
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${global.libcameraProcess.pid} ${global.directStreamProcess.pid}`);
     }
 
