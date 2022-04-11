@@ -1,4 +1,4 @@
-const childProcess = require('child_process');
+const previewProcessMap = {};
 
 function writeHeaders(response) {
     //const uuid = randomUUID();
@@ -7,7 +7,6 @@ function writeHeaders(response) {
         //'Content-Type': 'video/webm',
         'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
         'Cache-Control': 'no-cache'
-        //'x-user-id': uuid
     });
 }
 
@@ -21,34 +20,32 @@ module.exports = function(resolveFileLocation) {
 
     const setupPreviewStream = (streamObject, response) => {
 
-        const previewCmd = previewProcess();
+        const uuid = response.getHeader('x-uuid');
+        if (previewProcessMap[uuid]) {
+            previewProcessMap[uuid].kill('SIGKILL');
+        }
+        previewProcessMap[uuid] = previewProcess();
 
         writeHeaders(response);
         response.on('close', () => {
             try {
-                previewCmd.stdout.unpipe(response);
+                previewProcessMap[uuid].stdout.unpipe(response);
             } catch(e) {
                 logger.error(`Unpipe error ${stringify(e)}`);
             }
             try {
-                streamObject.stdout.unpipe(previewCmd.stdin);
+                streamObject.stdout.unpipe(previewProcessMap[uuid].stdin);
             } catch(e) {
                 logger.error(`Unpipe error ${stringify(e)}`);
             }
-            previewCmd.kill();
+            previewProcessMap[uuid].kill('SIGKILL');
         });
 
-        streamObject.stdout.pipe(previewCmd.stdin);
-        previewCmd.stdout.pipe(response);
-
-        streamObject.stdout.once('error', (e) => {
-            previewCmd.stdout.unpipe(response);
-            streamObject.stdout.unpipe(previewCmd.stdin);
-            logger.error(`Stream error ${stringify(e)}`);
-        });
+        streamObject.stdout.pipe(previewProcessMap[uuid].stdin);
+        previewProcessMap[uuid].stdout.pipe(response);
 
         streamObject.stdout.once('close', () => {
-            logger.info('Stream closed');
+            logger.info('Preview stream closed!');
         });
     };
 
@@ -59,11 +56,6 @@ module.exports = function(resolveFileLocation) {
         } else if (global.imageStreamProcess) {
             logger.info('Running via imageStreamProcess doing jpeg images');
             setupPreviewStream(global.imageStreamProcess, response);
-            /*global.imageStreamProcess.stderr.on('data', d => {
-                if (d.indexOf('Still') > -1) {
-                    logger.info('Still image started');
-                }
-            });*/
         } else {
             response.writeHead(200, {});
             response.end('Preview service is not running!');
