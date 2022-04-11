@@ -38,7 +38,7 @@ FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 50
 
 # pi camera code setup
 CODE_HOME=/home/pi/pi-camera
-PI_CAMERA_JS=""$NODE_BIN capture-server.js"
+PI_CAMERA_JS="$NODE_BIN capture-server.js"
 
 # client condig
 WEB_PID_FILE=/var/run/forever.pid
