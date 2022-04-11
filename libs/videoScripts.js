@@ -242,8 +242,12 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess = getFfmpegStream();
 
         const DevNull = new NullStream();
-        global.libcameraProcess.stdout.pipe(global.directStreamProcess.stdin);
-        global.directStreamProcess.stdout.pipe(DevNull);
+        global.directStreamProcess.stdout.on('data', d => {
+            DevNull.write(d);
+        });
+        global.libcameraProcess.stdout.on('data', d => {
+            global.directStreamProcess.stdin.write(d);
+        });
 
         global.directStreamProcess.stderr.on('error', (err) => {
             console.error('Error', err);
