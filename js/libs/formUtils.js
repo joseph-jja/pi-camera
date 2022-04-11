@@ -101,7 +101,7 @@ export function stopPreview() {
 
 export function startPreview() {
     const iframe = document.getElementById('videoDisplay');
-    iframe.src = '/preview';
+    iframe.src = `/preview?x-uuid=${xUuid}`; /* eslint-disable-line */
 }
 
 export function videoUpdate() {
