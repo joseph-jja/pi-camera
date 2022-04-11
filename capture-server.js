@@ -75,7 +75,7 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
-app.use((request, response, next) => {
+app.use('/preview', (request, response, next) => {
     const uuid = (request.headers['uuid'] ?
         request.headers['uuid'] :
         randomBytes(26).toString('hex'));
