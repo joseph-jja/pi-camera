@@ -75,15 +75,6 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
-app.use('/', (request, response, next) => {
-    const uuid = (request.headers['x-uuid'] ?
-        request.headers['x-uuid'] :
-        randomBytes(26).toString('hex'));
-    request.uuid = uuid;
-    response.setHeader('x-uuid', request.uuid);
-    next();
-});
-
 async function getFormData() {
     const formFields = await import('./libs/form.mjs');
 
@@ -209,10 +200,12 @@ async function start() {
     });
 
     app.get('/', (request, response) => {
+        const uuid = randomBytes(26).toString('hex');
         response.writeHead(200, {
-            'Content-Type': 'text/html'
+            'Content-Type': 'text/html',
+            'x-uuid': uuid
         });
-        response.end(getHTML(fields, imageFields).replace('[[PAGE_UU_ID]]', request.uuid));
+        response.end(getHTML(fields, imageFields).replace('[[PAGE_UU_ID]]', uuid));
     });
 
     app.get('/js/socket.io.js', (request, response) => {
