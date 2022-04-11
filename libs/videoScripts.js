@@ -231,10 +231,10 @@ module.exports = function(resolveFileLocation) {
         });
 
         global.directStreamProcess.stderr.on('data', (err) => {
-            console.error('Error', err);
+            logger.error(`Error ${err.length}`);
         });
         global.libcameraProcess.stderr.on('data', (err) => {
-            console.error('Error', err);
+            logger.error(`Error ${err.length}`);
         });
 
         //global.directStreamProcess.once('close', () => {
