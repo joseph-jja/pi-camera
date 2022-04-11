@@ -2,6 +2,17 @@ const {
     spawn
 } = require('child_process');
 
+const DEFAULT_OPTIONS = [];
+
+let lastVideoUpdateOpts;
+
+function getVideoUpdateOptions() {
+    return lastVideoUpdateOpts;
+}
+
+function setVideoUpdateOptions(opts) {
+    lastVideoUpdateOpts = opts;
+}
 module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
@@ -9,6 +20,18 @@ module.exports = function(resolveFileLocation) {
         LIBCAMERA_VIDEO
     } = require(`${resolveFileLocation}/libs/libcamera/Constants`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
+
+    const config = require(`${resolveFileLocation}/libs/libcamera/videoConfig`);
+    if (DEFAULT_OPTIONS.length === 0) {
+        config.forEach(item => {
+            if (item.defaultvalue) {
+                item.defaultvalue.split(' ').forEach(item => {
+                    DEFAULT_OPTIONS.push(item);
+                });
+            }
+        });
+        setVideoUpdateOptions(DEFAULT_OPTIONS);
+    }
 
     function streamMjpeg(options = []) {
 
@@ -38,6 +61,8 @@ module.exports = function(resolveFileLocation) {
     }
 
     return {
+        getVideoUpdateOptions,
+        setVideoUpdateOptions,
         streamMjpeg,
         saveH264
     };

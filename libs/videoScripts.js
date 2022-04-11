@@ -1,5 +1,4 @@
 const childProcess = require('child_process'),
-    os = require('os'),
     fs = require('fs');
 
 global.libcameraProcess;
@@ -11,19 +10,9 @@ const BASH_CMD = '/bin/bash';
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
 
-const DEFAULT_OPTIONS = [],
-    DEFAULT_IMAGE_CONFIG = [];
+const DEFAULT_IMAGE_CONFIG = [];
 
-let lastUpdateOpts,
-    lastImageUpdateOpts;
-
-function getVideoUpdateOptions() {
-    return lastUpdateOpts;
-}
-
-function setVideoUpdateOptions(opts) {
-    lastUpdateOpts = opts;
-}
+let lastImageUpdateOpts;
 
 function getImageUpdateOptions() {
     return lastImageUpdateOpts;
@@ -34,18 +23,6 @@ function setImageUpdateOptions(opts) {
 }
 
 function updateConfigs(resolveFileLocation) {
-    //only once
-    const config = require(`${resolveFileLocation}/libs/libcamera/videoConfig`);
-    if (DEFAULT_OPTIONS.length === 0) {
-        config.forEach(item => {
-            if (item.defaultvalue) {
-                item.defaultvalue.split(' ').forEach(item => {
-                    DEFAULT_OPTIONS.push(item);
-                });
-            }
-        });
-        setVideoUpdateOptions(DEFAULT_OPTIONS);
-    }
 
     const imageConfig = require(`${resolveFileLocation}/libs/libcamera/stillConfig`);
     if (DEFAULT_IMAGE_CONFIG.length === 0) {
@@ -73,6 +50,23 @@ function initSystem(logger) {
     }
 }
 
+function removeListeners(streamObject) {
+    if (streamObject && streamObject.stdout) {
+        if (streamObject.stdout.listeners('data')) {
+            const listeners = streamObject.stdout.listeners('data');
+            for (let i = 0, end = listeners.length; i < end; i++) {
+                streamObject.stdout.removeListener('data', listeners[i]);
+            }
+        }
+        if (streamObject.stderr.listeners('data')) {
+            const listeners = streamObject.stderr.listeners('data');
+            for (let i = 0, end = listeners.length; i < end; i++) {
+                streamObject.stderr.removeListener('data', listeners[i]);
+            }
+        }
+    }
+}
+
 module.exports = function(resolveFileLocation) {
 
     const KILL_ALL_CMD = `${resolveFileLocation}/scripts/killall.sh`;
@@ -86,11 +80,13 @@ module.exports = function(resolveFileLocation) {
     const stringify = require(`${resolveFileLocation}/libs/stringify`);
     const NullStream = require(`${resolveFileLocation}/libs/NullStream.js`);
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
-    const {
+    /*const {
         streamJpeg,
         saveImage
-    } = require(`${resolveFileLocation}/libs/libcamera/still`)(resolveFileLocation);
+    } = require(`${resolveFileLocation}/libs/libcamera/still`)(resolveFileLocation);*/
     const {
+        getVideoUpdateOptions,
+        setVideoUpdateOptions,
         streamMjpeg,
         saveH264
     } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation);
@@ -225,26 +221,9 @@ module.exports = function(resolveFileLocation) {
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
-    function removeListeners(streamObject) {
-        if (streamObject && streamObject.stdout) {
-            if (streamObject.stdout.listeners('data')) {
-                const listeners = streamObject.stdout.listeners('data');
-                for (let i = 0, end = listeners.length; i < end; i++) {
-                    streamObject.stdout.removeListener('data', listeners[i]);
-                }
-            } 
-            if (streamObject.stderr.listeners('data')) {
-                const listeners = streamObject.stderr.listeners('data');
-                for (let i = 0, end = listeners.length; i < end; i++) {
-                    streamObject.stderr.removeListener('data', listeners[i]);
-                }
-            } 
-        }
-    }
-
     function directStream(options = []) {
 
-        const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
+        const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions());
 
         removeListeners(global.directStreamProcess);
         removeListeners(global.libcameraProcess);
