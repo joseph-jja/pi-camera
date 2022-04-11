@@ -244,7 +244,7 @@ module.exports = function(resolveFileLocation) {
             }
         }
         const running = killAllRunning();
-        logger.info("Results of stopping all: ' + stringify(running));
+        logger.info('Results of stopping all: ' + stringify(running));
         await sleep(500); // sleep 
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
