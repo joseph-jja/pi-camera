@@ -52,15 +52,15 @@ module.exports = function(resolveFileLocation) {
 
     return (request, response) => {
         const uuid = request.params['x-uuid'];
-        if (global.directStreamProcess) {
+        if (uuid && global.directStreamProcess) {
             logger.info('Running via directStreamProcess doing mjpeg video');
             setupPreviewStream(global.directStreamProcess, response, uuid);
-        } else if (global.imageStreamProcess) {
+        } else if (uuid && global.imageStreamProcess) {
             logger.info('Running via imageStreamProcess doing jpeg images');
             setupPreviewStream(global.imageStreamProcess, response, uuid);
         } else {
             response.writeHead(200, {});
-            response.end('Preview service is not running!');
+            response.end('Preview service is not running or invalid identifier!');
         }
     };
 };
