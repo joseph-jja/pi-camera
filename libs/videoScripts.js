@@ -42,8 +42,6 @@ function removeListeners(streamObject) {
 
 module.exports = function(resolveFileLocation) {
 
-    const KILL_ALL_CMD = `${resolveFileLocation}/scripts/killall.sh`;
-
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
         {
             padNumber,

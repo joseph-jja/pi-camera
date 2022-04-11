@@ -40,7 +40,6 @@ const promiseWrapper = promiseIn => (
 
 async function listImageFiles(imageDir) {
 
-
     const promisifedReaddir = (indir) => {
         return new Promise((resolve, reject) => {
             readdir(indir, (err, data) => {
@@ -53,6 +52,7 @@ async function listImageFiles(imageDir) {
             });
         });
     };
+    
     const [err, files] = await promiseWrapper(promisifedReaddir(imageDir));
     if (err) {
         return {
@@ -118,7 +118,7 @@ async function sleep(sleepTime) {
     setTimeout(() => {
         Promise.resolve();
     }, sleepTime);
-}    
+}
 
 module.exports = {
     sleep,
