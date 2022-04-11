@@ -249,7 +249,7 @@ module.exports = function(resolveFileLocation) {
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
 
-        const oldlibcamera = global.libcameraProcess || {};
+        const oldlibcamera = (global.libcameraProcess || {}).pid;
 
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
@@ -272,7 +272,7 @@ module.exports = function(resolveFileLocation) {
 
         global.directStreamProcess.once('close', () => {
             removeListeners(global.directStreamProcess);
-            logger.info('Video stream has ended! ' + oldlibcamera.pid);
+            logger.info('Video stream has ended! ' + oldlibcamera);
             //global.directStreamProcess = undefined;
         });
         global.libcameraProcess.once('close', () => {
