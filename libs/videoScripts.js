@@ -134,43 +134,28 @@ module.exports = function(resolveFileLocation) {
         saveConfig(stringify(spawnOptions), 'h264');
     }
 
-    function saveImagesData(options, response) {
+    function saveImagesData(options = [], response) {
 
-        /*const running = killAllRunning();
-            const spawnOptions = options.concat();
-            const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
-            spawnOptions.push('-o');
-            spawnOptions.push(filename);
-            const rawDataProcess = saveImage(spawnOptions);
-            rawDataProcess.on('close', (code) => {
-                response.writeHead(200, {});
-                response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
-            });
-            logger.info(`${SAVE_IMAGES_CMD}: ${stringify(spawnOptions)}`);
-            saveConfig(stringify(spawnOptions), 'png');
-        */
         const spawnOptions = options.concat();
-        if (spawnOptions.length === 0) {
-            const filtered = getImageUpdateOptions().join(' ');
-            spawnOptions.push(filtered);
-        }
-        spawnOptions.unshift(SAVE_IMAGES_CMD);
+
+        const running = killAllRunning();
+        logger.info('Results of stopping all: ' + stringify(running));
+
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
-        spawnOptions.push(`-o ${filename}`);
-        const rawDataProcess = spawn(BASH_CMD, spawnOptions, {
-            env: process.env
-        });
-        rawDataProcess.on('close', (code) => {
+        spawnOptions.push('-o');
+        spawnOptions.push(filename);
+        const imageDataProcess = saveImage(options);
+        imageDataProcess.on('close', (code) => {
             response.writeHead(200, {});
             response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
         });
-        logger.info(`${SAVE_IMAGES_CMD}: ${stringify(spawnOptions)}`);
+        logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
         saveConfig(stringify(spawnOptions), 'png');
     }
 
-    function imageStream(options) {
+    function imageStream(options = []) {
 
-        const spawnOptions = (options.length > 0 ? options : getImageUpdateOptions());
+        const spawnOptions = (options.length > 0 ? options.concat() : getImageUpdateOptions());
 
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
@@ -218,7 +203,7 @@ module.exports = function(resolveFileLocation) {
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${global.libcameraProcess.pid} ${global.directStreamProcess.pid}`);
     }
 
-    function saveVideoProcess(options, response) {
+    function saveVideoProcess(options = [], response) {
 
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
 
