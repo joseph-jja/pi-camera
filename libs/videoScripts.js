@@ -1,11 +1,8 @@
-const { spawn } = require('child_process'),
-    fs = require('fs');
+const fs = require('fs');
 
 global.libcameraProcess;
 global.directStreamProcess;
 global.imageStreamProcess;
-
-const BASH_CMD = '/bin/bash';
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -66,8 +63,6 @@ module.exports = function(resolveFileLocation) {
             getFfmpegStream,
             previewStream
         } = require(`${resolveFileLocation}/libs/ffmpeg`);
-
-    const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
 
     initSystem(logger);
 
