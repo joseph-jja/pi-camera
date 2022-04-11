@@ -115,7 +115,7 @@ module.exports = function(resolveFileLocation) {
 
         const optionsStr = options.join(' ');
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
-        const spawnOptions = Object.assign({}, options);
+        const spawnOptions = options.concat();
         if (bitRate && bitRate.length > 0) {
             bitRate.split(' ').forEach(x => {
                 spawnOptions.push(x);
@@ -222,7 +222,7 @@ module.exports = function(resolveFileLocation) {
 
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
 
-        const spawnOptions = Object.assign({}, options);
+        const spawnOptions = options.concat();
         spawnOptions.push('-o');
         spawnOptions.push(filename);
 
