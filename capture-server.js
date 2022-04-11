@@ -1,7 +1,7 @@
 const os = require('os'),
     fs = require('fs'),
     http = require('http'),
-    { randomUUID } = require('crypto'),
+    { randomBytes } = require('crypto'),
     {
         resolve,
         basename
@@ -76,7 +76,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use((request, response, next) => {
-    const uuid = randomUUID();
+    const uuid = randomBytes(26).toString('hex');
     request.uuid = uuid;
     response.setHeader('uuid', uuid);
     next();
