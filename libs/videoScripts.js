@@ -121,6 +121,11 @@ module.exports = function(resolveFileLocation) {
         spawnOptions.push(filename);
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
+
+        global.libcameraProcess = undefined;
+        global.directStreamProcess = undefined;
+        global.imageStreamProcess = undefined;
+
         const rawDataProcess = saveH264(spawnOptions);
         rawDataProcess.on('close', (code) => {
             response.writeHead(200, {});
@@ -135,6 +140,10 @@ module.exports = function(resolveFileLocation) {
 
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
+
+        global.libcameraProcess = undefined;
+        global.directStreamProcess = undefined;
+        global.imageStreamProcess = undefined;
 
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
         spawnOptions.push('-o');
@@ -209,6 +218,10 @@ module.exports = function(resolveFileLocation) {
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
 
+        global.libcameraProcess = undefined;
+        global.directStreamProcess = undefined;
+        global.imageStreamProcess = undefined;
+        
         const mjpegDataProcess = saveMjpeg(spawnOptions);
         mjpegDataProcess.on('close', (code) => {
             response.writeHead(200, {});
