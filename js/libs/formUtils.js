@@ -23,6 +23,8 @@ export async function setMessage(resp) {
     const serverMsg = document.getElementById('server-messages');
     const msg = await resp.text();
     serverMsg.innerHTML = msg;
+    const headers = resp.headers();
+    console.log(headers);
 }
 
 export function getConfig() {
