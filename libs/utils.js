@@ -114,7 +114,14 @@ const getOptions = (body) => {
     return options;
 };
 
+async sleep(sleepTime) {
+    setTimeout(() => {
+        Promise.resolve();
+    }, sleepTime);
+}    
+
 module.exports = {
+    sleep,
     padNumber,
     getIPAddress,
     getHostname,

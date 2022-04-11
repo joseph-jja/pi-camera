@@ -80,6 +80,7 @@ module.exports = function(resolveFileLocation) {
     updateConfigs(resolveFileLocation);
 
     const {
+        sleep,
         padNumber,
         getH264Bitrate
     } = require(`${resolveFileLocation}/libs/utils`);
@@ -226,7 +227,7 @@ module.exports = function(resolveFileLocation) {
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
-    function directStream(options = []) {
+    async function directStream(options = []) {
 
         const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
         if (global.directStreamProcess && global.directStreamProcess.stdout &&
@@ -240,11 +241,13 @@ module.exports = function(resolveFileLocation) {
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
+        await sleep(500); // sleep 
 
         const DevNull = new NullStream();
         global.directStreamProcess.stdout.on('data', d => {
             DevNull.write(d);
         });
+        await sleep(250); // sleep 
         global.libcameraProcess.stdout.on('data', d => {
             global.directStreamProcess.stdin.write(d);
         });
