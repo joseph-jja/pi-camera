@@ -90,7 +90,7 @@ export function executeServerCommand(url) {
 export function stopPreview() {
     const iframe = document.getElementById('videoDisplay');
     iframe.src = '';
-    fetch('/stopPreview', {
+    fetch(`/stopPreview?x-uuid=${xUuid}`, {  /* eslint-disable-line */
         method: 'GET'
     }).then(resp => {
         setMessage(resp);

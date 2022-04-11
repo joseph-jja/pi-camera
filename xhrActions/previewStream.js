@@ -1,4 +1,5 @@
 const previewProcessMap = {};
+global.previewProcessMap = previewProcessMap;
 
 function writeHeaders(response) {
     //const uuid = randomUUID();
@@ -38,6 +39,7 @@ module.exports = function(resolveFileLocation) {
                 logger.error(`Unpipe error ${stringify(e)}`);
             }
             previewProcessMap[uuid].kill('SIGKILL');
+            previewProcessMap[uuid] = undefined;
         });
 
         streamObject.stdout.pipe(previewProcessMap[uuid].stdin);
