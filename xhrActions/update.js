@@ -1,5 +1,3 @@
-const childProcess = require('child_process');
-
 module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`),

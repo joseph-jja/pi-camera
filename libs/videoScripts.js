@@ -74,7 +74,24 @@ module.exports = function(resolveFileLocation) {
     initSystem(logger);
 
     function killAllRunning() {
-        return childProcess.execSync(`${BASH_CMD} ${KILL_ALL_CMD}`);
+
+        const streams = [
+            global.directStreamProcess,
+            global.libcameraProces,
+            global.imageStreamProcess
+        ].filter(stream => {
+            return (stream && stream.pid);
+        });
+        const results = streams.map(stream => {
+            removeListeners(stream);
+            stream.once('close', () => {
+                logger.info(`Process: ${stream.pid} ended`);
+            });
+            stream.kill('SIGKILL');
+            return stream.pid;
+        });
+
+        return results;
     }
 
     function getVideoFilename(ext = 'mjpeg') {
@@ -197,9 +214,6 @@ module.exports = function(resolveFileLocation) {
     function directStream(options = []) {
 
         const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions());
-
-        removeListeners(global.directStreamProcess);
-        removeListeners(global.libcameraProcess);
 
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
