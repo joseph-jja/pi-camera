@@ -199,7 +199,7 @@ async function start() {
         response.end(stringify(getVideoUpdateOptions()) + ' ');
     });
 
-    const pageUUID = new RegExp('[[PAGE_UUID]]', 'g');
+    const pageUUID = /\[\[PAGE_UUID\]\]/g;
     app.get('/', (request, response) => {
         const uuid = randomBytes(26).toString('hex');
         response.writeHead(200, {
