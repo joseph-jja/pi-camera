@@ -254,7 +254,7 @@ module.exports = function(resolveFileLocation) {
             await sleep(250); // sleep 
             i++;
         }
-        if (!global.directStreamProcess) {
+        if (!global.directStreamProcess || !global.directStreamProcess.stdin) {
             logger.error('Error starting preview');
             return;
         }
