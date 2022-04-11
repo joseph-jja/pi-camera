@@ -245,11 +245,19 @@ module.exports = function(resolveFileLocation) {
         }
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
-        await sleep(500); // sleep 
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
-        await sleep(250); // sleep 
+
+        let i=0;
+        while (!global.directStreamProcess.stdin && i < 10) {
+            await sleep(250); // sleep 
+            i++;
+        }
+        if (!global.directStreamProcess.stdin) {
+            logger.error('Error starting preview');
+            return;
+        }
 
         const DevNull = new NullStream();
         global.directStreamProcess.stdout.on('data', d => {
