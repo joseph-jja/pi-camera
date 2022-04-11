@@ -17,14 +17,18 @@
   <script src="/js/sockImage.js"></script>
   <script src="/js/mjpeg.js"></script>
   <script>
-    //Leave your .mjpeg video URL here.
-    var player = new MJPEGPlayer("player", "/preview", {
-        errorHandler: (err) => {
-            player.stream = new MJPEGStream(player.options);
-            player.start();
-        },
-        refreshRate: 250
+    let player;
+    fetch('/config').then(async resp => {
+        await headers = resp.headers();
+        //Leave your .mjpeg video URL here.
+        /*player = new MJPEGPlayer("player", "/preview", {
+            errorHandler: (err) => {
+                player.stream = new MJPEGStream(player.options);
+                player.start();
+            },
+            refreshRate: 250
+        });
+        player.start();*/
     });
-    player.start();
   </script>
 </html>
