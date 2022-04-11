@@ -61,10 +61,22 @@ module.exports = function(resolveFileLocation) {
         });
     }
 
+    function saveMjpeg(options = []) {
+
+        const spawnOptions = ['--codec', 'mjpeg', '-t', '60000'].concat(options);
+
+        logger.info(`Libcamera video save mjpeg options: ${stringify(spawnOptions)}`);
+
+        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+            env: process.env
+        });
+    }
+
     return {
         getVideoUpdateOptions,
         setVideoUpdateOptions,
         streamMjpeg,
-        saveH264
+        saveH264,
+        saveMjpeg
     };
 };

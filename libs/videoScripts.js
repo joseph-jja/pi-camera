@@ -59,14 +59,14 @@ module.exports = function(resolveFileLocation) {
             getVideoUpdateOptions,
             setVideoUpdateOptions,
             streamMjpeg,
-            saveH264
+            saveH264,
+            saveMjpeg
         } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation),
         {
             getFfmpegStream,
             previewStream
         } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
-    const MJPEG_IMAGE_CMD = `${resolveFileLocation}/scripts/imageStream.sh`;
     const SAVE_IMAGES_CMD = `${resolveFileLocation}/scripts/imageCapture.sh`;
 
     initSystem(logger);
@@ -115,7 +115,7 @@ module.exports = function(resolveFileLocation) {
 
         const optionsStr = options.join(' ');
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
-        const spawnOptions = options;
+        const spawnOptions = Object.assign({}, options);
         if (bitRate && bitRate.length > 0) {
             bitRate.split(' ').forEach(x => {
                 spawnOptions.push(x);
@@ -220,23 +220,22 @@ module.exports = function(resolveFileLocation) {
 
     function saveVideoProcess(options, response) {
 
-        if (!global.directStreamProcess) {
-            directStream(options);
-        }
-
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
-        const fileout = fs.createWriteStream(filename);
-        const callback = (d) => {
-            fileout.write(d);
-        };
-        saveConfig(stringify(options));
-        global.directStreamProcess.stdout.on('data', callback);
-        setTimeout(() => {
-            global.directStreamProcess.stdout.off('data', callback);
-            logger.info(`Finished writing file ${filename}`);
+
+        const spawnOptions = Object.assign({}, options);
+        spawnOptions.push('-o');
+        spawnOptions.push(filename);
+
+        const running = killAllRunning();
+        logger.info('Results of stopping all: ' + stringify(running));
+
+        const mjpegDataProcess = saveMjpeg(spawnOptions);
+        mjpegDataProcess.on('close', (code) => {
             response.writeHead(200, {});
-            response.end(`Finished writing file to disk using options ${stringify(options)}`);
-        }, 60000);
+            response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
+        });
+        saveConfig(stringify(spawnOptions), 'h264');
+        saveConfig(stringify(options));
     }
 
     return {
