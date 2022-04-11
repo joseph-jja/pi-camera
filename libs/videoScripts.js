@@ -51,9 +51,9 @@ module.exports = function(resolveFileLocation) {
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
             getImageUpdateOptions,
-            setImageUpdateOptions //,
-            //streamJpeg,
-            //saveImage
+            setImageUpdateOptions,
+            streamJpeg,
+            saveImage
         } = require(`${resolveFileLocation}/libs/libcamera/still`)(resolveFileLocation),
         {
             getVideoUpdateOptions,
@@ -125,6 +125,7 @@ module.exports = function(resolveFileLocation) {
         spawnOptions.push('-o');
         spawnOptions.push(filename);
         const running = killAllRunning();
+        logger.info('Results of stopping all: ' + stringify(running));
         const rawDataProcess = saveH264(spawnOptions);
         rawDataProcess.on('close', (code) => {
             response.writeHead(200, {});
@@ -169,43 +170,22 @@ module.exports = function(resolveFileLocation) {
 
     function imageStream(options) {
 
-        /*const running = killAllRunning();
-            global.imageStreamProcess = streamMjpeg(options);
-            const listeners = global.imageStreamProcess.stdout.listeners('data');
-            for (let i = 0, end = listeners.length; i < end; i++) {
-                global.imageStreamProcess.stdout.removeListener('data', listeners[i]);
-            }
-            const DevNull = new NullStream();
-            global.imageStreamProcess.stdout.pipe(DevNull);
-            global.imageStreamProcess.stderr.on('error', (err) => {
-                console.error('Error', err);
-            });
-            global.imageStreamProcess.on('close', () => {
-                logger.info('Video stream has ended!');
-                DevNull.destroy();
-            });
-            logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
-        */
-        const spawnOptions = [options.join(' ')];
-        if (spawnOptions.length === 0) {
-            const filtered = getImageUpdateOptions().join(' ');
-            spawnOptions.push(filtered);
-        }
-        spawnOptions.unshift(MJPEG_IMAGE_CMD);
-        global.imageStreamProcess = spawn(BASH_CMD, spawnOptions);
-        const listeners = global.imageStreamProcess.stdout.listeners('data');
-        for (let i = 0, end = listeners.length; i < end; i++) {
-            global.imageStreamProcess.stdout.removeListener('data', listeners[i]);
-        }
+        const spawnOptions = (options.length > 0 ? options : getImageUpdateOptions());
+
+        const running = killAllRunning();
+        logger.info('Results of stopping all: ' + stringify(running));
+
+        global.libcameraProcess = undefined;
+        global.directStreamProcess = undefined;
+
+        global.imageStreamProcess = streamJpeg(options);
+
         const DevNull = new NullStream();
         global.imageStreamProcess.stdout.pipe(DevNull);
         global.imageStreamProcess.stderr.on('error', (err) => {
-            console.error('Error', err);
+            logger.debug(`Error ${err.length}`);
         });
-        global.imageStreamProcess.on('close', () => {
-            logger.info('Video stream has ended!');
-            DevNull.destroy();
-        });
+
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
@@ -216,6 +196,7 @@ module.exports = function(resolveFileLocation) {
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
 
+        global.imageStreamProcess = undefined;
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
