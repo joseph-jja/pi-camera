@@ -139,7 +139,7 @@ module.exports = function(resolveFileLocation) {
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
         spawnOptions.push('-o');
         spawnOptions.push(filename);
-        const imageDataProcess = saveImage(options);
+        const imageDataProcess = saveImage(spawnOptions);
         imageDataProcess.on('close', (code) => {
             response.writeHead(200, {});
             response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
