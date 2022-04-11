@@ -106,8 +106,7 @@ module.exports = function(resolveFileLocation) {
     initSystem(logger);
 
     function killAllRunning() {
-        const results = childProcess.execSync(`${BASH_CMD} ${KILL_ALL_CMD}`);
-        return results;
+        return childProcess.execSync(`${BASH_CMD} ${KILL_ALL_CMD}`);
     }
 
     function getVideoFilename(ext = 'mjpeg') {
@@ -238,6 +237,7 @@ module.exports = function(resolveFileLocation) {
             }
         }
         const running = killAllRunning();
+        logger.info("Results of stopping all: ' + stringify(running));
         await sleep(500); // sleep 
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
