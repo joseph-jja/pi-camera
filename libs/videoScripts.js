@@ -77,7 +77,7 @@ module.exports = function(resolveFileLocation) {
 
         const streams = [
             global.directStreamProcess,
-            global.libcameraProces,
+            global.libcameraProcess,
             global.imageStreamProcess
         ].filter(stream => {
             return (stream && stream.pid);
@@ -231,22 +231,11 @@ module.exports = function(resolveFileLocation) {
         });
 
         global.directStreamProcess.stderr.on('data', (err) => {
-            logger.error(`Error ${err.length}`);
+            logger.debug(`Error ${err.length}`);
         });
         global.libcameraProcess.stderr.on('data', (err) => {
-            logger.error(`Error ${err.length}`);
+            logger.debug(`Error ${err.length}`);
         });
-
-        //global.directStreamProcess.once('close', () => {
-        //removeListeners(oldvideo);
-        //logger.info('Video stream has ended! ' + oldvideo.pid);
-        //global.directStreamProcess = undefined;
-        //});
-        //global.libcameraProcess.once('close', () => {
-        //removeListeners(oldlibcamera);
-        //logger.info('libcamera has ended! ' + oldlibcamera.pid);
-        //global.libcameraProcess = undefined;
-        //});
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${global.libcameraProcess.pid} ${global.directStreamProcess.pid}`);
     }
 
