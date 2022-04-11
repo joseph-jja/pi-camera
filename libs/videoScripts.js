@@ -80,7 +80,6 @@ module.exports = function(resolveFileLocation) {
     updateConfigs(resolveFileLocation);
 
     const {
-        sleep,
         padNumber,
         getH264Bitrate
     } = require(`${resolveFileLocation}/libs/utils`);
@@ -236,7 +235,7 @@ module.exports = function(resolveFileLocation) {
         }
     }
 
-    async function directStream(options = []) {
+    function directStream(options = []) {
 
         const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
 
@@ -249,16 +248,6 @@ module.exports = function(resolveFileLocation) {
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
-
-        let i=0;
-        while (!global.directStreamProcess && i < 10) {
-            await sleep(250); // sleep 
-            i++;
-        }
-        if (!global.directStreamProcess || !global.directStreamProcess.stdin) {
-            logger.error('Error starting preview');
-            return;
-        }
 
         const DevNull = new NullStream();
         global.directStreamProcess.stdout.on('data', d => {
