@@ -250,11 +250,11 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess = getFfmpegStream();
 
         let i=0;
-        while (!global.directStreamProcess.stdin && i < 10) {
+        while (!global.directStreamProcess && i < 10) {
             await sleep(250); // sleep 
             i++;
         }
-        if (!global.directStreamProcess.stdin) {
+        if (!global.directStreamProcess) {
             logger.error('Error starting preview');
             return;
         }
