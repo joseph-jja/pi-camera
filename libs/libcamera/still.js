@@ -36,8 +36,19 @@ module.exports = function(resolveFileLocation) {
 
     function streamJpeg(options) {
 
+        let isShutterSpeed = false;
+        const shutterSpeed = options.filter(opt => {
+            if (opt === '--shutter') {
+                isShutterSpeed = true;
+            } else if (isShutterSpeed) {
+                return true;
+                isShutterSpeed = false;
+            }
+            return false;
+        });
+        const timeLapseValue = (shutterSpeed[0] || 1000) + 100;
         // default image streaming options
-        const spawnOptions = ['-e', 'jpg', '-t', '0', '--timelapse', '10', '--immediate'].concat(options);
+        const spawnOptions = ['-e', 'jpg', '-t', '0', '--timelapse', timeLapseValue, '--immediate'].concat(options);
 
         // stream to stdout
         spawnOptions.push('-o');
