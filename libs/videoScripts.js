@@ -272,12 +272,12 @@ module.exports = function(resolveFileLocation) {
         });
 
         global.directStreamProcess.once('close', () => {
-            removeListeners(global.directStreamProcess);
+            removeListeners(oldvideo);
             logger.info('Video stream has ended! ' + oldvideo.pid);
             //global.directStreamProcess = undefined;
         });
         global.libcameraProcess.once('close', () => {
-            removeListeners(global.libcameraProcess);
+            removeListeners(oldlibcamera);
             logger.info('libcamera has ended! ' + oldlibcamera.pid);
             //global.libcameraProcess = undefined;
         });
