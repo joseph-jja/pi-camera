@@ -1,4 +1,4 @@
-const childProcess = require('child_process'),
+const { spawn } = require('child_process'),
     fs = require('fs');
 
 global.libcameraProcess;
@@ -156,7 +156,7 @@ module.exports = function(resolveFileLocation) {
         spawnOptions.unshift(SAVE_IMAGES_CMD);
         const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
         spawnOptions.push(`-o ${filename}`);
-        const rawDataProcess = childProcess.spawn(BASH_CMD, spawnOptions, {
+        const rawDataProcess = spawn(BASH_CMD, spawnOptions, {
             env: process.env
         });
         rawDataProcess.on('close', (code) => {
@@ -192,7 +192,7 @@ module.exports = function(resolveFileLocation) {
             spawnOptions.push(filtered);
         }
         spawnOptions.unshift(MJPEG_IMAGE_CMD);
-        global.imageStreamProcess = childProcess.spawn(BASH_CMD, spawnOptions);
+        global.imageStreamProcess = spawn(BASH_CMD, spawnOptions);
         const listeners = global.imageStreamProcess.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.imageStreamProcess.stdout.removeListener('data', listeners[i]);
@@ -258,10 +258,6 @@ module.exports = function(resolveFileLocation) {
         }, 60000);
     }
 
-    function previewProcess() {
-        return previewStream();
-    }
-
     return {
         BASE_IMAGE_PATH,
         BASE_CONFIG_PATH,
@@ -270,7 +266,7 @@ module.exports = function(resolveFileLocation) {
         saveImagesData,
         directStream,
         imageStream,
-        previewProcess,
+        previewProcess: previewStream,
         saveVideoProcess,
         getVideoUpdateOptions,
         setVideoUpdateOptions,
