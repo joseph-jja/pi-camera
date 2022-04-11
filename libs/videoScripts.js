@@ -232,9 +232,9 @@ module.exports = function(resolveFileLocation) {
             for (let i = 0, end = listeners.length; i < end; i++) {
                 streamObject.stdout.removeListener('data', listeners[i]);
             }
-            const listeners = streamObject.stdout.listeners('error');
+            const elisteners = streamObject.stdout.listeners('error');
             for (let i = 0, end = listeners.length; i < end; i++) {
-                streamObject.stdout.removeListener('error', listeners[i]);
+                streamObject.stdout.removeListener('error', elisteners[i]);
             }
         }
     }
