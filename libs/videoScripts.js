@@ -266,12 +266,12 @@ module.exports = function(resolveFileLocation) {
 
         global.directStreamProcess.on('close', () => {
             removeListeners(global.directStreamProcess);
-            global.directStreamProcess = undefined;
+            //global.directStreamProcess = undefined;
             logger.info('Video stream has ended!');
         });
         global.libcameraProcess.on('close', () => {
             removeListeners(global.libcameraProcess);
-            global.libcameraProcess = undefined;
+            //global.libcameraProcess = undefined;
             logger.info('libcamera has ended!');
         });
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
