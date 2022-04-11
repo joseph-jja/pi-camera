@@ -37,8 +37,8 @@ PID_FILE=/tmp/forever.pid
 FOREVER_OPTS="$LOG_FILES --pidFile $PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 # pi camera code setup
-BASE_CODE=/home/pi/pi-camera
-PI_CAMERA_JS=capture-server.js
+CODE_HOME=/home/pi/pi-camera
+PI_CAMERA_JS=""$NODE_BIN capture-server.js"
 
 # client condig
 WEB_PID_FILE=/var/run/forever.pid
@@ -48,15 +48,15 @@ WEB_LOG_FILES="-a -l $FOREVER_LOG -o $WEB_APP_LOG -e $WEB_APP_ERR_LOG "
 FOREVER_WEB_OPTS="$WEB_LOG_FILES --pidFile $WEB_PID_FILE --spinSleepTime 1000 --minUptime 500"
 
 start_program () {
-    cd $BASE_CODE && $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
+    cd $CODE_HOME && $FOREVER_BIN start $FOREVER_OPTS $PI_CAMERA_JS $CONFIG
 }
 
 stop_program () {
-    cd $BASE_CODE && $FOREVER_BIN stop $PI_CAMERA_JS
+    cd $CODE_HOME && $FOREVER_BIN stop $PI_CAMERA_JS
 }
 
 do_status () {
-    cd $BASE_CODE && $FOREVER_BIN list
+    cd $CODE_HOME && $FOREVER_BIN list
 }
 
 case "$1" in
