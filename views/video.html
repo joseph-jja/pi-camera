@@ -19,7 +19,7 @@
   <script>
     let player;
     fetch('/config').then(async resp => {
-        const headers = await resp.Headers();
+        const headers = await resp.Headers.get('x-uuid');
         //Leave your .mjpeg video URL here.
         /*player = new MJPEGPlayer("player", "/preview", {
             errorHandler: (err) => {
