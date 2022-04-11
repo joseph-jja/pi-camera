@@ -199,14 +199,14 @@ async function start() {
         response.end(stringify(getVideoUpdateOptions()) + ' ');
     });
 
-    const pageUUID = new RegExp('[[PAGE_UU_ID]]', 'g')
+    const pageUUID = new RegExp('[[PAGE_UUID]]', 'g');
     app.get('/', (request, response) => {
         const uuid = randomBytes(26).toString('hex');
         response.writeHead(200, {
             'Content-Type': 'text/html',
             'x-uuid': uuid
         });
-        response.end(getHTML(fields, imageFields).replace('[[PAGE_UU_ID]]', uuid));
+        response.end(getHTML(fields, imageFields).replace(pageUUID, uuid));
     });
 
     app.get('/js/socket.io.js', (request, response) => {
