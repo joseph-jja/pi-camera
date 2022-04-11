@@ -19,7 +19,7 @@ module.exports = function(resolveFileLocation) {
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
-            LIBCAMERA_VIDEO
+            LIBCAMERA_STILL
         } = require(`${resolveFileLocation}/libs/libcamera/Constants`),
         imageConfig = require(`${resolveFileLocation}/libs/libcamera/stillConfig`);
 
@@ -45,7 +45,7 @@ module.exports = function(resolveFileLocation) {
 
         logger.info(`Libcamera still spawn options: ${stringify(spawnOptions)}`);
 
-        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+        return spawn(LIBCAMERA_STILL, spawnOptions, {
             env: process.env
         });
     }
@@ -56,7 +56,7 @@ module.exports = function(resolveFileLocation) {
 
         logger.info(`Libcamera still save image options: ${stringify(spawnOptions)}`);
 
-        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+        return spawn(LIBCAMERA_STILL, spawnOptions, {
             env: process.env
         });
     }
