@@ -226,25 +226,26 @@ module.exports = function(resolveFileLocation) {
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
+    async function removeListeners(streamObject) {
+        if (streamObject && streamObject.stdout &&
+            streamObject.stdout.listeners('data')) {
+            const listeners = streamObject.stdout.listeners('data');
+            for (let i = 0, end = listeners.length; i < end; i++) {
+                streamObject.stdout.removeListener('data', listeners[i]);
+            }
+        }
+    }
+
     async function directStream(options = []) {
 
         const spawnOptions = (options.length > 0 ? options : DEFAULT_OPTIONS);
-        if (global.directStreamProcess && global.directStreamProcess.stdout &&
-            global.directStreamProcess.stdout.listeners('data')) {
-            const listeners = global.directStreamProcess.stdout.listeners('data');
-            for (let i = 0, end = listeners.length; i < end; i++) {
-                global.directStreamProcess.stdout.removeListener('data', listeners[i]);
-            }
-        }
-        if (global.libcameraProcess && global.libcameraProcess.stdout &&
-            global.libcameraProcess.stdout.listeners('data')) {
-            const listeners = global.libcameraProcess.stdout.listeners('data');
-            for (let i = 0, end = listeners.length; i < end; i++) {
-                global.libcameraProcess.stdout.removeListener('data', listeners[i]);
-            }
-        }
+
+        removeListeners(global.directStreamProcess);
+        removeListeners(global.libcameraProcess);
+
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
+
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
@@ -275,10 +276,12 @@ module.exports = function(resolveFileLocation) {
         });
 
         global.directStreamProcess.on('close', () => {
+            removeListeners(global.directStreamProcess);
             global.directStreamProcess = undefined;
             logger.info('Video stream has ended!');
         });
         global.libcameraProcess.on('close', () => {
+            removeListeners(global.libcameraProcess);
             global.libcameraProcess = undefined;
             logger.info('libcamera has ended!');
         });
