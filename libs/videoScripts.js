@@ -225,7 +225,7 @@ module.exports = function(resolveFileLocation) {
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
-    async function removeListeners(streamObject) {
+    function removeListeners(streamObject) {
         if (streamObject && streamObject.stdout &&
             streamObject.stdout.listeners('data')) {
             const listeners = streamObject.stdout.listeners('data');
@@ -264,16 +264,16 @@ module.exports = function(resolveFileLocation) {
             console.error('Error', err);
         });
 
-        /*global.directStreamProcess.on('close', () => {
-            removeListeners(global.directStreamProcess);
+        global.directStreamProcess.on('close', () => {
+            //removeListeners(global.directStreamProcess);
             //global.directStreamProcess = undefined;
             logger.info('Video stream has ended!');
         });
         global.libcameraProcess.on('close', () => {
-            removeListeners(global.libcameraProcess);
+            //removeListeners(global.libcameraProcess);
             //global.libcameraProcess = undefined;
             logger.info('libcamera has ended!');
-        });*/
+        });
         logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
     }
 
