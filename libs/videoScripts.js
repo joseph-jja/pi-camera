@@ -249,7 +249,7 @@ module.exports = function(resolveFileLocation) {
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
 
-        const oldlibcamera = global.libcameraProcess;
+        const oldlibcamera = global.libcameraProcess || {};
 
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
