@@ -11,7 +11,7 @@ module.exports = function(resolveFileLocation) {
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation),
         {
             OLD_FILENAME_MATCH
-        } = require(`${resolveFileLocation}/xhrActions/Constants`)(resolveFileLocation);
+        } = require(`${resolveFileLocation}/xhrActions/Constants`);
 
     return (request, response) => {
         const query = (request.query || {});
