@@ -238,16 +238,16 @@ module.exports = function(resolveFileLocation) {
             }
         }
         const running = killAllRunning();
+        await sleep(500); // sleep 
         // stream libcamera stdout to ffmpeg stdin
         global.libcameraProcess = streamMjpeg(spawnOptions);
         global.directStreamProcess = getFfmpegStream();
-        await sleep(500); // sleep 
+        await sleep(250); // sleep 
 
         const DevNull = new NullStream();
         global.directStreamProcess.stdout.on('data', d => {
             DevNull.write(d);
         });
-        await sleep(250); // sleep 
         global.libcameraProcess.stdout.on('data', d => {
             global.directStreamProcess.stdin.write(d);
         });
