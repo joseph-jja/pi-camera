@@ -76,9 +76,11 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use((request, response, next) => {
-    const uuid = randomBytes(26).toString('hex');
+    const uuid = (request.headers['uuid'] ?
+        request.headers['uuid'] :
+        randomBytes(26).toString('hex'));
     request.uuid = uuid;
-    response.setHeader('uuid', uuid);
+    response.setHeader('uuid', request.uuid);
     next();
 });
 
