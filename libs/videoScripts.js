@@ -232,6 +232,10 @@ module.exports = function(resolveFileLocation) {
             for (let i = 0, end = listeners.length; i < end; i++) {
                 streamObject.stdout.removeListener('data', listeners[i]);
             }
+            const listeners = streamObject.stdout.listeners('error');
+            for (let i = 0, end = listeners.length; i < end; i++) {
+                streamObject.stdout.removeListener('error', listeners[i]);
+            }
         }
     }
 
@@ -264,12 +268,12 @@ module.exports = function(resolveFileLocation) {
             console.error('Error', err);
         });
 
-        global.directStreamProcess.on('close', () => {
+        global.directStreamProcess.once('close', () => {
             //removeListeners(global.directStreamProcess);
             //global.directStreamProcess = undefined;
             //logger.info('Video stream has ended!');
         });
-        global.libcameraProcess.on('close', () => {
+        global.libcameraProcess.once('close', () => {
             //removeListeners(global.libcameraProcess);
             //global.libcameraProcess = undefined;
             //logger.info('libcamera has ended!');
