@@ -6,8 +6,10 @@ module.exports = function(resolveFileLocation) {
             getOptions
         } = require(`${resolveFileLocation}/libs/utils`),
         {
-            directStream,
             setVideoUpdateOptions
+        } = require(`${resolveFileLocation}/libs/libcamera/video`),
+        {
+            directStream
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
 
     return (request, response) => {
