@@ -114,7 +114,7 @@ const getOptions = (body) => {
     return options;
 };
 
-async sleep(sleepTime) {
+async function sleep(sleepTime) {
     setTimeout(() => {
         Promise.resolve();
     }, sleepTime);
