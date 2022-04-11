@@ -271,7 +271,7 @@ module.exports = function(resolveFileLocation) {
         global.directStreamProcess.once('close', () => {
             //removeListeners(global.directStreamProcess);
             //global.directStreamProcess = undefined;
-            //logger.info('Video stream has ended!');
+            logger.info('Video stream has ended!');
         });
         global.libcameraProcess.once('close', () => {
             //removeListeners(global.libcameraProcess);
