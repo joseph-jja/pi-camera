@@ -236,6 +236,13 @@ module.exports = function(resolveFileLocation) {
                 global.directStreamProcess.stdout.removeListener('data', listeners[i]);
             }
         }
+        if (global.libcameraProcess && global.libcameraProcess.stdout &&
+            global.libcameraProcess.stdout.listeners('data')) {
+            const listeners = global.libcameraProcess.stdout.listeners('data');
+            for (let i = 0, end = listeners.length; i < end; i++) {
+                global.libcameraProcess.stdout.removeListener('data', listeners[i]);
+            }
+        }
         const running = killAllRunning();
         logger.info("Results of stopping all: ' + stringify(running));
         await sleep(500); // sleep 
