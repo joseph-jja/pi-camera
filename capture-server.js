@@ -17,6 +17,8 @@ const express = require('express'),
 const FILENAME = basename(__filename);
 const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
 
+const pageUUID = /\[\[PAGE_UUID\]\]/g;
+
 process.on('uncaughtException', (e) => {
     console.error(e);
 });
@@ -195,11 +197,14 @@ async function start() {
     });
 
     app.get('/config', (request, response) => {
-        response.writeHead(200, {});
+        const uuid = randomBytes(26).toString('hex');
+        response.writeHead(200, {
+            'Content-Type': 'appllication/json',
+            'x-uuid': uuid
+        });
         response.end(stringify(getVideoUpdateOptions()) + ' ');
     });
 
-    const pageUUID = /\[\[PAGE_UUID\]\]/g;
     app.get('/', (request, response) => {
         const uuid = randomBytes(26).toString('hex');
         response.writeHead(200, {
