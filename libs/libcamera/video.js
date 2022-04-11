@@ -13,6 +13,7 @@ function getVideoUpdateOptions() {
 function setVideoUpdateOptions(opts) {
     lastVideoUpdateOpts = opts;
 }
+
 module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
