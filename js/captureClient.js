@@ -9,7 +9,8 @@ const {
     stopPreview,
     startPreview,
     videoUpdate,
-    displayImages
+    displayImages,
+    updateImage
 } = formUtils;
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -17,6 +18,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const mainForm = document.forms['mainForm'];
     const imageFormObj = document.forms['imageOptions'];
     listImageCaptures();
+
+    function usePlayer(playerMethod, altHandler) {
+        if (window.player) {
+            window.player[playerMethod]();
+        } else {
+            altHandler();
+        }
+    }
 
     document.addEventListener('click', (event) => {
         const target = event.target;
@@ -27,24 +36,11 @@ window.addEventListener('DOMContentLoaded', () => {
         if (target.id === 'updateButton') {
             videoUpdate();
         } else if (target.id === 'startPreview') {
-            startPreview();
+            usePlayer('start', startPreview);
         } else if (target.id === 'stopPreview') {
-            stopPreview();
+            usePlayer('stop', stopPreview);
         } else if (target.id === 'imageUpdate') {
-            const options = getFormOptions(imageFormObj);
-            fetch('/imageUpdate', {
-                method: 'POST',
-                cache: 'no-cache',
-                referrerPolicy: 'no-referrer',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: options
-            }).then(async resp => {
-                setMessage(resp);
-            }).catch(e => {
-                console.log(e);
-            });
+            updateImage(imageFormObj);
         } else if (target.id === 'renameFile') {
             const VALID_CHARACTERS = /[a-zA-Z]/g;
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();

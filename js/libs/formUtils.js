@@ -104,6 +104,23 @@ export function startPreview() {
     iframe.src = `/preview?x-uuid=${xUuid}`; /* eslint-disable-line */
 }
 
+export function updateImage(imageFormObj) {
+    const options = getFormOptions(imageFormObj);
+    fetch('/imageUpdate', {
+        method: 'POST',
+        cache: 'no-cache',
+        referrerPolicy: 'no-referrer',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: options
+    }).then(async resp => {
+        setMessage(resp);
+    }).catch(e => {
+        console.log(e);
+    });
+}
+
 export function videoUpdate() {
     stopPreview();
     const videoFormObj = document.forms['videoOptions'];
