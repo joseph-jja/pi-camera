@@ -26,15 +26,23 @@ module.exports = function(resolveFileLocation) {
         try {
             previewProcessMap[uuid].stdout.unpipe();
         } catch(e) {
-            logger.error(`Unpipe error ${stringify(e)}`);
+            logger.error(`Unpipe preview process error ${stringify(e)}`);
         }
         try {
             streamObject.stdout.unpipe(previewProcessMap[uuid].stdin);
         } catch(e) {
-            logger.error(`Unpipe error ${stringify(e)}`);
+            logger.error(`Unpipe stdout error ${stringify(e)}`);
         }
-        previewProcessMap[uuid].kill('SIGKILL');
-        previewProcessMap[uuid] = undefined;
+        try {
+            previewProcessMap[uuid].kill('SIGKILL');
+        } catch(e) {
+            logger.error(`kill error ${stringify(e)}`);
+        }
+        try {
+            previewProcessMap[uuid] = undefined;
+        } catch(e) {
+            logger.error(`Undef error ${stringify(e)}`);
+        }
     };
 
     const setupPreviewStream = (streamObject, response, uuid) => {
