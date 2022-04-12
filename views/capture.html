@@ -40,7 +40,17 @@
 
 <body>
     <div id="center-aligner">
-        <iframe id="videoDisplay" width="640" height="480" src="/preview?x-uuid=[[PAGE_UUID]]"></iframe>
+        <script type="text/javascript">
+            window.addEventListener('DOMContentLoaded', () => {
+                const iframe = document.createElement('iframe');
+                iframe.width = 640;
+                iframe.height = 480;
+                iframe.id = 'videoDisplay';
+                iframe.src = '/preview?x-uuid=[[PAGE_UUID]]';
+                const parent = document.getElementById('center-aligner');
+                parent.prepend(iframe);
+            });
+        </script>
         <!--<canvas id="player" style="background: #000;" width="640px" height="480px">
           Your browser sucks.
         </canvas>-->
@@ -138,10 +148,6 @@
             MJPEGPlayer,
             MJPEGStream
         } from '/js/mjpeg/index.js';
-        /*fetch('/config').then(async resp => {
-            const headers = await resp.headers;
-            const uuid = headers.get('x-uuid');
-        });*/
 
         /*const options = {
             errorHandler: (err) => {
