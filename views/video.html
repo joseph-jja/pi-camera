@@ -15,21 +15,33 @@
   </body>
   <script src="/js/socket.io.js"></script>
   <script src="/js/sockImage.js"></script>
-  <script  type="module">
-    import * as MJPEG from '/js/mjpeg/index.js';
+  <script type="module">
+    import {
+        stopPreview
+    } as formUtils from '/js/libs/formUtils.js';
+    import {
+        MJPEGPlayer,
+        MJPEGStream
+    } from '/js/mjpeg/index.js';
     let player;
-    fetch('/config').then(async resp => {
-        const headers = await resp.headers;
-        const uuid = headers.get('x-uuid');
-        //Leave your .mjpeg video URL here.
-        player = new MJPEG.MJPEGPlayer('player', `/preview?x-uuid=${uuid}`, {
-            errorHandler: (err) => {
-                player.stream = new MJPEG.MJPEGStream(player.options);
-                player.start();
-            },
-            refreshRate: 250
+    window.addEventListener('DOMContentLoaded', () => {
+
+        fetch('/config').then(async resp => {
+            const headers = await resp.headers;
+            const uuid = headers.get('x-uuid');
+
+            const options = {
+                errorHandler: (err) => {
+                    player.stream = new MJPEGStream(player.options);
+                    player.start();
+                },
+                refreshRate: 250,
+                onStop: stopPreview
+            };
+            //Leave your .mjpeg video URL here.
+            player = new MJPEGPlayer('player', `/preview?x-uuid=${uuid}`, options);
+            player.start();
         });
-        player.start();
     });
   </script>
 </html>
