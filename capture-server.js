@@ -82,8 +82,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 setInterval(() => {
-    const memory = process.memoryUsage().rss;
-    if (rss > 750000000) {
+    const memory = process.memoryUsage();
+    if (memory.rss > 750000000) {
         console.error('Using too much RAM, killing until restart');
         process.kill('SIGTERM');
     }
