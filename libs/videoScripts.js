@@ -34,6 +34,11 @@ function removeListeners(streamObject) {
                 streamObject.stderr.removeListener('data', listeners[i]);
             }
         }
+        try {
+            streamObject.stdout.unpipe();
+        } catch(e) {
+            // do we care?
+        }
     }
 }
 
@@ -221,7 +226,7 @@ module.exports = function(resolveFileLocation) {
         global.libcameraProcess = undefined;
         global.directStreamProcess = undefined;
         global.imageStreamProcess = undefined;
-        
+
         const mjpegDataProcess = saveMjpeg(spawnOptions);
         mjpegDataProcess.on('close', (code) => {
             response.writeHead(200, {});
