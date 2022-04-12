@@ -8,7 +8,7 @@ import {
 } from '/js/mjpeg/index.js';
 
 window.addEventListener('DOMContentLoaded', () => {
-    let player;
+    let streamPlayer;
 
     const queryString = window.location.search;
     const params = (queryString && queryString.length > 1) ?
@@ -33,17 +33,17 @@ window.addEventListener('DOMContentLoaded', () => {
             const options = {
                 errorHandler: (err) => {
                     console.log(err);
-                    player.stream = new MJPEGStream(player.options);
-                    player.start();
+                    streamPlayer.stream = new MJPEGStream(streamPlayer.options);
+                    streamPlayer.start();
                 },
                 refreshRate: 250,
                 onStop: stopPreview
             };
 
             //Leave your .mjpeg video URL here.
-            player = new MJPEGPlayer('player', `/preview?x-uuid=${xUuid}`, options);
-            player.start();
-            window.player = player;
+            streamPlayer = new MJPEGPlayer('player', `/preview?x-uuid=${xUuid}`, options);
+            streamPlayer.start();
+            window.streamPlayer = streamPlayer;
         }
     });
 });

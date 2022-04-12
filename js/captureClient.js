@@ -20,8 +20,8 @@ window.addEventListener('DOMContentLoaded', () => {
     listImageCaptures();
 
     function usePlayer(playerMethod, altHandler) {
-        if (typeof window.player !== 'undefined') {
-            window.player[playerMethod]();
+        if (typeof window.streamPlayer !== 'undefined') {
+            window.streamPlayer[playerMethod]();
         } else {
             altHandler();
         }
