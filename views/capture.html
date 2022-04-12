@@ -42,14 +42,18 @@
     <div id="center-aligner">
         <script type="text/javascript">
             window.addEventListener('DOMContentLoaded', () => {
+                const canvas = document.getElementById('player');
+
                 const queryString = window.location.search;
                 const params = (queryString && queryString.length > 1) ?
                     new URLSearchParams(queryString.substring(1)) :
                     undefined;
                 if (params && params.get('canvas')) {
-                    const canvas = document.getElementById('player');
                     canvas.style.display = 'block';
                 } else {
+                    canvas.style.display = 'none';
+
+                    // only create iframe if we are using canvas
                     const iframe = document.createElement('iframe');
                     iframe.width = 640;
                     iframe.height = 480;
@@ -60,7 +64,7 @@
                 }
             });
         </script>
-        <canvas id="player" style="background: #000;" width="640px" height="480px; display: none;">
+        <canvas id="player" style="background: #000;" width="640px" height="480px;">
           Your browser sucks.
         </canvas>
         <br>
