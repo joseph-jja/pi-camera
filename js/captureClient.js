@@ -1,8 +1,6 @@
 import * as formUtils from '/js/libs/formUtils.js';
 
 const {
-    getFormOptions,
-    setMessage,
     listImageCaptures,
     shutdown,
     executeServerCommand,
