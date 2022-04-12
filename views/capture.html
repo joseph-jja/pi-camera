@@ -46,7 +46,7 @@
                 const params = (queryString && queryString.length > 1) ?
                     new URLSearchParams(queryString.substring(1)) :
                     undefined;
-                if (params && params['canvas']) {
+                if (params && params.get('canvas') {
                     const canvas = document.getElementById('player');
                     canvas.style.display = 'block';
                 } else {
@@ -60,9 +60,9 @@
                 }
             });
         </script>
-        <<canvas id="player" style="background: #000;" width="640px" height="480px; display: none;">
+        <canvas id="player" style="background: #000;" width="640px" height="480px; display: none;">
           Your browser sucks.
-        </canvas>>
+        </canvas>
         <br>
         <div id="server-messages"></div>
         <br>
