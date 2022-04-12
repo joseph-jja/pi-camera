@@ -11,6 +11,8 @@ function writeHeaders(response) {
     });
 }
 
+const MAX_PREVIEW_CLIENT = 4;
+
 module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
@@ -19,11 +21,31 @@ module.exports = function(resolveFileLocation) {
             previewProcess
         } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
 
+
     const setupPreviewStream = (streamObject, response, uuid) => {
 
         if (previewProcessMap[uuid]) {
+            try {
+                previewProcessMap[uuid].stdout.unpipe(response);
+            } catch(e) {
+                logger.error(`Unpipe error ${stringify(e)}`);
+            }
+            try {
+                streamObject.stdout.unpipe(previewProcessMap[uuid].stdin);
+            } catch(e) {
+                logger.error(`Unpipe error ${stringify(e)}`);
+            }
             previewProcessMap[uuid].kill('SIGKILL');
+            previewProcessMap[uuid] = undefined;
         }
+        const previewClients = Object.keys(previewProcessMap);
+        if (previewClients.length > MAX_PREVIEW_CLIENT) {
+            previewClients.forEach(key => {
+                previewProcessMap[key].kill('SIGKILL');
+                previewProcessMap[key] = undefined;
+            });
+        }
+
         previewProcessMap[uuid] = previewProcess();
 
         writeHeaders(response);
