@@ -48,9 +48,8 @@
                 const params = (queryString && queryString.length > 1) ?
                     new URLSearchParams(queryString.substring(1)) :
                     undefined;
-                if (params && params.get('canvas')) {
-                    canvas.style.display = 'block';
-                } else {
+
+                if (!params || !params.get('canvas')) {
                     canvas.style.display = 'none';
 
                     // only create iframe if we are using canvas

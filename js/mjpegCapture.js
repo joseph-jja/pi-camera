@@ -11,10 +11,20 @@ window.addEventListener('DOMContentLoaded', () => {
     let player;
     window.player = player;
 
+    const queryString = window.location.search;
+    const params = (queryString && queryString.length > 1) ?
+        new URLSearchParams(queryString.substring(1)) :
+        undefined;
+
+    if (!params || !params.get('canvas')) {
+        return;
+    }
+
     const canvasObj = document.getElementById('player');
     if (!canvasObj) {
         return;
     }
+    canvasObj.style.display = 'block';
 
     fetch('/config').then(async resp => {
         const headers = await resp.headers;
