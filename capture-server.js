@@ -66,7 +66,6 @@ const jsMjpegFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/mjpeg`).map(it
 const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
     return `/js/${item}`;
 }).concat(jsLibFiles).concat(jsMjpegFiles);
-console.log(jsFiles);
 
 const videoConfig = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/videoConfig`),
     imageConfig = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/stillConfig`);
