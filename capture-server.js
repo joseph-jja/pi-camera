@@ -81,6 +81,14 @@ app.use(bodyParser.urlencoded({
     limit: 100000
 }));
 
+setInterval(() => {
+    const memory = process.memoryUsage().rss;
+    if (rss > 750000000) {
+        console.error('Using too much RAM, killing until restart');
+        process.kill('SIGTERM');
+    }
+}, 10000);
+
 async function getFormData() {
     const formFields = await import('./libs/form.mjs');
 

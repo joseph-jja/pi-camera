@@ -33,21 +33,19 @@ module.exports = function(resolveFileLocation) {
         } catch(e) {
             logger.error(`Unpipe error ${stringify(e)}`);
         }
+        previewProcessMap[uuid].kill('SIGKILL');
+        previewProcessMap[uuid] = undefined;
     };
 
     const setupPreviewStream = (streamObject, response, uuid) => {
 
         if (previewProcessMap[uuid]) {
             cleanupNodes(uuid, streamObject);
-            previewProcessMap[uuid].kill('SIGKILL');
-            previewProcessMap[uuid] = undefined;
         }
         const previewClients = Object.keys(previewProcessMap);
         if (previewClients.length > MAX_PREVIEW_CLIENT) {
             previewClients.forEach(key => {
                 cleanupNodes(key, streamObject);
-                previewProcessMap[key].kill('SIGKILL');
-                previewProcessMap[key] = undefined;
             });
         }
 
@@ -56,8 +54,6 @@ module.exports = function(resolveFileLocation) {
         writeHeaders(response);
         response.on('finish', () => {
             cleanupNodes(uuid, streamObject);
-            previewProcessMap[uuid].kill('SIGKILL');
-            previewProcessMap[uuid] = undefined;
         });
 
         streamObject.stdout.pipe(previewProcessMap[uuid].stdin);
