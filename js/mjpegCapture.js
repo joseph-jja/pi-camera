@@ -9,7 +9,6 @@ import {
 
 window.addEventListener('DOMContentLoaded', () => {
     let player;
-    window.player = player;
 
     const queryString = window.location.search;
     const params = (queryString && queryString.length > 1) ?
@@ -44,6 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
             //Leave your .mjpeg video URL here.
             player = new MJPEGPlayer('player', `/preview?x-uuid=${xUuid}`, options);
             player.start();
+            window.player = player;
         }
     });
 });
