@@ -15,16 +15,17 @@
   </body>
   <script src="/js/socket.io.js"></script>
   <script src="/js/sockImage.js"></script>
-  <script src="/js/mjpeg.js"></script>
-  <script>
+  <!--script src="/js/mjpeg" type="module"></script-->
+  <script  type="module">
+    import * as MJPEG from '/js/mjpeg/index.js';
     let player;
     fetch('/config').then(async resp => {
         const headers = await resp.headers;
         const uuid = headers.get('x-uuid');
         //Leave your .mjpeg video URL here.
-        player = new MJPEGPlayer('player', `/preview?x-uuid=${uuid}`, {
+        player = new MJPEG.MJPEGPlayer('player', `/preview?x-uuid=${uuid}`, {
             errorHandler: (err) => {
-                player.stream = new MJPEGStream(player.options);
+                player.stream = new MJPEG.MJPEGStream(player.options);
                 player.start();
             },
             refreshRate: 250
