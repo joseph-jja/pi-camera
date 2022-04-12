@@ -52,11 +52,11 @@ module.exports = function(resolveFileLocation) {
 
     return (request, response) => {
         const uuid = request.params['x-uuid'];
-        if (uuid && global.directStreamProcess) {
-            logger.info('Running via directStreamProcess doing mjpeg video');
+        if (global.directStreamProcess) {
+            logger.info(`Running via directStreamProcess doing mjpeg video using: ${uuid}`);
             setupPreviewStream(global.directStreamProcess, response, uuid);
-        } else if (uuid && global.imageStreamProcess) {
-            logger.info('Running via imageStreamProcess doing jpeg images');
+        } else if (global.imageStreamProcess) {
+            logger.info(`Running via imageStreamProcess doing mjpeg video using: ${uuid}`);
             setupPreviewStream(global.imageStreamProcess, response, uuid);
         } else {
             response.writeHead(200, {});
