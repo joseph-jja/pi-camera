@@ -46,7 +46,7 @@
                 const params = (queryString && queryString.length > 1) ?
                     new URLSearchParams(queryString.substring(1)) :
                     undefined;
-                if (params['canvas']) {
+                if (params & params['canvas']) {
                     const canvas = document.getElementById('player');
                     canvas.style.display = 'block';
                 } else {
