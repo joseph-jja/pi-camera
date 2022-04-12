@@ -20,18 +20,20 @@ window.addEventListener('DOMContentLoaded', () => {
         const headers = await resp.headers;
         const xUuid = headers.get('x-uuid');
 
-        const options = {
-            errorHandler: (err) => {
-                console.log(err);
-                player.stream = new MJPEGStream(player.options);
-                player.start();
-            },
-            refreshRate: 250,
-            onStop: stopPreview
-        };
+        if (canvasObj.style.display === 'block') {
+            const options = {
+                errorHandler: (err) => {
+                    console.log(err);
+                    player.stream = new MJPEGStream(player.options);
+                    player.start();
+                },
+                refreshRate: 250,
+                onStop: stopPreview
+            };
 
-        //Leave your .mjpeg video URL here.
-        player = new MJPEGPlayer('player', `/preview?x-uuid=${xUuid}`, options);
-        player.start();
+            //Leave your .mjpeg video URL here.
+            player = new MJPEGPlayer('player', `/preview?x-uuid=${xUuid}`, options);
+            player.start();
+        }
     });
 });

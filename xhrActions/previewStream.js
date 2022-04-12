@@ -27,7 +27,7 @@ module.exports = function(resolveFileLocation) {
         previewProcessMap[uuid] = previewProcess();
 
         writeHeaders(response);
-        response.on('close', () => {
+        response.on('finish', () => {
             try {
                 previewProcessMap[uuid].stdout.unpipe(response);
             } catch(e) {
