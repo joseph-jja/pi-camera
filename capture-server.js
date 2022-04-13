@@ -22,7 +22,6 @@ const pageUUID = /\[\[PAGE_UUID\]\]/g;
 
 process.on('uncaughtException', (e) => {
     console.error(e);
-    console.error(e.stack);
 });
 
 const stringify = require(`${basedir}/libs/stringify`),
