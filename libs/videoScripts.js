@@ -164,7 +164,7 @@ module.exports = function(resolveFileLocation) {
 
     function imageStream(options = []) {
 
-        const spawnOptions = (options.length > 0 ? options.concat() : getImageUpdateOptions());
+        const spawnOptions = (options.length > 0 ? options : getImageUpdateOptions()).concat();
 
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
@@ -185,7 +185,7 @@ module.exports = function(resolveFileLocation) {
 
     function directStream(options = []) {
 
-        const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions());
+        const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
 
         const running = killAllRunning();
         logger.info('Results of stopping all: ' + stringify(running));
