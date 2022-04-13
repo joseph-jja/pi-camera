@@ -12,9 +12,9 @@ socket.on('info', (data) => {
     console.log('Got data ', data);
     const keys = Object.keys(data);
     const results = keys.map(key => {
-        return `<br>${key}: ${JSON.stringify(data[key])}`;
+        return `${key}: ${JSON.stringify(data[key])}`;
     }).reduce((acc, next) => {
-        return acc + next;
+        return `${acc} <br> ${next}`;
     });
     socketInfo.innerHTML = results;
 });
