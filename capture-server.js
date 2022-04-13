@@ -38,16 +38,16 @@ const stringify = require(`${basedir}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${basedir}/libs/videoScripts`),
-    previewStreamAction = require(`${basedir}/xhrActions/previewStream`)(basedir),
-    socketStreamAction = require(`${basedir}/xhrActions/socketStream`)(basedir),
-    stopPreviewAction = require(`${basedir}/xhrActions/stopPreview`)(basedir),
-    imageUpdateAction = require(`${basedir}/xhrActions/imageUpdate`)(basedir),
-    renameFileAction = require(`${basedir}/xhrActions/renameFile`)(basedir),
-    viewImageOrVideoAction = require(`${basedir}/xhrActions/viewImageOrVideo`)(basedir),
-    deleteFileAction = require(`${basedir}/xhrActions/deleteFile`)(basedir),
+    previewStreamAction = require(`${basedir}/xhrActions/previewStream`),
+    socketStreamAction = require(`${basedir}/xhrActions/socketStream`),
+    stopPreviewAction = require(`${basedir}/xhrActions/stopPreview`),
+    imageUpdateAction = require(`${basedir}/xhrActions/imageUpdate`),
+    renameFileAction = require(`${basedir}/xhrActions/renameFile`),
+    viewImageOrVideoAction = require(`${basedir}/xhrActions/viewImageOrVideo`),
+    deleteFileAction = require(`${basedir}/xhrActions/deleteFile`),
     jsFilesAction = require(`${basedir}/xhrActions/jsFiles`),
     shutdownAction = require(`${basedir}/xhrActions/shutdown`),
-    updateXHRAction = require(`${basedir}/xhrActions/update`)(basedir);
+    updateXHRAction = require(`${basedir}/xhrActions/update`);
 
 const app = express();
 app.disable('x-powered-by');
@@ -165,7 +165,7 @@ async function start() {
         formFields
     } = await getFormData();
 
-    const imageListAction = require(`${basedir}/xhrActions/imageList`)(basedir, formFields);
+    const imageListAction = require(`${basedir}/xhrActions/imageList`);
 
     app.get(jsFiles, jsFilesAction);
 
@@ -195,7 +195,9 @@ async function start() {
         fs.createReadStream(`${basedir}/views/video.html`).pipe(response);
     });
 
-    app.get('/imageList', imageListAction);
+    app.get('/imageList', (request, response) => {
+        imageListAction(request, response, formFields);
+    });
 
     app.get('/preview', previewStreamAction);
 
