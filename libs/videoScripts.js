@@ -250,6 +250,7 @@ function cleanupPreviewNodes(uuid, streamObject) {
         for (let i = 0, end = listeners.length; i < end; i++) {
             streamObject.stdout.removeListener('data', listeners[i]);
         }
+        logger.error('Remove stream object listeners success!');
     } catch (e) {
         logger.error(`Remove stream object listeners error ${stringify(e)}`);
     }
@@ -258,6 +259,7 @@ function cleanupPreviewNodes(uuid, streamObject) {
         for (let i = 0, end = listeners.length; i < end; i++) {
             global.previewProcessMap[uuid].stdout.removeListener('data', listeners[i]);
         }
+        logger.error('Remove preview object listeners success!');
     } catch (e) {
         logger.error(`Remove preview object listeners  error ${stringify(e)}`);
     }
