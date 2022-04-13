@@ -42,9 +42,9 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
     setPreviewProcessMap(uuid, previewStream());
 
     writeHeaders(response);
-    /*response.on('finish', () => {
-        cleanupPreviewNodes(uuid, streamObject);
-    });*/
+    response.on('finish', () => {
+        logger.info('We are done!');
+    });
 
     streamObject.stdout.on('data', d => {
         previewProcessMap[uuid].stdin.write(d);
