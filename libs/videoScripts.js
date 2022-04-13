@@ -52,7 +52,7 @@ function removeListeners(streamObject) {
         if (streamObject.stdout.listeners('data')) {
             const listeners = streamObject.stdout.listeners('data');
             for (let i = 0, end = listeners.length; i < end; i++) {
-                console.log(listeners[i]);
+                console.log(listeners[i].name);
                 streamObject.stdout.removeListener('data', listeners[i]);
             }
         }
