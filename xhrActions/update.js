@@ -10,7 +10,7 @@ module.exports = function(resolveFileLocation) {
         } = require(`${resolveFileLocation}/libs/libcamera/video`),
         {
             directStream
-        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
+        } = require(`${resolveFileLocation}/libs/videoScripts`);
 
     return (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {

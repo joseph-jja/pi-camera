@@ -10,7 +10,7 @@ module.exports = function(resolveFileLocation) {
         {
             BASE_IMAGE_PATH,
             BASE_CONFIG_PATH
-        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
+        } = require(`${resolveFileLocation}/libs/videoScripts`);
 
     return (request, response) => {
         const query = (request.query || {});

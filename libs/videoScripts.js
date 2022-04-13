@@ -1,5 +1,31 @@
 const fs = require('fs');
 
+const basedir = process.cwd();
+
+const stringify = require(`${basedir}/libs/stringify`),
+    {
+        padNumber,
+        getH264Bitrate
+    } = require(`${basedir}/libs/utils`),
+    NullStream = require(`${basedir}/libs/NullStream.js`),
+    logger = require(`${basedir}/libs/logger`)(__filename),
+    {
+        getImageUpdateOptions,
+        setImageUpdateOptions,
+        streamJpeg,
+        saveImage
+    } = require(`${basedir}/libs/libcamera/still`),
+    {
+        getVideoUpdateOptions,
+        setVideoUpdateOptions,
+        streamMjpeg,
+        saveH264,
+        saveMjpeg
+    } = require(`${basedir}/libs/libcamera/video`),
+    {
+        getFfmpegStream
+    } = require(`${basedir}/libs/ffmpeg`);
+
 global.libcameraProcess;
 global.directStreamProcess;
 global.imageStreamProcess;
@@ -7,7 +33,7 @@ global.imageStreamProcess;
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
 
-function initSystem(logger) {
+function initSystem() {
     try {
         fs.mkdirSync(BASE_IMAGE_PATH);
     } catch (e) {
@@ -36,217 +62,192 @@ function removeListeners(streamObject) {
         }
         try {
             streamObject.stdout.unpipe();
-        } catch(e) {
+        } catch (e) {
             // do we care?
         }
     }
 }
 
-module.exports = function(resolveFileLocation) {
 
-    const stringify = require(`${resolveFileLocation}/libs/stringify`),
-        {
-            padNumber,
-            getH264Bitrate
-        } = require(`${resolveFileLocation}/libs/utils`),
-        NullStream = require(`${resolveFileLocation}/libs/NullStream.js`),
-        logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
-        {
-            getImageUpdateOptions,
-            setImageUpdateOptions,
-            streamJpeg,
-            saveImage
-        } = require(`${resolveFileLocation}/libs/libcamera/still`),
-        {
-            getVideoUpdateOptions,
-            setVideoUpdateOptions,
-            streamMjpeg,
-            saveH264,
-            saveMjpeg
-        } = require(`${resolveFileLocation}/libs/libcamera/video`),
-        {
-            getFfmpegStream
-        } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
-    initSystem(logger);
+initSystem();
 
-    function killAllRunning() {
+function killAllRunning() {
 
-        const streams = [
-            global.directStreamProcess,
-            global.libcameraProcess,
-            global.imageStreamProcess
-        ].filter(stream => {
-            return (stream && stream.pid);
+    const streams = [
+        global.directStreamProcess,
+        global.libcameraProcess,
+        global.imageStreamProcess
+    ].filter(stream => {
+        return (stream && stream.pid);
+    });
+    const results = streams.map(stream => {
+        removeListeners(stream);
+        stream.once('close', () => {
+            logger.info(`Process: ${stream.pid} ended`);
         });
-        const results = streams.map(stream => {
-            removeListeners(stream);
-            stream.once('close', () => {
-                logger.info(`Process: ${stream.pid} ended`);
-            });
-            stream.kill('SIGKILL');
-            return stream.pid;
-        });
+        stream.kill('SIGKILL');
+        return stream.pid;
+    });
 
-        return results;
-    }
+    return results;
+}
 
-    function getVideoFilename(ext = 'mjpeg') {
-        const now = new Date();
-        const datePart = `${now.getFullYear()}${padNumber(now.getMonth()+1)}${padNumber(now.getDate())}`;
-        const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
-        return `capture-${datePart}${timePart}.${ext}`;
-    }
+function getVideoFilename(ext = 'mjpeg') {
+    const now = new Date();
+    const datePart = `${now.getFullYear()}${padNumber(now.getMonth()+1)}${padNumber(now.getDate())}`;
+    const timePart = `${padNumber(now.getHours())}${padNumber(now.getMinutes())}${padNumber(now.getSeconds())}`;
+    return `capture-${datePart}${timePart}.${ext}`;
+}
 
-    function saveConfig(options, ext = 'mjpeg') {
+function saveConfig(options, ext = 'mjpeg') {
 
-        const filename = `${BASE_CONFIG_PATH}/${getVideoFilename(ext + '.cfg')}`;
-        fs.writeFile(filename, options, (err, res) => {
-            if (err) {
-                logger.error(stringify(err));
-            } else {
-                logger.verbose(stringify(res));
-            }
-        });
-    }
-
-    function saveRawVideoData(options = [], response, videoConfig) {
-
-        const optionsStr = options.join(' ');
-        const bitRate = getH264Bitrate(videoConfig, optionsStr);
-        const spawnOptions = options.concat();
-        if (bitRate && bitRate.length > 0) {
-            bitRate.split(' ').forEach(x => {
-                spawnOptions.push(x);
-            });
+    const filename = `${BASE_CONFIG_PATH}/${getVideoFilename(ext + '.cfg')}`;
+    fs.writeFile(filename, options, (err, res) => {
+        if (err) {
+            logger.error(stringify(err));
+        } else {
+            logger.verbose(stringify(res));
         }
-        const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('h264')}`;
-        spawnOptions.push('-o');
-        spawnOptions.push(filename);
-        const running = killAllRunning();
-        logger.info('Results of stopping all: ' + stringify(running));
+    });
+}
 
-        global.libcameraProcess = undefined;
-        global.directStreamProcess = undefined;
-        global.imageStreamProcess = undefined;
+function saveRawVideoData(options = [], response, videoConfig) {
 
-        const rawDataProcess = saveH264(spawnOptions);
-        rawDataProcess.on('close', (code) => {
-            response.writeHead(200, {});
-            response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+    const optionsStr = options.join(' ');
+    const bitRate = getH264Bitrate(videoConfig, optionsStr);
+    const spawnOptions = options.concat();
+    if (bitRate && bitRate.length > 0) {
+        bitRate.split(' ').forEach(x => {
+            spawnOptions.push(x);
         });
-        saveConfig(stringify(spawnOptions), 'h264');
     }
+    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('h264')}`;
+    spawnOptions.push('-o');
+    spawnOptions.push(filename);
+    const running = killAllRunning();
+    logger.info('Results of stopping all: ' + stringify(running));
 
-    function saveImagesData(options = [], response) {
+    global.libcameraProcess = undefined;
+    global.directStreamProcess = undefined;
+    global.imageStreamProcess = undefined;
 
-        const spawnOptions = options.concat();
+    const rawDataProcess = saveH264(spawnOptions);
+    rawDataProcess.on('close', (code) => {
+        response.writeHead(200, {});
+        response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+    });
+    saveConfig(stringify(spawnOptions), 'h264');
+}
 
-        const running = killAllRunning();
-        logger.info('Results of stopping all: ' + stringify(running));
+function saveImagesData(options = [], response) {
 
-        global.libcameraProcess = undefined;
-        global.directStreamProcess = undefined;
-        global.imageStreamProcess = undefined;
+    const spawnOptions = options.concat();
 
-        const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
-        spawnOptions.push('-o');
-        spawnOptions.push(filename);
-        const imageDataProcess = saveImage(spawnOptions);
-        imageDataProcess.on('close', (code) => {
-            response.writeHead(200, {});
-            response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
-        });
-        logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
-        saveConfig(stringify(spawnOptions), 'png');
-    }
+    const running = killAllRunning();
+    logger.info('Results of stopping all: ' + stringify(running));
 
-    function imageStream(options = []) {
+    global.libcameraProcess = undefined;
+    global.directStreamProcess = undefined;
+    global.imageStreamProcess = undefined;
 
-        const spawnOptions = (options.length > 0 ? options : getImageUpdateOptions()).concat();
+    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
+    spawnOptions.push('-o');
+    spawnOptions.push(filename);
+    const imageDataProcess = saveImage(spawnOptions);
+    imageDataProcess.on('close', (code) => {
+        response.writeHead(200, {});
+        response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
+    });
+    logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
+    saveConfig(stringify(spawnOptions), 'png');
+}
 
-        const running = killAllRunning();
-        logger.info('Results of stopping all: ' + stringify(running));
+function imageStream(options = []) {
 
-        global.libcameraProcess = undefined;
-        global.directStreamProcess = undefined;
+    const spawnOptions = (options.length > 0 ? options : getImageUpdateOptions()).concat();
 
-        global.imageStreamProcess = streamJpeg(options);
+    const running = killAllRunning();
+    logger.info('Results of stopping all: ' + stringify(running));
 
-        const DevNull = new NullStream();
-        global.imageStreamProcess.stdout.pipe(DevNull);
-        global.imageStreamProcess.stderr.on('error', (err) => {
-            logger.debug(`Error ${err.length}`);
-        });
+    global.libcameraProcess = undefined;
+    global.directStreamProcess = undefined;
 
-        logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
-    }
+    global.imageStreamProcess = streamJpeg(options);
 
-    function directStream(options = []) {
+    const DevNull = new NullStream();
+    global.imageStreamProcess.stdout.pipe(DevNull);
+    global.imageStreamProcess.stderr.on('error', (err) => {
+        logger.debug(`Error ${err.length}`);
+    });
 
-        const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
+    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
+}
 
-        const running = killAllRunning();
-        logger.info('Results of stopping all: ' + stringify(running));
+function directStream(options = []) {
 
-        global.imageStreamProcess = undefined;
-        // stream libcamera stdout to ffmpeg stdin
-        global.libcameraProcess = streamMjpeg(spawnOptions);
-        global.directStreamProcess = getFfmpegStream();
+    const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
 
-        const DevNull = new NullStream();
-        global.directStreamProcess.stdout.on('data', d => {
-            DevNull.write(d);
-        });
-        global.libcameraProcess.stdout.on('data', d => {
-            global.directStreamProcess.stdin.write(d);
-        });
+    const running = killAllRunning();
+    logger.info('Results of stopping all: ' + stringify(running));
 
-        global.directStreamProcess.stderr.on('data', (err) => {
-            logger.debug(`Error ${err.length}`);
-        });
-        global.libcameraProcess.stderr.on('data', (err) => {
-            logger.debug(`Error ${err.length}`);
-        });
-        logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${global.libcameraProcess.pid} ${global.directStreamProcess.pid}`);
-    }
+    global.imageStreamProcess = undefined;
+    // stream libcamera stdout to ffmpeg stdin
+    global.libcameraProcess = streamMjpeg(spawnOptions);
+    global.directStreamProcess = getFfmpegStream();
 
-    function saveVideoProcess(options = [], response) {
+    const DevNull = new NullStream();
+    global.directStreamProcess.stdout.on('data', d => {
+        DevNull.write(d);
+    });
+    global.libcameraProcess.stdout.on('data', d => {
+        global.directStreamProcess.stdin.write(d);
+    });
 
-        const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
+    global.directStreamProcess.stderr.on('data', (err) => {
+        logger.debug(`Error ${err.length}`);
+    });
+    global.libcameraProcess.stderr.on('data', (err) => {
+        logger.debug(`Error ${err.length}`);
+    });
+    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${global.libcameraProcess.pid} ${global.directStreamProcess.pid}`);
+}
 
-        const spawnOptions = options.concat();
-        spawnOptions.push('-o');
-        spawnOptions.push(filename);
+function saveVideoProcess(options = [], response) {
 
-        const running = killAllRunning();
-        logger.info('Results of stopping all: ' + stringify(running));
+    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
 
-        global.libcameraProcess = undefined;
-        global.directStreamProcess = undefined;
-        global.imageStreamProcess = undefined;
+    const spawnOptions = options.concat();
+    spawnOptions.push('-o');
+    spawnOptions.push(filename);
 
-        const mjpegDataProcess = saveMjpeg(spawnOptions);
-        mjpegDataProcess.on('close', (code) => {
-            response.writeHead(200, {});
-            response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
-        });
-        saveConfig(stringify(spawnOptions), 'h264');
-        saveConfig(stringify(options));
-    }
+    const running = killAllRunning();
+    logger.info('Results of stopping all: ' + stringify(running));
 
-    return {
-        BASE_IMAGE_PATH,
-        BASE_CONFIG_PATH,
-        getVideoFilename,
-        saveRawVideoData,
-        saveImagesData,
-        directStream,
-        imageStream,
-        saveVideoProcess,
-        getVideoUpdateOptions,
-        setVideoUpdateOptions,
-        getImageUpdateOptions,
-        setImageUpdateOptions
-    };
+    global.libcameraProcess = undefined;
+    global.directStreamProcess = undefined;
+    global.imageStreamProcess = undefined;
+
+    const mjpegDataProcess = saveMjpeg(spawnOptions);
+    mjpegDataProcess.on('close', (code) => {
+        response.writeHead(200, {});
+        response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
+    });
+    saveConfig(stringify(spawnOptions), 'h264');
+    saveConfig(stringify(options));
+}
+
+module.exports = {
+    BASE_IMAGE_PATH,
+    BASE_CONFIG_PATH,
+    getVideoFilename,
+    saveRawVideoData,
+    saveImagesData,
+    directStream,
+    imageStream,
+    saveVideoProcess,
+    getVideoUpdateOptions,
+    setVideoUpdateOptions,
+    getImageUpdateOptions,
+    setImageUpdateOptions
 };

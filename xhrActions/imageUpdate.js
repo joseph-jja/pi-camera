@@ -10,14 +10,14 @@ module.exports = function(resolveFileLocation) {
         {
             setImageUpdateOptions,
             imageStream
-        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
+        } = require(`${resolveFileLocation}/libs/videoScripts`);
 
     return (request, response) => {
         if (request.body && Object.keys(request.body).length > 0) {
             const options = getOptions(request.body);
             if (options.length > 0) {
                 setImageUpdateOptions(options);
-                const libcameraPid = (global.libcameraProcess ? global.libcameraProcess.pid : ''); 
+                const libcameraPid = (global.libcameraProcess ? global.libcameraProcess.pid : '');
                 if (global.directStreamProcess) {
                     const pid = global.directStreamProcess.pid;
                     childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {

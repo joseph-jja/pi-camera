@@ -8,7 +8,7 @@ module.exports = function(resolveFileLocation) {
     const logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
             BASE_IMAGE_PATH
-        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation),
+        } = require(`${resolveFileLocation}/libs/videoScripts`),
         {
             OLD_FILENAME_MATCH
         } = require(`${resolveFileLocation}/xhrActions/Constants`);

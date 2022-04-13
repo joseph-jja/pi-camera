@@ -38,7 +38,7 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         directStream,
         getVideoUpdateOptions,
         getImageUpdateOptions
-    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`)(RESOLVED_FILE_LOCATION),
+    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`),
     previewStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/previewStream`)(RESOLVED_FILE_LOCATION),
     socketStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/socketStream`)(RESOLVED_FILE_LOCATION),
     stopPreviewAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/stopPreview`)(RESOLVED_FILE_LOCATION),
