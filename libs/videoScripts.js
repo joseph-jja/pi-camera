@@ -271,17 +271,16 @@ function cleanupPreviewNodes(uuid, streamObject) {
         logger.error(`Remove preview object listeners  error ${stringify(e)}`);
     }
     try {
-        streamObject.once('close', () => {
-            logger.info('Preview stream closed!');
+        previewProcessMap[uuid].once('close', () => {
+            try {
+                previewProcessMap[uuid] = undefined;
+            } catch (e) {
+                logger.error(`Undef error ${stringify(e)}`);
+            }
         });
         previewProcessMap[uuid].kill('SIGKILL');
     } catch (e) {
         logger.error(`kill error ${stringify(e)}`);
-    }
-    try {
-        previewProcessMap[uuid] = undefined;
-    } catch (e) {
-        logger.error(`Undef error ${stringify(e)}`);
     }
 };
 
