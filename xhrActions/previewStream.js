@@ -18,8 +18,8 @@ module.exports = function(resolveFileLocation) {
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
         logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
         {
-            previewProcess
-        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
+            previewStream
+        } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
 
     const cleanupNodes = (uuid, streamObject) => {
@@ -57,7 +57,7 @@ module.exports = function(resolveFileLocation) {
             });
         }
 
-        previewProcessMap[uuid] = previewProcess();
+        previewProcessMap[uuid] = previewStream();
 
         writeHeaders(response);
         response.on('finish', () => {

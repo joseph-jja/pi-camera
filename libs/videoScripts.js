@@ -65,8 +65,7 @@ module.exports = function(resolveFileLocation) {
             saveMjpeg
         } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation),
         {
-            getFfmpegStream,
-            previewStream
+            getFfmpegStream
         } = require(`${resolveFileLocation}/libs/ffmpeg`);
 
     initSystem(logger);
@@ -244,7 +243,6 @@ module.exports = function(resolveFileLocation) {
         saveImagesData,
         directStream,
         imageStream,
-        previewProcess: previewStream,
         saveVideoProcess,
         getVideoUpdateOptions,
         setVideoUpdateOptions,
