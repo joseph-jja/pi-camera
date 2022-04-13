@@ -6,7 +6,8 @@ const stringify = require(`${basedir}/libs/stringify`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
         getLibcameraProcess,
-        getDirectStreamProcesss
+        getDirectStreamProcesss,
+        getPreviewProcessMap
     } = require(`${basedir}/libs/videoScripts`);
 
 function collectData() {
@@ -22,7 +23,7 @@ function collectData() {
         memory: process.memoryUsage(),
         loadAverage: os.loadavg(),
         free: os.freemem(),
-        activeStreams: (streams.length + Object.keys(global.previewProcessMap).length)
+        activeStreams: (streams.length + Object.keys(getPreviewProcessMap()).length)
     };
 }
 

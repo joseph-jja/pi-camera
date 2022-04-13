@@ -6,7 +6,9 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
     } = require(`${basedir}/libs/ffmpeg`),
     {
         cleanupPreviewNodes,
-        getDirectStreamProcesss
+        getDirectStreamProcesss,
+        getPreviewProcessMap,
+        setPreviewProcessMap
     } = require(`${basedir}/libs/videoScripts`);
 
 function writeHeaders(response) {
@@ -23,18 +25,19 @@ const MAX_PREVIEW_CLIENT = 4;
 
 const setupPreviewStream = async (streamObject, response, uuid) => {
 
-    if (global.previewProcessMap[uuid]) {
+    const previewProcessMap = getPreviewProcessMap();
+    if (previewProcessMap[uuid]) {
         cleanupPreviewNodes(uuid, streamObject);
     }
 
-    const previewClients = Object.keys(global.previewProcessMap);
+    const previewClients = Object.keys(previewProcessMap);
     if (previewClients.length > MAX_PREVIEW_CLIENT) {
         previewClients.forEach(key => {
             cleanupPreviewNodes(key, streamObject);
         });
     }
 
-    global.previewProcessMap[uuid] = previewStream();
+    setPreviewProcessMap(uuid, previewStream());
 
     writeHeaders(response);
     response.on('finish', () => {
@@ -42,9 +45,9 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
     });
 
     streamObject.stdout.on('data', d => {
-        global.previewProcessMap[uuid].stdin.write(d);
+        previewProcessMap[uuid].stdin.write(d);
     });
-    global.previewProcessMap[uuid].stdout.on('data', d => {
+    previewProcessMap[uuid].stdout.on('data', d => {
         response.write(d);
     });
 };

@@ -27,9 +27,9 @@ const stringify = require(`${basedir}/libs/stringify`),
     } = require(`${basedir}/libs/ffmpeg`);
 
 let libcameraProcess,
-    directStreamProcess;
+    directStreamProcess,
+    previewProcessMap = {};
 global.imageStreamProcess;
-global.previewProcessMap = {};
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -76,6 +76,14 @@ function getDirectStreamProcesss() {
 
 function unsetDirectStreamProcesss() {
     directStreamProcess = undefined;
+}
+
+function getPreviewProcessMap() {
+    return previewProcessMap;
+}
+
+function setPreviewProcessMap(key, value) {
+    previewProcessMap[key] = value;
 }
 
 function killAllRunning() {
@@ -254,9 +262,9 @@ function cleanupPreviewNodes(uuid, streamObject) {
         logger.error(`Remove stream object listeners error ${stringify(e)}`);
     }
     try {
-        const listeners = global.previewProcessMap[uuid].stdout.listeners('data');
+        const listeners = previewProcessMap[uuid].stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
-            global.previewProcessMap[uuid].stdout.removeListener('data', listeners[i]);
+            previewProcessMap[uuid].stdout.removeListener('data', listeners[i]);
         }
         logger.info('Remove preview object listeners success!');
     } catch (e) {
@@ -266,12 +274,12 @@ function cleanupPreviewNodes(uuid, streamObject) {
         streamObject.once('close', () => {
             logger.info('Preview stream closed!');
         });
-        global.previewProcessMap[uuid].kill('SIGKILL');
+        previewProcessMap[uuid].kill('SIGKILL');
     } catch (e) {
         logger.error(`kill error ${stringify(e)}`);
     }
     try {
-        global.previewProcessMap[uuid] = undefined;
+        previewProcessMap[uuid] = undefined;
     } catch (e) {
         logger.error(`Undef error ${stringify(e)}`);
     }
@@ -293,5 +301,7 @@ module.exports = {
     cleanupPreviewNodes,
     getLibcameraProcess,
     getDirectStreamProcesss,
-    unsetDirectStreamProcesss
+    unsetDirectStreamProcesss,
+    getPreviewProcessMap,
+    setPreviewProcessMap
 };
