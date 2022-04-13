@@ -1,7 +1,6 @@
 const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
-    stringify = require(`${basedir}/libs/stringify`),
     {
         cleanupPreviewNodes
     } = require(`${basedir}/libs/videoScripts`);

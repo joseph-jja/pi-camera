@@ -29,7 +29,7 @@ const stringify = require(`${basedir}/libs/stringify`),
 global.libcameraProcess;
 global.directStreamProcess;
 global.imageStreamProcess;
-global.previewProcessMap;
+global.previewProcessMap = {};
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
