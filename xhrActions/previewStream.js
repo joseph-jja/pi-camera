@@ -5,7 +5,8 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
         previewStream
     } = require(`${basedir}/libs/ffmpeg`),
     {
-        cleanupPreviewNodes
+        cleanupPreviewNodes,
+        getDirectStreamProcesss
     } = require(`${basedir}/libs/videoScripts`);
 
 function writeHeaders(response) {
@@ -50,9 +51,9 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
 
 module.exports = (request, response) => {
     const uuid = `${request.query['x-uuid']}`;
-    if (uuid && global.directStreamProcess) {
+    if (uuid && getDirectStreamProcesss()) {
         logger.info(`Running via directStreamProcess doing mjpeg video using: ${uuid}`);
-        setupPreviewStream(global.directStreamProcess, response, uuid);
+        setupPreviewStream(getDirectStreamProcesss(), response, uuid);
     } else if (uuid && global.imageStreamProcess) {
         logger.info(`Running via imageStreamProcess doing mjpeg video using: ${uuid}`);
         setupPreviewStream(global.imageStreamProcess, response, uuid);

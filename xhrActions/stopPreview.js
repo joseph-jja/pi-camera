@@ -2,13 +2,14 @@ const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
-        cleanupPreviewNodes
+        cleanupPreviewNodes,
+        getDirectStreamProcesss
     } = require(`${basedir}/libs/videoScripts`);
 
 module.exports = (request, response) => {
     const uuid = request.query['x-uuid'];
-    if (global.directStreamProcess) {
-        cleanupPreviewNodes(uuid, global.directStreamProcess);
+    if (getDirectStreamProcesss()) {
+        cleanupPreviewNodes(uuid, getDirectStreamProcesss());
     } else if (global.imageStreamProcess) {
         cleanupPreviewNodes(uuid, global.imageStreamProcess);
     }
