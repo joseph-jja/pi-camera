@@ -259,7 +259,12 @@ function cleanupPreviewNodes(uuid, streamObject) {
         previewProcessMap[uuid].once('close', () => {
             logger.info(`Preview process: ${previewProcessMap[uuid].pid} ended.`);
         });
-        previewProcessMap[uuid].kill('SIGKILL');
+        if (!previewProcessMap[uuid].killed){
+            previewProcessMap[uuid].kill('SIGKILL');
+        } else {
+            previewProcessMap[uuid] = undefined;
+            return undefined;
+        }
         return previewProcessMap[uuid].pid;
     }
     return undefined;
