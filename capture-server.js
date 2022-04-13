@@ -1,7 +1,9 @@
 const os = require('os'),
     fs = require('fs'),
     http = require('http'),
-    { randomBytes } = require('crypto'),
+    {
+        randomBytes
+    } = require('crypto'),
     {
         resolve,
         basename

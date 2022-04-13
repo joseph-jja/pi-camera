@@ -56,14 +56,14 @@ module.exports = function(resolveFileLocation) {
             setImageUpdateOptions,
             streamJpeg,
             saveImage
-        } = require(`${resolveFileLocation}/libs/libcamera/still`)(resolveFileLocation),
+        } = require(`${resolveFileLocation}/libs/libcamera/still`),
         {
             getVideoUpdateOptions,
             setVideoUpdateOptions,
             streamMjpeg,
             saveH264,
             saveMjpeg
-        } = require(`${resolveFileLocation}/libs/libcamera/video`)(resolveFileLocation),
+        } = require(`${resolveFileLocation}/libs/libcamera/video`),
         {
             getFfmpegStream
         } = require(`${resolveFileLocation}/libs/ffmpeg`);

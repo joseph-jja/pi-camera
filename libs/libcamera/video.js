@@ -2,6 +2,15 @@ const {
     spawn
 } = require('child_process');
 
+const basedir = process.cwd();
+
+const stringify = require(`${basedir}/libs/stringify`),
+    {
+        LIBCAMERA_VIDEO
+    } = require(`${basedir}/libs/libcamera/Constants`),
+    logger = require(`${basedir}/libs/logger`)(__filename),
+    config = require(`${basedir}/libs/libcamera/videoConfig`);
+
 const DEFAULT_OPTIONS = [];
 
 let lastVideoUpdateOpts;
@@ -14,69 +23,59 @@ function setVideoUpdateOptions(opts) {
     lastVideoUpdateOpts = opts;
 }
 
-module.exports = function(resolveFileLocation) {
+if (DEFAULT_OPTIONS.length === 0) {
+    config.forEach(item => {
+        if (item.defaultvalue) {
+            item.defaultvalue.split(' ').forEach(item => {
+                DEFAULT_OPTIONS.push(item);
+            });
+        }
+    });
+    setVideoUpdateOptions(DEFAULT_OPTIONS);
+}
 
-    const stringify = require(`${resolveFileLocation}/libs/stringify`),
-        {
-            LIBCAMERA_VIDEO
-        } = require(`${resolveFileLocation}/libs/libcamera/Constants`),
-        logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
-        config = require(`${resolveFileLocation}/libs/libcamera/videoConfig`);
+function streamMjpeg(options = []) {
 
-    if (DEFAULT_OPTIONS.length === 0) {
-        config.forEach(item => {
-            if (item.defaultvalue) {
-                item.defaultvalue.split(' ').forEach(item => {
-                    DEFAULT_OPTIONS.push(item);
-                });
-            }
-        });
-        setVideoUpdateOptions(DEFAULT_OPTIONS);
-    }
+    // default image streaming options
+    const spawnOptions = ['--codec', 'mjpeg', '-t', '0'].concat(options);
 
-    function streamMjpeg(options = []) {
+    // stream to stdout
+    spawnOptions.push('-o');
+    spawnOptions.push('-');
 
-        // default image streaming options
-        const spawnOptions = ['--codec', 'mjpeg', '-t', '0'].concat(options);
+    logger.info(`Libcamera video: ${LIBCAMERA_VIDEO} options: ${stringify(spawnOptions)}`);
 
-        // stream to stdout
-        spawnOptions.push('-o');
-        spawnOptions.push('-');
+    return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+        env: process.env
+    });
+}
 
-        logger.info(`Libcamera video: ${LIBCAMERA_VIDEO} options: ${stringify(spawnOptions)}`);
+function saveH264(options = []) {
 
-        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
-            env: process.env
-        });
-    }
+    const spawnOptions = ['--codec', 'h264', '-t', '60000'].concat(options);
 
-    function saveH264(options = []) {
+    logger.info(`Libcamera video save h264 options: ${stringify(spawnOptions)}`);
 
-        const spawnOptions = ['--codec', 'h264', '-t', '60000'].concat(options);
+    return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+        env: process.env
+    });
+}
 
-        logger.info(`Libcamera video save h264 options: ${stringify(spawnOptions)}`);
+function saveMjpeg(options = []) {
 
-        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
-            env: process.env
-        });
-    }
+    const spawnOptions = ['--codec', 'mjpeg', '-t', '60000'].concat(options);
 
-    function saveMjpeg(options = []) {
+    logger.info(`Libcamera video save mjpeg options: ${stringify(spawnOptions)}`);
 
-        const spawnOptions = ['--codec', 'mjpeg', '-t', '60000'].concat(options);
+    return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+        env: process.env
+    });
+}
 
-        logger.info(`Libcamera video save mjpeg options: ${stringify(spawnOptions)}`);
-
-        return spawn(LIBCAMERA_VIDEO, spawnOptions, {
-            env: process.env
-        });
-    }
-
-    return {
-        getVideoUpdateOptions,
-        setVideoUpdateOptions,
-        streamMjpeg,
-        saveH264,
-        saveMjpeg
-    };
+module.exports = {
+    getVideoUpdateOptions,
+    setVideoUpdateOptions,
+    streamMjpeg,
+    saveH264,
+    saveMjpeg
 };

@@ -2,6 +2,15 @@ const {
     spawn
 } = require('child_process');
 
+const basedir = process.cwd();
+
+const stringify = require(`${basedir}/libs/stringify`),
+    logger = require(`${basedir}/libs/logger`)(__filename),
+    {
+        LIBCAMERA_STILL
+    } = require(`${basedir}/libs/libcamera/Constants`),
+    imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
+
 const DEFAULT_IMAGE_CONFIG = [];
 
 let lastImageUpdateOpts;
@@ -14,57 +23,47 @@ function setImageUpdateOptions(opts) {
     lastImageUpdateOpts = opts;
 }
 
-module.exports = function(resolveFileLocation) {
+if (DEFAULT_IMAGE_CONFIG.length === 0) {
+    imageConfig.forEach(item => {
+        if (item.defaultvalue) {
+            item.defaultvalue.split(' ').forEach(item => {
+                DEFAULT_IMAGE_CONFIG.push(item);
+            });
+        }
+    });
+    setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
+}
 
-    const stringify = require(`${resolveFileLocation}/libs/stringify`),
-        logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
-        {
-            LIBCAMERA_STILL
-        } = require(`${resolveFileLocation}/libs/libcamera/Constants`),
-        imageConfig = require(`${resolveFileLocation}/libs/libcamera/stillConfig`);
+function streamJpeg(options) {
 
-    if (DEFAULT_IMAGE_CONFIG.length === 0) {
-        imageConfig.forEach(item => {
-            if (item.defaultvalue) {
-                item.defaultvalue.split(' ').forEach(item => {
-                    DEFAULT_IMAGE_CONFIG.push(item);
-                });
-            }
-        });
-        setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
-    }
+    // default image streaming options
+    const spawnOptions = ['-e', 'jpg', '-t', '0'].concat(options);
 
-    function streamJpeg(options) {
+    // stream to stdout
+    spawnOptions.push('-o');
+    spawnOptions.push('-');
 
-        // default image streaming options
-        const spawnOptions = ['-e', 'jpg', '-t', '0'].concat(options);
+    logger.info(`Libcamera still spawn options: ${stringify(spawnOptions)}`);
 
-        // stream to stdout
-        spawnOptions.push('-o');
-        spawnOptions.push('-');
+    return spawn(LIBCAMERA_STILL, spawnOptions, {
+        env: process.env
+    });
+}
 
-        logger.info(`Libcamera still spawn options: ${stringify(spawnOptions)}`);
+function saveImage(options) {
 
-        return spawn(LIBCAMERA_STILL, spawnOptions, {
-            env: process.env
-        });
-    }
+    const spawnOptions = ['-r'].concat(options);
 
-    function saveImage(options) {
+    logger.info(`Libcamera still save image options: ${stringify(spawnOptions)}`);
 
-        const spawnOptions = ['-r'].concat(options);
+    return spawn(LIBCAMERA_STILL, spawnOptions, {
+        env: process.env
+    });
+}
 
-        logger.info(`Libcamera still save image options: ${stringify(spawnOptions)}`);
-
-        return spawn(LIBCAMERA_STILL, spawnOptions, {
-            env: process.env
-        });
-    }
-
-    return {
-        getImageUpdateOptions,
-        setImageUpdateOptions,
-        streamJpeg,
-        saveImage
-    };
+module.exports = {
+    getImageUpdateOptions,
+    setImageUpdateOptions,
+    streamJpeg,
+    saveImage
 };
