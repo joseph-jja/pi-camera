@@ -20,14 +20,27 @@ function writeHeaders(response) {
 
 const MAX_PREVIEW_CLIENT = 4;
 
-const setupPreviewStream = (streamObject, response, uuid) => {
+const setupPreviewStream = async (streamObject, response, uuid) => {
 
-    let shouldWait = false;
+    let shouldWait = false,
+        promiseMaps;
     if (global.previewProcessMap[uuid]) {
         shouldWait = true;
-        //global.previewProcessMap[uuid].
+        promiseMaps = Promise.all([
+            streamObject.stdout.writer.once('unpipe', (src) => {
+                Promise.resolve(src);
+            }),
+            global.previewProcessMap[uuid].stdout.once('unpipe', (src) => {
+                Promise.resolve(src);
+            })
+        ], results => {
+            logger.info('Should be ready.');
+            return results;
+        });
+
         cleanupPreviewNodes(uuid, streamObject);
     }
+
     const previewClients = Object.keys(global.previewProcessMap);
     if (previewClients.length > MAX_PREVIEW_CLIENT) {
         previewClients.forEach(key => {
@@ -35,6 +48,10 @@ const setupPreviewStream = (streamObject, response, uuid) => {
         });
     }
 
+    if (shouldWait) {
+        const msg = await promiseMaps;
+        logger.info(msg);
+    }
     global.previewProcessMap[uuid] = previewStream();
 
     writeHeaders(response);
@@ -43,7 +60,7 @@ const setupPreviewStream = (streamObject, response, uuid) => {
     });
 
     streamObject.stdout.pipe(global.previewProcessMap[uuid].stdin);
-    //global.previewProcessMap[uuid].stdout.pipe(response);
+    global.previewProcessMap[uuid].stdout.pipe(response);
 };
 
 module.exports = (request, response) => {
