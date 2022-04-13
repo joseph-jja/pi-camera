@@ -75,6 +75,10 @@ initSystem();
 
 function killAllRunning() {
 
+    const previews = Object.keys(global.previewProcessMap).filter(key => {
+        return (global.previewProcessMap[key] && global.previewProcessMap[key].pid);
+    });
+
     const streams = [
         global.directStreamProcess,
         global.libcameraProcess,
@@ -82,7 +86,7 @@ function killAllRunning() {
     ].filter(stream => {
         return (stream && stream.pid);
     });
-    const results = streams.map(stream => {
+    const results = previews.concat(streams).map(stream => {
         removeListeners(stream);
         stream.once('close', () => {
             logger.info(`Process: ${stream.pid} ended`);
