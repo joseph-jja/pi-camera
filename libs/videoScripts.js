@@ -61,11 +61,6 @@ function removeListeners(streamObject) {
                 streamObject.stderr.removeListener('data', listeners[i]);
             }
         }
-        /*try {
-            streamObject.stdout.unpipe();
-        } catch (e) {
-            // do we care?
-        }*/
     }
 }
 
@@ -77,6 +72,10 @@ function getLibcameraProcess() {
 
 function getDirectStreamProcesss() {
     return directStreamProcess;
+}
+
+function unsetDirectStreamProcesss() {
+    directStreamProcess = undefined;
 }
 
 function killAllRunning() {
@@ -293,5 +292,6 @@ module.exports = {
     setImageUpdateOptions,
     cleanupPreviewNodes,
     getLibcameraProcess,
-    getDirectStreamProcesss
+    getDirectStreamProcesss,
+    unsetDirectStreamProcesss
 };

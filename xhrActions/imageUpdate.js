@@ -11,7 +11,8 @@ const stringify = require(`${basedir}/libs/stringify`),
         setImageUpdateOptions,
         imageStream,
         getLibcameraProcess,
-        getDirectStreamProcesss
+        getDirectStreamProcesss,
+        unsetDirectStreamProcesss
     } = require(`${basedir}/libs/videoScripts`);
 
 module.exports = (request, response) => {
@@ -23,7 +24,7 @@ module.exports = (request, response) => {
             if (getDirectStreamProcesss()) {
                 const pid = getDirectStreamProcesss().pid;
                 childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
-                    getDirectStreamProcesss() = undefined;
+                    unsetDirectStreamProcesss();
                 });
             }
             if (global.imageStreamProcess) {
