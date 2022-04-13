@@ -16,8 +16,7 @@ const express = require('express'),
         Server
     } = require("socket.io");
 
-const FILENAME = basename(__filename);
-const RESOLVED_FILE_LOCATION = resolve(__filename).replace(`/${FILENAME}`, '');
+const basedir = process.cwd();
 
 const pageUUID = /\[\[PAGE_UUID\]\]/g;
 
@@ -25,12 +24,12 @@ process.on('uncaughtException', (e) => {
     console.error(e);
 });
 
-const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
+const stringify = require(`${basedir}/libs/stringify`),
     {
         getIPAddress,
         getHostname
-    } = require(`${RESOLVED_FILE_LOCATION}/libs/utils`),
-    logger = require(`${RESOLVED_FILE_LOCATION}/libs/logger`)(__filename),
+    } = require(`${basedir}/libs/utils`),
+    logger = require(`${basedir}/libs/logger`)(__filename),
     {
         saveRawVideoData,
         saveVideoProcess,
@@ -38,17 +37,17 @@ const stringify = require(`${RESOLVED_FILE_LOCATION}/libs/stringify`),
         directStream,
         getVideoUpdateOptions,
         getImageUpdateOptions
-    } = require(`${RESOLVED_FILE_LOCATION}/libs/videoScripts`),
-    previewStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/previewStream`)(RESOLVED_FILE_LOCATION),
-    socketStreamAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/socketStream`)(RESOLVED_FILE_LOCATION),
-    stopPreviewAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/stopPreview`)(RESOLVED_FILE_LOCATION),
-    imageUpdateAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageUpdate`)(RESOLVED_FILE_LOCATION),
-    renameFileAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/renameFile`)(RESOLVED_FILE_LOCATION),
-    viewImageOrVideoAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/viewImageOrVideo`)(RESOLVED_FILE_LOCATION),
-    deleteFileAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/deleteFile`)(RESOLVED_FILE_LOCATION),
-    jsFilesAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/jsFiles`),
-    shutdownAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/shutdown`),
-    updateXHRAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/update`)(RESOLVED_FILE_LOCATION);
+    } = require(`${basedir}/libs/videoScripts`),
+    previewStreamAction = require(`${basedir}/xhrActions/previewStream`)(basedir),
+    socketStreamAction = require(`${basedir}/xhrActions/socketStream`)(basedir),
+    stopPreviewAction = require(`${basedir}/xhrActions/stopPreview`)(basedir),
+    imageUpdateAction = require(`${basedir}/xhrActions/imageUpdate`)(basedir),
+    renameFileAction = require(`${basedir}/xhrActions/renameFile`)(basedir),
+    viewImageOrVideoAction = require(`${basedir}/xhrActions/viewImageOrVideo`)(basedir),
+    deleteFileAction = require(`${basedir}/xhrActions/deleteFile`)(basedir),
+    jsFilesAction = require(`${basedir}/xhrActions/jsFiles`),
+    shutdownAction = require(`${basedir}/xhrActions/shutdown`),
+    updateXHRAction = require(`${basedir}/xhrActions/update`)(basedir);
 
 const app = express();
 app.disable('x-powered-by');
@@ -57,22 +56,22 @@ const port = 20000;
 const server = http.createServer(app);
 const io = new Server(server);
 
-const jsLibFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/libs`).map(item => {
+const jsLibFiles = fs.readdirSync(`${basedir}/js/libs`).map(item => {
     return `/js/libs/${item}`;
 });
 
-const jsMjpegFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js/mjpeg`).map(item => {
+const jsMjpegFiles = fs.readdirSync(`${basedir}/js/mjpeg`).map(item => {
     return `/js/mjpeg/${item}`;
 });
 
-const jsFiles = fs.readdirSync(`${RESOLVED_FILE_LOCATION}/js`).map(item => {
+const jsFiles = fs.readdirSync(`${basedir}/js`).map(item => {
     return `/js/${item}`;
 }).concat(jsLibFiles).concat(jsMjpegFiles);
 
-const videoConfig = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/videoConfig`),
-    imageConfig = require(`${RESOLVED_FILE_LOCATION}/libs/libcamera/stillConfig`);
+const videoConfig = require(`${basedir}/libs/libcamera/videoConfig`),
+    imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
 
-const VIDEO_HTML = fs.readFileSync(`${RESOLVED_FILE_LOCATION}/views/capture.html`).toString();
+const VIDEO_HTML = fs.readFileSync(`${basedir}/views/capture.html`).toString();
 
 function getHTML(videoBody, imageBody) {
     return VIDEO_HTML.replace('[[VIDEO_FORM]]', videoBody).replace('[[IMAGE_FORM]]', imageBody);
@@ -166,7 +165,7 @@ async function start() {
         formFields
     } = await getFormData();
 
-    const imageListAction = require(`${RESOLVED_FILE_LOCATION}/xhrActions/imageList`)(RESOLVED_FILE_LOCATION, formFields);
+    const imageListAction = require(`${basedir}/xhrActions/imageList`)(basedir, formFields);
 
     app.get(jsFiles, jsFilesAction);
 
@@ -193,7 +192,7 @@ async function start() {
     });
 
     app.get('/canvas', (request, response) => {
-        fs.createReadStream(`${RESOLVED_FILE_LOCATION}/views/video.html`).pipe(response);
+        fs.createReadStream(`${basedir}/views/video.html`).pipe(response);
     });
 
     app.get('/imageList', imageListAction);
