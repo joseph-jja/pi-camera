@@ -10,5 +10,5 @@ socket.on('connect', () => {
 });
 socket.on('info', (data) => {
     console.log('Got data ', data);
-    socketInfo.innerHTML = data;
+    socketInfo.innerHTML = JSON.stringify(data);
 });
