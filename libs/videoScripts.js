@@ -274,6 +274,7 @@ function cleanupPreviewNodes(uuid, streamObject) {
         previewProcessMap[uuid].once('close', () => {
             try {
                 previewProcessMap[uuid] = undefined;
+                logger.info('Undef success!');
             } catch (e) {
                 logger.error(`Undef error ${stringify(e)}`);
             }
