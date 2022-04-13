@@ -240,14 +240,14 @@ function saveVideoProcess(options = [], response) {
 
 function cleanupPreviewNodes(uuid, streamObject) {
     try {
-        global.previewProcessMap[uuid].stdout.unpipe();
-    } catch (e) {
-        logger.error(`Unpipe preview process error ${stringify(e)}`);
-    }
-    try {
         streamObject.stdout.unpipe(global.previewProcessMap[uuid].stdin);
     } catch (e) {
         logger.error(`Unpipe stdout error ${stringify(e)}`);
+    }
+    try {
+        global.previewProcessMap[uuid].stdout.unpipe();
+    } catch (e) {
+        logger.error(`Unpipe preview process error ${stringify(e)}`);
     }
     try {
         streamObject.stdout.once('close', () => {
