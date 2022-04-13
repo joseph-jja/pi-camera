@@ -31,20 +31,17 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
         setPreviewProcessMap(uuid, undefined);
     }
 
-    /*const previewClients = Object.keys(previewProcessMap);
+    const previewClients = Object.keys(previewProcessMap);
     if (previewClients.length > MAX_PREVIEW_CLIENT) {
         previewClients.forEach(key => {
             cleanupPreviewNodes(key, streamObject);
         });
-    }*/
+    }
 
     // new instance
     setPreviewProcessMap(uuid, previewStream());
 
     writeHeaders(response);
-    response.on('finish', () => {
-        logger.info('We are done!');
-    });
 
     streamObject.stdout.on('data', d => {
         previewProcessMap[uuid].stdin.write(d);
