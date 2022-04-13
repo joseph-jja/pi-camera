@@ -39,8 +39,8 @@ const setupPreviewStream = (streamObject, response, uuid) => {
         cleanupPreviewNodes(uuid, streamObject);
     });
 
-    streamObject.stdout.pipe(global.previewProcessMap[uuid].stdin);
-    global.previewProcessMap[uuid].stdout.pipe(response);
+    //streamObject.stdout.pipe(global.previewProcessMap[uuid].stdin);
+    //global.previewProcessMap[uuid].stdout.pipe(response);
 };
 
 module.exports = (request, response) => {
