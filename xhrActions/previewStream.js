@@ -72,7 +72,7 @@ const setupPreviewStream = (streamObject, response, uuid) => {
 };
 
 module.exports = (request, response) => {
-    const uuid = request.query['x-uuid'];
+    const uuid = `${request.query['x-uuid']}`;
     if (uuid && global.directStreamProcess) {
         logger.info(`Running via directStreamProcess doing mjpeg video using: ${uuid}`);
         setupPreviewStream(global.directStreamProcess, response, uuid);
