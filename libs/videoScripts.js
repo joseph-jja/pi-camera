@@ -192,8 +192,8 @@ function imageStream(options = []) {
 }
 
 const DSDevNull = new NullStream();
-const dsDevNullFN = d => {
-    DSDevNull.write(d);
+function dsDevNullFN(data) {
+    DSDevNull.write(data);
 };
 function directStream(options = []) {
 
