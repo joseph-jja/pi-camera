@@ -52,6 +52,13 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
     previewProcessMap[uuid].stdout.on('data', d => {
         response.write(d);
     });
+
+    streamObject.stdout.on('error', () => {
+        logger.info('here');
+    });
+    previewProcessMap[uuid].stdout.on('error', () => {
+        logger.info('here');
+    });
 };
 
 module.exports = (request, response) => {
