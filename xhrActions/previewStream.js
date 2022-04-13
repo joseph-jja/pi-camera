@@ -22,22 +22,7 @@ const MAX_PREVIEW_CLIENT = 4;
 
 const setupPreviewStream = async (streamObject, response, uuid) => {
 
-    let shouldWait = false,
-        promiseMaps;
     if (global.previewProcessMap[uuid]) {
-        shouldWait = true;
-        promiseMaps = Promise.all([
-            streamObject.stdout.writer.once('unpipe', (src) => {
-                Promise.resolve(src);
-            }),
-            global.previewProcessMap[uuid].stdout.once('unpipe', (src) => {
-                Promise.resolve(src);
-            })
-        ], results => {
-            logger.info('Should be ready.');
-            return results;
-        });
-
         cleanupPreviewNodes(uuid, streamObject);
     }
 
@@ -48,10 +33,6 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
         });
     }
 
-    if (shouldWait) {
-        const msg = await promiseMaps;
-        logger.info(msg);
-    }
     global.previewProcessMap[uuid] = previewStream();
 
     writeHeaders(response);
@@ -59,8 +40,12 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
         cleanupPreviewNodes(uuid, streamObject);
     });
 
-    streamObject.stdout.pipe(global.previewProcessMap[uuid].stdin);
-    global.previewProcessMap[uuid].stdout.pipe(response);
+    streamObject.stdout.on('data', d => {
+        global.previewProcessMap[uuid].stdin.write(d);
+    });
+    global.previewProcessMap[uuid].stdout.on('data', d => {
+        response.write(d);
+    });
 };
 
 module.exports = (request, response) => {
