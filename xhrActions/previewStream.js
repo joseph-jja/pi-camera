@@ -22,7 +22,10 @@ const MAX_PREVIEW_CLIENT = 4;
 
 const setupPreviewStream = (streamObject, response, uuid) => {
 
+    let shouldWait = false;
     if (global.previewProcessMap[uuid]) {
+        shouldWait = true;
+        //global.previewProcessMap[uuid].
         cleanupPreviewNodes(uuid, streamObject);
     }
     const previewClients = Object.keys(global.previewProcessMap);
@@ -39,7 +42,7 @@ const setupPreviewStream = (streamObject, response, uuid) => {
         cleanupPreviewNodes(uuid, streamObject);
     });
 
-    //streamObject.stdout.pipe(global.previewProcessMap[uuid].stdin);
+    streamObject.stdout.pipe(global.previewProcessMap[uuid].stdin);
     //global.previewProcessMap[uuid].stdout.pipe(response);
 };
 
