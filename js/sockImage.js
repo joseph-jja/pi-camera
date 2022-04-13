@@ -1,14 +1,14 @@
-const image = document.getElementById('stream-image');
-const xcanvas = document.getElementById('new-player');
-const context = xcanvas.getContext('2d');
-xcanvas.width = 640;
-xcanvas.height = 480;
-context.width = xcanvas.width;
-context.height = xcanvas.height;
+const socketInfo = document.getElementById('server-info');
+
 const socket = io(); /* eslint-disable-line */
 socket.on('connect', () => {
     console.log('Socket connected ', socket.id);
+    setInterval(() => {
+        // ping
+        socket.emit('status', {});
+    }, 5000);
 });
-socket.on('status', (data) => {
+socket.on('info', (data) => {
     console.log('Got data ', data);
+    socketInfo.innerHTML = data;
 });
