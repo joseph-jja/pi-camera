@@ -240,9 +240,9 @@ function saveVideoProcess(options = [], response) {
 
 function cleanupPreviewNodes(uuid, streamObject) {
     try {
-        const listeners = streamObject.stdout.stdout.listeners('data');
+        const listeners = streamObject.stdout.listeners('data');
         for (let i = 0, end = listeners.length; i < end; i++) {
-            streamObject.stdout.stdout.removeListener('data', listeners[i]);
+            streamObject.stdout.removeListener('data', listeners[i]);
         }
     } catch (e) {
         logger.error(`Unpipe stdout error ${stringify(e)}`);
