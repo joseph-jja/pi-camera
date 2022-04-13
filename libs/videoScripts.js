@@ -252,41 +252,17 @@ function saveVideoProcess(options = [], response) {
 }
 
 function cleanupPreviewNodes(uuid, streamObject) {
-    try {
-        const listeners = streamObject.stdout.listeners('data');
-        for (let i = 0, end = listeners.length; i < end; i++) {
-            streamObject.stdout.removeListener('data', listeners[i]);
-        }
-        const DevNull = new NullStream()
-        streamObject.stdout.on('data', d => {
-            DevNull.write(d);
-        });
-        logger.info('Remove stream object listeners success!');
-    } catch (e) {
-        logger.error(`Remove stream object listeners error ${stringify(e)}`);
-    }
-    try {
-        const listeners = previewProcessMap[uuid].stdout.listeners('data');
-        for (let i = 0, end = listeners.length; i < end; i++) {
-            previewProcessMap[uuid].stdout.removeListener('data', listeners[i]);
-        }
-        logger.info('Remove preview object listeners success!');
-    } catch (e) {
-        logger.error(`Remove preview object listeners  error ${stringify(e)}`);
-    }
-    try {
+    removeListeners(streamObject);
+    removeListeners(previewProcessMap[uuid]);
+
+    if (previewProcessMap[uuid] && previewProcessMap[uuid].pid) {
         previewProcessMap[uuid].once('close', () => {
-            try {
-                previewProcessMap[uuid] = undefined;
-                logger.info('Undef success!');
-            } catch (e) {
-                logger.error(`Undef error ${stringify(e)}`);
-            }
+            logger.info(`Preview process: ${previewProcessMap[uuid].pid} ended.`);
         });
         previewProcessMap[uuid].kill('SIGKILL');
-    } catch (e) {
-        logger.error(`kill error ${stringify(e)}`);
+        return previewProcessMap[uuid].pid;
     }
+    return undefined;
 };
 
 module.exports = {

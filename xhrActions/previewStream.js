@@ -26,23 +26,25 @@ const MAX_PREVIEW_CLIENT = 4;
 const setupPreviewStream = async (streamObject, response, uuid) => {
 
     const previewProcessMap = getPreviewProcessMap();
-    if (previewProcessMap[uuid]) {
-        cleanupPreviewNodes(uuid, streamObject);
+    const pid = (previewProcessMap[uuid] ? cleanupPreviewNodes(uuid, streamObject) : undefined);
+    if (pid) {
+        setPreviewProcessMap(uuid, undefined);
     }
 
-    const previewClients = Object.keys(previewProcessMap);
+    /*const previewClients = Object.keys(previewProcessMap);
     if (previewClients.length > MAX_PREVIEW_CLIENT) {
         previewClients.forEach(key => {
             cleanupPreviewNodes(key, streamObject);
         });
-    }
+    }*/
 
+    // new instance
     setPreviewProcessMap(uuid, previewStream());
 
     writeHeaders(response);
-    response.on('finish', () => {
+    /*response.on('finish', () => {
         cleanupPreviewNodes(uuid, streamObject);
-    });
+    });*/
 
     streamObject.stdout.on('data', d => {
         previewProcessMap[uuid].stdin.write(d);
