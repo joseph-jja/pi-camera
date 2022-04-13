@@ -247,7 +247,10 @@ function cleanupPreviewNodes(uuid, streamObject) {
         logger.error(`Unpipe stdout error ${stringify(e)}`);
     }
     try {
-        global.previewProcessMap[uuid].stdout.on('data');
+        const listeners = global.previewProcessMap[uuid].stdout.listeners('data');
+        for (let i = 0, end = listeners.length; i < end; i++) {
+            global.previewProcessMap[uuid].stdout.removeListener('data', listeners[i]);
+        }
     } catch (e) {
         logger.error(`Unpipe preview process error ${stringify(e)}`);
     }
