@@ -257,6 +257,10 @@ function cleanupPreviewNodes(uuid, streamObject) {
         for (let i = 0, end = listeners.length; i < end; i++) {
             streamObject.stdout.removeListener('data', listeners[i]);
         }
+        const DevNull = new NullStream()
+        streamObject.stdout.on('data', d => {
+            DevNull.write(d);
+        });
         logger.info('Remove stream object listeners success!');
     } catch (e) {
         logger.error(`Remove stream object listeners error ${stringify(e)}`);
@@ -279,9 +283,7 @@ function cleanupPreviewNodes(uuid, streamObject) {
                 logger.error(`Undef error ${stringify(e)}`);
             }
         });
-        setTimeout(() => {
-            previewProcessMap[uuid].kill('SIGKILL');
-        }, 250);
+        previewProcessMap[uuid].kill('SIGKILL');
     } catch (e) {
         logger.error(`kill error ${stringify(e)}`);
     }
