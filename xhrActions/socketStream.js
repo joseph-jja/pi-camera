@@ -31,6 +31,6 @@ module.exports = function(resolveFileLocation) {
 
         });
         // on connection emit some info
-        socket.emit('info', collectData);
+        socket.emit('info', collectData());
     };
 };
