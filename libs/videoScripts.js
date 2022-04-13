@@ -256,10 +256,11 @@ function cleanupPreviewNodes(uuid, streamObject) {
     removeListeners(previewProcessMap[uuid]);
 
     if (previewProcessMap[uuid] && previewProcessMap[uuid].pid) {
-        /*previewProcessMap[uuid].once('close', () => {
+        previewProcessMap[uuid].once('close', () => {
             logger.info(`Preview process: ${previewProcessMap[uuid].pid} ended.`);
-        });*/
-        if (!previewProcessMap[uuid].killed){
+        });
+        if (!previewProcessMap[uuid].killed) {
+            previewProcessMap[uuid].destroy();
             previewProcessMap[uuid].kill('SIGKILL');
         } else {
             previewProcessMap[uuid] = undefined;
