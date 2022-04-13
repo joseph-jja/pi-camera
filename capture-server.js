@@ -47,7 +47,9 @@ const stringify = require(`${basedir}/libs/stringify`),
     deleteFileAction = require(`${basedir}/xhrActions/deleteFile`),
     jsFilesAction = require(`${basedir}/xhrActions/jsFiles`),
     shutdownAction = require(`${basedir}/xhrActions/shutdown`),
-    updateXHRAction = require(`${basedir}/xhrActions/update`);
+    updateXHRAction = require(`${basedir}/xhrActions/update`),
+    imageListAction = require(`${basedir}/xhrActions/imageList`);
+
 
 const app = express();
 app.disable('x-powered-by');
@@ -164,8 +166,6 @@ async function start() {
         imageFields,
         formFields
     } = await getFormData();
-
-    const imageListAction = require(`${basedir}/xhrActions/imageList`);
 
     app.get(jsFiles, jsFilesAction);
 
