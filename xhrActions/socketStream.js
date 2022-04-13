@@ -18,7 +18,7 @@ module.exports = function(resolveFileLocation) {
             memory: process.memoryUsage(),
             loadAverage: os.loadavg(),
             free: os.freemem(),
-            activeStreams: streams.length
+            activeStreams: (streams.length + Object.keys(global.previewProcessMap).length)
         };
     }
 
