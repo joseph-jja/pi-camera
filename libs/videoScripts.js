@@ -279,7 +279,9 @@ function cleanupPreviewNodes(uuid, streamObject) {
                 logger.error(`Undef error ${stringify(e)}`);
             }
         });
-        previewProcessMap[uuid].kill('SIGKILL');
+        setTimeout(() => {
+            previewProcessMap[uuid].kill('SIGKILL');
+        }, 250);
     } catch (e) {
         logger.error(`kill error ${stringify(e)}`);
     }
