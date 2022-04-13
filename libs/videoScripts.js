@@ -52,6 +52,7 @@ function removeListeners(streamObject) {
         if (streamObject.stdout.listeners('data')) {
             const listeners = streamObject.stdout.listeners('data');
             for (let i = 0, end = listeners.length; i < end; i++) {
+                console.log(listeners[i]);
                 streamObject.stdout.removeListener('data', listeners[i]);
             }
         }
@@ -190,6 +191,10 @@ function imageStream(options = []) {
     logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
 }
 
+const DSDevNull = new NullStream();
+const dsDevNullFN = d => {
+    DSDevNull.write(d);
+};
 function directStream(options = []) {
 
     const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
@@ -202,10 +207,7 @@ function directStream(options = []) {
     libcameraProcess = streamMjpeg(spawnOptions);
     directStreamProcess = getFfmpegStream();
 
-    const DevNull = new NullStream();
-    directStreamProcess.stdout.on('data', d => {
-        DevNull.write(d);
-    });
+    directStreamProcess.stdout.on('data', dsDevNullFN);
     libcameraProcess.stdout.on('data', d => {
         directStreamProcess.stdin.write(d);
     });
