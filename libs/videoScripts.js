@@ -29,6 +29,7 @@ const stringify = require(`${basedir}/libs/stringify`),
 global.libcameraProcess;
 global.directStreamProcess;
 global.imageStreamProcess;
+global.previewProcessMap;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -237,6 +238,32 @@ function saveVideoProcess(options = [], response) {
     saveConfig(stringify(options));
 }
 
+function cleanupPreviewNodes(uuid, streamObject) {
+    try {
+        global.previewProcessMap[uuid].stdout.unpipe();
+    } catch (e) {
+        logger.error(`Unpipe preview process error ${stringify(e)}`);
+    }
+    try {
+        streamObject.stdout.unpipe(global.previewProcessMap[uuid].stdin);
+    } catch (e) {
+        logger.error(`Unpipe stdout error ${stringify(e)}`);
+    }
+    try {
+        streamObject.stdout.once('close', () => {
+            logger.info('Preview stream closed!');
+        });
+        global.previewProcessMap[uuid].kill('SIGKILL');
+    } catch (e) {
+        logger.error(`kill error ${stringify(e)}`);
+    }
+    try {
+        global.previewProcessMap[uuid] = undefined;
+    } catch (e) {
+        logger.error(`Undef error ${stringify(e)}`);
+    }
+};
+
 module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
@@ -249,5 +276,6 @@ module.exports = {
     getVideoUpdateOptions,
     setVideoUpdateOptions,
     getImageUpdateOptions,
-    setImageUpdateOptions
+    setImageUpdateOptions,
+    cleanupPreviewNodes
 };

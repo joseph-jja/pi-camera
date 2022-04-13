@@ -1,14 +1,12 @@
-const previewProcessMap = {};
-
 const basedir = process.cwd();
 
-const stringify = require(`${basedir}/libs/stringify`),
-    logger = require(`${basedir}/libs/logger`)(__filename),
+const logger = require(`${basedir}/libs/logger`)(__filename),
     {
         previewStream
-    } = require(`${basedir}/libs/ffmpeg`);
-
-global.previewProcessMap = previewProcessMap;
+    } = require(`${basedir}/libs/ffmpeg`),
+    {
+        cleanupPreviewNodes
+    } = require(`${basedir}/libs/videoScripts`);
 
 function writeHeaders(response) {
     //const uuid = randomUUID();
@@ -22,53 +20,27 @@ function writeHeaders(response) {
 
 const MAX_PREVIEW_CLIENT = 4;
 
-const cleanupNodes = (uuid, streamObject) => {
-    try {
-        previewProcessMap[uuid].stdout.unpipe();
-    } catch (e) {
-        logger.error(`Unpipe preview process error ${stringify(e)}`);
-    }
-    try {
-        streamObject.stdout.unpipe(previewProcessMap[uuid].stdin);
-    } catch (e) {
-        logger.error(`Unpipe stdout error ${stringify(e)}`);
-    }
-    try {
-        streamObject.stdout.once('close', () => {
-            logger.info('Preview stream closed!');
-        });
-        previewProcessMap[uuid].kill('SIGKILL');
-    } catch (e) {
-        logger.error(`kill error ${stringify(e)}`);
-    }
-    try {
-        previewProcessMap[uuid] = undefined;
-    } catch (e) {
-        logger.error(`Undef error ${stringify(e)}`);
-    }
-};
-
 const setupPreviewStream = (streamObject, response, uuid) => {
 
-    if (previewProcessMap[uuid]) {
-        cleanupNodes(uuid, streamObject);
+    if (global.previewProcessMap[uuid]) {
+        cleanupPreviewNodes(uuid, streamObject);
     }
-    const previewClients = Object.keys(previewProcessMap);
+    const previewClients = Object.keys(global.previewProcessMap);
     if (previewClients.length > MAX_PREVIEW_CLIENT) {
         previewClients.forEach(key => {
-            cleanupNodes(key, streamObject);
+            cleanupPreviewNodes(key, streamObject);
         });
     }
 
-    previewProcessMap[uuid] = previewStream();
+    global.previewProcessMap[uuid] = previewStream();
 
     writeHeaders(response);
     response.on('finish', () => {
-        cleanupNodes(uuid, streamObject);
+        cleanupPreviewNodes(uuid, streamObject);
     });
 
-    streamObject.stdout.pipe(previewProcessMap[uuid].stdin);
-    previewProcessMap[uuid].stdout.pipe(response);
+    streamObject.stdout.pipe(global.previewProcessMap[uuid].stdin);
+    global.previewProcessMap[uuid].stdout.pipe(response);
 };
 
 module.exports = (request, response) => {
