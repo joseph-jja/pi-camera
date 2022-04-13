@@ -1,47 +1,36 @@
+const os = require('os');
+
 module.exports = function(resolveFileLocation) {
 
     const stringify = require(`${resolveFileLocation}/libs/stringify`),
-        logger = require(`${resolveFileLocation}/libs/logger`)(__filename),
-        {
-            previewProcess
-        } = require(`${resolveFileLocation}/libs/videoScripts`)(resolveFileLocation);
+        logger = require(`${resolveFileLocation}/libs/logger`)(__filename);
 
-    const setupPreviewStream = (streamObject, socket) => {
+    function collectData() {
+        const streams = [
+            global.directStreamProcess,
+            global.libcameraProcess,
+            global.imageStreamProcess
+        ].filter(stream => {
+            return (stream && stream.pid);
+        });
 
-        const previewCmd = previewProcess();
-        const previewCmdCB = (d) => {
-            socket.emit('image', d);
+        return {
+            memory: process.memoryUsage(),
+            loadAverage: os.loadavg(),
+            free: os.freemem(),
+            activeStreams: streams.length
         };
-        previewCmd.stdout.on('data', previewCmdCB);
+    }
 
-        streamObject.stdout.pipe(previewCmd.stdin);
-
-        streamObject.stdout.once('error', (e) => {
-            streamObject.stdout.unpipe(previewCmd.stdin);
-            socket.emit('error!', { message: e } );
-            logger.error(`Stream error ${stringify(e)}`);
-        });
-
-        streamObject.stdout.once('close', () => {
-            socket.emit('error!', { message: 'Closed!' } );
-            logger.info('Stream closed');
-        });
-    };
-
+    // use this as a timed data about the server
     return (socket) => {
-        if (global.directStreamProcess) {
-            logger.info('Running via directStreamProcess doing mjpeg video');
-            setupPreviewStream(global.directStreamProcess, socket);
-        } else if (global.imageStreamProcess) {
-            logger.info('Running via imageStreamProcess doing jpeg images');
-            setupPreviewStream(global.imageStreamProcess, socket);
-            /*global.imageStreamProcess.stderr.on('data', d => {
-                if (d.indexOf('Still') > -1) {
-                    logger.info('Still image started');
-                }
-            });*/
-        } else {
-            socket.emit('error!', { message: 'No preview service running!' } );
-        }
+        socket.on('status', (socket) => {
+            const data = collectData();
+            logger.info(`System info: ${stringify(data)} `);
+            socket.emit('info', data);
+
+        });
+        // on connection emit some info
+        socket.emit('info', collectData);
     };
 };
