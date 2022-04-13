@@ -9,6 +9,6 @@ const socket = io(); /* eslint-disable-line */
 socket.on('connect', () => {
     console.log('Socket connected ', socket.id);
 });
-socket.on('image', (data) => {
-    //image.src = data;
+socket.on('status', (data) => {
+    console.log('Got data ', data);
 });
