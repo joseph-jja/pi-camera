@@ -34,6 +34,9 @@ module.exports = function(resolveFileLocation) {
             logger.error(`Unpipe stdout error ${stringify(e)}`);
         }
         try {
+			streamObject.stdout.once('close', () => {
+				logger.info('Preview stream closed!');
+			});
             previewProcessMap[uuid].kill('SIGKILL');
         } catch(e) {
             logger.error(`kill error ${stringify(e)}`);
@@ -66,10 +69,6 @@ module.exports = function(resolveFileLocation) {
 
         streamObject.stdout.pipe(previewProcessMap[uuid].stdin);
         previewProcessMap[uuid].stdout.pipe(response);
-
-        streamObject.stdout.once('close', () => {
-            logger.info('Preview stream closed!');
-        });
     };
 
     return (request, response) => {
