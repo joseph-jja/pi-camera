@@ -10,5 +10,11 @@ socket.on('connect', () => {
 });
 socket.on('info', (data) => {
     console.log('Got data ', data);
-    socketInfo.innerHTML = JSON.stringify(data);
+    const keys = Object.keys(data);
+    const results = keys.map(key => {
+        return `<br>${key}: ${JSON.stringify(data[key])}`;
+    }).reduce((acc, next) => {
+        return acc + next;
+    });
+    socketInfo.innerHTML = results;
 });
