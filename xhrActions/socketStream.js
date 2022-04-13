@@ -24,7 +24,7 @@ module.exports = function(resolveFileLocation) {
 
     // use this as a timed data about the server
     return (socket) => {
-        socket.on('status', (socket) => {
+        socket.on('status', (sock) => {
             const data = collectData();
             logger.info(`System info: ${stringify(data)} `);
             socket.emit('info', data);
