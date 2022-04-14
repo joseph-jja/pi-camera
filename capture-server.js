@@ -88,7 +88,7 @@ setInterval(() => {
     const memory = process.memoryUsage();
     if (memory.rss > 650000000) {
         console.error('Using too much RAM, killing until restart');
-        process.kill('SIGTERM');
+        process.exit(-1);
     }
 }, 10000);
 
