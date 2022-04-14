@@ -1,14 +1,14 @@
 const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
+    //{
+    //    previewStream
+    //} = require(`${basedir}/libs/ffmpeg`),
     {
-        previewStream
-    } = require(`${basedir}/libs/ffmpeg`),
-    {
-        cleanupPreviewNodes,
+    //    cleanupPreviewNodes,
         getDirectStreamProcesss,
-        getPreviewProcessMap,
-        setPreviewProcessMap,
+        //    getPreviewProcessMap,
+        //    setPreviewProcessMap,
         getImageStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
 
