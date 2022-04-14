@@ -211,10 +211,13 @@ function directStream(options = []) {
     const running = killAllRunning();
     logger.info('Results of stopping all: ' + stringify(running));
 
+    const index = spawnOptions.indexOf('--framerate');
+    const ffmpegFramerate = (index > -1 ? spawnOptions[index + 1] : 4);
+
     imageStreamProcess = undefined;
     // stream libcamera stdout to ffmpeg stdin
     libcameraProcess = streamMjpeg(spawnOptions);
-    directStreamProcess = getFfmpegStream();
+    directStreamProcess = getFfmpegStream(ffmpegFramerate);
 
     const DevNull = new NullStream();
     directStreamProcess.stdout.pipe(DevNull);
