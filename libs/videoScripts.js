@@ -100,6 +100,9 @@ function killAllRunning() {
         stream.once('close', () => {
             logger.info(`Process: ${stream.pid} ended`);
         });
+        stream.stdout.destroy();
+        stream.stdin.destroy();
+        stream.stderr.destroy();
         stream.kill('SIGKILL');
         return stream.pid;
     });
@@ -259,15 +262,10 @@ function cleanupPreviewNodes(uuid, streamObject) {
         previewProcessMap[uuid].once('close', () => {
             logger.info(`Preview process: ${previewProcessMap[uuid].pid} ended.`);
         });
-        if (!previewProcessMap[uuid].killed) {
-            previewProcessMap[uuid].stdout.destroy();
-            previewProcessMap[uuid].stdin.destroy();
-            previewProcessMap[uuid].stderr.destroy();
-            previewProcessMap[uuid].kill('SIGKILL');
-        } else {
-            previewProcessMap[uuid] = undefined;
-            return undefined;
-        }
+        previewProcessMap[uuid].stdout.destroy();
+        previewProcessMap[uuid].stdin.destroy();
+        previewProcessMap[uuid].stderr.destroy();
+        previewProcessMap[uuid].kill('SIGKILL');
         return previewProcessMap[uuid].pid;
     }
     return undefined;
