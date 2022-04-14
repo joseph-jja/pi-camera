@@ -24,7 +24,7 @@ function writeHeaders(response) {
 
 const MAX_PREVIEW_CLIENT = 4;
 
-async function setupPreviewStream(streamObject, response, uuid) {
+function setupPreviewStream(streamObject, response, uuid) {
 
     const previewProcessMap = getPreviewProcessMap();
     if (previewProcessMap[uuid]) {
