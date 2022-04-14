@@ -277,7 +277,7 @@ function cleanupPreviewNodes(uuid, streamObject) {
         previewProcessMap[uuid].kill('SIGKILL');
         previewProcessMap[uuid] = undefined;
     }
-};
+}
 
 module.exports = {
     BASE_IMAGE_PATH,

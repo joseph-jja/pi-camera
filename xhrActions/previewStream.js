@@ -12,16 +12,6 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
         getImageStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
 
-function writeHeaders(response) {
-    //const uuid = randomUUID();
-    //previewProcesses[uid] = {};
-    response.writeHead(200, {
-        //'Content-Type': 'video/webm',
-        'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-        'Cache-Control': 'no-cache'
-    });
-}
-
 const MAX_PREVIEW_CLIENT = 4;
 
 function setupPreviewStream(streamObject, response, uuid) {
@@ -41,8 +31,12 @@ function setupPreviewStream(streamObject, response, uuid) {
     // new instance
     setPreviewProcessMap(uuid, previewStream());
 
-    writeHeaders(response);
-
+    response.writeHead(200, {
+        //'Content-Type': 'video/webm',
+        'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+        'Cache-Control': 'no-cache'
+    });
+    
     streamObject.stdout.on('data', d => {
         previewProcessMap[uuid].stdin.write(d);
     });
