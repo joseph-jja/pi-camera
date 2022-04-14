@@ -2,6 +2,9 @@ const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
+        getVideoUpdateOptions
+    } = require(`${basedir}/libs/libcamera/video`),
+    {
         //cleanupPreviewNodes,
         getDirectStreamProcesss,
         getImageStreamProcess
@@ -10,6 +13,7 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
 module.exports = (request, response) => {
     //const uuid = request.query['x-uuid'];
     if (getDirectStreamProcesss()) {
+        getDirectStreamProcesss(getVideoUpdateOptions());
         //cleanupPreviewNodes(uuid, getDirectStreamProcesss());
     } else if (getImageStreamProcess()) {
         //cleanupPreviewNodes(uuid, getImageStreamProcess());
