@@ -1,5 +1,6 @@
 import {
-    stopPreview
+    stopPreview,
+    videoUpdate
 } from '/js/libs/formUtils.js';
 
 import {
@@ -31,9 +32,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (canvasObj.style.display === 'block') {
             const options = {
-                errorHandler: (err) => {
+                errorHandler: async (err) => {
                     console.log(err);
                     streamPlayer.stream = new MJPEGStream(streamPlayer.options);
+                    await videoUpdate();
                     streamPlayer.start();
                 },
                 refreshRate: 250,

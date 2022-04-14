@@ -87,15 +87,17 @@ export function executeServerCommand(url) {
     });
 }
 
-export function stopPreview() {
+export async function stopPreview() {
     const iframe = document.getElementById('videoDisplay');
     iframe.src = '';
     fetch(`/stopPreview?x-uuid=${xUuid}`, {  /* eslint-disable-line */
         method: 'GET'
     }).then(resp => {
         setMessage(resp);
+        Promise.resolve();
     }).catch(e => {
         console.log(e);
+        Promise.reject();
     });
 }
 
@@ -121,8 +123,8 @@ export function updateImage(imageFormObj) {
     });
 }
 
-export function videoUpdate() {
-    stopPreview();
+export async function videoUpdate() {
+    await stopPreview();
     const videoFormObj = document.forms['videoOptions'];
     const options = getFormOptions(videoFormObj);
     fetch('/update', {
@@ -136,7 +138,9 @@ export function videoUpdate() {
     }).then(async resp => {
         setMessage(resp);
         getConfig();
+        Promise.resolve();
     }).catch(e => {
         console.log(e);
+        Promise.reject();
     });
 }
