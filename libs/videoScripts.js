@@ -209,6 +209,10 @@ function imageStream(options = []) {
     logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
 }
 
+const errorHandler = (err) => {
+    logger.debug(`Error ${err.length}`);
+};
+
 function directStream(options = []) {
 
     const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
@@ -231,12 +235,8 @@ function directStream(options = []) {
     });*/
     libcameraProcess.stdout.pipe(directStreamProcess.stdin);
 
-    directStreamProcess.stderr.on('data', (err) => {
-        logger.debug(`Error ${err.length}`);
-    });
-    libcameraProcess.stderr.on('data', (err) => {
-        logger.debug(`Error ${err.length}`);
-    });
+    directStreamProcess.stderr.on('data', errorHandler);
+    libcameraProcess.stderr.on('data', errorHandler);
     logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${libcameraProcess.pid} ${directStreamProcess.pid}`);
 }
 
