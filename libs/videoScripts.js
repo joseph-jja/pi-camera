@@ -221,10 +221,10 @@ function directStream(options = []) {
     libcameraProcess = streamMjpeg(spawnOptions);
     directStreamProcess = getFfmpegStream();
 
-    /*const DevNull = new NullStream();
+    const DevNull = new NullStream();
     directStreamProcess.stdout.on('data', d => {
         DevNull.write(d);
-    });*/
+    });
     libcameraProcess.stdout.on('data', d => {
         directStreamProcess.stdin.write(d);
     });
