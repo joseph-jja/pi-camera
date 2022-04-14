@@ -2,7 +2,12 @@ const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
-        cleanupPreviewNodes,
+        getImageUpdateOptions
+    } = require(`${basedir}/libs/libcamera/video`),
+    {
+        getVideoUpdateOptions
+    } = require(`${basedir}/libs/libcamera/video`),
+    {
         getDirectStreamProcesss,
         getImageStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
@@ -10,11 +15,12 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
 module.exports = (request, response) => {
     const uuid = request.query['x-uuid'];
     if (getDirectStreamProcesss()) {
-        cleanupPreviewNodes(uuid, getDirectStreamProcesss());
+        getDirectStreamProcesss(getVideoUpdateOptions());
     } else if (getImageStreamProcess()) {
-        cleanupPreviewNodes(uuid, getImageStreamProcess());
+        getImageStreamProcess(getImageUpdateOptions());
     }
     response.writeHead(200, {});
-    response.end('Preview should have stopped.');
-    logger.info('Preview should have stopped.');
+    const message = `Preview should have stopped for : ${uuid}`;
+    response.end(message);
+    logger.info(message);
 };

@@ -28,7 +28,6 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 let libcameraProcess,
     directStreamProcess,
-    previewProcessMap = {},
     imageStreamProcess;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
@@ -76,14 +75,6 @@ function getDirectStreamProcesss() {
 
 function unsetDirectStreamProcesss() {
     directStreamProcess = undefined;
-}
-
-function getPreviewProcessMap() {
-    return previewProcessMap;
-}
-
-function setPreviewProcessMap(key, value) {
-    previewProcessMap[key] = value;
 }
 
 function getImageStreamProcess() {
@@ -209,6 +200,10 @@ function imageStream(options = []) {
     logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
 }
 
+const errorHandler = (err) => {
+    logger.debug(`Error ${err.length}`);
+};
+
 function directStream(options = []) {
 
     const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
@@ -222,19 +217,11 @@ function directStream(options = []) {
     directStreamProcess = getFfmpegStream();
 
     const DevNull = new NullStream();
-    directStreamProcess.stdout.on('data', d => {
-        DevNull.write(d);
-    });
-    libcameraProcess.stdout.on('data', d => {
-        directStreamProcess.stdin.write(d);
-    });
+    directStreamProcess.stdout.pipe(DevNull);
+    libcameraProcess.stdout.pipe(directStreamProcess.stdin);
 
-    directStreamProcess.stderr.on('data', (err) => {
-        logger.debug(`Error ${err.length}`);
-    });
-    libcameraProcess.stderr.on('data', (err) => {
-        logger.debug(`Error ${err.length}`);
-    });
+    directStreamProcess.stderr.on('data', errorHandler);
+    libcameraProcess.stderr.on('data', errorHandler);
     logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${libcameraProcess.pid} ${directStreamProcess.pid}`);
 }
 
@@ -262,23 +249,6 @@ function saveVideoProcess(options = [], response) {
     saveConfig(stringify(options));
 }
 
-function cleanupPreviewNodes(uuid, streamObject) {
-    removeListeners(streamObject);
-    removeListeners(previewProcessMap[uuid]);
-
-    if (previewProcessMap[uuid] && previewProcessMap[uuid].pid) {
-        const pid = previewProcessMap[uuid].pid;
-        previewProcessMap[uuid].once('close', () => {
-            logger.info(`Preview process: ${pid} ended.`);
-        });
-        previewProcessMap[uuid].stdout.destroy();
-        previewProcessMap[uuid].stdin.destroy();
-        previewProcessMap[uuid].stderr.destroy();
-        previewProcessMap[uuid].kill('SIGKILL');
-        previewProcessMap[uuid] = undefined;
-    }
-}
-
 module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
@@ -292,12 +262,9 @@ module.exports = {
     setVideoUpdateOptions,
     getImageUpdateOptions,
     setImageUpdateOptions,
-    cleanupPreviewNodes,
     getLibcameraProcess,
     getDirectStreamProcesss,
     unsetDirectStreamProcesss,
-    getPreviewProcessMap,
-    setPreviewProcessMap,
     getImageStreamProcess,
     setImageStreamProcess
 };
