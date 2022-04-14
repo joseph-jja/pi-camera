@@ -28,8 +28,8 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 let libcameraProcess,
     directStreamProcess,
-    previewProcessMap = {};
-global.imageStreamProcess;
+    previewProcessMap = {},
+    imageStreamProcess;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -86,12 +86,20 @@ function setPreviewProcessMap(key, value) {
     previewProcessMap[key] = value;
 }
 
+function getImageStreamProcess() {
+    return imageStreamProcess;
+}
+
+function setImageStreamProcess(value) {
+    imageStreamProcess = undefined;
+}
+
 function killAllRunning() {
 
     const streams = [
         directStreamProcess,
         libcameraProcess,
-        global.imageStreamProcess
+        imageStreamProcess
     ].filter(stream => {
         return (stream && stream.pid);
     });
@@ -147,7 +155,7 @@ function saveRawVideoData(options = [], response, videoConfig) {
 
     libcameraProcess = undefined;
     directStreamProcess = undefined;
-    global.imageStreamProcess = undefined;
+    imageStreamProcess = undefined;
 
     const rawDataProcess = saveH264(spawnOptions);
     rawDataProcess.on('close', (code) => {
@@ -166,7 +174,7 @@ function saveImagesData(options = [], response) {
 
     libcameraProcess = undefined;
     directStreamProcess = undefined;
-    global.imageStreamProcess = undefined;
+    imageStreamProcess = undefined;
 
     const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
     spawnOptions.push('-o');
@@ -190,11 +198,11 @@ function imageStream(options = []) {
     libcameraProcess = undefined;
     directStreamProcess = undefined;
 
-    global.imageStreamProcess = streamJpeg(options);
+    imageStreamProcess = streamJpeg(options);
 
     const DevNull = new NullStream();
-    global.imageStreamProcess.stdout.pipe(DevNull);
-    global.imageStreamProcess.stderr.on('error', (err) => {
+    imageStreamProcess.stdout.pipe(DevNull);
+    imageStreamProcess.stderr.on('error', (err) => {
         logger.debug(`Error ${err.length}`);
     });
 
@@ -208,7 +216,7 @@ function directStream(options = []) {
     const running = killAllRunning();
     logger.info('Results of stopping all: ' + stringify(running));
 
-    global.imageStreamProcess = undefined;
+    imageStreamProcess = undefined;
     // stream libcamera stdout to ffmpeg stdin
     libcameraProcess = streamMjpeg(spawnOptions);
     directStreamProcess = getFfmpegStream();
@@ -243,7 +251,7 @@ function saveVideoProcess(options = [], response) {
 
     libcameraProcess = undefined;
     directStreamProcess = undefined;
-    global.imageStreamProcess = undefined;
+    imageStreamProcess = undefined;
 
     const mjpegDataProcess = saveMjpeg(spawnOptions);
     mjpegDataProcess.on('close', (code) => {
@@ -288,5 +296,7 @@ module.exports = {
     getDirectStreamProcesss,
     unsetDirectStreamProcesss,
     getPreviewProcessMap,
-    setPreviewProcessMap
+    setPreviewProcessMap,
+    getImageStreamProcess,
+    setImageStreamProcess
 };

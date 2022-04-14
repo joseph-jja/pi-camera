@@ -7,14 +7,15 @@ const stringify = require(`${basedir}/libs/stringify`),
     {
         getLibcameraProcess,
         getDirectStreamProcesss,
-        getPreviewProcessMap
+        getPreviewProcessMap,
+        getImageStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
 
 function collectData() {
     const streams = [
         getDirectStreamProcesss(),
         getLibcameraProcess(),
-        global.imageStreamProcess
+        getImageStreamProcess()
     ].filter(stream => {
         return (stream && stream.pid);
     });
@@ -28,7 +29,7 @@ function collectData() {
 }
 
 module.exports = (socket) => {
-    socket.on('status', (sock) => {
+    socket.on('status', (sock) => { /* eslint-disable-line */
         const data = collectData();
         logger.info(`System info: ${stringify(data)} `);
         socket.emit('info', data);

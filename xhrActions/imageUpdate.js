@@ -12,7 +12,9 @@ const stringify = require(`${basedir}/libs/stringify`),
         imageStream,
         getLibcameraProcess,
         getDirectStreamProcesss,
-        unsetDirectStreamProcesss
+        unsetDirectStreamProcesss,
+        getImageStreamProcess,
+        setImageStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
 
 module.exports = (request, response) => {
@@ -27,10 +29,10 @@ module.exports = (request, response) => {
                     unsetDirectStreamProcesss();
                 });
             }
-            if (global.imageStreamProcess) {
-                const pid = global.imageStreamProcess.pid;
+            if (getImageStreamProcess()) {
+                const pid = getImageStreamProcess().pid;
                 childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
-                    global.imageStreamProcess = undefined;
+                    setImageStreamProcess(undefined);
                     imageStream(options);
                 });
             } else {
