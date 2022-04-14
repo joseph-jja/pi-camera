@@ -91,7 +91,7 @@ function getImageStreamProcess() {
 }
 
 function setImageStreamProcess(value) {
-    imageStreamProcess = undefined;
+    imageStreamProcess = value;
 }
 
 function killAllRunning() {
