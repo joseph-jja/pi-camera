@@ -225,10 +225,11 @@ function directStream(options = []) {
     directStreamProcess.stdout.on('data', d => {
         DevNull.write(d);
     });
-    libcameraProcess.stdout.on('data', d => {
+    /*libcameraProcess.stdout.on('data', d => {
         directStreamProcess.stdin.write(d);
-    });
-
+    });*/
+    libcameraProcess.stdout.pipe(directStreamProcess.stdin);
+    
     directStreamProcess.stderr.on('data', (err) => {
         logger.debug(`Error ${err.length}`);
     });
