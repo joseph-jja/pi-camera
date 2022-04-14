@@ -28,7 +28,6 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 let libcameraProcess,
     directStreamProcess,
-    previewProcessMap = {},
     imageStreamProcess;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
@@ -76,14 +75,6 @@ function getDirectStreamProcesss() {
 
 function unsetDirectStreamProcesss() {
     directStreamProcess = undefined;
-}
-
-function getPreviewProcessMap() {
-    return previewProcessMap;
-}
-
-function setPreviewProcessMap(key, value) {
-    previewProcessMap[key] = value;
 }
 
 function getImageStreamProcess() {
@@ -258,23 +249,6 @@ function saveVideoProcess(options = [], response) {
     saveConfig(stringify(options));
 }
 
-function cleanupPreviewNodes(uuid, streamObject) {
-    removeListeners(streamObject);
-    removeListeners(previewProcessMap[uuid]);
-
-    if (previewProcessMap[uuid] && previewProcessMap[uuid].pid) {
-        const pid = previewProcessMap[uuid].pid;
-        previewProcessMap[uuid].once('close', () => {
-            logger.info(`Preview process: ${pid} ended.`);
-        });
-        previewProcessMap[uuid].stdout.destroy();
-        previewProcessMap[uuid].stdin.destroy();
-        previewProcessMap[uuid].stderr.destroy();
-        previewProcessMap[uuid].kill('SIGKILL');
-        previewProcessMap[uuid] = undefined;
-    }
-}
-
 module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
@@ -288,12 +262,9 @@ module.exports = {
     setVideoUpdateOptions,
     getImageUpdateOptions,
     setImageUpdateOptions,
-    cleanupPreviewNodes,
     getLibcameraProcess,
     getDirectStreamProcesss,
     unsetDirectStreamProcesss,
-    getPreviewProcessMap,
-    setPreviewProcessMap,
     getImageStreamProcess,
     setImageStreamProcess
 };
