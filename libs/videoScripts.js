@@ -226,13 +226,7 @@ function directStream(options = []) {
     directStreamProcess = getFfmpegStream();
 
     const DevNull = new NullStream();
-    /*directStreamProcess.stdout.on('data', d => {
-        DevNull.write(d);
-    });*/
     directStreamProcess.stdout.pipe(DevNull);
-    /*libcameraProcess.stdout.on('data', d => {
-        directStreamProcess.stdin.write(d);
-    });*/
     libcameraProcess.stdout.pipe(directStreamProcess.stdin);
 
     directStreamProcess.stderr.on('data', errorHandler);

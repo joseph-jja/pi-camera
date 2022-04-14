@@ -42,20 +42,7 @@ function setupPreviewStream(streamObject, response, uuid) {
         'x-uuid': uuid
     });
 
-    const dataHandler = d => {
-        response.write(d);
-        //previewProcessMap[uuid].stdin.write(d);
-    };
-
-    response.once('finish', () => {
-        streamObject.stdout.off('error', errorHandler);
-        streamObject.stdout.off('data', dataHandler);
-    });
-
-    streamObject.stdout.on('data', dataHandler);
-    /*previewProcessMap[uuid].stdout.on('data', d => {
-        response.write(d);
-    });*/
+    streamObject.stdout.pipe(response);
 
     streamObject.stdout.on('error', errorHandler);
     /*previewProcessMap[uuid].stdout.on('error', () => {
