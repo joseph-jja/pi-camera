@@ -23,12 +23,11 @@ function writeHeaders(response) {
 
 const MAX_PREVIEW_CLIENT = 4;
 
-const setupPreviewStream = async (streamObject, response, uuid) => {
+async function setupPreviewStream(streamObject, response, uuid) {
 
     const previewProcessMap = getPreviewProcessMap();
-    const pid = (previewProcessMap[uuid] ? cleanupPreviewNodes(uuid, streamObject) : undefined);
-    if (pid) {
-        setPreviewProcessMap(uuid, undefined);
+    if (previewProcessMap[uuid]) {
+        cleanupPreviewNodes(uuid, streamObject);
     }
 
     const previewClients = Object.keys(previewProcessMap);
@@ -56,7 +55,7 @@ const setupPreviewStream = async (streamObject, response, uuid) => {
     previewProcessMap[uuid].stdout.on('error', () => {
         logger.info('here');
     });
-};
+}
 
 module.exports = (request, response) => {
     const uuid = `${request.query['x-uuid']}`;

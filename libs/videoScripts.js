@@ -266,9 +266,8 @@ function cleanupPreviewNodes(uuid, streamObject) {
         previewProcessMap[uuid].stdin.destroy();
         previewProcessMap[uuid].stderr.destroy();
         previewProcessMap[uuid].kill('SIGKILL');
-        return previewProcessMap[uuid].pid;
+        previewProcessMap[uuid] = undefined;
     }
-    return undefined;
 };
 
 module.exports = {
