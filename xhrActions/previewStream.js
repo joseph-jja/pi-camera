@@ -12,11 +12,15 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
         getImageStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
 
-const MAX_PREVIEW_CLIENT = 4;
+//const MAX_PREVIEW_CLIENT = 4;
+
+function errorHandler() {
+    logger.info('Video streaming error');
+}
 
 function setupPreviewStream(streamObject, response, uuid) {
 
-    const previewProcessMap = getPreviewProcessMap();
+    /*const previewProcessMap = getPreviewProcessMap();
     if (previewProcessMap[uuid]) {
         cleanupPreviewNodes(uuid, streamObject);
     }
@@ -29,27 +33,34 @@ function setupPreviewStream(streamObject, response, uuid) {
     }
 
     // new instance
-    setPreviewProcessMap(uuid, previewStream());
+    setPreviewProcessMap(uuid, previewStream());*/
 
     response.writeHead(200, {
         //'Content-Type': 'video/webm',
         'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
-        'Cache-Control': 'no-cache'
-    });
-    
-    streamObject.stdout.on('data', d => {
-        previewProcessMap[uuid].stdin.write(d);
-    });
-    previewProcessMap[uuid].stdout.on('data', d => {
-        response.write(d);
+        'Cache-Control': 'no-cache',
+        'x-uuid': uuid
     });
 
-    streamObject.stdout.on('error', () => {
-        logger.info('here');
+    const dataHandler = d => {
+        response.write(d);
+        //previewProcessMap[uuid].stdin.write(d);
+    };
+
+    response.once('finish', () => {
+        streamObject.stdout.off('error', errorHandler);
+        streamObject.stdout.off('data', dataHandler);
     });
-    previewProcessMap[uuid].stdout.on('error', () => {
+
+    streamObject.stdout.on('data', dataHandler);
+    /*previewProcessMap[uuid].stdout.on('data', d => {
+        response.write(d);
+    });*/
+
+    streamObject.stdout.on('error', errorHandler);
+    /*previewProcessMap[uuid].stdout.on('error', () => {
         logger.info('here');
-    });
+    });*/
 }
 
 module.exports = (request, response) => {
