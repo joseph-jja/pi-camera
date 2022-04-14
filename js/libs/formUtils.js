@@ -89,7 +89,9 @@ export function executeServerCommand(url) {
 
 export async function stopPreview() {
     const iframe = document.getElementById('videoDisplay');
-    iframe.src = '';
+    if (iframe) {
+        iframe.src = '';
+    }
     fetch(`/stopPreview?x-uuid=${xUuid}`, {  /* eslint-disable-line */
         method: 'GET'
     }).then(resp => {
@@ -103,6 +105,9 @@ export async function stopPreview() {
 
 export function startPreview() {
     const iframe = document.getElementById('videoDisplay');
+    if (!iframe) {
+        return;
+    }
     iframe.src = `/preview?x-uuid=${xUuid}`; /* eslint-disable-line */
 }
 
