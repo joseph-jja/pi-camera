@@ -20,6 +20,9 @@ window.addEventListener('DOMContentLoaded', () => {
     function usePlayer(playerMethod, altHandler) {
         if (typeof window.streamPlayer !== 'undefined') {
             window.streamPlayer[playerMethod]();
+            if (playerMethod === 'stop') {
+                altHandler();
+            }
         } else {
             altHandler();
         }
