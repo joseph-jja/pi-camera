@@ -25,11 +25,11 @@ export default class MJPEGPlayer {
         this.options.onFrameCaller = this;
 
         this.options.onStart = () => {
-            console.log('started');
+            console.log('Started at ' + new Date());
         };
 
         this.options.onStop = () => {
-            console.log('stopped');
+            console.log('Stopped at ' + new Date());
         };
 
         this.stream = new MJPEGStream(this.options);
@@ -84,7 +84,7 @@ export default class MJPEGPlayer {
         } catch (e) {
             // if we can't draw, don't bother updating anymore
             this.stop();
-            console.log('stopped! ', e);
+            console.log('Stopped! at ', new Date(), e);
             this.options.errorHandler(e);
         }
     };
