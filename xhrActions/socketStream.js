@@ -7,16 +7,14 @@ const stringify = require(`${basedir}/libs/stringify`),
     {
         getLibcameraProcess,
         getDirectStreamProcesss,
-        getImageStreamProcess,
-        getImageFfmpegStreamProcess
+        getImageStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
 
 function collectData() {
     const streams = [
         getDirectStreamProcesss(),
         getLibcameraProcess(),
-        getImageStreamProcess(),
-        getImageFfmpegStreamProcess()
+        getImageStreamProcess()
     ].filter(stream => {
         return (stream && stream.pid);
     });

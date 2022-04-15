@@ -28,8 +28,7 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 let libcameraProcess,
     directStreamProcess,
-    imageStreamProcess,
-    imageFfmpegStreamProcess;
+    imageStreamProcess;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -86,21 +85,12 @@ function setImageStreamProcess(value) {
     imageStreamProcess = value;
 }
 
-function getImageFfmpegStreamProcess() {
-    return imageFfmpegStreamProcess;
-}
-
-function setImageFfmpegStreamProcess(value) {
-    imageFfmpegStreamProcess = value;
-}
-
 function killAllRunning() {
 
     const streams = [
         directStreamProcess,
         libcameraProcess,
-        imageStreamProcess,
-        imageFfmpegStreamProcess
+        imageStreamProcess
     ].filter(stream => {
         return (stream && stream.pid);
     });
@@ -204,17 +194,10 @@ function imageStream(options = []) {
     directStreamProcess = undefined;
 
     imageStreamProcess = streamJpeg(options);
-    imageFfmpegStreamProcess = getFfmpegStream();
-
-    const DevNull = new NullStream();
-    imageFfmpegStreamProcess.stdout.pipe(DevNull);
-    imageStreamProcess.stdout.pipe(imageFfmpegStreamProcess);
-
-    imageFfmpegStreamProcess.stderr.on('error', errorHandler);
 
     imageStreamProcess.stderr.on('error', errorHandler);
 
-    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${imageStreamProcess.pid} ${imageFfmpegStreamProcess.pid}`);
+    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pid ${imageStreamProcess.pid}`);
 }
 
 function directStream(options = []) {
@@ -282,7 +265,5 @@ module.exports = {
     getDirectStreamProcesss,
     unsetDirectStreamProcesss,
     getImageStreamProcess,
-    setImageStreamProcess,
-    getImageFfmpegStreamProcess,
-    setImageFfmpegStreamProcess
+    setImageStreamProcess
 };

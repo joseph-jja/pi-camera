@@ -2,8 +2,7 @@ const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
-        getDirectStreamProcesss,
-        getImageStreamProcess
+        getDirectStreamProcesss
     } = require(`${basedir}/libs/videoScripts`);
 
 function errorHandler() {
@@ -29,9 +28,6 @@ module.exports = (request, response) => {
     if (uuid && getDirectStreamProcesss()) {
         logger.info(`Running via directStreamProcess doing mjpeg video using: ${uuid}`);
         setupPreviewStream(getDirectStreamProcesss(), response, uuid);
-    } else if (uuid && getImageStreamProcess()) {
-        logger.info(`Running via imageStreamProcess doing mjpeg video using: ${uuid}`);
-        setupPreviewStream(getImageStreamProcess(), response, uuid);
     } else {
         response.writeHead(200, {});
         response.end('Preview service is not running or invalid identifier!');
