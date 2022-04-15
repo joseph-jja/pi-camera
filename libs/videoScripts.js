@@ -99,7 +99,8 @@ function killAllRunning() {
     const streams = [
         directStreamProcess,
         libcameraProcess,
-        imageStreamProcess
+        imageStreamProcess,
+        imageFfmpegStreamProcess
     ].filter(stream => {
         return (stream && stream.pid);
     });
@@ -188,12 +189,16 @@ function saveImagesData(options = [], response) {
     saveConfig(stringify(spawnOptions), 'png');
 }
 
+const errorHandler = (err) => {
+    logger.debug(`Error ${err.length}`);
+};
+
 function imageStream(options = []) {
 
     const spawnOptions = (options.length > 0 ? options : getImageUpdateOptions()).concat();
 
     const running = killAllRunning();
-    logger.info('Results of stopping all: ' + stringify(running));
+    logger.info('ImageStream: Results of stopping all: ' + stringify(running));
 
     libcameraProcess = undefined;
     directStreamProcess = undefined;
@@ -202,24 +207,22 @@ function imageStream(options = []) {
     imageFfmpegStreamProcess = getFfmpegStream();
 
     const DevNull = new NullStream();
-    imageStreamProcess.stdout.pipe(DevNull);
-    imageStreamProcess.stderr.on('error', (err) => {
-        logger.debug(`Error ${err.length}`);
-    });
+    imageFfmpegStreamProcess.stdout.pipe(DevNull);
+    imageStreamProcess.stdout.pipe(imageFfmpegStreamProcess);
 
-    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)}...`);
+    imageFfmpegStreamProcess.stderr.on('error', errorHandler);
+
+    imageStreamProcess.stderr.on('error', errorHandler);
+
+    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${imageStreamProcess.pid} ${imageFfmpegStreamProcess.pid}`);
 }
-
-const errorHandler = (err) => {
-    logger.debug(`Error ${err.length}`);
-};
 
 function directStream(options = []) {
 
     const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
 
     const running = killAllRunning();
-    logger.info('Results of stopping all: ' + stringify(running));
+    logger.info('VideoStream: Results of stopping all: ' + stringify(running));
 
     const index = spawnOptions.indexOf('--framerate');
     const ffmpegFramerate = (index > -1 ? spawnOptions[index + 1] : 4);
