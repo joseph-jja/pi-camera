@@ -9,12 +9,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     } = require(`${basedir}/libs/utils`),
     {
         setImageUpdateOptions,
-        imageStream,
-        getLibcameraProcess,
-        getDirectStreamProcesss,
-        unsetDirectStreamProcesss,
-        getImageStreamProcess,
-        setImageStreamProcess
+        imageStream
     } = require(`${basedir}/libs/videoScripts`);
 
 module.exports = (request, response) => {
@@ -22,22 +17,7 @@ module.exports = (request, response) => {
         const options = getOptions(request.body);
         if (options.length > 0) {
             setImageUpdateOptions(options);
-            const libcameraPid = (getLibcameraProcess() ? getLibcameraProcess().pid : '');
-            if (getDirectStreamProcesss()) {
-                const pid = getDirectStreamProcesss().pid;
-                childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
-                    unsetDirectStreamProcesss();
-                });
-            }
-            if (getImageStreamProcess()) {
-                const pid = getImageStreamProcess().pid;
-                childProcess.exec(`kill -9 ${pid} ${libcameraPid}`, () => {
-                    setImageStreamProcess(undefined);
-                    imageStream(options);
-                });
-            } else {
-                imageStream(options);
-            }
+            imageStream(options);
             response.writeHead(200, {});
             const message = `Executed image script with options ${stringify(options)} on ${new Date()}`;
             response.end(message);
