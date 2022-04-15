@@ -156,9 +156,27 @@ function saveRawVideoData(options = [], response, videoConfig) {
     saveConfig(stringify(spawnOptions), 'h264');
 }
 
-function saveImagesData(options = [], response) {
+function saveSingle(options, callback, count) {
 
     const spawnOptions = options.concat();
+
+    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
+    spawnOptions.push('-o');
+    spawnOptions.push(filename);
+    logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
+    const imageDataProcess = saveImage(spawnOptions);
+    imageDataProcess.on('close', (code) => {
+        saveConfig(stringify(spawnOptions), 'png');
+        count++;
+        if (count >= 30) {
+            callback(code);
+        } else {
+            saveSingle(options, callback, count);
+        }
+    });
+}
+
+function saveImagesData(options = [], response) {
 
     const running = killAllRunning();
     logger.info('Results of stopping all: ' + stringify(running));
@@ -167,16 +185,22 @@ function saveImagesData(options = [], response) {
     directStreamProcess = undefined;
     imageStreamProcess = undefined;
 
-    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
+    /*const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);
     const imageDataProcess = saveImage(spawnOptions);
     imageDataProcess.on('close', (code) => {
         response.writeHead(200, {});
-        response.end(`Saved image data with status code ${code} using options ${stringify(spawnOptions)}.`);
+        response.end(`Saved image data with status code ${code} using options ${stringify(options)}.`);
     });
     logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
-    saveConfig(stringify(spawnOptions), 'png');
+
+    saveConfig(stringify(spawnOptions), 'png');*/
+    let count = 0;
+    saveSingle(options, (code) => {
+        response.writeHead(200, {});
+        response.end(`Saved image data with status code ${code} using options ${stringify(options)}.`);
+    }, count);
 }
 
 const errorHandler = (err) => {
