@@ -54,7 +54,7 @@ function streamJpeg(options) {
 function saveImage(options) {
 
     // 60 seconds of images each time
-    const spawnOptions = ['-r', '-t', '60000'].concat(options);
+    const spawnOptions = ['-r'].concat(options);
 
     logger.info(`Libcamera still save image options: ${stringify(spawnOptions)}`);
 
