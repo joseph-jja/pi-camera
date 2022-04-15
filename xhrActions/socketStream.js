@@ -7,15 +7,16 @@ const stringify = require(`${basedir}/libs/stringify`),
     {
         getLibcameraProcess,
         getDirectStreamProcesss,
-        getPreviewProcessMap,
-        getImageStreamProcess
+        getImageStreamProcess,
+        getImageFfmpegStreamProcess
     } = require(`${basedir}/libs/videoScripts`);
 
 function collectData() {
     const streams = [
         getDirectStreamProcesss(),
         getLibcameraProcess(),
-        getImageStreamProcess()
+        getImageStreamProcess(),
+        getImageFfmpegStreamProcess()
     ].filter(stream => {
         return (stream && stream.pid);
     });
@@ -24,7 +25,7 @@ function collectData() {
         memory: process.memoryUsage(),
         loadAverage: os.loadavg(),
         free: os.freemem(),
-        activeStreams: (streams.length + Object.keys(getPreviewProcessMap()).length)
+        activeStreams: (streams.length)
     };
 }
 
