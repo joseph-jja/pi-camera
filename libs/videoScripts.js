@@ -28,7 +28,8 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 let libcameraProcess,
     directStreamProcess,
-    imageStreamProcess;
+    imageStreamProcess,
+    imageFfmpegStreamProcess;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -83,6 +84,14 @@ function getImageStreamProcess() {
 
 function setImageStreamProcess(value) {
     imageStreamProcess = value;
+}
+
+function getImageFfmpegStreamProcess() {
+    return imageFfmpegStreamProcess;
+}
+
+function setImageFfmpegStreamProcess(value) {
+    imageFfmpegStreamProcess = value;
 }
 
 function killAllRunning() {
@@ -190,6 +199,7 @@ function imageStream(options = []) {
     directStreamProcess = undefined;
 
     imageStreamProcess = streamJpeg(options);
+    imageFfmpegStreamProcess = getFfmpegStream();
 
     const DevNull = new NullStream();
     imageStreamProcess.stdout.pipe(DevNull);
@@ -269,5 +279,7 @@ module.exports = {
     getDirectStreamProcesss,
     unsetDirectStreamProcesss,
     getImageStreamProcess,
-    setImageStreamProcess
+    setImageStreamProcess,
+    getImageFfmpegStreamProcess,
+    setImageFfmpegStreamProcess
 };
