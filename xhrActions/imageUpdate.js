@@ -1,5 +1,3 @@
-const childProcess = require('child_process');
-
 const basedir = process.cwd();
 
 const stringify = require(`${basedir}/libs/stringify`),
