@@ -15,11 +15,7 @@ module.exports = (request, response) => {
         const options = getOptions(request.body);
         if (options.length > 0) {
             setImageUpdateOptions(options);
-            imageStream(options);
-            response.writeHead(200, {});
-            const message = `Executed image script with options ${stringify(options)} on ${new Date()}`;
-            response.end(message);
-            logger.info(message);
+            imageStream(options, response);
         }
     } else {
         response.writeHead(200, {});

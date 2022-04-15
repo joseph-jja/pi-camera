@@ -183,7 +183,7 @@ const errorHandler = (err) => {
     logger.debug(`Error ${err.length}`);
 };
 
-function imageStream(options = []) {
+function imageStream(options = [], response) {
 
     const spawnOptions = (options.length > 0 ? options : getImageUpdateOptions()).concat();
 
@@ -197,7 +197,12 @@ function imageStream(options = []) {
 
     imageStreamProcess.stderr.on('error', errorHandler);
 
-    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pid ${imageStreamProcess.pid}`);
+    imageStreamProcess.on('close', (code) => {
+        response.writeHead(200, {});
+        response.end(`Options set resulted in code ${code} using options ${stringify(spawnOptions)} on ${new Date()}.`);
+    });
+
+    logger.info(`Testing still capture options from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pid ${imageStreamProcess.pid}`);
 }
 
 function directStream(options = []) {
