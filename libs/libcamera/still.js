@@ -38,7 +38,7 @@ function streamJpeg(options) {
 
     // default image streaming options
     // this is more a default image test
-    const spawnOptions = ['-e', 'jpg', '-t', '10'].concat(options);
+    const spawnOptions = ['-e', 'jpg', '-t', '1000'].concat(options);
 
     // stream to stdout
     spawnOptions.push('-o');
@@ -54,7 +54,7 @@ function streamJpeg(options) {
 function saveImage(options) {
 
     // 60 seconds of images each time
-    const spawnOptions = ['-r', '-t', '60'].concat(options);
+    const spawnOptions = ['-r', '-t', '60000'].concat(options);
 
     logger.info(`Libcamera still save image options: ${stringify(spawnOptions)}`);
 
