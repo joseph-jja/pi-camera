@@ -6,7 +6,7 @@ socket.on('connect', () => {
     setInterval(() => {
         // ping
         socket.emit('status', {});
-    }, 5000);
+    }, 60000);
 });
 socket.on('info', (data) => {
     console.log('Got data ', data);
