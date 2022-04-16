@@ -188,7 +188,7 @@ async function start() {
     });
 
     app.get('/saveImage', (request, response) => {
-        saveImagesData(reqeust, response);
+        saveImagesData(request, response);
     });
 
     app.get('/canvas', (request, response) => {
