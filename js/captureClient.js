@@ -55,7 +55,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const isImage = currentItem.endsWith('.png');
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
-            executeServerCommand('/saveImage');
+            const imageCount = document.forms['saveImages'].imagecount.value;
+            executeServerCommand(`/saveImage?count=${imageCount}`);
         } else if (target.id === 'saveStream') {
             executeServerCommand('/saveStream');
         } else if (target.id === 'saveRawStream') {
