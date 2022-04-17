@@ -191,10 +191,6 @@ async function start() {
         saveImagesData(request, response);
     });
 
-    app.get('/canvas', (request, response) => {
-        fs.createReadStream(`${basedir}/views/video.html`).pipe(response);
-    });
-
     app.get('/imageList', (request, response) => {
         imageListAction(request, response, formFields);
     });

@@ -23,6 +23,7 @@ function collectData() {
         memory: process.memoryUsage(),
         loadAverage: os.loadavg(),
         free: os.freemem(),
+        total: os.totalmem(),
         activeStreams: (streams.length)
     };
 }
@@ -30,7 +31,7 @@ function collectData() {
 module.exports = (socket) => {
     socket.on('status', (sock) => { /* eslint-disable-line */
         const data = collectData();
-        logger.info(`System info: ${stringify(data)} `);
+        logger.debug(`System info: ${stringify(data)} `);
         socket.emit('info', data);
 
     });

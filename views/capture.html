@@ -21,6 +21,7 @@
         }
 
         #server-messages,
+        #server-info,
         #previewOptions,
         div.content-container {
             width: 900px;
@@ -70,6 +71,7 @@
         <div id="server-messages"></div>
         <br>
         <div id="previewOptions"></div>
+        <div id="server-info" style="background: #000;color: white; " ></div>
         <br>
         <br>
         <fieldset class="full-width" style="width: 480px; height:250px">
@@ -164,6 +166,8 @@
     const xUuid = '[[PAGE_UUID]]';
     let player;
 </script>
+<script src="/js/socket.io.js"></script>
+<script src="/js/sockImage.js"></script>
 <script type="module" src="/js/mjpegCapture.js"></script>
 <script src="/js/captureClient.js" type="module"></script>
 
