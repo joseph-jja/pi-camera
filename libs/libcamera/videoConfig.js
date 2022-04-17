@@ -34,7 +34,7 @@ module.exports = [{
     },
     step: 0.5,
     decimalPlaces: 1,
-    comment: 'Change amount of red and blue, higer means more'
+    comment: 'Change amount of red and blue, higher means more'
 }, {
     name: 'EV_compensation',
     comment: 'higher is brighter',

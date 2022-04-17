@@ -35,7 +35,7 @@ module.exports = [{
     },
     step: 0.5,
     decimalPlaces: 1,
-    comment: 'Change amount of red and blue, higer means more'
+    comment: 'Change amount of red and blue, higher means more'
 }, {
     name: 'EV_compensation',
     comment: 'higher is brighter',
@@ -56,8 +56,16 @@ module.exports = [{
 }, {
     name: 'shutter_speed',
     paramName: '--shutter',
-    values: [1, 2, 4, 8, 10, 20, 30, 40, 50, 100, 150, 200, 250, 500, 1000, 2000, 2500, 5000, 10000],
-    comment: 'time in ms, 1 = 1/1000, 2 = 1/500, 4 = 1/250 = 1/125 or 8ms'
+    values: [
+        1, 2, 4, 8, 10,
+        20, 30, 40, 50,
+        100, 200, 250, 500,
+        1000, 2000, 2500,
+        5000, 10000, 100000,
+        1000000, 2000000, 5000000,
+        10000000
+    ],
+    comment: '100000 = 1/10 higger is longer'
 }, {
     name: 'framerate',
     paramName: '--framerate',
