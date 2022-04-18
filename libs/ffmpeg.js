@@ -5,7 +5,7 @@ const {
 const FFMPEG = 'ffmpeg';
 
 const DIRECT_STREAM_OPTS = ['-i', 'pipe:',
-    '-an', 
+    '-an',
     '-filter_threads', '1',
     '-r', '4',
     '-q:v', '2',
@@ -27,7 +27,13 @@ function playFile(filename, config) {
     const index = config.indexOf['--framerate'];
     const framerate = [index > -1 ? config[index + 1] : 4];
 
-    const spawnOptions = ['-i', filename, '-an', '-filter_threads', '1', '-r', framerate, '-s', '640x480', '-f', 'mpjpeg', '-'];
+    const spawnOptions = ['-i', filename,
+        '-an',
+        '-filter_threads', '1',
+        '-r', framerate,
+        '-q:v', '2',
+        '-s', '640x480',
+        '-f', 'mpjpeg', '-'];
 
     return spawn(FFMPEG, spawnOptions, {
         env: process.env
