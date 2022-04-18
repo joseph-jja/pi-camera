@@ -36,7 +36,7 @@ async function httpGet(host, urlPath, headers = {}, extraOptions) {
             });
         });
 
-        req.on('error', (e) => {
+        req.once('error', (e) => {
             reject(e);
         });
 
