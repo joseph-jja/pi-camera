@@ -7,7 +7,8 @@ const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
-        BASE_IMAGE_PATH
+        BASE_IMAGE_PATH,
+        previewSavedVideo
     } = require(`${basedir}/libs/videoScripts`),
     {
         OLD_FILENAME_MATCH
@@ -36,12 +37,12 @@ module.exports = (request, response) => {
         readFile(`${BASE_IMAGE_PATH}/${filename}`, (err, data) => {
             response.end(data);
         });
-    } else if (filename.endsWith('.mjpeg')) {
+    } else if (filename.endsWith('.mjpeg') || filename.endsWith('.h264')) {
         response.writeHead(200, {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
         });
-        createReadStream(`${BASE_IMAGE_PATH}/${filename}`).pipe(response);
+        previewSavedVideo(`${BASE_IMAGE_PATH}/${filename}`, response);
     } else {
         response.writeHead(200, {});
         response.end('Cannot preview file!');
