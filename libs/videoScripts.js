@@ -339,7 +339,7 @@ async function previewSavedVideo(filename, response) {
     libcameraProcess = undefined;
     directStreamProcess = undefined;
 
-    const configFileName = `${filename}.cfg`;
+    const configFileName = `${filename}.cfg`.replace(/\/images\//, '/imageConfig/');
 
     const configData = await promiseifiedRead(configFileName);
 
