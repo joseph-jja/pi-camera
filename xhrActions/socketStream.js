@@ -31,9 +31,9 @@ function collectData() {
         memory: process.memoryUsage(),
         load: os.loadavg(),
         'free / total': `${Math.round(os.freemem() / K_TO_M)}M out of ${Math.round(os.totalmem() / K_TO_M)}M`,
-        activeStreams: (streams.length),
-        imageOptions: getImageUpdateOptions(),
-        videoOptions: getVideoUpdateOptions()
+        'active streams': (streams.length),
+        'image options': getImageUpdateOptions(),
+        'video options': getVideoUpdateOptions()
     };
 }
 
