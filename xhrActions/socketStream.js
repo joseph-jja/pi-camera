@@ -15,6 +15,8 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 let lastMessage = '';
 
+const K_TO_M = 1024 * 1024;
+
 function collectData() {
     const streams = [
         getDirectStreamProcesss(),
@@ -27,9 +29,8 @@ function collectData() {
     return {
         messages: lastMessage,
         memory: process.memoryUsage(),
-        loadAverage: os.loadavg(),
-        free: os.freemem(),
-        total: os.totalmem(),
+        load: os.loadavg(),
+        'free / total': `${os.freemem() / K_TO_M} / ${os.totalmem() / K_TO_M}`,
         activeStreams: (streams.length),
         imageOptions: getImageUpdateOptions(),
         videoOptions: getVideoUpdateOptions()
