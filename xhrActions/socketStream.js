@@ -30,7 +30,7 @@ function collectData() {
         messages: lastMessage,
         memory: process.memoryUsage(),
         load: os.loadavg(),
-        'free / total': `${os.freemem() / K_TO_M} out of ${os.totalmem() / K_TO_M}`,
+        'free / total': `${Math.round(os.freemem() / K_TO_M)} out of ${Math.round(os.totalmem() / K_TO_M)}`,
         activeStreams: (streams.length),
         imageOptions: getImageUpdateOptions(),
         videoOptions: getVideoUpdateOptions()
