@@ -4,7 +4,13 @@ const {
 
 const FFMPEG = 'ffmpeg';
 
-const DIRECT_STREAM_OPTS = ['-i', 'pipe:', '-an', '-filter_threads', '1', '-r', '4', '-s', '640x480', '-f', 'mpjpeg', '-'];
+const DIRECT_STREAM_OPTS = ['-i', 'pipe:',
+    '-an', 
+    '-filter_threads', '1',
+    '-r', '4',
+    '-q:v', '2',
+    '-s', '640x480',
+    '-f', 'mpjpeg', '-'];
 
 const defaultFramerateIndex = DIRECT_STREAM_OPTS.indexOf('-r') + 1;
 
