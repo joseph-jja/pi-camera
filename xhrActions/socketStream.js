@@ -7,8 +7,11 @@ const stringify = require(`${basedir}/libs/stringify`),
     {
         getLibcameraProcess,
         getDirectStreamProcesss,
-        getImageStreamProcess
+        getImageStreamProcess,
+        captureEmitter
     } = require(`${basedir}/libs/videoScripts`);
+
+let lastMessage = '';
 
 function collectData() {
     const streams = [
@@ -20,6 +23,7 @@ function collectData() {
     });
 
     return {
+        messages: lastMessage,
         memory: process.memoryUsage(),
         loadAverage: os.loadavg(),
         free: os.freemem(),
@@ -27,6 +31,10 @@ function collectData() {
         activeStreams: (streams.length)
     };
 }
+
+captureEmitter.on('button-exec', message => {
+    lastMessage = message.status;
+});
 
 module.exports = (socket) => {
     socket.on('status', (sock) => { /* eslint-disable-line */

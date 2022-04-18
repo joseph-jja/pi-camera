@@ -1,4 +1,5 @@
-const fs = require('fs');
+const fs = require('fs'),
+    EventEmitter = require('events');
 
 const basedir = process.cwd();
 
@@ -32,6 +33,23 @@ let libcameraProcess,
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
+
+class CaptureProcessEmitter extends EventEmitter {
+    constructor() {
+        super();
+        this.count = 0;
+    }
+
+    add() {
+        this.count++;
+    }
+
+    remove() {
+        this.count--;
+    }
+}
+
+const captureEmitter = new CaptureProcessEmitter();
 
 function initSystem() {
     try {
@@ -154,6 +172,11 @@ function saveRawVideoData(options = [], response, videoConfig) {
         response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
     });
     saveConfig(stringify(spawnOptions), 'h264');
+
+    captureEmitter.emit('button-exec', {
+        method: 'saveRawVideoData',
+        status: 'running save raw h264'
+    });
 }
 
 function saveSingle(options, callback, count, total) {
@@ -173,6 +196,10 @@ function saveSingle(options, callback, count, total) {
         } else {
             saveSingle(options, callback, count);
         }
+        captureEmitter.emit('button-exec', {
+            method: 'saveImagesData',
+            status: `Saved image ${count} of ${total}`
+        });
     });
 }
 
@@ -187,12 +214,17 @@ function saveImagesData(request, response) {
 
     const options = getImageUpdateOptions();
     const total = request.query.imagecount || 1;
-    
+
     let count = 0;
     saveSingle(options, (code) => {
         response.writeHead(200, {});
         response.end(`Saved image data with status code ${code} using options ${stringify(options)}.`);
     }, count, total);
+
+    captureEmitter.emit('button-exec', {
+        method: 'saveImagesData',
+        status: 'running save images'
+    });
 }
 
 const errorHandler = (err) => {
@@ -219,6 +251,11 @@ function imageStream(options = [], response) {
     });
 
     logger.info(`Testing still capture options from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pid ${imageStreamProcess.pid}`);
+
+    captureEmitter.emit('button-exec', {
+        method: 'imageStream',
+        status: 'image stream test running'
+    });
 }
 
 function directStream(options = []) {
@@ -243,6 +280,11 @@ function directStream(options = []) {
     directStreamProcess.stderr.on('data', errorHandler);
     libcameraProcess.stderr.on('data', errorHandler);
     logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pids ${libcameraProcess.pid} ${directStreamProcess.pid}`);
+
+    captureEmitter.emit('button-exec', {
+        method: 'directStream',
+        status: 'preview is enabled'
+    });
 }
 
 function saveVideoProcess(options = [], response) {
@@ -265,8 +307,12 @@ function saveVideoProcess(options = [], response) {
         response.writeHead(200, {});
         response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
     });
-    saveConfig(stringify(spawnOptions), 'h264');
     saveConfig(stringify(options));
+
+    captureEmitter.emit('button-exec', {
+        method: 'saveVideoProcess',
+        status: 'running save mjpeg'
+    });
 }
 
 module.exports = {
@@ -286,5 +332,6 @@ module.exports = {
     getDirectStreamProcesss,
     unsetDirectStreamProcesss,
     getImageStreamProcess,
-    setImageStreamProcess
+    setImageStreamProcess,
+    captureEmitter
 };

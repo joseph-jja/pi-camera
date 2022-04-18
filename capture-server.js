@@ -50,7 +50,6 @@ const stringify = require(`${basedir}/libs/stringify`),
     updateXHRAction = require(`${basedir}/xhrActions/update`),
     imageListAction = require(`${basedir}/xhrActions/imageList`);
 
-
 const app = express();
 app.disable('x-powered-by');
 
