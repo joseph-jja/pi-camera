@@ -57,15 +57,14 @@ module.exports = [{
     name: 'shutter_speed',
     paramName: '--shutter',
     values: [
-        1, 2, 4, 8, 10,
-        20, 30, 40, 50,
+        1, 10, 20, 25, 50,
         100, 200, 250, 500,
-        1000, 2000, 2500,
-        5000, 10000, 100000,
+        1000, 2000, 2500, 5000, 10000,
+        100000, 200000, 250000, 500000,
         1000000, 2000000, 5000000,
         10000000
     ],
-    comment: '100000 = 1/10 higger is longer'
+    comment: 'time in microseconds => 1000 = 1 millisecond, 250000 = 1/4 second '
 }, {
     name: 'framerate',
     paramName: '--framerate',
