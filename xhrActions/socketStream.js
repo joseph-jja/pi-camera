@@ -26,10 +26,16 @@ function collectData() {
         return (stream && stream.pid);
     });
 
+    const memoryUsage = process.memoryUsage();
+    const filtered = Object.keys(memoryUsage).map(key => {
+        const megs = Math.round(memoryUsage[key] / K_TO_M);
+        return { [key]: `${megs}M` };
+    });
+
     return {
         messages: lastMessage,
-        memory: process.memoryUsage(),
         load: os.loadavg(),
+        memory: filtered,
         'free / total': `${Math.round(os.freemem() / K_TO_M)}M out of ${Math.round(os.totalmem() / K_TO_M)}M`,
         'active streams': (streams.length),
         'image options': getImageUpdateOptions(),
