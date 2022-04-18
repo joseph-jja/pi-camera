@@ -24,12 +24,14 @@ const stringify = require(`${basedir}/libs/stringify`),
         saveMjpeg
     } = require(`${basedir}/libs/libcamera/video`),
     {
-        getFfmpegStream
+        getFfmpegStream,
+        playFile
     } = require(`${basedir}/libs/ffmpeg`);
 
 let libcameraProcess,
     directStreamProcess,
-    imageStreamProcess;
+    imageStreamProcess,
+    playbackStream;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -108,7 +110,8 @@ function killAllRunning() {
     const streams = [
         directStreamProcess,
         libcameraProcess,
-        imageStreamProcess
+        imageStreamProcess,
+        playbackStream
     ].filter(stream => {
         return (stream && stream.pid);
     });
@@ -315,6 +318,44 @@ function saveVideoProcess(options = [], response) {
     });
 }
 
+function promiseifiedRead(filename) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filename, (err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
+    });
+}
+
+async function previewSavedVideo(filename, response) {
+
+    const running = killAllRunning();
+    logger.info('VideoStream: Results of stopping all: ' + stringify(running));
+
+    imageStreamProcess = undefined;
+    libcameraProcess = undefined;
+    directStreamProcess = undefined;
+
+    const configFileName = `${filename}.cfg`;
+
+    const configData = await promiseifiedRead(configFileName);
+
+    playbackStream  = playFile(filename, configData);
+
+    playbackStream.stdout.pipe(response);
+
+    playbackStream.stderr.on('data', errorHandler);
+    logger.info(`Should be streaming now from ${process.env.IP_ADDR} with options: ${stringify(configData)} pid: ${playbackStream.pid}`);
+
+    captureEmitter.emit('button-exec', {
+        method: 'previewSavedVideo',
+        status: 'video preview should be playing'
+    });
+}
+
 module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
@@ -333,5 +374,6 @@ module.exports = {
     unsetDirectStreamProcesss,
     getImageStreamProcess,
     setImageStreamProcess,
-    captureEmitter
+    captureEmitter,
+    previewSavedVideo
 };

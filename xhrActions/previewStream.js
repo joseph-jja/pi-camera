@@ -2,7 +2,8 @@ const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
-        getDirectStreamProcesss
+        getDirectStreamProcesss,
+        captureEmitter
     } = require(`${basedir}/libs/videoScripts`);
 
 function errorHandler() {
@@ -31,5 +32,9 @@ module.exports = (request, response) => {
     } else {
         response.writeHead(200, {});
         response.end('Preview service is not running or invalid identifier!');
+        captureEmitter.emit('button-exec', {
+            method: 'previewStream',
+            status: 'Preview service is not running'
+        });
     }
 };

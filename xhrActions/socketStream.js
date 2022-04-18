@@ -8,7 +8,9 @@ const stringify = require(`${basedir}/libs/stringify`),
         getLibcameraProcess,
         getDirectStreamProcesss,
         getImageStreamProcess,
-        captureEmitter
+        captureEmitter,
+        getVideoUpdateOptions,
+        getImageUpdateOptions
     } = require(`${basedir}/libs/videoScripts`);
 
 let lastMessage = '';
@@ -28,7 +30,9 @@ function collectData() {
         loadAverage: os.loadavg(),
         free: os.freemem(),
         total: os.totalmem(),
-        activeStreams: (streams.length)
+        activeStreams: (streams.length),
+        imageOptions: getImageUpdateOptions(),
+        videoOptions: getVideoUpdateOptions()
     };
 }
 
