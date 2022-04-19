@@ -76,7 +76,9 @@ const videoConfig = require(`${basedir}/libs/libcamera/videoConfig`),
 const VIDEO_HTML = fs.readFileSync(`${basedir}/views/capture.html`).toString();
 
 function getHTML(videoBody, imageBody, profiles) {
-    return VIDEO_HTML.replace('[[VIDEO_FORM]]', videoBody).replace('[[IMAGE_FORM]]', imageBody);
+    return VIDEO_HTML.replace('[[VIDEO_FORM]]', videoBody)
+        .replace('[[IMAGE_FORM]]', imageBody)
+        .replace('[[PROFILE_OPTIONS]]', profiles);
 }
 
 app.use(bodyParser.urlencoded({
@@ -158,12 +160,17 @@ async function getFormData() {
                 value: field.value
             }
         });
+
         return {
             name: item.name,
-            videoOptions: stringify(reducedVideo),
-            imageOptions: stringify(reducedImage)
+            values: [ stringify({
+                videoOptions: reducedVideo,
+                imageOptions: reducedImage
+            }) ]
         };
-    });
+    });/*.map(formBuilder).reduce((acc, next) => {
+        return `${acc}<br><br>${os.EOL}${next}`;
+    });*/
 
     const fields = videoConfig.map(formBuilder).reduce((acc, next) => {
         return `${acc}<br><br>${os.EOL}${next}`;
