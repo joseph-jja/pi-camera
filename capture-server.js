@@ -175,7 +175,8 @@ async function getFormData() {
     return {
         fields,
         imageFields,
-        formFields
+        formFields,
+        profiles
     };
 }
 
@@ -188,7 +189,8 @@ async function start() {
     const {
         fields,
         imageFields,
-        formFields
+        formFields,
+        profiles
     } = await getFormData();
 
     app.get(jsFiles, jsFilesAction);
