@@ -70,7 +70,8 @@ const jsFiles = fs.readdirSync(`${basedir}/js`).map(item => {
 }).concat(jsLibFiles).concat(jsMjpegFiles);
 
 const videoConfig = require(`${basedir}/libs/libcamera/videoConfig`),
-    imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
+    imageConfig = require(`${basedir}/libs/libcamera/stillConfig`),
+    profileConfig = require(`${basedir}/libs/libcamera/configProfiles`);
 
 const VIDEO_HTML = fs.readFileSync(`${basedir}/views/capture.html`).toString();
 
@@ -139,6 +140,30 @@ async function getFormData() {
             return '';
         }
     };
+
+    const profiles = profileConfig.map(item => {
+        const reducedVideo = item.fields.filter(field => {
+            return (field.forms.indexOf('videoOptions') > -1);
+        }).map(field => {
+            return {
+                name: field.name,
+                value: field.value
+            };
+        });
+        const reducedImage = item.fields.filter(field => {
+            return (field.forms.indexOf('imageOptions') > -1);
+        }).map(field => {
+            return {
+                name: field.name,
+                value: field.value
+            }
+        });
+        return {
+            name: item.name,
+            videoOptions: reducedVideo,
+            imageOptions: reducedImage
+        };
+    });
 
     const fields = videoConfig.map(formBuilder).reduce((acc, next) => {
         return `${acc}<br><br>${os.EOL}${next}`;
