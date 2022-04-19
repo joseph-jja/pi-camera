@@ -75,7 +75,7 @@ const videoConfig = require(`${basedir}/libs/libcamera/videoConfig`),
 
 const VIDEO_HTML = fs.readFileSync(`${basedir}/views/capture.html`).toString();
 
-function getHTML(videoBody, imageBody) {
+function getHTML(videoBody, imageBody, profiles) {
     return VIDEO_HTML.replace('[[VIDEO_FORM]]', videoBody).replace('[[IMAGE_FORM]]', imageBody);
 }
 
@@ -160,8 +160,8 @@ async function getFormData() {
         });
         return {
             name: item.name,
-            videoOptions: reducedVideo,
-            imageOptions: reducedImage
+            videoOptions: stringify(reducedVideo),
+            imageOptions: stringify(reducedImage)
         };
     });
 
@@ -248,7 +248,7 @@ async function start() {
             'Content-Type': 'text/html',
             'x-uuid': uuid
         });
-        response.end(getHTML(fields, imageFields).replace(pageUUID, uuid));
+        response.end(getHTML(fields, imageFields, profiles).replace(pageUUID, uuid));
     });
 
     app.get('/js/socket.io.js', (request, response) => {
