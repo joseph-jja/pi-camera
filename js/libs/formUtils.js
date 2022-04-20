@@ -31,9 +31,9 @@ export async function executeGETRequest(url) {
     }).then(async resp => {
         const message = await resp.text();
         setMessage(message);
-        Promise.resolve(message);
+        return Promise.resolve(message);
     }).catch(e => {
-        Promise.reject(e);
+        return Promise.reject(e);
     });
 }
 
@@ -43,11 +43,11 @@ export async function getConfig() {
         if (data) {
             saveOptionsObj.innerHTML = data;
         }
-        Promise.resolve(data);
+        return Promise.resolve(data);
     }).catch(e => {
         console.log(e);
         saveOptionsObj.innerHTML = 'Error: ' + e;
-        Promise.reject(e);
+        return Promise.reject(e);
     });
 }
 
@@ -57,10 +57,10 @@ export async function listImageCaptures() {
         if (images){
             container.innerHTML = images;
         }
-        Promise.resolve(images);
+        return Promise.resolve(images);
     }).catch(e => {
         console.log(e);
-        Promise.reject(e);
+        return Promise.reject(e);
     });
 }
 
@@ -93,9 +93,9 @@ export async function stopPreview() {
         iframe.src = '';
     }
     executeGETRequest(`/stopPreview?x-uuid=${xUuid}`).then(data => {  /* eslint-disable-line */
-        Promise.resolve(data);
+        return Promise.resolve(data);
     }).catch(e => {
-        Promise.reject(e);
+        return Promise.reject(e);
     });
 }
 
