@@ -23,10 +23,11 @@ function profileUpdate() {
                 const selectObj = form[field.name];
                 if (selectObj) {
                     const selectOpts = selectObj.options;
-                    const Array.from(selectOpts).findIndex(item => {
+                    const index = Array.from(selectOpts).findIndex(item => {
                         console.log(item.value, field.value, field.value === item.value);
                         return (field.value === item.value);
                     });
+                    console.log(index);
                 }
                 //form[field.name].selectedOptions[0].value = field.value;
             });
