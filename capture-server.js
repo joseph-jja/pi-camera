@@ -169,7 +169,7 @@ async function getFormData() {
             })
         };
     }).map(item => {
-        return `<option value="${item.value}">${item.name}</option>`; 
+        return `<option value="${item.value}">${item.name}</option>`;
     }).reduce((acc, next) => {
         return `${acc}${os.EOL}${next}`;
     });
@@ -248,7 +248,7 @@ async function start() {
             'Content-Type': 'appllication/json',
             'x-uuid': uuid
         });
-        response.end(stringify(getVideoUpdateOptions()) + ' ');
+        response.end(stringify(getVideoUpdateOptions()) + ' ' + stringify(getImageUpdateOptions()));
     });
 
     app.get('/', (request, response) => {
