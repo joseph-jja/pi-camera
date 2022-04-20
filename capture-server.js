@@ -248,7 +248,7 @@ async function start() {
             'Content-Type': 'appllication/json',
             'x-uuid': uuid
         });
-        response.end(stringify(getVideoUpdateOptions()) + ' ' + stringify(getImageUpdateOptions()));
+        response.end('[' + stringify(getVideoUpdateOptions()) + ', ' + stringify(getImageUpdateOptions()) + ']');
     });
 
     app.get('/', (request, response) => {
