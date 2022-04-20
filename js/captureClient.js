@@ -24,12 +24,12 @@ function profileUpdate() {
                 if (selectObj) {
                     const selectOpts = selectObj.options;
                     const index = Array.from(selectOpts).findIndex(item => {
-                        console.log(item.value, field.value, field.value === item.value);
                         return (field.value === item.value);
                     });
-                    console.log(index);
+                    if (index > 0) {
+                        form[field.name].selectedIndex = index;
+                    }
                 }
-                //form[field.name].selectedOptions[0].value = field.value;
             });
         });
     }
