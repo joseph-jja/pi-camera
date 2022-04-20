@@ -41,29 +41,6 @@
 
 <body>
     <div id="center-aligner">
-        <script type="text/javascript">
-            window.addEventListener('DOMContentLoaded', () => {
-                const canvas = document.getElementById('player');
-
-                const queryString = window.location.search;
-                const params = (queryString && queryString.length > 1) ?
-                    new URLSearchParams(queryString.substring(1)) :
-                    undefined;
-
-                if (!params || !params.get('canvas')) {
-                    canvas.style.display = 'none';
-
-                    // only create iframe if we are using canvas
-                    const iframe = document.createElement('iframe');
-                    iframe.width = 640;
-                    iframe.height = 480;
-                    iframe.id = 'videoDisplay';
-                    iframe.src = '/preview?x-uuid=[[PAGE_UUID]]';
-                    const parent = document.getElementById('center-aligner');
-                    parent.prepend(iframe);
-                }
-            });
-        </script>
         <canvas id="player" style="background: #000;" width="640px" height="480px;">
           Your browser sucks.
         </canvas>

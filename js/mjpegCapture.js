@@ -11,7 +11,18 @@ import {
 window.addEventListener('DOMContentLoaded', async () => {
 
     const canvasObj = document.getElementById('player');
-    if (!getParamValue('canvas') || !canvasObj) {
+    if (!getParamValue('canvas')) {
+        //not a canvas to do iframe impl
+        if (canvasObj) {
+            canvasObj.style.display = 'none';
+        }
+        const iframe = document.createElement('iframe');
+        iframe.width = 640;
+        iframe.height = 480;
+        iframe.id = 'videoDisplay';
+        iframe.src = '/preview?x-uuid=[[PAGE_UUID]]';
+        const parent = document.getElementById('center-aligner');
+        parent.prepend(iframe);
         return;
     }
     canvasObj.style.display = 'block';
