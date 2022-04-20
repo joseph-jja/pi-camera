@@ -20,7 +20,9 @@ function profileUpdate() {
             const opts = options[key];
             const form = document.forms[key];
             opts.forEach(field => {
-                form[field.name].selectedOptions[0].value = field.value;
+                const selectObj = form[field.name];
+                console.log(selectObj);
+                //form[field.name].selectedOptions[0].value = field.value;
             });
         });
     }
