@@ -169,7 +169,7 @@ async function getFormData() {
             }
         };
     }).map(item => {
-        return `<option value="${stringify(item.value)}">${item.name}</option>`;
+        return `<option value="${encodeURIComponent(stringify(item.value))}">${item.name}</option>`;
     }).reduce((acc, next) => {
         return `${acc}${os.EOL}${next}`;
     });
