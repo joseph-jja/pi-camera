@@ -38,21 +38,21 @@ function profileUpdate() {
     }
 }
 
+function usePlayer(playerMethod, altHandler) {
+    if (typeof window.streamPlayer !== 'undefined') {
+        window.streamPlayer[playerMethod]();
+        if (playerMethod === 'stop') {
+            altHandler();
+        }
+    } else {
+        altHandler();
+    }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
     listImageCaptures();
-
-    function usePlayer(playerMethod, altHandler) {
-        if (typeof window.streamPlayer !== 'undefined') {
-            window.streamPlayer[playerMethod]();
-            if (playerMethod === 'stop') {
-                altHandler();
-            }
-        } else {
-            altHandler();
-        }
-    }
 
     document.addEventListener('click', (event) => {
         const target = event.target;
