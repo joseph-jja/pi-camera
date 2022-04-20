@@ -25,30 +25,39 @@ export async function setMessage(resp) {
     serverMsg.innerHTML = msg;
 }
 
-export function getConfig() {
+export async function getConfig() {
     const saveOptionsObj = document.getElementById('previewOptions');
     fetch('/config').then(resp => {
         resp.text().then(data => {
             saveOptionsObj.innerHTML = data;
+            Promise.resolve(data);
         }).catch(e => {
             console.log(e);
             saveOptionsObj.innerHTML = 'Error: ' + e;
+            Promise.reject(e);
         });
     }).catch(e => {
         console.log(e);
         saveOptionsObj.innerHTML = 'Error: ' + e;
+        Promise.reject(e);
     });
 }
 
-export function listImageCaptures() {
+export async function listImageCaptures() {
     fetch('/imageList', {
         method: 'GET'
-    }).then(async resp => {
-        const images = await resp.text();
-        const container = document.getElementById('image-files');
-        container.innerHTML = images;
+    }).then(resp => {
+        resp.text().then(images => {
+            const container = document.getElementById('image-files');
+            container.innerHTML = images;
+            Promise.resolve(images);
+        }).catch(e => {
+            console.log(e);
+            Promise.reject(e);
+        });
     }).catch(e => {
         console.log(e);
+        Promise.reject(e);
     });
 }
 
