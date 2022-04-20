@@ -11,6 +11,21 @@ const {
     updateImage
 } = formUtils;
 
+function profileUpdate() {
+    const mainForm = document.forms['mainForm'];
+    const selected = mainForm.profiles.selectedOptions[0].value;
+    if (selected.length > 0) {
+        const options = JSON.parse(decodeURIComponent(selected));
+        Object.keys(options).forEach(key => {
+            const opts = options[key];
+            const form = document.forms(key);
+            opts.forEach(field => {
+                form[field.name].selectedOptions[0].value = field.value;
+            });
+        });
+    }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
@@ -36,6 +51,8 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         if (target.id === 'updateButton') {
             videoUpdate();
+        } else if (target.id === 'useProfile') {
+            profileUpdate();
         } else if (target.id === 'startPreview') {
             usePlayer('start', startPreview);
         } else if (target.id === 'stopPreview') {
