@@ -107,9 +107,10 @@ export function startPreview() {
     iframe.src = `/preview?x-uuid=${xUuid}`; /* eslint-disable-line */
 }
 
-export function updateImage(imageFormObj) {
+export async function updateImage() {
+    const imageFormObj = document.forms['imageOptions'];
     const options = getFormOptions(imageFormObj);
-    fetch('/imageUpdate', {
+    return fetch('/imageUpdate', {
         method: 'POST',
         cache: 'no-cache',
         referrerPolicy: 'no-referrer',
@@ -122,8 +123,10 @@ export function updateImage(imageFormObj) {
         setMessage(msg);
         listImageCaptures();
         getConfig();
+        return Promise.resolve(msg);
     }).catch(e => {
         console.log(e);
+        return Promise.reject(e);
     });
 }
 
@@ -131,7 +134,7 @@ export async function videoUpdate() {
     await stopPreview();
     const videoFormObj = document.forms['videoOptions'];
     const options = getFormOptions(videoFormObj);
-    fetch('/update', {
+    return fetch('/update', {
         method: 'POST',
         cache: 'no-cache',
         referrerPolicy: 'no-referrer',
@@ -144,9 +147,9 @@ export async function videoUpdate() {
         setMessage(msg);
         listImageCaptures();
         getConfig();
-        Promise.resolve(msg);
+        return Promise.resolve(msg);
     }).catch(e => {
         console.log(e);
-        Promise.reject(e);
+        return Promise.reject(e);
     });
 }

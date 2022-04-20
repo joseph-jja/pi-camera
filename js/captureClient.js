@@ -3,7 +3,7 @@ import * as formUtils from '/js/libs/formUtils.js';
 const {
     listImageCaptures,
     shutdown,
-    executeServerCommand,
+    executeGETRequest,
     stopPreview,
     startPreview,
     videoUpdate,
@@ -32,13 +32,15 @@ function profileUpdate() {
                 }
             });
         });
+        updateImage().catch().finally(() => {
+            videoUpdate();
+        });
     }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
-    const imageFormObj = document.forms['imageOptions'];
     listImageCaptures();
 
     function usePlayer(playerMethod, altHandler) {
@@ -67,26 +69,26 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'stopPreview') {
             usePlayer('stop', stopPreview);
         } else if (target.id === 'imageUpdate') {
-            updateImage(imageFormObj);
+            updateImage();
         } else if (target.id === 'renameFile') {
             const VALID_CHARACTERS = /[a-zA-Z]/g;
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const fname = (mainForm['new-name'].value || '').match(VALID_CHARACTERS).join('');
-            executeServerCommand(`/renameFile?oldname=${currentItem}&name=${fname}`);
+            executeGETRequest(`/renameFile?oldname=${currentItem}&name=${fname}`);
         } else if (target.id === 'deleteFile') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
-            executeServerCommand(`/deleteFile?name=${currentItem}`);
+            executeGETRequest(`/deleteFile?name=${currentItem}`);
         } else if (target.id === 'viewImageOrVideo') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.png');
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.value;
-            executeServerCommand(`/saveImage?count=${imageCount}`);
+            executeGETRequest(`/saveImage?count=${imageCount}`);
         } else if (target.id === 'saveStream') {
-            executeServerCommand('/saveStream');
+            executeGETRequest('/saveStream');
         } else if (target.id === 'saveRawStream') {
-            executeServerCommand('/saveRawStream');
+            executeGETRequest('/saveRawStream');
         } else if (target.id === 'listCaptures') {
             listImageCaptures();
         } else if (target.id === 'shutdownButton') {
