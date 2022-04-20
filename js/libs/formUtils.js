@@ -26,7 +26,7 @@ function setMessage(msg) {
 //    const msg = await resp.text();
 
 export async function executeGETRequest(url) {
-    fetch(url, {
+    return fetch(url, {
         method: 'GET'
     }).then(async resp => {
         const message = await resp.text();
