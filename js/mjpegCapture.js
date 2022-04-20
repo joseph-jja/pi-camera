@@ -1,11 +1,10 @@
 import {
-    stopPreview,
-    videoUpdate
+    stopPreview
 } from '/js/libs/formUtils.js';
 
 import {
-    MJPEGPlayer,
-    MJPEGStream
+    MJPEGPlayer//,
+    //MJPEGStream
 } from '/js/mjpeg/index.js';
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -34,9 +33,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const options = {
                 errorHandler: async (err) => {
                     console.log(err);
-                    streamPlayer.stream = new MJPEGStream(streamPlayer.options);
-                    await videoUpdate();
-                    streamPlayer.start();
+                    //streamPlayer.stream = new MJPEGStream(streamPlayer.options);
+                    //streamPlayer.start();
                 },
                 refreshRate: 250,
                 onStop: stopPreview
