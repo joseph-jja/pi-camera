@@ -20,10 +20,13 @@ function profileUpdate() {
             const opts = options[key];
             const form = document.forms[key];
             opts.forEach(field => {
-                const selectOpts = form[field.name].options;
-                Array.from(selectOpts).find(item => {
-                    console.log(item.value, opts.value, opts.value === item.value);
-                });
+                const selectObj = form[field.name];
+                if (selectObj) { 
+                    const selectOpts = form[field.name].options;
+                    Array.from(selectOpts).find(item => {
+                        console.log(item.value, opts.value, opts.value === item.value);
+                    });
+                }
                 //form[field.name].selectedOptions[0].value = field.value;
             });
         });
