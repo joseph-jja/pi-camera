@@ -163,10 +163,10 @@ async function getFormData() {
 
         return {
             name: item.name,
-            value: stringify({
+            value: {
                 videoOptions: reducedVideo,
                 imageOptions: reducedImage
-            })
+            }
         };
     }).map(item => {
         return `<option value="${stringify(item.value)}">${item.name}</option>`;
