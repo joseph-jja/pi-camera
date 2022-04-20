@@ -163,14 +163,16 @@ async function getFormData() {
 
         return {
             name: item.name,
-            values: [ stringify({
+            value: stringify({
                 videoOptions: reducedVideo,
                 imageOptions: reducedImage
-            }) ]
+            })
         };
-    });/*.map(formBuilder).reduce((acc, next) => {
-        return `${acc}<br><br>${os.EOL}${next}`;
-    });*/
+    }).map(item => {
+        return `<option value="${item.value}">${item.name}</option>`; 
+    }).reduce((acc, next) => {
+        return `${acc}${os.EOL}${next}`;
+    });
 
     const fields = videoConfig.map(formBuilder).reduce((acc, next) => {
         return `${acc}<br><br>${os.EOL}${next}`;
