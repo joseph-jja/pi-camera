@@ -18,7 +18,7 @@ function profileUpdate() {
         const options = JSON.parse(decodeURIComponent(selected));
         Object.keys(options).forEach(key => {
             const opts = options[key];
-            const form = document.forms(key);
+            const form = document.forms[key];
             opts.forEach(field => {
                 form[field.name].selectedOptions[0].value = field.value;
             });
