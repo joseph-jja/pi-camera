@@ -1,6 +1,6 @@
 import {
     stopPreview,
-    getParams
+    getParamValue
 } from '/js/libs/formUtils.js';
 
 import {
@@ -11,9 +11,7 @@ import {
 window.addEventListener('DOMContentLoaded', async () => {
     let streamPlayer;
 
-    const params = getParams();
-
-    if (!params || !params.get('canvas')) {
+    if (!getParamValue('canvas')) {
         return;
     }
 

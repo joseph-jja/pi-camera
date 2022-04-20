@@ -26,6 +26,11 @@ export function getParams() {
         undefined;
 }
 
+export function getParamValue(paramName) {
+    const params = getParams();
+    return (params ? params.get(paramName) : undefined);
+}
+
 function setMessage(msg) {
     const serverMsg = document.getElementById('server-messages');
     serverMsg.innerHTML = msg;
