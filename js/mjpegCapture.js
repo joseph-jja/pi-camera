@@ -8,7 +8,7 @@ import {
     //MJPEGStream
 } from '/js/mjpeg/index.js';
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
     let streamPlayer;
 
     const params = getParams();
@@ -23,25 +23,27 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     canvasObj.style.display = 'block';
 
-    fetch('/config').then(async resp => {
-        const headers = await resp.headers;
-        const xUuid = headers.get('x-uuid');
+    const uuid = (!xUuid) ? /* eslint-disable-line */
+        await fetch('/config').then(async resp => {
+            const headers = await resp.headers;
+            const xuid = headers.get('x-uuid');
+            return xuid;
+        }) : xUuid;  /* eslint-disable-line */
 
-        if (canvasObj.style.display === 'block') {
-            const options = {
-                errorHandler: async (err) => {
-                    console.log(err);
-                    //streamPlayer.stream = new MJPEGStream(streamPlayer.options);
-                    //streamPlayer.start();
-                },
-                refreshRate: 250,
-                onStop: stopPreview
-            };
+    if (canvasObj.style.display === 'block') {
+        const options = {
+            errorHandler: async (err) => {
+                console.log(err);
+                //streamPlayer.stream = new MJPEGStream(streamPlayer.options);
+                //streamPlayer.start();
+            },
+            refreshRate: 250,
+            onStop: stopPreview
+        };
 
-            //Leave your .mjpeg video URL here.
-            streamPlayer = new MJPEGPlayer('player', `/preview?x-uuid=${xUuid}`, options);
-            streamPlayer.start();
-            window.streamPlayer = streamPlayer;
-        }
-    });
+        //Leave your .mjpeg video URL here.
+        streamPlayer = new MJPEGPlayer('player', `/preview?x-uuid=${uuid}`, options);
+        streamPlayer.start();
+        window.streamPlayer = streamPlayer;
+    }
 });
