@@ -52,7 +52,9 @@ export async function getConfig() {
 export async function listImageCaptures() {
     executeGETRequest('/imageList').then(images => {
         const container = document.getElementById('image-files');
-        container.innerHTML = images;
+        if (images){
+            container.innerHTML = images;
+        }
         Promise.resolve(images);
     }).catch(e => {
         console.log(e);
