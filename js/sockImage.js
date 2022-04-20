@@ -9,7 +9,7 @@ socket.on('connect', () => {
     }, 5000);
 });
 socket.on('info', (data) => {
-    console.log('Got data ', data);
+    //console.log('Got data ', data);
     const keys = Object.keys(data);
     const results = keys.map(key => {
         return `${key}: ${JSON.stringify(data[key])}`;
