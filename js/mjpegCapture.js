@@ -1,5 +1,6 @@
 import {
-    stopPreview
+    stopPreview,
+    getParams
 } from '/js/libs/formUtils.js';
 
 import {
@@ -10,10 +11,7 @@ import {
 window.addEventListener('DOMContentLoaded', () => {
     let streamPlayer;
 
-    const queryString = window.location.search;
-    const params = (queryString && queryString.length > 1) ?
-        new URLSearchParams(queryString.substring(1)) :
-        undefined;
+    const params = getParams();
 
     if (!params || !params.get('canvas')) {
         return;

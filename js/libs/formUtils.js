@@ -19,6 +19,13 @@ export function getFormOptions(formObj) {
     return options;
 }
 
+export function getParams() {
+    const queryString = window.location.search;
+    return (queryString && queryString.length > 1) ?
+        new URLSearchParams(queryString.substring(1)) :
+        undefined;
+}
+
 function setMessage(msg) {
     const serverMsg = document.getElementById('server-messages');
     serverMsg.innerHTML = msg;
