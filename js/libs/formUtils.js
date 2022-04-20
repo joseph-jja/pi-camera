@@ -40,7 +40,9 @@ export async function executeGETRequest(url) {
 export async function getConfig() {
     const saveOptionsObj = document.getElementById('previewOptions');
     executeGETRequest('/config').then(data => {
-        saveOptionsObj.innerHTML = data;
+        if (data) {
+            saveOptionsObj.innerHTML = data;
+        }
         Promise.resolve(data);
     }).catch(e => {
         console.log(e);
