@@ -39,7 +39,7 @@ export async function executeGETRequest(url) {
 
 export async function getConfig() {
     const saveOptionsObj = document.getElementById('previewOptions');
-    executeGETRequest('/config').then(data => {
+    return executeGETRequest('/config').then(data => {
         if (data) {
             saveOptionsObj.innerHTML = data;
         }
@@ -52,7 +52,7 @@ export async function getConfig() {
 }
 
 export async function listImageCaptures() {
-    executeGETRequest('/imageList').then(images => {
+    return executeGETRequest('/imageList').then(images => {
         const container = document.getElementById('image-files');
         if (images){
             container.innerHTML = images;
@@ -121,6 +121,7 @@ export function updateImage(imageFormObj) {
         const msg = await resp.text();
         setMessage(msg);
         listImageCaptures();
+        getConfig();
     }).catch(e => {
         console.log(e);
     });
