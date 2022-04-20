@@ -8,14 +8,25 @@ const {
     startPreview,
     videoUpdate,
     displayImages,
-    updateImage
+    updateImage,
+    getConfig
 } = formUtils;
+
+function init() {
+    listImageCaptures();
+
+    getConfig().then(data => {
+        console.log(data);
+    }).catch(e => {
+        console.error(e);
+    });
+}
 
 window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
     const imageFormObj = document.forms['imageOptions'];
-    listImageCaptures();
+    init();
 
     function usePlayer(playerMethod, altHandler) {
         if (typeof window.streamPlayer !== 'undefined') {

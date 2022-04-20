@@ -19,23 +19,29 @@ export function getFormOptions(formObj) {
     return options;
 }
 
-export async function setMessage(resp) {
+function setMessage(msg) {
     const serverMsg = document.getElementById('server-messages');
-    const msg = await resp.text();
     serverMsg.innerHTML = msg;
+}
+//    const msg = await resp.text();
+
+export async function executeGETRequest(url) {
+    fetch(url, {
+        method: 'GET'
+    }).then(async resp => {
+        const message = await resp.text();
+        setMessage(message);
+        Promise.resolve(message);
+    }).catch(e => {
+        Promise.reject(e);
+    });
 }
 
 export async function getConfig() {
     const saveOptionsObj = document.getElementById('previewOptions');
-    fetch('/config').then(resp => {
-        resp.text().then(data => {
-            saveOptionsObj.innerHTML = data;
-            Promise.resolve(data);
-        }).catch(e => {
-            console.log(e);
-            saveOptionsObj.innerHTML = 'Error: ' + e;
-            Promise.reject(e);
-        });
+    executeGETRequest('/config').then(data => {
+        saveOptionsObj.innerHTML = data;
+        Promise.resolve(data);
     }).catch(e => {
         console.log(e);
         saveOptionsObj.innerHTML = 'Error: ' + e;
@@ -44,17 +50,10 @@ export async function getConfig() {
 }
 
 export async function listImageCaptures() {
-    fetch('/imageList', {
-        method: 'GET'
-    }).then(resp => {
-        resp.text().then(images => {
-            const container = document.getElementById('image-files');
-            container.innerHTML = images;
-            Promise.resolve(images);
-        }).catch(e => {
-            console.log(e);
-            Promise.reject(e);
-        });
+    executeGETRequest('/imageList').then(images => {
+        const container = document.getElementById('image-files');
+        container.innerHTML = images;
+        Promise.resolve(images);
     }).catch(e => {
         console.log(e);
         Promise.reject(e);
@@ -84,31 +83,15 @@ export function displayImages(url, isImage) {
     videoDisplay.src = url;
 }
 
-export function executeServerCommand(url) {
-    getConfig();
-    fetch(url, {
-        method: 'GET'
-    }).then(resp => {
-        setMessage(resp);
-        listImageCaptures();
-    }).catch(e => {
-        console.log(e);
-    });
-}
-
 export async function stopPreview() {
     const iframe = document.getElementById('videoDisplay');
     if (iframe) {
         iframe.src = '';
     }
-    fetch(`/stopPreview?x-uuid=${xUuid}`, {  /* eslint-disable-line */
-        method: 'GET'
-    }).then(resp => {
-        setMessage(resp);
-        Promise.resolve();
+    executeGETRequest(`/stopPreview?x-uuid=${xUuid}`).then(data => {  /* eslint-disable-line */
+        Promise.resolve(data);
     }).catch(e => {
-        console.log(e);
-        Promise.reject();
+        Promise.reject(e);
     });
 }
 
@@ -131,7 +114,9 @@ export function updateImage(imageFormObj) {
         },
         body: options
     }).then(async resp => {
-        setMessage(resp);
+        const msg = await resp.text();
+        setMessage(msg);
+        listImageCaptures();
     }).catch(e => {
         console.log(e);
     });
@@ -150,11 +135,13 @@ export async function videoUpdate() {
         },
         body: options
     }).then(async resp => {
-        setMessage(resp);
+        const msg = await resp.text();
+        setMessage(msg);
+        listImageCaptures();
         getConfig();
-        Promise.resolve();
+        Promise.resolve(msg);
     }).catch(e => {
         console.log(e);
-        Promise.reject();
+        Promise.reject(e);
     });
 }
