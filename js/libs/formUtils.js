@@ -37,12 +37,14 @@ function setMessage(msg) {
 }
 //    const msg = await resp.text();
 
-export async function executeGETRequest(url) {
+export async function executeGETRequest(url, skipMessage = false) {
     return fetch(url, {
         method: 'GET'
     }).then(async resp => {
         const message = await resp.text();
-        setMessage(message);
+        if (!skipMessage) {
+            setMessage(message);
+        }
         return Promise.resolve(message);
     }).catch(e => {
         return Promise.reject(e);
@@ -64,7 +66,7 @@ export async function getConfig() {
 }
 
 export async function listImageCaptures() {
-    return executeGETRequest('/imageList').then(images => {
+    return executeGETRequest('/imageList', true).then(images => {
         const container = document.getElementById('image-files');
         if (images){
             container.innerHTML = images;
