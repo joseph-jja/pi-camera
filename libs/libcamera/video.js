@@ -6,7 +6,7 @@ const basedir = process.cwd();
 
 const stringify = require(`${basedir}/libs/stringify`),
     {
-        LIBCAMERA_VIDEO
+        VIDEO
     } = require(`${basedir}/libs/libcamera/Constants`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     config = require(`${basedir}/libs/libcamera/videoConfig`);
@@ -43,9 +43,9 @@ function streamMjpeg(options = []) {
     spawnOptions.push('-o');
     spawnOptions.push('-');
 
-    logger.info(`Libcamera video: ${LIBCAMERA_VIDEO} options: ${stringify(spawnOptions)}`);
+    logger.info(`Libcamera video: ${VIDEO} options: ${stringify(spawnOptions)}`);
 
-    return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+    return spawn(VIDEO, spawnOptions, {
         env: process.env
     });
 }
@@ -56,7 +56,7 @@ function saveH264(options = []) {
 
     logger.info(`Libcamera video save h264 options: ${stringify(spawnOptions)}`);
 
-    return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+    return spawn(VIDEO, spawnOptions, {
         env: process.env
     });
 }
@@ -67,7 +67,7 @@ function saveMjpeg(options = []) {
 
     logger.info(`Libcamera video save mjpeg options: ${stringify(spawnOptions)}`);
 
-    return spawn(LIBCAMERA_VIDEO, spawnOptions, {
+    return spawn(VIDEO, spawnOptions, {
         env: process.env
     });
 }

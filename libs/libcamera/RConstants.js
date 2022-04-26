@@ -1,8 +1,8 @@
-const RASPISTILL = '/usr/bin/raspistill';
+const STILL = '/usr/bin/raspistill';
 
-const RASPIVIDEO = '/usr/bin/raspivid';
+const VIDEO = '/usr/bin/raspivid';
 
 module.exports = {
-    RASPISTILL,
-    RASPIVIDEO
+    STILL,
+    VIDEO
 };

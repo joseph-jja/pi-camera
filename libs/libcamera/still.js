@@ -7,7 +7,7 @@ const basedir = process.cwd();
 const stringify = require(`${basedir}/libs/stringify`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
-        LIBCAMERA_STILL
+        STILL
     } = require(`${basedir}/libs/libcamera/Constants`),
     imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
 
@@ -46,7 +46,7 @@ function streamJpeg(options) {
 
     logger.info(`Libcamera still spawn options: ${stringify(spawnOptions)}`);
 
-    return spawn(LIBCAMERA_STILL, spawnOptions, {
+    return spawn(STILL, spawnOptions, {
         env: process.env
     });
 }
@@ -58,7 +58,7 @@ function saveImage(options) {
 
     logger.info(`Libcamera still save image options: ${stringify(spawnOptions)}`);
 
-    return spawn(LIBCAMERA_STILL, spawnOptions, {
+    return spawn(STILL, spawnOptions, {
         env: process.env
     });
 }
