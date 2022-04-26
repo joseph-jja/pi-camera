@@ -5,11 +5,16 @@ const {
 const basedir = process.cwd();
 
 const stringify = require(`${basedir}/libs/stringify`),
+    getEnvVar = require(`${basedir}/libs/env`).getEnvVar,
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
         STILL
-    } = require(`${basedir}/libs/libcamera/Constants`),
-    imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
+    } = (getEnvVar('LEGACY_STACK') ?
+        require(`${basedir}/libs/libcamera/RConstants`) :
+        require(`${basedir}/libs/libcamera/Constants`)),
+    imageConfig = (getEnvVar('LEGACY_STACK') ?
+        require(`${basedir}/libs/libcamera/rstillConfig`) :
+        require(`${basedir}/libs/libcamera/stillConfig`));
 
 const DEFAULT_IMAGE_CONFIG = [];
 
