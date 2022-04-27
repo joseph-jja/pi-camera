@@ -181,7 +181,7 @@ function saveMjpeg(options = []) {
 module.exports = {
     getVideoUpdateOptions,
     setVideoUpdateOptions,
-    streamMjpeg: (getEnvVar('NO_LIB_CAMERA') ? streamFfmpegMjpeg : streamMjpeg),
+    streamMjpeg: (getEnvVar('NO_LIBCAMERA') ? streamFfmpegMjpeg : streamMjpeg),
     saveH264,
     saveMjpeg
 };
