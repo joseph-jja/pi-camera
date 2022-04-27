@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         iframe.width = 640;
         iframe.height = 480;
         iframe.id = 'videoDisplay';
-        iframe.src = '/preview?x-uuid=[[PAGE_UUID]]';
+        iframe.src = `/preview?x-uuid=${window.xUuid}`;
         const parent = document.getElementById('center-aligner');
         parent.prepend(iframe);
         return;
