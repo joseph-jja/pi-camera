@@ -133,7 +133,7 @@ async function streamFfmpegMjpeg() {
 
     const spawnOptions = ['-f', 'video4linux2', '-i', videoDevice[0], '-q:v', '2', '-f', 'mpjpeg', '-'];
 
-    logger.info(`Libcamera video: ${VIDEO} options: ${stringify(spawnOptions)}`);
+    logger.info(`Using ffmpeg for video with options: ${stringify(spawnOptions)}`);
 
     return spawn('ffmpeg', spawnOptions, {
         env: process.env
