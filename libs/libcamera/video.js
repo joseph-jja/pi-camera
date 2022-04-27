@@ -104,7 +104,11 @@ async function getFirstVideoCaptureDevice() {
 
     const resultDevices = await Promise.allSettled(promiseList);
 
-    return resultDevices;
+    return resultDevices.filter(item => {
+        return item.value.hasdata;
+    }).map(item => {
+        return `/dev/${item.value.device}`;
+    });
 }
 
 function streamMjpeg(options = []) {
