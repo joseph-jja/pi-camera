@@ -62,27 +62,34 @@ function runVideo4Linux2Control(device) {
         const capture = spawn('grep', ['Video Capture']);
         const filtered = spawn('grep', ['-v', 'Format Video Capture']);
 
-        let hasdata = false;
+        const resultData = {
+            hasdata: false,
+            device,
+            errorMsg: ''
+        };
 
 	    v4l2ctl.stdout.pipe(capture.stdin);
 	    capture.stdout.pipe(filtered.stdin);
 	    filtered.stdout.on('data', d => {
 		    if (d && d.length > 0 ) {
-                hasdata = true;
+                resultData.hasdata = true;
 		    }
 	    });
 
 	    v4l2ctl.stderr.on('data', d => {
-            return reject(d);
+            resultData.errorMsg = d;
+            return reject(resultData);
 	    });
 	    capture.stderr.on('data', d => {
-            return reject(d);
+            resultData.errorMsg = d;
+            return reject(resultData);
 	    });
 	    filtered.stderr.on('data', d => {
-            return reject(d);
+            resultData.errorMsg = d;
+            return reject(resultData);
 	    });
         filtered.on('close', () => {
-            return resolve(hasdata);
+            return resolve(resultData);
         });
     });
 }
