@@ -4,6 +4,7 @@ const fs = require('fs'),
 const basedir = process.cwd();
 
 const stringify = require(`${basedir}/libs/stringify`),
+    getEnvVar = require(`${basedir}/libs/env`).getEnvVar,
     {
         padNumber,
         getH264Bitrate
@@ -25,13 +26,16 @@ const stringify = require(`${basedir}/libs/stringify`),
     } = require(`${basedir}/libs/libcamera/video`),
     {
         getFfmpegStream,
-        playFile
+        playFile,
+        getFfmpegWebmStream
     } = require(`${basedir}/libs/ffmpeg`);
 
 let libcameraProcess,
     directStreamProcess,
     imageStreamProcess,
     playbackStream;
+
+const ffmpegStreamFunction = getEnvVar('STREAM_WEBM') ? getFfmpegWebmStream : getFfmpegStream;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
@@ -274,7 +278,7 @@ function directStream(options = []) {
     imageStreamProcess = undefined;
     // stream libcamera stdout to ffmpeg stdin
     libcameraProcess = streamMjpeg(spawnOptions);
-    directStreamProcess = getFfmpegStream(ffmpegFramerate);
+    directStreamProcess = ffmpegStreamFunction(ffmpegFramerate);
 
     const DevNull = new NullStream();
     directStreamProcess.stdout.pipe(DevNull);

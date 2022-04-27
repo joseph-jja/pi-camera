@@ -1,6 +1,7 @@
 const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
+    getEnvVar = require(`${basedir}/libs/env`).getEnvVar,
     {
         getDirectStreamProcesss,
         captureEmitter
@@ -10,11 +11,14 @@ function errorHandler() {
     logger.info('Video streaming error');
 }
 
+const CONTENT_TYPE = getEnvVar('STREAM_WEBM') ? 'video/webm' :
+    'multipart/x-mixed-replace;boundary=ffmpeg';
+
 function setupPreviewStream(streamObject, response, uuid) {
 
     response.writeHead(200, {
         //'Content-Type': 'video/webm',
-        'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
+        'Content-Type': CONTENT_TYPE,
         'Cache-Control': 'no-cache',
         'x-uuid': uuid
     });
