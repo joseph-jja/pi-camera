@@ -96,22 +96,51 @@ function runVideo4Linux2Control(device) {
 
 async function getFirstVideoCaptureDevice() {
 
-    const devices = getVideoCaptureDevices();
+    const devices = await getVideoCaptureDevices();
+    if (!devices || devices.length <= 0) {
+        return [];
+    }
 
     const promiseList = devices.map(device => {
         return runVideo4Linux2Control(device);
     });
 
     const resultDevices = await Promise.allSettled(promiseList);
+    if (!resultDevices || resultDevices.length <= 0) {
+        return [];
+    }
 
-    return resultDevices.filter(item => {
+    const filteredList = resultDevices.filter(item => {
         return item.value.hasdata;
-    }).map(item => {
+    });
+
+    if (filteredList.length <= 0) {
+        return [];
+    }
+
+    return filteredList.map(item => {
         return `/dev/${item.value.device}`;
     });
 }
 
-function streamMjpeg(options = []) {
+async function streamFfmpegMjpeg() {
+
+    const videoDevice = await getFirstVideoCaptureDevice();
+    if (videoDevice.length === 0 ) {
+        logger.error('No video devices found!');
+        return undefined;
+    }
+
+    const spawnOptions = ['-f', 'video4linux2', '-i', videoDevice[0], '-q:v', '2', '-f', 'mpjpeg', '-'];
+
+    logger.info(`Libcamera video: ${VIDEO} options: ${stringify(spawnOptions)}`);
+
+    return spawn('ffmpeg', spawnOptions, {
+        env: process.env
+    });
+}
+
+async function streamMjpeg(options = []) {
 
     // default image streaming options
     const spawnOptions = ['--codec', 'mjpeg', '-t', '0'].concat(options);
@@ -152,7 +181,7 @@ function saveMjpeg(options = []) {
 module.exports = {
     getVideoUpdateOptions,
     setVideoUpdateOptions,
-    streamMjpeg,
+    streamMjpeg: (getEnvVar('NO_LIB_CAMERA') ? streamFfmpegMjpeg : streamMjpeg),
     saveH264,
     saveMjpeg
 };

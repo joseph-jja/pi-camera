@@ -265,7 +265,7 @@ function imageStream(options = [], response) {
     });
 }
 
-function directStream(options = []) {
+async function directStream(options = []) {
 
     const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
 
@@ -277,7 +277,11 @@ function directStream(options = []) {
 
     imageStreamProcess = undefined;
     // stream libcamera stdout to ffmpeg stdin
-    libcameraProcess = streamMjpeg(spawnOptions);
+    libcameraProcess = await streamMjpeg(spawnOptions);
+    if (!libcameraProcess) {
+        return;
+    }
+    
     directStreamProcess = ffmpegStreamFunction(ffmpegFramerate);
 
     const DevNull = new NullStream();
