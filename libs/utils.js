@@ -1,4 +1,5 @@
 const dns = require('dns').promises,
+    statSync = require('fs').statSync,
     childProcess = require('child_process'),
     {
         readdir
@@ -8,6 +9,14 @@ function padNumber(num) {
     return new String(num).padStart(2, 0);
 }
 
+function exists(file) {
+    try {
+        const exists = statSync(file);
+        return exists;
+    } catch(e) {
+        return false;
+    }
+}
 async function getIPAddress(hostname) {
 
     let ipaddr;
@@ -52,7 +61,7 @@ async function listImageFiles(imageDir) {
             });
         });
     };
-    
+
     const [err, files] = await promiseWrapper(promisifedReaddir(imageDir));
     if (err) {
         return {
@@ -128,5 +137,6 @@ module.exports = {
     promiseWrapper,
     listImageFiles,
     getH264Bitrate,
-    getOptions
+    getOptions,
+    exists
 };
