@@ -71,7 +71,9 @@ async function getVideoStreamCommand() {
 
     const results = {
         STILL: undefined,
+        imageConfig: undefined,
         VIDEO: undefined,
+        videoConfig: undefined,
         FFMPEG: undefined,
     };
 
@@ -81,6 +83,7 @@ async function getVideoStreamCommand() {
         const executable = await runCommand(libcameraStill).catch(errorHandler);
         if (exectuable) {
             results.STILL = libcameraStill;
+            results.imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
         }
     }
 
@@ -89,6 +92,7 @@ async function getVideoStreamCommand() {
         const executable = await runCommand(libcameraVid).catch(errorHandler);
         if (exectuable) {
             results.VIDEO = libcameraVid;
+            results.videoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
         }
     }
 
@@ -99,6 +103,7 @@ async function getVideoStreamCommand() {
             const executable = await runCommand('raspistill').catch(errorHandler);
             if (exectuable) {
                 results.STILL = raspistill;
+                results.imageConfig = require(`${basedir}/libs/libcamera/rstillConfig`);
             }
         }
     }
@@ -110,6 +115,7 @@ async function getVideoStreamCommand() {
             const executable = await runCommand(raspivid).catch(errorHandler);
             if (exectuable) {
                 results.VIDEO = raspivid;
+                results.videoConfig = require(`${basedir}/libs/libcamera/rvideoConfig`);
             }
         }
     }
