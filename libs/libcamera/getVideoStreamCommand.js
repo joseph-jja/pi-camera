@@ -67,15 +67,21 @@ function errorHandler(e) {
     return Promise.resolve();
 }
 
+let hasRun = false;
+const results = {
+    STILL: undefined,
+    imageConfig: undefined,
+    VIDEO: undefined,
+    videoConfig: undefined,
+    FFMPEG: undefined,
+};
+
+
 async function getVideoStreamCommand() {
 
-    const results = {
-        STILL: undefined,
-        imageConfig: undefined,
-        VIDEO: undefined,
-        videoConfig: undefined,
-        FFMPEG: undefined,
-    };
+    if (hasRun) {
+        return results;
+    }
 
     // first check for libcamera 
     const libcameraStill = await whichCommand('libcamera-still').catch(errorHandler);
@@ -127,6 +133,8 @@ async function getVideoStreamCommand() {
             results.FFMPEG = ffmpeg;
         }
     }
+
+    hasRun = true;
 
     return results;
 }
