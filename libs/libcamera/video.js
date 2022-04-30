@@ -9,6 +9,7 @@ const basedir = process.cwd();
 
 const stringify = require(`${basedir}/libs/stringify`),
     getEnvVar = require(`${basedir}/libs/env`).getEnvVar,
+    getFirstVideoCaptureDevice = require(`${basedir}/libs/libcamera/getFirstVideoCaptureDevice`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
         VIDEO
@@ -40,87 +41,6 @@ if (DEFAULT_OPTIONS.length === 0) {
         }
     });
     setVideoUpdateOptions(DEFAULT_OPTIONS);
-}
-
-function getVideoCaptureDevices() {
-    return new Promise((resolve, reject) => {
-        readdir('/dev', (err, data) => {
-            if (err) {
-                return reject(err);
-            }
-            const videoDevices = data.filter(device => {
-                return device.startsWith('video');
-            });
-            return resolve(videoDevices);
-        });
-    });
-}
-
-function runVideo4Linux2Control(device) {
-    return new Promise((resolve, reject) => {
-        const v4l2ctl= spawn('v4l2-ctl', [`--device=/dev/${device}`, '--all']);
-        const capture = spawn('grep', ['Video Capture']);
-        const filtered = spawn('grep', ['-v', 'Format Video Capture']);
-
-        const resultData = {
-            hasdata: false,
-            device,
-            errorMsg: ''
-        };
-
-	    v4l2ctl.stdout.pipe(capture.stdin);
-	    capture.stdout.pipe(filtered.stdin);
-	    filtered.stdout.on('data', d => {
-		    if (d && d.length > 0 ) {
-                resultData.hasdata = true;
-		    }
-	    });
-
-	    v4l2ctl.stderr.on('data', d => {
-            resultData.errorMsg = d;
-            return reject(resultData);
-	    });
-	    capture.stderr.on('data', d => {
-            resultData.errorMsg = d;
-            return reject(resultData);
-	    });
-	    filtered.stderr.on('data', d => {
-            resultData.errorMsg = d;
-            return reject(resultData);
-	    });
-        filtered.on('close', () => {
-            return resolve(resultData);
-        });
-    });
-}
-
-async function getFirstVideoCaptureDevice() {
-
-    const devices = await getVideoCaptureDevices();
-    if (!devices || devices.length <= 0) {
-        return [];
-    }
-
-    const promiseList = devices.map(device => {
-        return runVideo4Linux2Control(device);
-    });
-
-    const resultDevices = await Promise.allSettled(promiseList);
-    if (!resultDevices || resultDevices.length <= 0) {
-        return [];
-    }
-
-    const filteredList = resultDevices.filter(item => {
-        return item.value.hasdata;
-    });
-
-    if (filteredList.length <= 0) {
-        return [];
-    }
-
-    return filteredList.map(item => {
-        return `/dev/${item.value.device}`;
-    });
 }
 
 async function streamFfmpegMjpeg() {
