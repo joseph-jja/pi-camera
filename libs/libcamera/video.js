@@ -1,9 +1,8 @@
 const {
-        readdir
-    } = require('fs'),
-    {
-        spawn
-    } = require('child_process');
+    readdir
+} = require('fs'), {
+    spawn
+} = require('child_process');
 
 const basedir = process.cwd();
 
@@ -46,7 +45,7 @@ if (DEFAULT_OPTIONS.length === 0) {
 async function streamFfmpegMjpeg() {
 
     const videoDevice = await getFirstVideoCaptureDevice();
-    if (videoDevice.length === 0 ) {
+    if (videoDevice.length === 0) {
         logger.error('No video devices found!');
         return undefined;
     }

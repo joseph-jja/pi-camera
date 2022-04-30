@@ -1,9 +1,8 @@
 const {
-        readdir
-    } = require('fs'),
-    {
-        spawn
-    } = require('child_process');
+    readdir
+} = require('fs'), {
+    spawn
+} = require('child_process');
 
 const basedir = process.cwd();
 
@@ -28,7 +27,7 @@ function getVideoCaptureDevices() {
 // find video capture devices
 function runVideo4Linux2Control(device) {
     return new Promise((resolve, reject) => {
-        const v4l2ctl= spawn('v4l2-ctl', [`--device=/dev/${device}`, '--all']);
+        const v4l2ctl = spawn('v4l2-ctl', [`--device=/dev/${device}`, '--all']);
         const capture = spawn('grep', ['Video Capture']);
         const filtered = spawn('grep', ['-v', 'Format Video Capture']);
 
@@ -38,26 +37,26 @@ function runVideo4Linux2Control(device) {
             errorMsg: ''
         };
 
-	    v4l2ctl.stdout.pipe(capture.stdin);
-	    capture.stdout.pipe(filtered.stdin);
-	    filtered.stdout.on('data', d => {
-		    if (d && d.length > 0 ) {
+        v4l2ctl.stdout.pipe(capture.stdin);
+        capture.stdout.pipe(filtered.stdin);
+        filtered.stdout.on('data', d => {
+            if (d && d.length > 0) {
                 resultData.hasdata = true;
-		    }
-	    });
+            }
+        });
 
-	    v4l2ctl.stderr.on('data', d => {
+        v4l2ctl.stderr.on('data', d => {
             resultData.errorMsg = d;
             return reject(resultData);
-	    });
-	    capture.stderr.on('data', d => {
+        });
+        capture.stderr.on('data', d => {
             resultData.errorMsg = d;
             return reject(resultData);
-	    });
-	    filtered.stderr.on('data', d => {
+        });
+        filtered.stderr.on('data', d => {
             resultData.errorMsg = d;
             return reject(resultData);
-	    });
+        });
         filtered.on('close', () => {
             return resolve(resultData);
         });
