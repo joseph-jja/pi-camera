@@ -13,7 +13,7 @@ function exists(file) {
     try {
         const exists = statSync(file);
         return exists;
-    } catch(e) {
+    } catch (e) {
         return false;
     }
 }

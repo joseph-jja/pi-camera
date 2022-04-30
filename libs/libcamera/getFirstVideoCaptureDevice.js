@@ -69,6 +69,7 @@ async function getFirstVideoCaptureDevice() {
 
     const devices = await getVideoCaptureDevices();
     if (!devices || devices.length <= 0) {
+        logger.error('No video devices found!');
         return [];
     }
 
@@ -78,6 +79,7 @@ async function getFirstVideoCaptureDevice() {
 
     const resultDevices = await Promise.allSettled(promiseList);
     if (!resultDevices || resultDevices.length <= 0) {
+        logger.error('No video capture devices found!');
         return [];
     }
 

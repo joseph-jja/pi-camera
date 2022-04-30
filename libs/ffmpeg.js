@@ -10,7 +10,8 @@ const DIRECT_STREAM_OPTS = ['-i', 'pipe:',
         '-r', '4',
         '-q:v', '2',
         '-s', '640x480',
-        '-f', 'mpjpeg', '-'],
+        '-f', 'mpjpeg', '-'
+    ],
     WEB_DIRECT_STREAM_OPTS = ['-i', 'pipe:',
         '-an',
         '-filter_threads', '1',
@@ -20,7 +21,8 @@ const DIRECT_STREAM_OPTS = ['-i', 'pipe:',
         '-c:v', 'libvpx',
         '-crf', '10',
         '-b:v', '1M',
-        '-c:a', 'libvorbis', '-'];
+        '-c:a', 'libvorbis', '-'
+    ];
 
 const defaultFramerateIndex = DIRECT_STREAM_OPTS.indexOf('-r') + 1;
 
@@ -50,7 +52,8 @@ function playFile(filename, config) {
         '-r', framerate,
         '-q:v', '2',
         '-s', '640x480',
-        '-f', 'mpjpeg', '-'];
+        '-f', 'mpjpeg', '-'
+    ];
 
     return spawn(FFMPEG, spawnOptions, {
         env: process.env

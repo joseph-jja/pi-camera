@@ -2,5 +2,6 @@
 
 npx js-beautify -r *.js
 
-find ./ -type f -name 'libs/*' -exec npx js-beautify -r {} \;
-find ./ -type f -name 'xhrActions/*' -exec npx js-beautify -r {} \;
+npx js-beautify -r js/*.js
+npx js-beautify -r libs/*.js
+npx js-beautify -r xhrActions/*.js

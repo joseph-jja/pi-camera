@@ -29,7 +29,9 @@ function collectData() {
     const memoryUsage = process.memoryUsage();
     const filtered = Object.keys(memoryUsage).map(key => {
         const megs = Math.round(memoryUsage[key] / K_TO_M);
-        return { [key]: `${megs}M` };
+        return {
+            [key]: `${megs}M`
+        };
     });
 
     return {
@@ -48,7 +50,8 @@ captureEmitter.on('button-exec', message => {
 });
 
 module.exports = (socket) => {
-    socket.on('status', (sock) => { /* eslint-disable-line */
+    socket.on('status', (sock) => {
+        /* eslint-disable-line */
         const data = collectData();
         logger.debug(`System info: ${stringify(data)} `);
         socket.emit('info', data);

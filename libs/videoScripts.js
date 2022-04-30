@@ -281,7 +281,7 @@ async function directStream(options = []) {
     if (!libcameraProcess) {
         return;
     }
-    
+
     directStreamProcess = ffmpegStreamFunction(ffmpegFramerate);
 
     const DevNull = new NullStream();
@@ -351,7 +351,7 @@ async function previewSavedVideo(filename, response) {
 
     const configData = await promiseifiedRead(configFileName);
 
-    playbackStream  = playFile(filename, configData);
+    playbackStream = playFile(filename, configData);
 
     playbackStream.stdout.pipe(response);
 
