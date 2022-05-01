@@ -9,15 +9,8 @@ const basedir = process.cwd();
 const stringify = require(`${basedir}/libs/stringify`),
     getEnvVar = require(`${basedir}/libs/env`).getEnvVar,
     getFirstVideoCaptureDevice = require(`${basedir}/libs/libcamera/getFirstVideoCaptureDevice`),
-    logger = require(`${basedir}/libs/logger`)(__filename),
-    {
-        VIDEO
-    } = (getEnvVar('LEGACY_STACK') ?
-        require(`${basedir}/libs/libcamera/RConstants`) :
-        require(`${basedir}/libs/libcamera/Constants`)),
-    config = (getEnvVar('LEGACY_STACK') ?
-        require(`${basedir}/libs/libcamera/rvideoConfig`) :
-        require(`${basedir}/libs/libcamera/videoConfig`));
+    getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`),
+    logger = require(`${basedir}/libs/logger`)(__filename);
 
 const DEFAULT_OPTIONS = [];
 
@@ -31,15 +24,37 @@ function setVideoUpdateOptions(opts) {
     lastVideoUpdateOpts = opts;
 }
 
-if (DEFAULT_OPTIONS.length === 0) {
-    config.forEach(item => {
-        if (item.defaultvalue) {
-            item.defaultvalue.split(' ').forEach(item => {
-                DEFAULT_OPTIONS.push(item);
-            });
-        }
-    });
-    setVideoUpdateOptions(DEFAULT_OPTIONS);
+let VIDEO,
+    config,
+    streamCommand;
+
+async function initVideo() {
+
+    const commands = await getVideoStreamCommand();
+    VIDEO = commands.VIDEO;
+    config = commands.videoConfig;
+
+    if (VIDEO) {
+        streamCommand = piStreamMjpeg;
+    } else if (commands.FFMPEG) {
+        streamCommand = streamFfmpegMjpeg;
+    }
+
+    if (config && DEFAULT_OPTIONS.length === 0) {
+        config.forEach(item => {
+            if (item.defaultvalue) {
+                item.defaultvalue.split(' ').forEach(item => {
+                    DEFAULT_OPTIONS.push(item);
+                });
+            }
+        });
+        setVideoUpdateOptions(DEFAULT_OPTIONS);
+    }
+    const videoDevice = await getFirstVideoCaptureDevice();
+    if (videoDevice.length === 0) {
+        logger.error('No video devices found!');
+        return undefined;
+    }
 }
 
 async function streamFfmpegMjpeg() {
@@ -59,7 +74,7 @@ async function streamFfmpegMjpeg() {
     });
 }
 
-async function streamMjpeg(options = []) {
+async function piStreamMjpeg(options = []) {
 
     // default image streaming options
     const spawnOptions = ['--codec', 'mjpeg', '-t', '0'].concat(options);
@@ -98,9 +113,10 @@ function saveMjpeg(options = []) {
 }
 
 module.exports = {
+    initVideo,
     getVideoUpdateOptions,
     setVideoUpdateOptions,
-    streamMjpeg: (getEnvVar('NO_LIBCAMERA') ? streamFfmpegMjpeg : streamMjpeg),
+    streamMjpeg: streamCommand,
     saveH264,
     saveMjpeg
 };

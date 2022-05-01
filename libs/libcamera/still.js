@@ -6,15 +6,8 @@ const basedir = process.cwd();
 
 const stringify = require(`${basedir}/libs/stringify`),
     getEnvVar = require(`${basedir}/libs/env`).getEnvVar,
-    logger = require(`${basedir}/libs/logger`)(__filename),
-    {
-        STILL
-    } = (getEnvVar('LEGACY_STACK') ?
-        require(`${basedir}/libs/libcamera/RConstants`) :
-        require(`${basedir}/libs/libcamera/Constants`)),
-    imageConfig = (getEnvVar('LEGACY_STACK') ?
-        require(`${basedir}/libs/libcamera/rstillConfig`) :
-        require(`${basedir}/libs/libcamera/stillConfig`));
+    getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`),
+    logger = require(`${basedir}/libs/logger`)(__filename);
 
 const DEFAULT_IMAGE_CONFIG = [];
 
@@ -28,16 +21,26 @@ function setImageUpdateOptions(opts) {
     lastImageUpdateOpts = opts;
 }
 
-if (DEFAULT_IMAGE_CONFIG.length === 0) {
-    imageConfig.forEach(item => {
-        if (item.defaultvalue) {
-            item.defaultvalue.split(' ').forEach(item => {
-                DEFAULT_IMAGE_CONFIG.push(item);
+let STILL,
+    imageConfig,
+
+    async function initStill() {
+
+        const commands = await getVideoStreamCommand();
+        STILL = commands.STILL;
+        imageConfig = commands.videoConfig;
+
+        if (imageConfig && DEFAULT_IMAGE_CONFIG.length === 0) {
+            imageConfig.forEach(item => {
+                if (item.defaultvalue) {
+                    item.defaultvalue.split(' ').forEach(item => {
+                        DEFAULT_IMAGE_CONFIG.push(item);
+                    });
+                }
             });
+            setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
         }
-    });
-    setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
-}
+    }
 
 function streamJpeg(options) {
 

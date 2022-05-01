@@ -15,14 +15,16 @@ const stringify = require(`${basedir}/libs/stringify`),
         getImageUpdateOptions,
         setImageUpdateOptions,
         streamJpeg,
-        saveImage
+        saveImage,
+        initStill
     } = require(`${basedir}/libs/libcamera/still`),
     {
         getVideoUpdateOptions,
         setVideoUpdateOptions,
         streamMjpeg,
         saveH264,
-        saveMjpeg
+        saveMjpeg,
+        initVideo
     } = require(`${basedir}/libs/libcamera/video`),
     {
         getFfmpegStream,
@@ -265,7 +267,15 @@ function imageStream(options = [], response) {
     });
 }
 
+let initialized = false;
+
 async function directStream(options = []) {
+
+    if (!initialized) {
+        await initVideo();
+        await initStill();
+        initialized = true;
+    }
 
     const spawnOptions = (options.length > 0 ? options : getVideoUpdateOptions()).concat();
 
