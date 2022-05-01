@@ -87,7 +87,7 @@ async function getVideoStreamCommand() {
     const libcameraStill = await whichCommand('libcamera-still').catch(errorHandler);
     if (libcameraStill) {
         const executable = await runCommand(libcameraStill).catch(errorHandler);
-        if (exectuable) {
+        if (executable) {
             results.STILL = libcameraStill;
             results.imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
         }
@@ -96,7 +96,7 @@ async function getVideoStreamCommand() {
     const libcameraVid = await whichCommand('libcamera-vid').catch(errorHandler);
     if (libcameraVid) {
         const executable = await runCommand(libcameraVid).catch(errorHandler);
-        if (exectuable) {
+        if (executable) {
             results.VIDEO = libcameraVid;
             results.videoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
         }
@@ -107,7 +107,7 @@ async function getVideoStreamCommand() {
         const raspistill = await whichCommand('raspistill').catch(errorHandler);
         if (raspistill) {
             const executable = await runCommand('raspistill').catch(errorHandler);
-            if (exectuable) {
+            if (executable) {
                 results.STILL = raspistill;
                 results.imageConfig = require(`${basedir}/libs/libcamera/rstillConfig`);
             }
@@ -119,7 +119,7 @@ async function getVideoStreamCommand() {
         const raspivid = await whichCommand('raspivid').catch(errorHandler);
         if (raspivid) {
             const executable = await runCommand(raspivid).catch(errorHandler);
-            if (exectuable) {
+            if (executable) {
                 results.VIDEO = raspivid;
                 results.videoConfig = require(`${basedir}/libs/libcamera/rvideoConfig`);
             }
