@@ -27,11 +27,11 @@ function setVideoUpdateOptions(opts) {
 let VIDEO,
     FFMPEG,
     config,
-    streamCommand = () => {
+    streamCommand = (options) => {
         if (VIDEO) {
-            return piStreamMjpeg;
+            return piStreamMjpeg(options);
         } else if (FFMPEG) {
-            return streamFfmpegMjpeg;
+            return streamFfmpegMjpeg();
         }
         return () => {};
     };
