@@ -26,7 +26,9 @@ function setVideoUpdateOptions(opts) {
 
 let VIDEO,
     config,
-    streamCommand;
+    streamCommand = () => {
+         return;
+    };
 
 async function initVideo() {
 
@@ -39,7 +41,6 @@ async function initVideo() {
     } else if (commands.FFMPEG) {
         streamCommand = streamFfmpegMjpeg;
     }
-console.log(streamCommand)
 
     if (config && DEFAULT_OPTIONS.length === 0) {
         config.forEach(item => {

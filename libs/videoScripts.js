@@ -289,6 +289,7 @@ async function directStream(options = []) {
     // stream libcamera stdout to ffmpeg stdin
     libcameraProcess = await streamMjpeg(spawnOptions);
     if (!libcameraProcess) {
+        logger.error('No streaming abilities found, will do nothing!');
         return;
     }
 
