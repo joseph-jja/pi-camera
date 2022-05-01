@@ -83,7 +83,7 @@ async function getFirstVideoCaptureDevice() {
     }
 
     const filteredList = resultDevices.filter(item => {
-        return item.value.hasdata;
+        return item.status === 'fulfilled';
     });
 
     if (filteredList.length <= 0) {
