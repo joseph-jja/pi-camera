@@ -31,9 +31,9 @@ function whichCommand(checkCommand) {
     });
 }
 
-function runCommand(command) {
+function runCommand(command, args) {
     return new Promise((resolve, reject) => {
-        const commandToRun = spawn(command);
+        const commandToRun = ( args && Array.isArray(args) ? spawn(command, args) : spawn(command) );
 
         let results;
 
