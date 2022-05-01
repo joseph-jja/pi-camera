@@ -25,9 +25,15 @@ function setVideoUpdateOptions(opts) {
 }
 
 let VIDEO,
+    FFMPEG,
     config,
     streamCommand = () => {
-         return;
+        if (VIDEO) {
+            return piStreamMjpeg;
+        } else if (FFMPEG) {
+            return streamFfmpegMjpeg;
+        }
+        return () => {};
     };
 
 async function initVideo() {
@@ -35,12 +41,7 @@ async function initVideo() {
     const commands = await getVideoStreamCommand();
     VIDEO = commands.VIDEO;
     config = commands.videoConfig;
-
-    if (VIDEO) {
-        streamCommand = piStreamMjpeg;
-    } else if (commands.FFMPEG) {
-        streamCommand = streamFfmpegMjpeg;
-    }
+    FFMPEG = commands.FFMPEG;
 
     if (config && DEFAULT_OPTIONS.length === 0) {
         config.forEach(item => {
