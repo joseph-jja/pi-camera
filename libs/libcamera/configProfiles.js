@@ -15,7 +15,7 @@ module.exports = [{
     }, {
         name: 'shutter_speed',
         value: '--shutter 250000',
-        forms: ['videoOptions', 'imageOptions']
+        forms: ['imageOptions']
     }]
 }, {
     name: 'Moon Capture',
