@@ -56,7 +56,7 @@ module.exports = [{
     name: 'framerate',
     paramName: '--framerate',
     values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
-    defaultvalue: '--framerate 15',
+    defaultvalue: '--framerate 10',
     comment: '0.2 = 5 seconds frame and 0.5 = 2 second frame'
 }, {
     name: 'exposure_profile',
