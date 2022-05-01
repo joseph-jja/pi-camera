@@ -12,7 +12,7 @@ function whichCommand(checkCommand) {
 
         whichCmd.stdout.on('data', d => {
             if (d && d.length > 0) {
-                commandPath = d.toString().trim();
+                commandPath = d.toString().trim().replace(/\/\//g, '/');
             }
         });
 
