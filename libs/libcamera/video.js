@@ -39,6 +39,7 @@ async function initVideo() {
     } else if (commands.FFMPEG) {
         streamCommand = streamFfmpegMjpeg;
     }
+console.log(streamCommand)
 
     if (config && DEFAULT_OPTIONS.length === 0) {
         config.forEach(item => {
@@ -48,8 +49,9 @@ async function initVideo() {
                 });
             }
         });
-        setVideoUpdateOptions(DEFAULT_OPTIONS);
     }
+    setVideoUpdateOptions(DEFAULT_OPTIONS);
+
     const videoDevice = await getFirstVideoCaptureDevice();
     if (videoDevice.length === 0) {
         logger.error('No video devices found!');

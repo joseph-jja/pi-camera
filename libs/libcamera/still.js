@@ -22,25 +22,25 @@ function setImageUpdateOptions(opts) {
 }
 
 let STILL,
-    imageConfig,
+    imageConfig;
 
-    async function initStill() {
+async function initStill() {
 
-        const commands = await getVideoStreamCommand();
-        STILL = commands.STILL;
-        imageConfig = commands.videoConfig;
+    const commands = await getVideoStreamCommand();
+    STILL = commands.STILL;
+    imageConfig = commands.imageConfig;
 
-        if (imageConfig && DEFAULT_IMAGE_CONFIG.length === 0) {
-            imageConfig.forEach(item => {
-                if (item.defaultvalue) {
-                    item.defaultvalue.split(' ').forEach(item => {
-                        DEFAULT_IMAGE_CONFIG.push(item);
-                    });
-                }
-            });
-            setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
-        }
+    if (imageConfig && DEFAULT_IMAGE_CONFIG.length === 0) {
+        imageConfig.forEach(item => {
+            if (item.defaultvalue) {
+                item.defaultvalue.split(' ').forEach(item => {
+                    DEFAULT_IMAGE_CONFIG.push(item);
+                });
+            }
+        });
     }
+    setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
+}
 
 function streamJpeg(options) {
 
@@ -72,6 +72,7 @@ function saveImage(options) {
 }
 
 module.exports = {
+    initStill,
     getImageUpdateOptions,
     setImageUpdateOptions,
     streamJpeg,
