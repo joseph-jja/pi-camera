@@ -86,7 +86,7 @@ async function getVideoStreamCommand() {
     // first check for libcamera 
     const libcameraStill = await whichCommand('libcamera-still').catch(errorHandler);
     if (libcameraStill) {
-        const executable = await runCommand(libcameraStill).catch(errorHandler);
+        const executable = await runCommand(libcameraStill, [ '--help' ]).catch(errorHandler);
         if (executable) {
             results.STILL = libcameraStill;
             results.imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
@@ -95,7 +95,7 @@ async function getVideoStreamCommand() {
 
     const libcameraVid = await whichCommand('libcamera-vid').catch(errorHandler);
     if (libcameraVid) {
-        const executable = await runCommand(libcameraVid).catch(errorHandler);
+        const executable = await runCommand(libcameraVid, [ '--help' ]).catch(errorHandler);
         if (executable) {
             results.VIDEO = libcameraVid;
             results.videoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
@@ -106,7 +106,7 @@ async function getVideoStreamCommand() {
         // first check for libcamera 
         const raspistill = await whichCommand('raspistill').catch(errorHandler);
         if (raspistill) {
-            const executable = await runCommand('raspistill').catch(errorHandler);
+            const executable = await runCommand('raspistill', [ '--help' ]).catch(errorHandler);
             if (executable) {
                 results.STILL = raspistill;
                 results.imageConfig = require(`${basedir}/libs/libcamera/rstillConfig`);
@@ -118,7 +118,7 @@ async function getVideoStreamCommand() {
         // first check for libcamera 
         const raspivid = await whichCommand('raspivid').catch(errorHandler);
         if (raspivid) {
-            const executable = await runCommand(raspivid).catch(errorHandler);
+            const executable = await runCommand(raspivid, [ '--help' ]).catch(errorHandler);
             if (executable) {
                 results.VIDEO = raspivid;
                 results.videoConfig = require(`${basedir}/libs/libcamera/rvideoConfig`);
@@ -128,7 +128,7 @@ async function getVideoStreamCommand() {
 
     const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
     if (ffmpeg) {
-        const executable = await runCommand('ffmpeg').catch(errorHandler);
+        const executable = await runCommand('ffmpeg', [ '--help' ]).catch(errorHandler);
         if (executable) {
             results.FFMPEG = ffmpeg;
         }
