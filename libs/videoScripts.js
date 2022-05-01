@@ -15,17 +15,16 @@ const stringify = require(`${basedir}/libs/stringify`),
         getImageUpdateOptions,
         setImageUpdateOptions,
         streamJpeg,
-        saveImage,
-        initStill
+        saveImage
     } = require(`${basedir}/libs/libcamera/still`),
     {
         getVideoUpdateOptions,
         setVideoUpdateOptions,
         streamMjpeg,
         saveH264,
-        saveMjpeg,
-        initVideo
+        saveMjpeg
     } = require(`${basedir}/libs/libcamera/video`),
+    getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`),
     {
         getFfmpegStream,
         playFile,
@@ -272,8 +271,7 @@ let initialized = false;
 async function directStream(options = []) {
 
     if (!initialized) {
-        await initVideo();
-        await initStill();
+        await getVideoStreamCommand();
         initialized = true;
     }
 
