@@ -25,7 +25,7 @@ function whichCommand(checkCommand) {
             if (commandPath) {
                 return resolve(commandPath);
             } else {
-                return reject(`Command: ${checkCommand} does not exist! 'which ${checkCommand}' returned ${code}`);
+                return reject(`Command: 'which ${checkCommand}' returned ${code}. Command: ${checkCommand} does not exist!`);
             }
         });
     });
@@ -35,27 +35,27 @@ function runCommand(command, args) {
     return new Promise((resolve, reject) => {
         const commandToRun = ( args && Array.isArray(args) ? spawn(command, args) : spawn(command) );
 
-        let results;
+        const results = [];
 
         commandToRun.stdout.on('data', d => {
             if (d && d.length > 0) {
-                results = d.toString().trim();
+                results.push(d);
             }
         });
 
         commandToRun.stderr.on('data', d => {
             // command runs but spits our error message so we are ok to run command
             if (d && d.length > 0) {
-                results = d.toString().trim();
+                results.push(d);
             }
         });
 
 
         commandToRun.on('close', (code) => {
-            if (results || code === 0) {
-                return resolve(results || {});
+            if (results) {
+                return resolve(Buffer.concat(results).toString());
             } else {
-                return reject(`No output from command: ${command}!`);
+                return reject(`Command: ${command} exited with code: ${code} and resulted in no output!`);
             }
         });
 
