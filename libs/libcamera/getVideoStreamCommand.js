@@ -25,7 +25,7 @@ function whichCommand(checkCommand) {
             if (commandPath) {
                 return resolve(commandPath);
             } else {
-                return reject(`Command: ${checkCommand} does not exist! 'which ${check Command}' returned ${code}`);
+                return reject(`Command: ${checkCommand} does not exist! 'which ${checkCommand}' returned ${code}`);
             }
         });
     });
@@ -52,8 +52,8 @@ function runCommand(command, args) {
 
 
         commandToRun.on('close', (code) => {
-            if (results) {
-                return resolve(results);
+            if (results || code === 0) {
+                return resolve(results || {});
             } else {
                 return reject(`No output from command: ${command}!`);
             }
