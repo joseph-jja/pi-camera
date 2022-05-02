@@ -21,11 +21,11 @@ function whichCommand(checkCommand) {
         });
 
 
-        whichCmd.on('close', () => {
+        whichCmd.on('close', (code) => {
             if (commandPath) {
                 return resolve(commandPath);
             } else {
-                return reject(`Command: ${checkCommand} does not exist!`);
+                return reject(`Command: ${checkCommand} does not exist! 'which ${check Command}' returned ${code}`);
             }
         });
     });
