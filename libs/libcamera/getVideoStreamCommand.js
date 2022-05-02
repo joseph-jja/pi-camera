@@ -51,7 +51,7 @@ function runCommand(command, args) {
         });
 
 
-        commandToRun.on('close', () => {
+        commandToRun.on('close', (code) => {
             if (results) {
                 return resolve(results);
             } else {
