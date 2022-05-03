@@ -5,7 +5,6 @@ const {
 const basedir = process.cwd();
 
 const stringify = require(`${basedir}/libs/stringify`),
-    getEnvVar = require(`${basedir}/libs/env`).getEnvVar,
     getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`),
     logger = require(`${basedir}/libs/logger`)(__filename);
 

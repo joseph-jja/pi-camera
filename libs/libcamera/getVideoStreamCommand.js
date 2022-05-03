@@ -33,7 +33,7 @@ function whichCommand(checkCommand) {
 
 function runCommand(command, args) {
     return new Promise((resolve, reject) => {
-        const commandToRun = ( args && Array.isArray(args) ? spawn(command, args) : spawn(command) );
+        const commandToRun = (args && Array.isArray(args) ? spawn(command, args) : spawn(command));
 
         const results = [];
 
@@ -73,20 +73,15 @@ const results = {
     imageConfig: undefined,
     VIDEO: undefined,
     videoConfig: undefined,
-    FFMPEG: undefined,
+    FFMPEG: undefined
 };
 
+async function libcameraChecks() {
 
-async function getVideoStreamCommand() {
-
-    if (hasRun) {
-        return results;
-    }
-
-    // first check for libcamera 
+    // first check for libcamera
     const libcameraStill = await whichCommand('libcamera-still').catch(errorHandler);
     if (libcameraStill) {
-        const executable = await runCommand(libcameraStill, [ '--help' ]).catch(errorHandler);
+        const executable = await runCommand(libcameraStill, ['--help']).catch(errorHandler);
         if (executable) {
             results.STILL = libcameraStill;
             results.imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
@@ -95,18 +90,21 @@ async function getVideoStreamCommand() {
 
     const libcameraVid = await whichCommand('libcamera-vid').catch(errorHandler);
     if (libcameraVid) {
-        const executable = await runCommand(libcameraVid, [ '--help' ]).catch(errorHandler);
+        const executable = await runCommand(libcameraVid, ['--help']).catch(errorHandler);
         if (executable) {
             results.VIDEO = libcameraVid;
             results.videoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
         }
     }
+}
 
-    if (!libcameraStill) {
-        // first check for libcamera 
+async function raspiChecks() {
+
+    if (!results.STILL) {
+        // first check for libcamera
         const raspistill = await whichCommand('raspistill').catch(errorHandler);
         if (raspistill) {
-            const executable = await runCommand('raspistill', [ '--help' ]).catch(errorHandler);
+            const executable = await runCommand('raspistill', ['--help']).catch(errorHandler);
             if (executable) {
                 results.STILL = raspistill;
                 results.imageConfig = require(`${basedir}/libs/libcamera/rstillConfig`);
@@ -114,21 +112,32 @@ async function getVideoStreamCommand() {
         }
     }
 
-    if (!libcameraVid) {
-        // first check for libcamera 
+    if (!results.VIDEO) {
+        // first check for libcamera
         const raspivid = await whichCommand('raspivid').catch(errorHandler);
         if (raspivid) {
-            const executable = await runCommand(raspivid, [ '--help' ]).catch(errorHandler);
+            const executable = await runCommand(raspivid, ['--help']).catch(errorHandler);
             if (executable) {
                 results.VIDEO = raspivid;
                 results.videoConfig = require(`${basedir}/libs/libcamera/rvideoConfig`);
             }
         }
     }
+}
+
+async function getVideoStreamCommand() {
+
+    if (hasRun) {
+        return results;
+    }
+
+    await libcameraChecks();
+
+    await raspiChecks();
 
     const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
     if (ffmpeg) {
-        const executable = await runCommand('ffmpeg', [ '--help' ]).catch(errorHandler);
+        const executable = await runCommand('ffmpeg', ['--help']).catch(errorHandler);
         if (executable) {
             results.FFMPEG = ffmpeg;
         }

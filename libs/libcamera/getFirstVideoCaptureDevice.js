@@ -1,13 +1,12 @@
 const {
-    readdir
-} = require('fs'), {
-    spawn
-} = require('child_process');
+        readdir
+    } = require('fs'), {
+        spawn
+    } = require('child_process');
 
 const basedir = process.cwd();
 
-const stringify = require(`${basedir}/libs/stringify`),
-    logger = require(`${basedir}/libs/logger`)(__filename);
+const logger = require(`${basedir}/libs/logger`)(__filename);
 
 // find all the video devices
 function getVideoCaptureDevices() {
