@@ -16,7 +16,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         setImageUpdateOptions,
         streamJpeg,
         saveImage,
-        initStill,
+        initStill
     } = require(`${basedir}/libs/libcamera/still`),
     {
         getVideoUpdateOptions,
