@@ -1,3 +1,4 @@
+/* eslint max-statements: 0 */
 import * as formUtils from '/js/libs/formUtils.js';
 
 const {
@@ -82,6 +83,10 @@ window.addEventListener('DOMContentLoaded', () => {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.png');
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
+        } else if (target.id === 'plateSolveImage') {
+            const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
+            const isImage = currentItem.endsWith('.png');
+            displayImages(`/plateSolve?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.value;
             executeGETRequest(`/saveImage?count=${imageCount}`);

@@ -38,6 +38,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${basedir}/libs/videoScripts`),
+    plateSolve = require(`${basedir}/xhrActions/plateSolve`),
     previewStreamAction = require(`${basedir}/xhrActions/previewStream`),
     socketStreamAction = require(`${basedir}/xhrActions/socketStream`),
     stopPreviewAction = require(`${basedir}/xhrActions/stopPreview`),
@@ -238,6 +239,8 @@ async function start() {
 
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
 
+    app.get('/viewImageOrVideo', plateSolve);
+    
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), response, videoConfig);
     });

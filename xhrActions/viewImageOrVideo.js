@@ -1,5 +1,4 @@
 const {
-    createReadStream,
     readFile
 } = require('fs');
 
