@@ -1,12 +1,24 @@
+const {
+    mkdirSync,
+    statSync
+} = require('fs');
+
 const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
         whichCommand,
         runCommand
-    } = require(`${basedir}/libs/spawnUtils`);
+    } = require(`${basedir}/libs/spawnUtils`),
+    {
+        BASE_IMAGE_PATH
+    } = require(`${basedir}/libs/videoScripts`),
+    {
+        OLD_FILENAME_MATCH
+    } = require(`${basedir}/xhrActions/Constants`);
 
-const PLATE_SOLVE_DIR = `${process.env.HOME}/solved`;
+const PLATE_SOLVE_DIR = `${process.env.HOME}/solved`,
+    PLATE_SOLVE_IN_DIR = `${process.env.HOME}/plate-solve-in`;
 
 let SOLVE_FIELD_CMD,
     CONVERT_CMD;
@@ -25,28 +37,72 @@ async function findCommands() {
 
 findCommands();
 
+let exists = false;
+
+function initDir() {
+
+    // first time system starts and this function is accessed we will create dir
+    // but we don't need to do this on every request
+    if (exists) {
+        return;
+    }
+
+    try {
+        // dir exixts we skip trying to make it again
+        const stats = statSync(PLATE_SOLVE_IN_DIR);
+        if (stats) {
+            exists = true;
+            return;
+        }
+    } catch (e) {
+        logger.verbose(e);
+    }
+
+    try {
+        mkdirSync(PLATE_SOLVE_IN_DIR);
+    } catch (e) {
+        logger.verbose(e);
+    }
+}
+
 module.exports = async (request, response) => {
 
     // FIRST convert png to tif
     if (!CONVERT_CMD) {
-        response.end('Not implemented yet!');
-        logger.error('Could not convert png to tif');
+        response.end('The convert command was not found!');
         return;
     }
 
     if (!SOLVE_FIELD_CMD) {
-        response.end('Not implemented yet!');
-        logger.error('Could not run plate solvinging on tif');
+        response.end('The solve-field command was not found!');
         return;
     }
 
-    //await runCommand(CONVERT_CMD, ['', '']);
-    //convert
+    initDir();
+
+    const query = (request.query || {});
+    const filename = query.name;
+    if (!filename) {
+        response.writeHead(200, {});
+        response.end('Missing parameters, nothing done!');
+        logger.info('Missing parameters, nothing done!');
+        return;
+    }
+    const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
+    if (!filteredOldFilename || !filename.endsWith('.png')) {
+        response.writeHead(200, {});
+        response.end('Invalid oldfile name, nothing done!');
+        logger.info('Invalid oldfile name, nothing done!');
+        return;
+    }
+
+    // run convert to change to tiff
+    const tifFilename = `${PLATE_SOLVE_IN_DIR}/${filename.replace('.png', '.tif')}`;
+    await runCommand(CONVERT_CMD, [`${BASE_IMAGE_PATH}/${filename}`, tifFilename]);
 
     // second run command
     //  solve-field -D PLATE_SOLVE_DIR input-image.tif
-    //await runCommand(SOLVE_FIELD_CMD, ['-D', PLATE_SOLVE_DIR, '']);
+    await runCommand(SOLVE_FIELD_CMD, ['-D', PLATE_SOLVE_DIR, tifFilename]);
 
     response.end('Not implemented yet!');
-
 };
