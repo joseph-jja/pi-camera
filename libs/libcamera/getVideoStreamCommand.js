@@ -1,5 +1,3 @@
-const spawn = require('child_process').spawn;
-
 const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
