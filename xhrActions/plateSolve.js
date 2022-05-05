@@ -34,9 +34,9 @@ module.exports = async (request, response) => {
         return;
     }
 
-    if (!CONVERT_CMD) {
+    if (!SOLVE_FIELD_CMD) {
         response.end('Not implemented yet!');
-        logger.error('Could not convert png to tif');
+        logger.error('Could not run plate solvinging on tif');
         return;
     }
 
