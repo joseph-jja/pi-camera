@@ -1,7 +1,6 @@
 const basedir = process.cwd();
 
-const stringify = require(`${basedir}/libs/stringify`),
-    logger = require(`${basedir}/libs/logger`)(__filename),
+const logger = require(`${basedir}/libs/logger`)(__filename),
     {
         getOptions
     } = require(`${basedir}/libs/utils`),
@@ -20,5 +19,6 @@ module.exports = (request, response) => {
     } else {
         response.writeHead(200, {});
         response.end('No changes applied!');
+        logger.info('No image updates applied');
     }
 };
