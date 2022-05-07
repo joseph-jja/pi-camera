@@ -70,7 +70,7 @@ async function streamFfmpegMjpeg() {
 
     logger.info(`Using ffmpeg for video with options: ${stringify(spawnOptions)}`);
 
-    return spawn('ffmpeg', spawnOptions, {
+    return spawn(FFMPEG, spawnOptions, {
         env: process.env
     });
 }
