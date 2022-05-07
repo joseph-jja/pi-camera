@@ -2,7 +2,10 @@ const {
     spawn
 } = require('child_process');
 
-const FFMPEG = 'ffmpeg';
+const basedir = process.cwd(),
+    getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`);
+    
+let FFMPEG;
 
 const DIRECT_STREAM_OPTS = ['-i', 'pipe:',
         '-an',
@@ -25,6 +28,12 @@ const DIRECT_STREAM_OPTS = ['-i', 'pipe:',
     ];
 
 const defaultFramerateIndex = DIRECT_STREAM_OPTS.indexOf('-r') + 1;
+
+async function initFfmpeg() {
+
+    const commands = await getVideoStreamCommand();
+    FFMPEG = commands.FFMPEG;
+}
 
 function getFfmpegWebmStream(framerate = 4) {
     WEB_DIRECT_STREAM_OPTS[defaultFramerateIndex] = framerate;
@@ -61,6 +70,7 @@ function playFile(filename, config) {
 }
 
 module.exports = {
+    initFfmpeg,
     getFfmpegWebmStream,
     getFfmpegStream,
     playFile

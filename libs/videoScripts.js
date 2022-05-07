@@ -27,6 +27,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         initVideo
     } = require(`${basedir}/libs/libcamera/video`),
     {
+        initFfmpeg,
         getFfmpegStream,
         playFile,
         getFfmpegWebmStream
@@ -274,6 +275,7 @@ async function directStream(options = []) {
     if (!initialized) {
         await initStill();
         await initVideo();
+        await initFfmpeg();
         initialized = true;
     }
 
