@@ -67,7 +67,7 @@ function initDir() {
 
 module.exports = async (request, response) => {
 
-    // FIRST convert png to tif
+    // FIRST convert jpg to tif
     if (!CONVERT_CMD) {
         response.end('The convert command was not found!');
         return;
@@ -89,7 +89,7 @@ module.exports = async (request, response) => {
         return;
     }
     const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
-    if (!filteredOldFilename || !filename.endsWith('.png')) {
+    if (!filteredOldFilename || !filename.endsWith('.jpg')) {
         response.writeHead(200, {});
         response.end('Invalid oldfile name, nothing done!');
         logger.info('Invalid oldfile name, nothing done!');
@@ -97,7 +97,7 @@ module.exports = async (request, response) => {
     }
 
     // run convert to change to tiff
-    const tifFilename = `${PLATE_SOLVE_IN_DIR}/${filename.replace('.png', '.tif')}`;
+    const tifFilename = `${PLATE_SOLVE_IN_DIR}/${filename.replace('.jpg', '.tif')}`;
     await runCommand(CONVERT_CMD, [`${BASE_IMAGE_PATH}/${filename}`, tifFilename]);
 
     // second run command

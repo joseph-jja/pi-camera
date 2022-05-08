@@ -193,13 +193,13 @@ function saveSingle(options, callback, count, total) {
 
     const spawnOptions = options.concat();
 
-    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('png')}`;
+    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('jpg')}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);
     logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
     const imageDataProcess = saveImage(spawnOptions);
     imageDataProcess.on('close', (code) => {
-        saveConfig(stringify(spawnOptions), 'png');
+        saveConfig(stringify(spawnOptions), 'jpg');
         count++;
         if (count >= total) {
             callback(code);
