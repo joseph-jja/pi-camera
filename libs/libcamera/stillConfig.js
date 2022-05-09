@@ -3,6 +3,13 @@ module.exports = [{
     paramName: '',
     values: ['--nopreview']
 }, {
+    name: 'autofocus',
+    paramName: '',
+    values: [
+        '--autofocus 0',
+        '--autofocus 1'
+    ]
+}, {
     name: 'zoom',
     paramName: '',
     values: [
