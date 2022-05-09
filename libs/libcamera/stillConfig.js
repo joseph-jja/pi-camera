@@ -61,8 +61,7 @@ module.exports = [{
     name: 'imageSize',
     paramName: '',
     values: V2_STILL_CAMERA,
-    comment: '1640x1232 uses full sensor with binning',
-    defaultvalue: '--width 3840 --height 2464'
+    defaultvalue: '--width 3200 --height 2400'
 }, {
     name: 'ISO_Gain',
     paramName: '--gain',

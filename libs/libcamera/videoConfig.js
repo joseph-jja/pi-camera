@@ -47,8 +47,7 @@ module.exports = [{
     name: 'videoSize',
     paramName: '',
     values: V2_VIDEO_CAMERA,
-    comment: '1640x1232 uses full sensor with binning',
-    defaultvalue: '--width 1640 --height 1232'
+    defaultvalue: '--width 1920 --height 1080'
 }, {
     name: 'ISO_Gain',
     paramName: '--gain',
