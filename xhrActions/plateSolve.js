@@ -101,8 +101,8 @@ module.exports = async (request, response) => {
     await runCommand(CONVERT_CMD, [`${BASE_IMAGE_PATH}/${filename}`, tifFilename]);
 
     // second run command
-    //  solve-field -D PLATE_SOLVE_DIR input-image.tif
-    await runCommand(SOLVE_FIELD_CMD, ['-D', PLATE_SOLVE_DIR, tifFilename]);
+    //  solve-field -O -D PLATE_SOLVE_DIR input-image.tif
+    await runCommand(SOLVE_FIELD_CMD, ['-O', '-D', PLATE_SOLVE_DIR, tifFilename]);
 
     response.end('Not implemented yet!');
 };
