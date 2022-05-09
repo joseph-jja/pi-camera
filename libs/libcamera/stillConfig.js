@@ -3,6 +3,13 @@ module.exports = [{
     paramName: '',
     values: ['--nopreview']
 }, {
+    name: 'zoom',
+    paramName: '',
+    values: [
+        '--roi 0.25,0.25,0.5,0.5',
+        '--roi 0.35,0.35,0.3,0.3'
+    ]
+}, {
     name: 'imageSize',
     paramName: '',
     values: [
