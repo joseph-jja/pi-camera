@@ -9,7 +9,8 @@ const rl = readline.createInterface({
   input: fmts
 });
 
-const matrix = new Map();
+const still = new Set(),
+    video = new Set();
 
 rl.on('line', line => {
 
@@ -22,30 +23,22 @@ rl.on('line', line => {
     if (!isNaN(width) && !isNaN(height)) {
 
         if (width >= 640 && height >= 480 ) {
-            /*if (matrix.get(width)) {
-                const h = matrix.get(width).split('x')[1];
-                if (height > h) {
-                    matrix.set(width, `${width}x${height}`);
-                } else {
-                    matrix.set(width, `${width}x${h}`);
-                }
-            } else {
-                matrix.set(width, `${width}x${height}`);
-            }*/
-            matrix.set(`${width}x${height}`, `${width}x${height}`);
-            //console.log(width, height);
-        } 
 
+            still.add(`--width ${width} --height ${height}`);
+            if (width <=1920 && height <= 1080 ) {
+                video.add(`--width ${width} --height ${height}`);
+            }
+        }
     }
 
 });
 
 const sortFn = (a, b) => {
-    const wha = a.split('x'),
-        whb = b.split('x');
+    const wha = a.split(' ')[1],
+        whb = b.split(' ')[3];
 
-    const xa = wha[0] * wha[1], 
-       xb = whb[0] * whb[1]; 
+    const xa = wha[0] * wha[1],
+        xb = whb[0] * whb[1];
 
     if (xa > xb) {
         return 1;
@@ -54,10 +47,11 @@ const sortFn = (a, b) => {
     } else {
         return 0;
     }
-}
+};
 
 rl.on('close', () => {
-    const keys = Array.from(matrix.values()); 
-    console.log('Done! ', keys.sort(sortFn) );
+    const skeys = Array.from(still.keys()),
+        vkeys = Array.from(video.keys());
+    console.log('Done still! ', skeys.sort(sortFn) );
+    console.log('Done video! ', vkeys.sort(sortFn) );
 });
-
