@@ -239,8 +239,10 @@ async function start() {
 
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
 
-    app.get('/viewImageOrVideo', plateSolve);
-    
+    app.get('/plateSolve', (request, response) => {
+        plateSolve(request, response, , formFields);
+    });
+
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), response, videoConfig);
     });
