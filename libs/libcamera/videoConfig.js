@@ -1,6 +1,7 @@
-const{
-    getEnvVar
-} = require(`${baseDir}/libs/env`);
+const basedir = process.cwd(),
+    {
+        getEnvVar
+    } = require(`${basedir}/libs/env`);
 
 const V2_VIDEO_CAMERA = [
     '--width 640 --height 480',
