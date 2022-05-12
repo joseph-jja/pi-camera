@@ -35,5 +35,9 @@ module.exports = [{
         name: 'videoSize',
         value: '--width 1920 --height 1080',
         forms: ['videoOptions']
+    }, {
+        name: 'videoSize',
+        value: "--width 4096 --height 2160",
+        forms: ['imageOptions']
     }]
 }];
