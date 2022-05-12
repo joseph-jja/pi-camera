@@ -144,9 +144,9 @@ function getVideoFilename(ext = 'mjpeg') {
     return `capture-${datePart}${timePart}.${ext}`;
 }
 
-function saveConfig(options, ext = 'mjpeg') {
+function saveConfig(options, captureFilename) {
 
-    const filename = `${BASE_CONFIG_PATH}/${getVideoFilename(ext + '.cfg')}`;
+    const filename = `${BASE_CONFIG_PATH}/${captureFilename}.cfg`;
     fs.writeFile(filename, options, (err, res) => {
         if (err) {
             logger.error(stringify(err));
@@ -181,7 +181,7 @@ function saveRawVideoData(options = [], response, videoConfig) {
         response.writeHead(200, {});
         response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
     });
-    saveConfig(stringify(spawnOptions), 'h264');
+    saveConfig(stringify(spawnOptions), filename);
 
     captureEmitter.emit('button-exec', {
         method: 'saveRawVideoData',
@@ -199,7 +199,7 @@ function saveSingle(options, callback, count, total) {
     logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
     const imageDataProcess = saveImage(spawnOptions);
     imageDataProcess.on('close', (code) => {
-        saveConfig(stringify(spawnOptions), 'jpg');
+        saveConfig(stringify(spawnOptions), filename);
         count++;
         if (count >= total) {
             callback(code);
@@ -331,7 +331,7 @@ function saveVideoProcess(options = [], response) {
         response.writeHead(200, {});
         response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
     });
-    saveConfig(stringify(options));
+    saveConfig(stringify(options), filename);
 
     captureEmitter.emit('button-exec', {
         method: 'saveVideoProcess',
