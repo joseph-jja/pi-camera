@@ -16,6 +16,14 @@ module.exports = [{
         name: 'shutter_speed',
         value: '--shutter 250000',
         forms: ['imageOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1920 --height 1080',
+        forms: ['videoOptions']
+    }, {
+        name: 'imageSize',
+        value: "--width 4096 --height 2160",
+        forms: ['imageOptions']
     }]
 }, {
     name: 'Moon Capture',
@@ -36,7 +44,7 @@ module.exports = [{
         value: '--width 1920 --height 1080',
         forms: ['videoOptions']
     }, {
-        name: 'videoSize',
+        name: 'imageSize',
         value: "--width 4096 --height 2160",
         forms: ['imageOptions']
     }]
