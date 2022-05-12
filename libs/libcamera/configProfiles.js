@@ -21,11 +21,19 @@ module.exports = [{
     name: 'Moon Capture',
     fields: [{
         name: 'ISO_Gain',
-        value: '--gain 24.0',
+        value: '--gain 1.0',
         forms: ['videoOptions', 'imageOptions']
     }, {
         name: 'EV_compensation',
-        value: '--ev -2.0',
+        value: '--ev -1.0',
         forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'framerate',
+        value: '--framerate 15',
+        forms: ['videoOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1920 --height 1080',
+        forms: ['videoOptions']
     }]
 }];
