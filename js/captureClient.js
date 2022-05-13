@@ -14,14 +14,14 @@ const {
 
 function restore() {
 
-    const processForm = (formName) {
+    const processForm = (formName) => {
         const formData = localStorage.getItem(formName);
-        if (!formData) { 
+        if (!formData) {
             return;
-        } 
-        const data = JSON.parse(formData); 
+        }
+        const data = JSON.parse(formData);
         const formObj = document.forms[formName];
-        
+
     };
 
     processForm('videoOptions');
