@@ -12,6 +12,22 @@ const {
     updateImage
 } = formUtils;
 
+function restore() {
+
+    const processForm = (formName) {
+        const formData = localStorage.getItem(formName);
+        if (!formData) { 
+            return;
+        } 
+        const data = JSON.parse(formData); 
+        const formObj = document.forms[formName];
+        
+    };
+
+    processForm('videoOptions');
+    processForm('imageOptions');
+}
+
 function profileUpdate() {
     const mainForm = document.forms['mainForm'];
     const selected = mainForm.profiles.selectedOptions[0].value;
