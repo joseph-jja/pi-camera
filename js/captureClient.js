@@ -21,7 +21,18 @@ function restore() {
         }
         const data = JSON.parse(formData);
         const formObj = document.forms[formName];
-
+        data.forEach(item => {
+            const key = Object.keys(item)[0];
+            const value = item[key];
+            const selectObj = formObj[key];
+            const selectOpts = selectObj.options;
+            const index = Array.from(selectOpts).findIndex(item => {
+                return (value === item.value);
+            });
+            if (index > 0) {
+                selectObj.selectedIndex = index;
+            }
+        });
     };
 
     processForm('videoOptions');
@@ -44,7 +55,7 @@ function profileUpdate() {
                         return (field.value === item.value);
                     });
                     if (index > 0) {
-                        form[field.name].selectedIndex = index;
+                        selectObj.selectedIndex = index;
                     }
                 }
             });
