@@ -3,10 +3,25 @@ export function getFormOptions(formObj) {
     const formElements = Array.from(formObj);
     //const bitrate = setBitrate(formElements);
 
-    const options = formElements.filter(element => {
+    const filtered = formElements.filter(element => {
         const nodeName = element.nodeName.toLowerCase();
         return (nodeName !== 'button' && nodeName !== 'input');
+    });
+
+    const storage = filtered.filter(element => {
+        const tagName = element.tagName.toLowerCase();
+        return (tagName === 'select' &&
+            element.selectedOptions[0].value && 
+            element.selectedOptions[0].value.length > 0);
     }).map(element => {
+        const tagName = element.tagName.toLowerCase();
+        return {
+            [element.name]: `${element.selectedOptions[0].value}`
+        };
+    });
+    localStorage.setItem(formObj.name, JSON.stringify(storage));
+
+    const options = filtered.map(element => {
         const tagName = element.tagName.toLowerCase();
         if (tagName === 'select') {
             return element.selectedOptions[0].value;
