@@ -261,6 +261,10 @@ function imageStream(options = [], response) {
     imageStreamProcess.on('close', (code) => {
         response.writeHead(200, {});
         response.end(`Options set resulted in code ${code} using options ${stringify(spawnOptions)} on ${new Date()}.`);
+        captureEmitter.emit('button-exec', {
+            method: 'imageStream',
+            status: `Image stream completed with code ${code}`
+        });
     });
 
     logger.info(`Testing still capture options from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pid ${imageStreamProcess.pid}`);
