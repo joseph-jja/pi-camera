@@ -166,7 +166,9 @@ function saveRawVideoData(options = [], response, videoConfig) {
             spawnOptions.push(x);
         });
     }
-    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('h264')}`;
+
+    const basefilename = getVideoFilename('h264');
+    const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);
     const running = killAllRunning();
@@ -181,7 +183,7 @@ function saveRawVideoData(options = [], response, videoConfig) {
         response.writeHead(200, {});
         response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
     });
-    saveConfig(stringify(spawnOptions), filename);
+    saveConfig(stringify(spawnOptions), basefilename);
 
     captureEmitter.emit('button-exec', {
         method: 'saveRawVideoData',
@@ -193,18 +195,19 @@ function saveSingle(options, callback, count, total) {
 
     const spawnOptions = options.concat();
 
-    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename('jpg')}`;
+    const basefilename = getVideoFilename('jpg');
+    const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);
     logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
     const imageDataProcess = saveImage(spawnOptions);
     imageDataProcess.on('close', (code) => {
-        saveConfig(stringify(spawnOptions), filename);
+        saveConfig(stringify(spawnOptions), basefilename);
         count++;
         if (count >= total) {
             callback(code);
         } else {
-            saveSingle(options, callback, count);
+            saveSingle(options, callback, count, total);
         }
         captureEmitter.emit('button-exec', {
             method: 'saveImagesData',
@@ -313,6 +316,7 @@ async function directStream(options = []) {
 
 function saveVideoProcess(options = [], response) {
 
+    const basefilename = getVideoFilename();
     const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
 
     const spawnOptions = options.concat();
@@ -331,7 +335,7 @@ function saveVideoProcess(options = [], response) {
         response.writeHead(200, {});
         response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
     });
-    saveConfig(stringify(options), filename);
+    saveConfig(stringify(options), basefilename);
 
     captureEmitter.emit('button-exec', {
         method: 'saveVideoProcess',
