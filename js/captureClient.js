@@ -117,7 +117,7 @@ window.addEventListener('DOMContentLoaded', () => {
             displayImages(`/plateSolve?name=${currentItem}`, true);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.value;
-            executeGETRequest(`/saveImage?count=${imageCount}`);
+            executeGETRequest(`/saveImage?imagecount=${imageCount}`);
         } else if (target.id === 'saveStream') {
             executeGETRequest('/saveStream');
         } else if (target.id === 'saveRawStream') {
