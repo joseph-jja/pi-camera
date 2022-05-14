@@ -106,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
             executeGETRequest(`/renameFile?oldname=${currentItem}&name=${fname}`);
         } else if (target.id === 'deleteFile') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
-            executeGETRequest(`/deleteFile?name=${currentItem}`);
+            executeGETRequest(`/deleteFile?name=${currentItem}`).then(listImageCaptures);
         } else if (target.id === 'viewImageOrVideo') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.jpg');
