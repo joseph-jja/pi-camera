@@ -369,6 +369,23 @@ async function previewSavedVideo(filename, response) {
     const configData = await promiseifiedRead(configFileName);
 
     playbackStream = playFile(filename, configData);
+    // 60 seconds kill the process
+    setTimeout(() => {
+        if (!playbackStream) {
+            return;
+        }
+        try {
+            if (playbackStream.stdin) {
+                playbackStream.stdin.destroy();
+            }
+            if (playbackStream.stderr) {
+                playbackStream.stderr.destroy();
+            }
+            playbackStream.kill('SIGKILL');
+        } catch(e) {
+            logger.info('Error stopping playback');
+        }
+    }, 60000);
 
     playbackStream.stdout.pipe(response);
 
