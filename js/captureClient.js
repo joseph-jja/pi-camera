@@ -103,7 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const VALID_CHARACTERS = /[a-zA-Z]/g;
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const fname = (mainForm['new-name'].value || '').match(VALID_CHARACTERS).join('');
-            executeGETRequest(`/renameFile?oldname=${currentItem}&name=${fname}`);
+            executeGETRequest(`/renameFile?oldname=${currentItem}&name=${fname}`).then(listImageCaptures);
         } else if (target.id === 'deleteFile') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             executeGETRequest(`/deleteFile?name=${currentItem}`).then(listImageCaptures);
@@ -117,11 +117,11 @@ window.addEventListener('DOMContentLoaded', () => {
             displayImages(`/plateSolve?name=${currentItem}`, true);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.value;
-            executeGETRequest(`/saveImage?imagecount=${imageCount}`);
+            executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
         } else if (target.id === 'saveStream') {
-            executeGETRequest('/saveStream');
+            executeGETRequest('/saveStream').then(listImageCaptures);
         } else if (target.id === 'saveRawStream') {
-            executeGETRequest('/saveRawStream');
+            executeGETRequest('/saveRawStream').then(listImageCaptures);
         } else if (target.id === 'listCaptures') {
             listImageCaptures();
         } else if (target.id === 'shutdownButton') {
