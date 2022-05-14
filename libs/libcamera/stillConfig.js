@@ -41,8 +41,7 @@ const V2_STILL_CAMERA = [
     '--width 2560 --height 2048',
     '--width 3200 --height 1800',
     '--width 3200 --height 2048',
-    '--width 3200 --height 2400',
-    '--width 4656 --height 3496'
+    '--width 3200 --height 2400'
 ];
 
 const PIVARITY_16MP_STILL_CAMERA = [
@@ -89,7 +88,8 @@ const PIVARITY_16MP_STILL_CAMERA = [
     '--width 3200 --height 2400',
     '--width 3840 --height 2160',
     '--width 4096 --height 2160',
-    '--width 3840 --height 2400'
+    '--width 3840 --height 2400',
+    '--width 4656 --height 3496'
 ];
 
 module.exports = [{
