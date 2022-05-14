@@ -110,7 +110,7 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'viewImageOrVideo') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.jpg');
-            displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
+            displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage).then(listImageCaptures);
         } else if (target.id === 'plateSolveImage') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.jpg');
