@@ -81,6 +81,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
     listImageCaptures();
+    restore();
 
     document.addEventListener('click', (event) => {
         const target = event.target;
