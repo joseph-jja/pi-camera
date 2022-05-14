@@ -84,7 +84,7 @@ module.exports = [{
 }, {
     name: 'ISO_Gain',
     paramName: '--gain',
-    range: [1, 40],
+    range: [0.5, 40],
     step: 0.5,
     decimalPlaces: 1,
     comment: 'Higher value is higher ISO'
