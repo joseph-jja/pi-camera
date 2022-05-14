@@ -41,7 +41,12 @@ module.exports = (request, response) => {
             logger.error('Error: ' + stringify(err));
             return;
         }
-        const successMsg = stringify(success);
+        const successMsg = `File ${oldFilename} renamed to ${newName}`;
+        if (oldFilename.endsWith('.dng')) {
+            response.writeHead(200, {});
+            response.end('Done! ' + successMsg);
+            return;
+        }
         rename(`${BASE_CONFIG_PATH}/${oldFilename}.cfg`, `${BASE_CONFIG_PATH}/${newName}.cfg`, (xerr, xsuccess) => {
             if (xerr) {
                 const message = 'Error: ' + stringify(xerr) + ' and success: ' + successMsg;
@@ -51,8 +56,9 @@ module.exports = (request, response) => {
                 return;
             }
 
+            const xsuccessMsg = `File ${oldFilename}.cfg renamed to ${newName}.cfg`;
             response.writeHead(200, {});
-            response.end('Done! ' + successMsg + ' and ' + stringify(xsuccess));
+            response.end('Done! ' + successMsg + ' ' + xsuccessMsg);
         });
     });
 };
