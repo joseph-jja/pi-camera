@@ -117,8 +117,7 @@ const stillConfig = [{
     comment: 'time in microseconds => 1000 = 1 millisecond, 250000 = 1/4 second '
 }];
 
-module.exports = prefixConfig.concat(brightnessConfig).
-concat(stillConfig).concat(suffixConfig).concat[{
+module.exports = prefixConfig.concat(brightnessConfig).concat(stillConfig).concat(suffixConfig).concat[{
     name: 'saturation',
     paramName: '--saturation',
     range: [0, 1],
