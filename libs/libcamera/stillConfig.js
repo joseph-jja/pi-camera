@@ -1,7 +1,12 @@
 const basedir = process.cwd(),
     {
         getEnvVar
-    } = require(`${basedir}/libs/env`);
+    } = require(`${basedir}/libs/env`),
+    {
+        prefixConfig,
+        suffixConfig,
+        brightnessConfig
+    } = require(`${basedir}/libs/libcamera/configCommon`);
 
 const V2_STILL_CAMERA = [
     '--width 640 --height 480',
@@ -92,66 +97,11 @@ const PIVARITY_16MP_STILL_CAMERA = [
     '--width 4656 --height 3496'
 ];
 
-module.exports = [{
-    name: 'preview',
-    paramName: '',
-    values: ['--nopreview']
-}, {
-    name: 'autofocus',
-    paramName: '',
-    values: [
-        '--autofocus 0',
-        '--autofocus 1'
-    ]
-}, {
-    name: 'zoom',
-    paramName: '',
-    values: [
-        '--roi 0.25,0.25,0.5,0.5',
-        '--roi 0.35,0.35,0.3,0.3'
-    ]
-}, {
+const stillConfig = [{
     name: 'imageSize',
     paramName: '',
-    values: (getEnvVar('PIVARITY_16MP') ?  PIVARITY_16MP_STILL_CAMERA : V2_STILL_CAMERA),
+    values: (getEnvVar('PIVARITY_16MP') ? PIVARITY_16MP_STILL_CAMERA : V2_STILL_CAMERA),
     defaultvalue: '--width 3200 --height 2400'
-}, {
-    name: 'ISO_Gain',
-    paramName: '--gain',
-    range: [0.5, 40],
-    step: 0.5,
-    decimalPlaces: 1,
-    comment: 'Higher value is higher ISO'
-}, {
-    name: 'AWB_Gain',
-    paramName: '--awbgains',
-    multiRange: {
-        joinedBy: ',',
-        ranges: [
-            [0, 50],
-            [0, 50]
-        ]
-    },
-    step: 0.5,
-    decimalPlaces: 1,
-    comment: 'Change amount of red and blue, higher means more'
-}, {
-    name: 'EV_compensation',
-    comment: 'higher is brighter',
-    paramName: '--ev',
-    range: [-10, 10],
-    step: 0.5,
-    decimalPlaces: 1
-}, {
-    name: 'metering',
-    paramName: '--metering',
-    values: ['centre', 'spot', 'average'], // 'custom'
-    defaultValue: '--metering centre'
-}, {
-    name: 'quality',
-    paramName: '--quality',
-    range: [1, 100],
-    step: 1
 }, {
     name: 'shutter_speed',
     paramName: '--shutter',
@@ -161,42 +111,17 @@ module.exports = [{
         1000, 2000, 2500, 5000, 10000,
         100000, 200000, 250000, 500000,
         1000000, 2000000, 5000000,
-        10000000, 15000000, 30000000, 
-        60000000,120000000, 180000000
+        10000000, 15000000, 30000000,
+        60000000, 120000000, 180000000
     ],
     comment: 'time in microseconds => 1000 = 1 millisecond, 250000 = 1/4 second '
-}, {
-    name: 'framerate',
-    paramName: '--framerate',
-    values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
-    comment: '0.2 = 5 seconds frame and 0.5 = 2 second frame'
-}, {
-    name: 'exposure_profile',
-    paramName: '--exposure',
-    values: ['normal', 'sport', 'long'],
-    defaultvalue: '--exposure normal'
-}, {
-    name: 'contrast',
-    paramName: '--contrast',
-    range: [0, 1],
-    step: 0.1,
-    decimalPlaces: 1
-}, {
+}];
+
+module.exports = prefixConfig.concat(brightnessConfig).
+concat(stillConfig).concat(suffixConfig).concat[{
     name: 'saturation',
     paramName: '--saturation',
     range: [0, 1],
-    step: 0.1,
-    decimalPlaces: 1
-}, {
-    name: 'sharpness',
-    paramName: '--sharpness',
-    range: [0, 1],
-    step: 0.1,
-    decimalPlaces: 1
-}, {
-    name: 'brightness',
-    paramName: '--brightness',
-    range: [-1, 1],
     step: 0.1,
     decimalPlaces: 1
 }];
