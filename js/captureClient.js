@@ -114,7 +114,9 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'plateSolveImage') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.jpg');
-            displayImages(`/plateSolve?name=${currentItem}`, true);
+            if (isImage) {
+                displayImages(`/plateSolve?name=${currentItem}`, isImage);
+            }
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.value;
             executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
