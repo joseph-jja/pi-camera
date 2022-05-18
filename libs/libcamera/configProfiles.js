@@ -30,6 +30,37 @@ module.exports = [{
         forms: ['imageOptions']
     }]
 }, {
+    name: 'Tracking Star Capture',
+    fields: [{
+        name: 'ISO_Gain',
+        value: '--gain 40.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev 10.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'framerate',
+        value: '--framerate 4',
+        forms: ['videoOptions']
+    }, {
+        name: 'shutter_speed',
+        value: '--shutter 15000000',
+        forms: ['imageOptions']
+    }, {
+        name: 'quality',
+        value: '--quality 100',
+        forms: ['imageOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1920 --height 1080',
+        forms: ['videoOptions']
+    }, {
+        name: 'imageSize',
+        value: "--width 4096 --height 2160",
+        forms: ['imageOptions']
+    }]
+}, {
     name: 'Moon Capture',
     fields: [{
         name: 'ISO_Gain',
