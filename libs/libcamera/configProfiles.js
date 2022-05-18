@@ -17,6 +17,10 @@ module.exports = [{
         value: '--shutter 250000',
         forms: ['imageOptions']
     }, {
+        name: 'quality',
+        value: '--quality 100',
+        forms: ['imageOptions']
+    }, {
         name: 'videoSize',
         value: '--width 1920 --height 1080',
         forms: ['videoOptions']
