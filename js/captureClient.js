@@ -9,7 +9,8 @@ const {
     startPreview,
     videoUpdate,
     displayImages,
-    updateImage
+    updateImage,
+    runPlateSolve
 } = formUtils;
 
 function restore() {
@@ -115,7 +116,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.jpg');
             if (isImage) {
-                displayImages(`/plateSolve?name=${currentItem}`, isImage);
+                runPlateSolve(currentItem);
             }
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.value;

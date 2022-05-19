@@ -11,7 +11,7 @@ export function getFormOptions(formObj) {
     const storage = filtered.filter(element => {
         const tagName = element.tagName.toLowerCase();
         return (tagName === 'select' &&
-            element.selectedOptions[0].value && 
+            element.selectedOptions[0].value &&
             element.selectedOptions[0].value.length > 0);
     }).map(element => {
         const tagName = element.tagName.toLowerCase();
@@ -83,7 +83,20 @@ export async function getConfig() {
 export async function listImageCaptures() {
     return executeGETRequest('/imageList', true).then(images => {
         const container = document.getElementById('image-files');
-        if (images){
+        if (images) {
+            container.innerHTML = images;
+        }
+        return Promise.resolve(images);
+    }).catch(e => {
+        console.log(e);
+        return Promise.reject(e);
+    });
+}
+
+export async function runPlateSolve(image) {
+    return executeGETRequest(`/plateSolve?name=${image}`, true).then(images => {
+        const container = document.getElementById('platesolved-files');
+        if (images) {
             container.innerHTML = images;
         }
         return Promise.resolve(images);

@@ -36,6 +36,13 @@
             background: red;
             color: white;
         }
+        .flex-container {
+            display: flex;
+        }
+        .flex-container > div {
+            margin: 10px;
+            padding: 20px;
+        }
     </style>
 </head>
 
@@ -55,18 +62,25 @@
         <fieldset class="full-width" style="width: 650px; height:325px">
             <form name="mainForm" onsubmit="return false;">
                 <br>
-                <div id="image-files"></div>
+                <div class="flex-container">
+                    <div id="image-files"></div>
+                    <div id="platesolved-files"></div>
+                </div>
                 <br>
                 <button type="submit" id="listCaptures">
                     List Captures
                 </button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button type="submit" id="viewImageOrVideo">
-                    View
+                    View Image
                 </button>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button type="submit" id="plateSolveImage">
                     Identify
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="viewPlateSolve">
+                    View Plate Solve
                 </button>
                 <br><br>
                 <input type="text" name="new-name">
