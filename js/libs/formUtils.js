@@ -80,19 +80,6 @@ export async function getConfig() {
     });
 }
 
-export async function listImageCaptures() {
-    return executeGETRequest('/imageList', true).then(images => {
-        const container = document.getElementById('image-files');
-        if (images) {
-            container.innerHTML = images;
-        }
-        return Promise.resolve(images);
-    }).catch(e => {
-        console.log(e);
-        return Promise.reject(e);
-    });
-}
-
 export async function listPlateSolves() {
     return executeGETRequest('/listPlateSolves', true).then(images => {
         const container = document.getElementById('platesolved-files');
@@ -106,8 +93,23 @@ export async function listPlateSolves() {
     });
 }
 
+export async function listImageCaptures() {
+    return executeGETRequest('/imageList', true).then(images => {
+        const container = document.getElementById('image-files');
+        if (images) {
+            container.innerHTML = images;
+        }
+        return Promise.resolve(images);
+    }).catch(e => {
+        console.log(e);
+        return Promise.reject(e);
+    });
+}
+
 export async function runPlateSolve(image) {
-    return executeGETRequest(`/plateSolve?name=${image}`, false).catch(e => {
+    return executeGETRequest(`/plateSolve?name=${image}`, false).then(() => {
+        listPlateSolves();
+    }).catch(e => {
         console.log(e);
         return Promise.reject(e);
     });

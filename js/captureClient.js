@@ -10,7 +10,8 @@ const {
     videoUpdate,
     displayImages,
     updateImage,
-    runPlateSolve
+    runPlateSolve,
+    listPlateSolves
 } = formUtils;
 
 function restore() {
@@ -127,6 +128,7 @@ window.addEventListener('DOMContentLoaded', () => {
             executeGETRequest('/saveRawStream').then(listImageCaptures);
         } else if (target.id === 'listCaptures') {
             listImageCaptures();
+            listPlateSolves();
         } else if (target.id === 'shutdownButton') {
             shutdown();
         }
