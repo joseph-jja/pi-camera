@@ -240,7 +240,7 @@ async function start() {
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
 
     app.get('/plateSolve', (request, response) => {
-        plateSolve(request, response, formFields);
+        plateSolve(request, response);
     });
 
     app.get('/saveRawStream', (request, response) => {
