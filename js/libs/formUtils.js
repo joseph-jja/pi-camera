@@ -14,7 +14,7 @@ export function getFormOptions(formObj) {
             element.selectedOptions[0].value &&
             element.selectedOptions[0].value.length > 0);
     }).map(element => {
-        const tagName = element.tagName.toLowerCase();
+        //const tagName = element.tagName.toLowerCase();
         return {
             [element.name]: `${element.selectedOptions[0].value}`
         };
@@ -93,14 +93,21 @@ export async function listImageCaptures() {
     });
 }
 
-export async function runPlateSolve(image) {
-    return executeGETRequest(`/plateSolve?name=${image}`, true).then(images => {
+export async function listPlateSolves() {
+    return executeGETRequest('/listPlateSolves', true).then(images => {
         const container = document.getElementById('platesolved-files');
         if (images) {
             container.innerHTML = images;
         }
         return Promise.resolve(images);
     }).catch(e => {
+        console.log(e);
+        return Promise.reject(e);
+    });
+}
+
+export async function runPlateSolve(image) {
+    return executeGETRequest(`/plateSolve?name=${image}`, false).catch(e => {
         console.log(e);
         return Promise.reject(e);
     });
