@@ -15,11 +15,11 @@ const stringify = require(`${basedir}/libs/stringify`),
         BASE_IMAGE_PATH
     } = require(`${basedir}/libs/videoScripts`),
     {
-        OLD_FILENAME_MATCH
+        OLD_FILENAME_MATCH,
+        PLATE_SOLVE_DIR
     } = require(`${basedir}/xhrActions/Constants`);
 
-const PLATE_SOLVE_DIR = `${process.env.HOME}/solved`,
-    PLATE_SOLVE_IN_DIR = `${process.env.HOME}/plate-solve-in`;
+const PLATE_SOLVE_IN_DIR = `${process.env.HOME}/plate-solve-in`;
 
 let SOLVE_FIELD_CMD,
     CONVERT_CMD;

@@ -10,7 +10,8 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
         previewSavedVideo
     } = require(`${basedir}/libs/videoScripts`),
     {
-        OLD_FILENAME_MATCH
+        OLD_FILENAME_MATCH,
+        PLATE_SOLVE_DIR
     } = require(`${basedir}/xhrActions/Constants`);
 
 module.exports = (request, response) => {
@@ -42,6 +43,13 @@ module.exports = (request, response) => {
             'Cache-Control': 'no-cache'
         });
         previewSavedVideo(`${BASE_IMAGE_PATH}/${filename}`, response);
+    } else if (filename.endsWith('.png')) {
+        response.writeHead(200, {
+            'Content-type': 'image/png'
+        });
+        readFile(`${PLATE_SOLVE_DIR}/${filename}`, (err, data) => {
+            response.end(data);
+        });
     } else {
         response.writeHead(200, {});
         response.end('Cannot preview file!');
