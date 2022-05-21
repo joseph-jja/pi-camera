@@ -244,7 +244,7 @@ async function start() {
         plateSolve(request, response);
     });
 
-    app.get('/listPlateSolve', (request, response) => {
+    app.get('/listPlateSolves', (request, response) => {
         listPlateSolves(request, response, formFields);
     });
 
