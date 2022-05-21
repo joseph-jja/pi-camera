@@ -83,6 +83,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
     listImageCaptures();
+    listPlateSolves();
     restore();
 
     document.addEventListener('click', (event) => {
