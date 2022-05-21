@@ -11,7 +11,8 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
     } = require(`${basedir}/libs/videoScripts`),
     {
         OLD_FILENAME_MATCH,
-        PLATE_SOLVE_DIR
+        PLATE_SOLVE_DIR,
+        PLATE_SOLVE_FILENAME_MATCH
     } = require(`${basedir}/xhrActions/Constants`);
 
 module.exports = (request, response) => {
@@ -23,11 +24,12 @@ module.exports = (request, response) => {
         logger.info('Missing parameters, nothing done!');
         return;
     }
-    const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
-    if (!filteredOldFilename) {
+    const filteredOldFilename = filename.match(OLD_FILENAME_MATCH),
+        plateSolveOldFilename = filename.match(PLATE_SOLVE_FILENAME_MATCH);
+    if (!filteredOldFilename && !plateSolveOldFilename) {
         response.writeHead(200, {});
-        response.end('Invalid oldfile name, nothing done!');
-        logger.info('Invalid oldfile name, nothing done!');
+        response.end('Invalid file name, nothing done!');
+        logger.info('Invalid file name, nothing done!');
         return;
     }
     if (filename.endsWith('.jpg')) {
