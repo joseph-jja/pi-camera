@@ -119,6 +119,10 @@ window.addEventListener('DOMContentLoaded', () => {
             if (isImage) {
                 runPlateSolve(currentItem);
             }
+        } else if (target.id === 'viewPlateSolve') {
+            const currentItem = mainForm['plate_solved'].selectedOptions[0].value.trim();
+            const isImage = currentItem.endsWith('.png');
+            displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.value;
             executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
