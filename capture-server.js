@@ -39,6 +39,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         getImageUpdateOptions
     } = require(`${basedir}/libs/videoScripts`),
     plateSolve = require(`${basedir}/xhrActions/plateSolve`),
+    listPlateSolves = require(`${basedir}/xhrActions/listPlateSolves`),
     previewStreamAction = require(`${basedir}/xhrActions/previewStream`),
     socketStreamAction = require(`${basedir}/xhrActions/socketStream`),
     stopPreviewAction = require(`${basedir}/xhrActions/stopPreview`),
@@ -241,6 +242,10 @@ async function start() {
 
     app.get('/plateSolve', (request, response) => {
         plateSolve(request, response);
+    });
+
+    app.get('/listPlateSolve', (request, response) => {
+        listPlateSolves(request, response, formFields);
     });
 
     app.get('/saveRawStream', (request, response) => {
