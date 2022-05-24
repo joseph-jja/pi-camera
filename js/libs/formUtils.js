@@ -85,6 +85,8 @@ export async function listPlateSolves() {
         const container = document.getElementById('platesolved-files');
         if (images && images.indexOf('<select') > -1) {
             container.innerHTML = images;
+        } else {
+            container.innerHTML = '';
         }
         return Promise.resolve(images);
     }).catch(e => {
@@ -98,6 +100,8 @@ export async function listImageCaptures() {
         const container = document.getElementById('image-files');
         if (images && images.indexOf('<select') > -1) {
             container.innerHTML = images;
+        } else {
+            container.innerHTML = '';
         }
         return Promise.resolve(images);
     }).catch(e => {
