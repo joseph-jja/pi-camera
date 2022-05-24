@@ -83,7 +83,7 @@ export async function getConfig() {
 export async function listPlateSolves() {
     return executeGETRequest('/listPlateSolves', true).then(images => {
         const container = document.getElementById('platesolved-files');
-        if (images) {
+        if (images && images.indexOf('<select') > -1) {
             container.innerHTML = images;
         }
         return Promise.resolve(images);
