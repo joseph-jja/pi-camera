@@ -120,13 +120,25 @@
                         Run Video Stream w/ Options
                     </button>
                     <br><br>
+                </form>
+                <form name="videoRecord" onsubmit="return false;">
+                    <select name="recordingTime">
+                        <option value="-t 30000">30 seconds</option>
+                        <option value="-t 60000" selected>60 seconds</option>
+                        <option value="-t 120000">2 minutes</option>
+                        <option value="-t 300000">5 minutes</option>
+                        <option value="-t 600000">10 minutes</option>
+                        <option value="-t 900000">15 minutes</option>
+                        <option value="-t 1800000">30 minutes</option>
+                        <option value="-t 3600000">1 hour</option>
+                    </select>
                     <button type="submit" id="saveStream">
                         Capture mjpeg
                     </button>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="saveRawStream">
-                    Capture H264
-                </button>
+                    <button type="submit" id="saveRawStream">
+                        Capture H264
+                    </button>
                 </form>
             </fieldset>
             <fieldset style="width: 400px; min-height: 650px; float: left;">
