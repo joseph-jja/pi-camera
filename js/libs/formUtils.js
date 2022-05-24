@@ -96,7 +96,7 @@ export async function listPlateSolves() {
 export async function listImageCaptures() {
     return executeGETRequest('/imageList', true).then(images => {
         const container = document.getElementById('image-files');
-        if (images) {
+        if (images && images.indexOf('<select') > -1) {
             container.innerHTML = images;
         }
         return Promise.resolve(images);
