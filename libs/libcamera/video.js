@@ -11,6 +11,9 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 const DEFAULT_OPTIONS = [];
 
+const MJPEG_DEFAULT_OPTIONS = ['--codec', 'mjpeg', '-t', '60000'],
+    H264_DEFAULT_OPTIONS = ['--codec', 'h264', '-t', '60000'];
+
 let lastVideoUpdateOpts;
 
 function getVideoUpdateOptions() {
@@ -93,7 +96,12 @@ async function piStreamMjpeg(options = []) {
 
 function saveH264(options = []) {
 
-    const spawnOptions = ['--codec', 'h264', '-t', '60000'].concat(options);
+    const defaultOptions = MJPEG_DEFAULT_OPTIONS.concat();
+    if (options.indexOf('-t') > -1) {
+        defaultOptions[defaultOptions.indexOf('-t') + 1] = options[options.indexOf('-t') + 1];
+    }
+
+    const spawnOptions = defaultOptions.concat(options);
 
     logger.info(`Libcamera video save h264 options: ${stringify(spawnOptions)}`);
 
@@ -104,7 +112,12 @@ function saveH264(options = []) {
 
 function saveMjpeg(options = []) {
 
-    const spawnOptions = ['--codec', 'mjpeg', '-t', '60000'].concat(options);
+    const defaultOptions = MJPEG_DEFAULT_OPTIONS.concat();
+    if (options.indexOf('-t') > -1) {
+        defaultOptions[defaultOptions.indexOf('-t') + 1] = options[options.indexOf('-t') + 1];
+    }
+
+    const spawnOptions = defaultOptions.concat(options);
 
     logger.info(`Libcamera video save mjpeg options: ${stringify(spawnOptions)}`);
 
