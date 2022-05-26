@@ -270,8 +270,11 @@ async function start() {
         response.end(getHTML(fields, imageFields, profiles).replace(pageUUID, uuid));
     });
 
-    app.get('/js/socket.io.js', (request, response) => {
-        fs.createReadStream('node_modules/socket.io/client-dist/socket.io.min.js').pipe(response);
+    app.get('/js/socket.io.esm.min.js', (request, response) => {
+        response.writeHead(200, {
+            'Content-Type': 'text/javascript; charset=utf-8'
+        });
+        fs.createReadStream('node_modules/socket.io/client-dist/socket.io.esm.min.js').pipe(response);
     });
 
     io.on('connection', (socket) => {

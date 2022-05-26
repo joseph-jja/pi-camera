@@ -1,6 +1,8 @@
+import { io } from "/js/socket.io.esm.min.js";
+
 const socketInfo = document.getElementById('server-info');
 
-const socket = io(); /* eslint-disable-line */
+const socket = io();
 socket.on('connect', () => {
     console.log('Socket connected ', socket.id);
     setInterval(() => {
