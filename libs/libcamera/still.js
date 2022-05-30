@@ -50,6 +50,12 @@ function streamJpeg(options) {
     const spawnOptions = ['-e', 'jpg'].concat(options);
 
     // only test this for 1 second
+    const shutterTime = options.indexOf('--shutter');
+    if (shutterTime > -1 && spawnOptions[shutterTime + 1] > 1000000) {
+        spawnOptions[shutterTime + 1] = 1000000;
+    }
+
+    // only test this for 1 second
     const captureTime = options.indexOf('-t');
     if (captureTime > -1) {
         spawnOptions[captureTime + 1] = 1000;
