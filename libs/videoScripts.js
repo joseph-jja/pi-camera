@@ -182,6 +182,12 @@ function saveRawVideoData(options = [], response, videoConfig) {
     rawDataProcess.on('close', (code) => {
         response.writeHead(200, {});
         response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+        captureEmitter.emit('button-exec', {
+            method: 'saveRawVideoData',
+            status: 'Saved raw h264 completed'
+        });
+        // after the test continue video streaming until image capture :) 
+        directStream(getVideoUpdateOptions());
     });
     saveConfig(stringify(spawnOptions), basefilename);
 
@@ -232,6 +238,12 @@ function saveImagesData(request, response) {
     saveSingle(options, (code) => {
         response.writeHead(200, {});
         response.end(`Saved image data with status code ${code} using options ${stringify(options)}.`);
+        captureEmitter.emit('button-exec', {
+            method: 'saveImagesData',
+            status: 'running save images completed'
+        });
+        // after the test continue video streaming until image capture :) 
+        directStream(getVideoUpdateOptions());
     }, count, total);
 
     captureEmitter.emit('button-exec', {
@@ -254,7 +266,7 @@ function imageStream(options = [], response) {
     libcameraProcess = undefined;
     directStreamProcess = undefined;
 
-    imageStreamProcess = streamJpeg(options);
+    imageStreamProcess = streamJpeg(spawnOptions);
 
     imageStreamProcess.stderr.on('error', errorHandler);
 
@@ -265,6 +277,8 @@ function imageStream(options = [], response) {
             method: 'imageStream',
             status: `Image stream completed with code ${code}`
         });
+        // after the test continue video streaming until image capture :) 
+        directStream(getVideoUpdateOptions());
     });
 
     logger.info(`Testing still capture options from ${process.env.IP_ADDR} with options: ${stringify(spawnOptions)} pid ${imageStreamProcess.pid}`);
@@ -338,6 +352,12 @@ function saveVideoProcess(options = [], response) {
     mjpegDataProcess.on('close', (code) => {
         response.writeHead(200, {});
         response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
+        captureEmitter.emit('button-exec', {
+            method: 'saveVideoProcess',
+            status: 'running save mjpeg completed'
+        });
+        // after the test continue video streaming until image capture :) 
+        directStream(getVideoUpdateOptions());
     });
     saveConfig(stringify(options), basefilename);
 

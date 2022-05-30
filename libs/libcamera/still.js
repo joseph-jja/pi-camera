@@ -41,11 +41,22 @@ async function initStill() {
     setImageUpdateOptions(DEFAULT_IMAGE_CONFIG);
 }
 
+// misnamed function
+// really this is just to test the options for image capture
 function streamJpeg(options) {
 
     // default image streaming options
     // this is more a default image test
-    const spawnOptions = ['-e', 'jpg', '-t', '1000'].concat(options);
+    const spawnOptions = ['-e', 'jpg'].concat(options);
+
+    // only test this for 1 second
+    const captureTime = options.indexOf('-t');
+    if (captureTime > -1) {
+        spawnOptions[captureTime + 1] = 1000;
+    } else {
+        spawnOptions.push('-t');
+        spawnOptions.push(1000);
+    }
 
     // stream to stdout
     spawnOptions.push('-o');
