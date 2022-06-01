@@ -115,6 +115,10 @@ const stillConfig = [{
         60000000, 120000000, 180000000
     ],
     comment: 'time in microseconds => 1000 = 1 millisecond, 250000 = 1/4 second '
+}, {
+    name: 'captureRaw',
+    paramName: '',
+    values: ['-r']
 }];
 
 module.exports = prefixConfig.concat(brightnessConfig).concat(stillConfig).concat(suffixConfig).concat([{
