@@ -6,7 +6,11 @@ const basedir = process.cwd();
 
 const logger = require(`${basedir}/libs/logger`)(__filename),
     {
+        captureEmitter
+    } = require(`${basedir}/libs/videoScripts`),
+    {
         BASE_IMAGE_PATH,
+        BASE_CONFIG_PATH,
         previewSavedVideo
     } = require(`${basedir}/libs/videoScripts`),
     {
@@ -39,10 +43,22 @@ module.exports = (request, response) => {
         readFile(`${BASE_IMAGE_PATH}/${filename}`, (err, data) => {
             response.end(data);
         });
+        readFile(`${BASE_CONFIG_PATH}/${filename}.cfg`, (err, data) => {
+            captureEmitter.emit('button-exec', {
+                method: 'previewImageConfig',
+                status: (err || data).toString()
+            });
+        });
     } else if (filename.endsWith('.mjpeg') || filename.endsWith('.h264')) {
         response.writeHead(200, {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
+        });
+        readFile(`${BASE_CONFIG_PATH}/${filename}.cfg`, (err, data) => {
+            captureEmitter.emit('button-exec', {
+                method: 'previewVideoConfig',
+                status: (err || data).toString()
+            });
         });
         previewSavedVideo(`${BASE_IMAGE_PATH}/${filename}`, response);
     } else if (filename.endsWith('.png')) {
