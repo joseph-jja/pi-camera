@@ -137,7 +137,7 @@ const stillConfig = [{
         '10', '15', '30',
         '60', '120', '180'
     ],
-    'Time in seconds'
+    comment: 'Time in seconds'
 }, {
     name: 'captureRaw',
     paramName: '',
