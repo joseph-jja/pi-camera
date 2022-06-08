@@ -14,7 +14,7 @@ const prefixConfig = [{
     paramName: '',
     values: [
         '--roi 0.25,0.25,0.5,0.5',
-        '--roi 0.35,0.35,0.3,0.3', 
+        '--roi 0.35,0.35,0.3,0.3',
         '--roi 0.4,0.4,0.2,0.2'
     ]
 }];
@@ -52,6 +52,13 @@ const brightnessConfig = [{
     decimalPlaces: 1,
     comment: 'Higher value is higher ISO'
 }, {
+    name: 'EV_compensation',
+    comment: 'higher is brighter',
+    paramName: '--ev',
+    range: [-10, 10],
+    step: 0.5,
+    decimalPlaces: 1
+}, {
     name: 'AWB_Gain',
     paramName: '--awbgains',
     multiRange: {
@@ -64,13 +71,6 @@ const brightnessConfig = [{
     step: 0.5,
     decimalPlaces: 1,
     comment: 'Change amount of red and blue, higher means more'
-}, {
-    name: 'EV_compensation',
-    comment: 'higher is brighter',
-    paramName: '--ev',
-    range: [-10, 10],
-    step: 0.5,
-    decimalPlaces: 1
 }, {
     name: 'metering',
     paramName: '--metering',
