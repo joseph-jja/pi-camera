@@ -18,13 +18,15 @@ export function buildSelect(item) {
         name,
         paramName,
         values,
+        valueNames,
         defaultvalue
     } = item;
 
-    const options = values.map(element => {
+    const options = values.map((element, index) => {
         const selectedValue = (paramName.startsWith('-') ? `${paramName} ${element}` : `${paramName}${element}`);
         const selected = (defaultvalue && defaultvalue.trim() === selectedValue.trim() ? 'selected' : '');
-        return `<option value="${selectedValue}" ${selected}>${element}</option>`;
+        const name = valueNames && valueNames[index] ? valueNames[index] : element;
+        return `<option value="${selectedValue}" ${selected}>${name}</option>`;
     }).reduce((acc, next) => {
         return `${acc}${EOL}${next}`;
     });

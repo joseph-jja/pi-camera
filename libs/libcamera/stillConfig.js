@@ -8,6 +8,8 @@ const basedir = process.cwd(),
         brightnessConfig
     } = require(`${basedir}/libs/libcamera/configCommon`);
 
+const MULTIPLIER_FOR_SHUTTER_SPEED = 1000000;
+
 const V2_STILL_CAMERA = [
     '--width 640 --height 480',
     '--width 720 --height 480',
@@ -106,15 +108,35 @@ const stillConfig = [{
     name: 'shutter_speed',
     paramName: '--shutter',
     values: [
-        50, 100, 150, 200, 250, 300, 
-        400, 500, 600, 700, 800, 900,
-        1000, 2000, 2500, 5000, 10000,
-        100000, 200000, 250000, 500000,
+        Math.round(1/10000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/6000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/5000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/4000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/3000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/2500 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/2000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/1000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/500 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/400 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/300 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/200 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/100 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        Math.round(1/50 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        250000, 500000,
         1000000, 2000000, 5000000,
         10000000, 15000000, 30000000,
         60000000, 120000000, 180000000
     ],
-    comment: 'time in microseconds => 1000 = 1 millisecond, 250000 = 1/4 second '
+    valueNames: [
+        '1/10000', '1/6000', '1/5000', '1/4000',
+        '1/3000', '1/2500', '1/2000', '1/1000',
+        '1/500', '1/400', '1/300', '1/200',
+        '1/100', '1/50',
+        '1/4', '1/2',
+        '1', '2', '5',
+        '10', '15', '30',
+        '60', '120', '180'
+    ]
 }, {
     name: 'captureRaw',
     paramName: '',
