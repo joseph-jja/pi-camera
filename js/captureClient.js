@@ -125,12 +125,14 @@ window.addEventListener('DOMContentLoaded', () => {
             const isImage = currentItem.endsWith('.png');
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
-            const imageCount = document.forms['saveImages'].imagecount.value;
+            const imageCount = document.forms['saveImages'].imagecount.selectedOptions[0].value.trim();
             executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
         } else if (target.id === 'saveStream') {
-            executeGETRequest('/saveStream').then(listImageCaptures);
+            const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
+            executeGETRequest(`/saveStream?recordingTime=${videoLength}`).then(listImageCaptures);
         } else if (target.id === 'saveRawStream') {
-            executeGETRequest('/saveRawStream').then(listImageCaptures);
+            const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
+            executeGETRequest(`/saveRawStream?recordingTime=${videoLength}`).then(listImageCaptures);
         } else if (target.id === 'listCaptures') {
             listImageCaptures();
             listPlateSolves();
