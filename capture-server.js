@@ -221,7 +221,7 @@ async function start() {
     app.get('/stopPreview', stopPreviewAction);
 
     app.get('/saveStream', (request, response) => {
-        saveVideoProcess(getVideoUpdateOptions(), response);
+        saveVideoProcess(getVideoUpdateOptions(), request, response);
     });
 
     app.get('/saveImage', (request, response) => {
@@ -249,7 +249,7 @@ async function start() {
     });
 
     app.get('/saveRawStream', (request, response) => {
-        saveRawVideoData(getVideoUpdateOptions(), response, videoConfig);
+        saveRawVideoData(getVideoUpdateOptions(), request, response, videoConfig);
     });
 
     app.get('/config', (request, response) => {

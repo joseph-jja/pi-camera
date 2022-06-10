@@ -156,7 +156,7 @@ function saveConfig(options, captureFilename) {
     });
 }
 
-function saveRawVideoData(options = [], response, videoConfig) {
+function saveRawVideoData(options = [], request, response, videoConfig) {
 
     const optionsStr = options.join(' ');
     const bitRate = getH264Bitrate(videoConfig, optionsStr);
@@ -165,6 +165,13 @@ function saveRawVideoData(options = [], response, videoConfig) {
         bitRate.split(' ').forEach(x => {
             spawnOptions.push(x);
         });
+    }
+
+    // pass the recording time
+    const recordingTime = request.query.recordingTime;
+    if (recordingTime) {
+        spawnOptions.push('-t');
+        spawnOptions.push(recordingTime);
     }
 
     const basefilename = getVideoFilename('h264');
@@ -186,7 +193,7 @@ function saveRawVideoData(options = [], response, videoConfig) {
             method: 'saveRawVideoData',
             status: 'Saved raw h264 completed'
         });
-        // after the test continue video streaming until image capture :) 
+        // after the test continue video streaming until image capture :)
         directStream(getVideoUpdateOptions());
     });
     saveConfig(stringify(spawnOptions), basefilename);
@@ -222,6 +229,63 @@ function saveSingle(options, callback, count, total) {
     });
 }
 
+function timelapseCapture(options, lapseTime, total, response) {
+
+    const spawnOptions = options.concat();
+
+    // skip first frame
+    spawnOptions.push(' --framestart');
+    spawnOptions.push('1');
+
+    // short time between frames
+    spawnOptions.push('--timelapse');
+    spawnOptions.push(50);
+
+    // total capture time
+    spawnOptions.push('-t');
+    spawnOptions.push(lapseTime);
+
+    // need to add in the percent 4 d for timelapse filenames
+    const basefilename = getVideoFilename('jpg').replace(/jpg$/, '');
+    const filename = `${BASE_IMAGE_PATH}/${basefilename}%4d.jpg`;
+    spawnOptions.push('-o');
+    spawnOptions.push(filename);
+
+    logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
+    const imageDataProcess = saveImage(spawnOptions);
+    imageDataProcess.on('close', (code) => {
+        saveConfig(stringify(spawnOptions), basefilename);
+        response.writeHead(200, {});
+        response.end(`Saved image timelapse data with status code ${code} using options ${stringify(options)}.`);
+        captureEmitter.emit('button-exec', {
+            method: 'saveImagesData',
+            status: `Saved a total of ${total} images with code ${code}`
+        });
+    });
+}
+
+function calculateTimelapse(options, total, response) {
+    const shutterTime = options.indexOf('--shutter');
+    let lapseTime = 0;
+    if (shutterTime > -1 && total > 1) {
+        // capturing multiple images and specified shutter time
+        const shutter = ((options[shutterTime + 1] > 1000000) ?
+            options[shutterTime + 1] / 1000 :
+            1000) + 100;
+        lapseTime = (shutter * (total + 1));
+    } else if (total > 1) {
+        // capturing more than 1 image but no shutter time
+        // need to think about framerate?
+        lapseTime = 2100;
+    }
+
+    if (lapseTime > 0) {
+        // to do
+        timelapseCapture(options, lapseTime, total, response);
+        // return;
+    }
+}
+
 function saveImagesData(request, response) {
 
     const running = killAllRunning();
@@ -232,7 +296,7 @@ function saveImagesData(request, response) {
     imageStreamProcess = undefined;
 
     const options = getImageUpdateOptions();
-    const total = request.query.imagecount || 1;
+    const total = (request.query || {}).imagecount || 1;
 
     let count = 0;
     saveSingle(options, (code) => {
@@ -242,7 +306,7 @@ function saveImagesData(request, response) {
             method: 'saveImagesData',
             status: 'running save images completed'
         });
-        // after the test continue video streaming until image capture :) 
+        // after the test continue video streaming until image capture :)
         directStream(getVideoUpdateOptions());
     }, count, total);
 
@@ -277,7 +341,7 @@ function imageStream(options = [], response) {
             method: 'imageStream',
             status: `Image stream completed with code ${code}`
         });
-        // after the test continue video streaming until image capture :) 
+        // after the test continue video streaming until image capture :)
         directStream(getVideoUpdateOptions());
     });
 
@@ -332,7 +396,7 @@ async function directStream(options = []) {
     });
 }
 
-function saveVideoProcess(options = [], response) {
+function saveVideoProcess(options = [], request, response) {
 
     const basefilename = getVideoFilename();
     const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
@@ -340,6 +404,13 @@ function saveVideoProcess(options = [], response) {
     const spawnOptions = options.concat();
     spawnOptions.push('-o');
     spawnOptions.push(filename);
+
+    // pass the recording time
+    const recordingTime = request.query.recordingTime;
+    if (recordingTime) {
+        spawnOptions.push('-t');
+        spawnOptions.push(recordingTime);
+    }
 
     const running = killAllRunning();
     logger.info('Results of stopping all: ' + stringify(running));
@@ -356,7 +427,7 @@ function saveVideoProcess(options = [], response) {
             method: 'saveVideoProcess',
             status: 'running save mjpeg completed'
         });
-        // after the test continue video streaming until image capture :) 
+        // after the test continue video streaming until image capture :)
         directStream(getVideoUpdateOptions());
     });
     saveConfig(stringify(options), basefilename);
