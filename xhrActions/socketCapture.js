@@ -38,7 +38,10 @@ module.exports = (socket) => {
     initStill();
 
     socket.on('get-image', (sock) => {
-        const options = sock.options;
+        const options = sock.options || [];
+
+        logger.info(`Client requested image with options: ${stringify(options)}`);
+
         captureSingleImage(options, socket);
     });
 
