@@ -34,7 +34,7 @@ module.exports = (request, response) => {
     }
     const firstpart = oldFilename.split('-')[0];
     const newName = oldFilename.replace(firstpart, filteredFilename);
-    rename(`${BASE_IMAGE_PATH}/${oldFilename}`, `${BASE_IMAGE_PATH}/${newName}`, (err, success) => {
+    rename(`${BASE_IMAGE_PATH}/${oldFilename}`, `${BASE_IMAGE_PATH}/${newName}`, (err, _success) => {
         if (err) {
             response.writeHead(200, {});
             response.end('Error: ' + stringify(err));
@@ -47,7 +47,7 @@ module.exports = (request, response) => {
             response.end('Done! ' + successMsg);
             return;
         }
-        rename(`${BASE_CONFIG_PATH}/${oldFilename}.cfg`, `${BASE_CONFIG_PATH}/${newName}.cfg`, (xerr, xsuccess) => {
+        rename(`${BASE_CONFIG_PATH}/${oldFilename}.cfg`, `${BASE_CONFIG_PATH}/${newName}.cfg`, (xerr, _xsuccess) => {
             if (xerr) {
                 const message = 'Error: ' + stringify(xerr) + ' and success: ' + successMsg;
                 response.writeHead(200, {});

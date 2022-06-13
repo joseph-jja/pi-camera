@@ -61,7 +61,7 @@
         "no-irregular-whitespace": 1,
         "no-new": 1,
         "no-plusplus": 0,
-        "no-unused-vars": 1,
+        "no-unused-vars": [2, {"argsIgnorePattern": "^_"}],
         "strict": 0,
         "comma-dangle": 1,
         "no-trailing-spaces": 0,

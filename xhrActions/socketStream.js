@@ -50,7 +50,7 @@ captureEmitter.on('button-exec', message => {
 });
 
 module.exports = (socket) => {
-    socket.on('status', (sock) => {
+    socket.on('status', (_sock) => {
         /* eslint-disable-line */
         const data = collectData();
         logger.debug(`System info: ${stringify(data)} `);

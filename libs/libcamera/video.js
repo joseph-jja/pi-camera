@@ -96,7 +96,7 @@ async function piStreamMjpeg(options = []) {
 
 function saveH264(options = []) {
 
-    const defaultOptions = MJPEG_DEFAULT_OPTIONS.concat();
+    const defaultOptions = H264_DEFAULT_OPTIONS.concat();
     if (options.indexOf('-t') > -1) {
         defaultOptions[defaultOptions.indexOf('-t') + 1] = options[options.indexOf('-t') + 1];
     }

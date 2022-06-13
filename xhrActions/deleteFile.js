@@ -29,7 +29,7 @@ module.exports = (request, response) => {
         response.end('Invalid oldfile name, nothing done!');
         return;
     }
-    unlink(`${BASE_IMAGE_PATH}/${filename}`, (err, success) => {
+    unlink(`${BASE_IMAGE_PATH}/${filename}`, (err, _success) => {
         if (err) {
             response.writeHead(200, {});
             response.end('Error: ' + stringify(err));
@@ -42,7 +42,7 @@ module.exports = (request, response) => {
             response.end('Done! ' + successMsg);
             return;
         }
-        unlink(`${BASE_CONFIG_PATH}/${filename}.cfg`, (xerr, xsuccess) => {
+        unlink(`${BASE_CONFIG_PATH}/${filename}.cfg`, (xerr, _xsuccess) => {
             if (xerr) {
                 const message = 'Error: ' + stringify(xerr) + ' and success: ' + successMsg;
                 response.writeHead(200, {});
