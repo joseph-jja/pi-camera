@@ -21,6 +21,7 @@ function captureSingleImage(options = [], socket) {
     spawnOptions.push(filename);
     logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
 
+    const startTime = process.hrtime();
     const imageDataProcess = saveImage(spawnOptions);
 
     imageDataProcess.on('close', (code) => {
@@ -28,7 +29,8 @@ function captureSingleImage(options = [], socket) {
             socket.emit('view-image', {
                 status: err || 'success',
                 message: `Saved image with code ${code}`,
-                img: data.toString('base64')
+                img: data.toString('base64'),
+                perf: process.hrtime(startTime)
             });
         });
     });
