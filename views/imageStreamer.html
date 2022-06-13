@@ -49,10 +49,10 @@
                 console.log(msg.message);
                 if (msg.status === 'success') {
                     const cvs = document.getElementById('image-display');
-                    context = cvs.getContext('2d');
+                    const context = cvs.getContext('2d');
 
                     try {
-                        this.context.drawImage(msg.img,
+                        context.drawImage(msg.img,
                             srcRect.x,
                             srcRect.y,
                             srcRect.width,
@@ -64,12 +64,8 @@
                         );
                         console.log('.');
                     } catch (e) {
-                        // if we can't draw, don't bother updating anymore
-                        this.stop();
                         console.log('Stopped! at ', new Date(), e);
-                        this.options.errorHandler(e);
                     }
-                    //msg.data
                 }
             });
         }
