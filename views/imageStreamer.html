@@ -52,7 +52,8 @@
                     const context = cvs.getContext('2d');
 
                     try {
-                        const image = `data:image/png;base64${msg.img}`;
+                        const image = new Image();
+                        image.src = `data:image/png;base64,${msg.img}`;
                         context.drawImage(image,
                             srcRect.x,
                             srcRect.y,
