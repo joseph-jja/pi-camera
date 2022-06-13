@@ -38,6 +38,7 @@
                 console.log(msg.message);
                 if (msg.status === 'success') {
                     fetchNextImageTime = ((msg.perf[0] * 1e6) + msg.perf[1]) / 1e6) * 1000;
+                    console.log('Fetch time ', fetchNextImageTime);
                     try {
                         const image = document.getElementById('image-display-2');
                         image.src = `data:image/png;base64,${msg.img}`;
