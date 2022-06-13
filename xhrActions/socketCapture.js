@@ -9,7 +9,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         saveImage
     } = require(`${basedir}/libs/libcamera/still`);
 
-const BASE_IMAGE_PATH = '/tmp/';
+const BASE_IMAGE_PATH = '/tmp';
 
 function captureSingleImage(options = [], socket) {
 
