@@ -28,7 +28,7 @@ function captureSingleImage(options = [], socket) {
             socket.emit('view-image', {
                 status: err || 'success',
                 message: `Saved image with code ${code}`,
-                img: data
+                img: data.toString('base64')
             });
         });
     });
