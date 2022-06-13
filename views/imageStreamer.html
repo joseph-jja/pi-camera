@@ -25,7 +25,7 @@
                 600
             ];
 
-            let fetchNextImageTime = 1000;
+            const fetchNextImageTime = 2000;
             const host = window.location.host;
             const socket = new io();
             socket.on('connected', msg => {
@@ -39,8 +39,8 @@
             socket.on('view-image', msg => {
                 console.log(msg.message);
                 if (msg.status === 'success') {
-                    fetchNextImageTime = Math.ceil((((msg.perf[0] * 1e9) + msg.perf[1]) / 1e6))+ 250;
-                    console.log('Fetch time ', fetchNextImageTime);
+                    const fetchedTime = Math.ceil((((msg.perf[0] * 1e9) + msg.perf[1]) / 1e6))+ 250;
+                    console.log('Fetch time ', fetchedTime);
                     try {
                         const image = document.getElementById('image-display-2');
                         image.src = `data:image/png;base64,${msg.img}`;
