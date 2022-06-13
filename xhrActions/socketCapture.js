@@ -34,8 +34,9 @@ function captureSingleImage(options = [], socket) {
     });
 }
 
+initStill();
+
 module.exports = (socket) => {
-    initStill();
 
     socket.on('get-image', (sock) => {
         const options = sock.options || [];
