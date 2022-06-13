@@ -39,7 +39,7 @@
             socket.on('view-image', msg => {
                 console.log(msg.message);
                 if (msg.status === 'success') {
-                    fetchNextImageTime = Math.ceil((((msg.perf[0] * 1e9) + msg.perf[1]) / 1e6))+ 500;
+                    fetchNextImageTime = Math.ceil((((msg.perf[0] * 1e9) + msg.perf[1]) / 1e6))+ 250;
                     console.log('Fetch time ', fetchNextImageTime);
                     try {
                         const image = document.getElementById('image-display-2');
