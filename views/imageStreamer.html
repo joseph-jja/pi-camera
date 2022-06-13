@@ -2,12 +2,11 @@
 <html>
 
 <head>
-    <title>Image captureEmitter</title>
+    <title>Image Capture</title>
 
 </head>
 <body>
 
-    <canvas width="800" height="600" id="image-display" style="border: 1px solid black;"></canvas>
     <img id="image-display-2">
     <script src="/js/socket.io.min.js"></script>
 
@@ -24,19 +23,6 @@
                 600
             ];
 
-            const srcRect = {
-                x: 0,
-                y: 0,
-                width: 800,
-                height: 600
-            };
-            const dstRect = {
-                x: 0,
-                y: 0,
-                width: 800,
-                height: 600
-            };
-
             const host = window.location.host;
             const socket = new io();
             socket.on('connected', msg => {
@@ -48,26 +34,12 @@
             socket.on('view-image', msg => {
                 console.log(msg.message);
                 if (msg.status === 'success') {
-                    const cvs = document.getElementById('image-display');
-                    const context = cvs.getContext('2d');
 
                     try {
                         const image = document.getElementById('image-display-2');
                         image.src = `data:image/png;base64,${msg.img}`;
-
-                        context.drawImage(image,
-                            srcRect.x,
-                            srcRect.y,
-                            srcRect.width,
-                            srcRect.height,
-                            dstRect.x,
-                            dstRect.y,
-                            dstRect.width,
-                            dstRect.height
-                        );
-                        console.log('.');
                     } catch (e) {
-                        console.log('Stopped! at ', new Date(), e);
+                        console.log(new Date(), ' error: ', e);
                     }
                 }
             });
