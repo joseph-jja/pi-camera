@@ -8,7 +8,7 @@
 <body>
 
     <canvas width="800" height="600" id="image-display" style="border: 1px solid black;"></canvas>
-
+    <img id="image-display-2">
     <script src="/js/socket.io.min.js"></script>
 
     <script type="text/javascript">
@@ -52,8 +52,9 @@
                     const context = cvs.getContext('2d');
 
                     try {
-                        const image = new Image();
+                        const image = document.getElementById('image-display-2');
                         image.src = `data:image/png;base64,${msg.img}`;
+
                         context.drawImage(image,
                             srcRect.x,
                             srcRect.y,
