@@ -52,7 +52,7 @@ module.exports = [{
         forms: ['videoOptions']
     }, {
         name: 'EV_compensation',
-        value: '--ev 2.0',
+        value: '--ev 4.0',
         forms: ['imageOptions']
     }, {
         name: 'framerate',
