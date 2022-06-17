@@ -1,5 +1,12 @@
+const basedir = process.cwd(),
+    {
+        getEnvVar
+    } = require(`${basedir}/libs/env`);
+
+const IMAGE_RESOLUTION = (getEnvVar('PIVARITY_16MP') ? '--width 2328 --height 1748' : '--width 1640 --height 1232');
+
 module.exports = [{
-    name: 'Star Capture',
+    name: 'Star Capture - No tracking',
     fields: [{
         name: 'ISO_Gain',
         value: '--gain 40.0',
@@ -26,11 +33,11 @@ module.exports = [{
         forms: ['videoOptions']
     }, {
         name: 'imageSize',
-        value: "--width 4096 --height 2160",
+        value: IMAGE_RESOLUTION,
         forms: ['imageOptions']
     }]
 }, {
-    name: 'Tracking Star Capture',
+    name: 'Star Capture - Tracking',
     fields: [{
         name: 'ISO_Gain',
         value: '--gain 40.0',
@@ -57,7 +64,7 @@ module.exports = [{
         forms: ['videoOptions']
     }, {
         name: 'imageSize',
-        value: "--width 4096 --height 2160",
+        value: IMAGE_RESOLUTION,
         forms: ['imageOptions']
     }]
 }, {
@@ -72,7 +79,7 @@ module.exports = [{
         forms: ['videoOptions', 'imageOptions']
     }, {
         name: 'framerate',
-        value: '--framerate 15',
+        value: '--framerate 30',
         forms: ['videoOptions']
     }, {
         name: 'videoSize',
@@ -80,7 +87,7 @@ module.exports = [{
         forms: ['videoOptions']
     }, {
         name: 'imageSize',
-        value: "--width 4096 --height 2160",
+        value: IMAGE_RESOLUTION,
         forms: ['imageOptions']
     }]
 }];
