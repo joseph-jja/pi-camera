@@ -171,7 +171,7 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     const recordingTime = request.query.recordingTime;
     if (recordingTime) {
         spawnOptions.push('-t');
-        spawnOptions.push(recordingTime);
+        spawnOptions.push(recordingTime * 1000);
     }
 
     const basefilename = getVideoFilename('h264');
@@ -409,7 +409,7 @@ function saveVideoProcess(options = [], request, response) {
     const recordingTime = request.query.recordingTime;
     if (recordingTime) {
         spawnOptions.push('-t');
-        spawnOptions.push(recordingTime);
+        spawnOptions.push(recording Time * 1000);
     }
 
     const running = killAllRunning();
