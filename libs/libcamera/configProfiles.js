@@ -37,7 +37,7 @@ module.exports = [{
         forms: ['imageOptions']
     }]
 }, {
-    name: 'Star Capture - Tracking',
+    name: 'Star Capture - Tracking (2s)',
     fields: [{
         name: 'ISO_Gain',
         value: '--gain 40.0',
@@ -61,6 +61,45 @@ module.exports = [{
     }, {
         name: 'shutter_speed',
         value: '--shutter 2000000',
+        forms: ['imageOptions']
+    }, {
+        name: 'quality',
+        value: '--quality 100',
+        forms: ['imageOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1920 --height 1080',
+        forms: ['videoOptions']
+    }, {
+        name: 'imageSize',
+        value: IMAGE_RESOLUTION,
+        forms: ['imageOptions']
+    }]
+}, {
+    name: 'Star Capture - Tracking (30s)',
+    fields: [{
+        name: 'ISO_Gain',
+        value: '--gain 40.0',
+        forms: ['videoOptions']
+    }, {
+        name: 'ISO_Gain',
+        value: '--gain 8.0',
+        forms: ['imageOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev 10.0',
+        forms: ['videoOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev 4.0',
+        forms: ['imageOptions']
+    }, {
+        name: 'framerate',
+        value: '--framerate 4',
+        forms: ['videoOptions']
+    }, {
+        name: 'shutter_speed',
+        value: '--shutter 30000000',
         forms: ['imageOptions']
     }, {
         name: 'quality',
