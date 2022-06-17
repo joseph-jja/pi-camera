@@ -41,18 +41,26 @@ module.exports = [{
     fields: [{
         name: 'ISO_Gain',
         value: '--gain 40.0',
-        forms: ['videoOptions', 'imageOptions']
+        forms: ['videoOptions']
+    }, {
+        name: 'ISO_Gain',
+        value: '--gain 8.0',
+        forms: ['imageOptions']
     }, {
         name: 'EV_compensation',
         value: '--ev 10.0',
-        forms: ['videoOptions', 'imageOptions']
+        forms: ['videoOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev 2.0',
+        forms: ['imageOptions']
     }, {
         name: 'framerate',
         value: '--framerate 4',
         forms: ['videoOptions']
     }, {
         name: 'shutter_speed',
-        value: '--shutter 15000000',
+        value: '--shutter 2000000',
         forms: ['imageOptions']
     }, {
         name: 'quality',
@@ -68,7 +76,7 @@ module.exports = [{
         forms: ['imageOptions']
     }]
 }, {
-    name: 'Moon Capture',
+    name: 'Moon Capture - No Tracking',
     fields: [{
         name: 'ISO_Gain',
         value: '--gain 1.0',
