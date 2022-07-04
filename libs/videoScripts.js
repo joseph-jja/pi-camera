@@ -409,7 +409,7 @@ function saveVideoProcess(options = [], request, response) {
     const recordingTime = request.query.recordingTime;
     if (recordingTime) {
         spawnOptions.push('-t');
-        spawnOptions.push(recording Time * 1000);
+        spawnOptions.push(recordingTime * 1000);
     }
 
     const running = killAllRunning();
