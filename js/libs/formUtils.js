@@ -80,21 +80,6 @@ export async function getConfig() {
     });
 }
 
-export async function listPlateSolves() {
-    return executeGETRequest('/listPlateSolves', true).then(images => {
-        const container = document.getElementById('platesolved-files');
-        if (images && images.indexOf('<select') > -1) {
-            container.innerHTML = images;
-        } else {
-            container.innerHTML = '';
-        }
-        return Promise.resolve(images);
-    }).catch(e => {
-        console.log(e);
-        return Promise.reject(e);
-    });
-}
-
 export async function listImageCaptures() {
     return executeGETRequest('/imageList', true).then(images => {
         const container = document.getElementById('image-files');
@@ -104,15 +89,6 @@ export async function listImageCaptures() {
             container.innerHTML = '';
         }
         return Promise.resolve(images);
-    }).catch(e => {
-        console.log(e);
-        return Promise.reject(e);
-    });
-}
-
-export async function runPlateSolve(image) {
-    return executeGETRequest(`/plateSolve?name=${image}`, false).then(() => {
-        listPlateSolves();
     }).catch(e => {
         console.log(e);
         return Promise.reject(e);

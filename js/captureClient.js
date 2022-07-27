@@ -9,9 +9,7 @@ const {
     startPreview,
     videoUpdate,
     displayImages,
-    updateImage,
-    runPlateSolve,
-    listPlateSolves
+    updateImage
 } = formUtils;
 
 function restore() {
@@ -83,7 +81,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
     listImageCaptures();
-    listPlateSolves();
     restore();
 
     document.addEventListener('click', (event) => {
@@ -114,16 +111,6 @@ window.addEventListener('DOMContentLoaded', () => {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.jpg');
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
-        } else if (target.id === 'plateSolveImage') {
-            const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
-            const isImage = currentItem.endsWith('.jpg');
-            if (isImage) {
-                runPlateSolve(currentItem);
-            }
-        } else if (target.id === 'viewPlateSolve') {
-            const currentItem = mainForm['plate_solved'].selectedOptions[0].value.trim();
-            const isImage = currentItem.endsWith('.png');
-            displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.selectedOptions[0].value.trim();
             executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
@@ -135,7 +122,6 @@ window.addEventListener('DOMContentLoaded', () => {
             executeGETRequest(`/saveRawStream?recordingTime=${videoLength}`).then(listImageCaptures);
         } else if (target.id === 'listCaptures') {
             listImageCaptures();
-            listPlateSolves();
         } else if (target.id === 'shutdownButton') {
             shutdown();
         }

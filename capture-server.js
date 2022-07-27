@@ -38,8 +38,6 @@ const stringify = require(`${basedir}/libs/stringify`),
         getVideoUpdateOptions,
         getImageUpdateOptions
     } = require(`${basedir}/libs/videoScripts`),
-    plateSolve = require(`${basedir}/xhrActions/plateSolve`),
-    listPlateSolves = require(`${basedir}/xhrActions/listPlateSolves`),
     previewStreamAction = require(`${basedir}/xhrActions/previewStream`),
     socketStreamAction = require(`${basedir}/xhrActions/socketStream`),
     stopPreviewAction = require(`${basedir}/xhrActions/stopPreview`),
@@ -239,14 +237,6 @@ async function start() {
     app.get('/deleteFile', deleteFileAction);
 
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
-
-    app.get('/plateSolve', (request, response) => {
-        plateSolve(request, response);
-    });
-
-    app.get('/listPlateSolves', (request, response) => {
-        listPlateSolves(request, response, formFields);
-    });
 
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), request, response, videoConfig);
