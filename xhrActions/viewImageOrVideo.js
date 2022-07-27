@@ -14,9 +14,7 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
         previewSavedVideo
     } = require(`${basedir}/libs/videoScripts`),
     {
-        OLD_FILENAME_MATCH,
-        PLATE_SOLVE_DIR,
-        PLATE_SOLVE_FILENAME_MATCH
+        OLD_FILENAME_MATCH
     } = require(`${basedir}/xhrActions/Constants`);
 
 module.exports = (request, response) => {
@@ -28,9 +26,8 @@ module.exports = (request, response) => {
         logger.info('Missing parameters, nothing done!');
         return;
     }
-    const filteredOldFilename = filename.match(OLD_FILENAME_MATCH),
-        plateSolveOldFilename = filename.match(PLATE_SOLVE_FILENAME_MATCH);
-    if (!filteredOldFilename && !plateSolveOldFilename) {
+    const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
+    if (!filteredOldFilename) {
         response.writeHead(200, {});
         response.end('Invalid file name, nothing done!');
         logger.info('Invalid file name, nothing done!');
@@ -61,13 +58,6 @@ module.exports = (request, response) => {
             });
         });
         previewSavedVideo(`${BASE_IMAGE_PATH}/${filename}`, response);
-    } else if (filename.endsWith('.png')) {
-        response.writeHead(200, {
-            'Content-type': 'image/png'
-        });
-        readFile(`${PLATE_SOLVE_DIR}/${filename}`, (err, data) => {
-            response.end(data);
-        });
     } else {
         response.writeHead(200, {});
         response.end('Cannot preview file!');
