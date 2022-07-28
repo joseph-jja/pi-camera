@@ -44,6 +44,19 @@ const suffixConfig = [{
     decimalPlaces: 1
 }];
 
+// ISO_Gain v2 camera raw format reported
+// 1 - 100
+// 2 - 200
+// 3 - 297
+// 4 - 400
+// 5 - 492
+// 6 - 595
+// 7 - 691
+// 8 - 800
+// 9 - 882
+// 10 - 984
+// 11 - 1066
+// 12 - 1066
 const brightnessConfig = [{
     name: 'ISO_Gain',
     paramName: '--gain',
