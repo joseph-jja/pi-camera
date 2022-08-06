@@ -25,7 +25,7 @@ export PATH=$USR_BIN:$PATH
 
 # setup full path to binary files
 FOREVER_BIN=/home/pi/.nvm/versions/node/v16.14.0/bin/forever
-NODE_BIN=/home/pi/.nvm/versions/node/v16.14.0/bin/node
+NODE_BIN=/home/pi/.nvm/versions/node/v16.14.0/bin
 export PATH=$NODE_BIN:$PATH
 
 # forever setup
