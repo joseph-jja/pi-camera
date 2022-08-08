@@ -11,8 +11,8 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 const DEFAULT_OPTIONS = [];
 
-const MJPEG_DEFAULT_OPTIONS = ['--codec', 'mjpeg', '-t', '60000'],
-    H264_DEFAULT_OPTIONS = ['--codec', 'h264', '-t', '60000'];
+const MJPEG_DEFAULT_OPTIONS = ['--codec', 'mjpeg'],
+    H264_DEFAULT_OPTIONS = ['--codec', 'h264'];
 
 let lastVideoUpdateOpts;
 
@@ -97,8 +97,9 @@ async function piStreamMjpeg(options = []) {
 function saveH264(options = []) {
 
     const defaultOptions = H264_DEFAULT_OPTIONS.concat();
-    if (options.indexOf('-t') > -1) {
-        defaultOptions[defaultOptions.indexOf('-t') + 1] = options[options.indexOf('-t') + 1];
+    if (options.indexOf('-t') < 0) {
+        defaultOptions.push('-t');
+        defaultOptions.push(60000);
     }
 
     const spawnOptions = defaultOptions.concat(options);
@@ -113,8 +114,9 @@ function saveH264(options = []) {
 function saveMjpeg(options = []) {
 
     const defaultOptions = MJPEG_DEFAULT_OPTIONS.concat();
-    if (options.indexOf('-t') > -1) {
-        defaultOptions[defaultOptions.indexOf('-t') + 1] = options[options.indexOf('-t') + 1];
+    if (options.indexOf('-t') < 0) {
+        defaultOptions.push('-t');
+        defaultOptions.push(60000);
     }
 
     const spawnOptions = defaultOptions.concat(options);
