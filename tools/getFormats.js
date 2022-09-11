@@ -34,8 +34,8 @@ rl.on('line', line => {
 });
 
 const sortFn = (a, b) => {
-    const wha = a.replace('--width ', '').replace(--height', '').split(' '),
-        whb = b.replace('--width ', '').replace(--height', '').split(' ');
+    const wha = a.replace('--width ', '').replace('--height', '').split(' '),
+        whb = b.replace('--width ', '').replace('--height', '').split(' ');
 
     const xa = wha[0] * wha[1],
         xb = whb[0] * whb[1];
