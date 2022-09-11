@@ -42,7 +42,13 @@ const sortFn = (a, b) => {
     } else if (parseInt(wha[0]) < parseInt(whb[0])) {
         return -1;
     } else {
-        return 0;
+        if (parseInt(wha[1]) > parseInt(whb[1])) {
+            return 1;
+        } else if (parseInt(wha[1]) < parseInt(whb[1])) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 };
 
