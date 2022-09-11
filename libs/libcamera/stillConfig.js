@@ -104,7 +104,8 @@ const PIVARITY_16MP_STILL_CAMERA = [
     '--width 3840 --height 1600',
     '--width 3840 --height 2160',
     '--width 3840 --height 2400',
-    '--width 4096 --height 2160'
+    '--width 4096 --height 2160',
+    '--width 4656 --height 3496'
 ];
 
 const stillConfig = [{
