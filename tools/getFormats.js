@@ -37,12 +37,9 @@ const sortFn = (a, b) => {
     const wha = a.replace('--width ', '').replace('--height', '').split(' '),
         whb = b.replace('--width ', '').replace('--height', '').split(' ');
 
-    const xa = wha[0] * wha[1],
-        xb = whb[0] * whb[1];
-
-    if (xa > xb) {
+    if (parseInt(wha[0]) > parseInt(whb[0])) {
         return 1;
-    } else if (xa > xb) {
+    } else if (parseInt(wha[0]) < parseInt(whb[0])) {
         return -1;
     } else {
         return 0;
