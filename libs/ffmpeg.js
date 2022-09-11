@@ -4,7 +4,7 @@ const {
 
 const basedir = process.cwd(),
     getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`);
-    
+
 let FFMPEG;
 
 const DIRECT_STREAM_OPTS = ['-i', 'pipe:',

@@ -175,7 +175,7 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
         spawnOptions.push('-t');
         spawnOptions.push(recordingTime);
     }
-    
+
     const basefilename = getVideoFilename('h264');
     const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
@@ -481,7 +481,7 @@ async function previewSavedVideo(filename, response) {
                 playbackStream.stderr.destroy();
             }
             playbackStream.kill('SIGKILL');
-        } catch(e) {
+        } catch (e) {
             logger.info('Error stopping playback');
         }
     }, 60000);

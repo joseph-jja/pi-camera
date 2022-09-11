@@ -1,4 +1,6 @@
-import { io } from "/js/socket.io.esm.min.js";
+import {
+    io
+} from "/js/socket.io.esm.min.js";
 
 const socketInfo = document.getElementById('server-info');
 
