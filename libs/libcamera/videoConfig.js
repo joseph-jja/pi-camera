@@ -72,6 +72,7 @@ const PIVARITY_16MP_VIDEO_CAMERA = [
     '--width 2048 --height 1152',
     '--width 2048 --height 1536',
     '--width 2160 --height 1080',
+    '--width 2328 --height 1748',
     '--width 2560 --height 1080',
     '--width 2560 --height 1440',
     '--width 2560 --height 1600',
