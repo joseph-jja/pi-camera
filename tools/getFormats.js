@@ -22,13 +22,13 @@ rl.on('line', line => {
 
     if (!isNaN(width) && !isNaN(height)) {
 
-        if (width >= 640 && height >= 480 ) {
+        //if (width >= 640 && height >= 480 ) {
 
-            still.add(`--width ${width} --height ${height}`);
-            if (width <=1920 && height <= 1080 ) {
-                video.add(`--width ${width} --height ${height}`);
-            }
-        }
+        still.add(`--width ${width} --height ${height}`);
+        //    if (width <=1920 && height <= 1080 ) {
+        video.add(`--width ${width} --height ${height}`);
+        //    }
+        //}
     }
 
 });
