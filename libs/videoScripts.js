@@ -1,4 +1,5 @@
 const fs = require('fs'),
+    os = require('os'),
     EventEmitter = require('events');
 
 const basedir = process.cwd();
@@ -147,7 +148,7 @@ function getVideoFilename(ext = 'mjpeg') {
 function saveConfig(options, captureFilename) {
 
     const filename = `${BASE_CONFIG_PATH}/${captureFilename}.cfg`;
-    fs.writeFile(filename, options, (err, res) => {
+    fs.writeFile(filename, `${options}${os.EOL}`, (err, res) => {
         if (err) {
             logger.error(stringify(err));
         } else {
