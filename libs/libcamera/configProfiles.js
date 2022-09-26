@@ -176,4 +176,58 @@ module.exports = [{
         value: IMAGE_RESOLUTION,
         forms: ['imageOptions']
     }]
+}, {
+    name: 'Saturn Capture',
+    fields: [{
+        name: 'ISO_Gain',
+        value: '--gain 40.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev 10.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'framerate',
+        value: '--framerate 60',
+        forms: ['videoOptions']
+    }, {
+        name: 'quality',
+        value: '--quality 100',
+        forms: ['imageOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1280 --height 720',
+        forms: ['videoOptions']
+    }, {
+        name: 'imageSize',
+        value: IMAGE_RESOLUTION,
+        forms: ['imageOptions']
+    }]
+}, {
+    name: 'Jupiter Capture',
+    fields: [{
+        name: 'ISO_Gain',
+        value: '--gain 14.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev 0.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'framerate',
+        value: '--framerate 60',
+        forms: ['videoOptions']
+    }, {
+        name: 'quality',
+        value: '--quality 100',
+        forms: ['imageOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1280 --height 720',
+        forms: ['videoOptions']
+    }, {
+        name: 'imageSize',
+        value: IMAGE_RESOLUTION,
+        forms: ['imageOptions']
+    }]
 }];
