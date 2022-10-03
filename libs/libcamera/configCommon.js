@@ -22,7 +22,7 @@ const prefixConfig = [{
 const suffixConfig = [{
     name: 'framerate',
     paramName: '--framerate',
-    values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120],
+    values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120, 150, 180, 200],
     comment: '0.2 = 5 seconds frame and 0.5 = 2 second frame'
 }, {
     name: 'contrast',
