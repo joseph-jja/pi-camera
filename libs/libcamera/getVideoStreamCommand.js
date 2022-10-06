@@ -88,8 +88,8 @@ async function getVideoStreamCommand() {
         }
     }
 
-    const results = await gstreamer();
-    if (results.data) {
+    const gresults = await gstreamer();
+    if (gresults && gresults.data) {
         const cameraSizes = gstreamerProcessor();
         console.log(cameraSizes);
         if (cameraSizes.sortedStill) {

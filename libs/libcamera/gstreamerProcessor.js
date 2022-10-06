@@ -55,6 +55,13 @@ async function gstreamerProcessor() {
         const sortedStill = Array.from(still.keys()),
             sortedVideo = Array.from(video.keys());
 
+        if (sortedStill.length === 0 || sortedVideo.length === 0) {
+            return Promise.reject({
+                sortedStill: sortedStill,
+                sortedVideo: filteredSizes
+            });
+        }
+
         sortedStill.sort(sortFn);
         sortedVideo.sort(sortFn);
 
@@ -76,7 +83,6 @@ async function gstreamerProcessor() {
             }
         });
         
-
         logger.info('Done still! ', sortedStill);
         logger.info('Done video! ', filteredSizes);
 
@@ -84,9 +90,7 @@ async function gstreamerProcessor() {
             sortedStill: sortedStill,
             sortedVideo: filteredSizes
         });
-
     });
-
 }
 
 module.exports = gstreamerProcessor;
