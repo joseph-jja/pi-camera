@@ -19,7 +19,8 @@ function errorHandler(e) {
     return Promise.resolve();
 }
 
-let hasRun = false;
+let hasRun = false,
+    gstCompleted = false;
 const results = {
     STILL: undefined,
     imageConfig: defaultImageConfig,
@@ -74,7 +75,6 @@ function gstChecks() {
                         return item;
                     });
                     data.imageConfig = imageConfig;
-                    logger.info(`Final results for camera sizes ${stringify(imageConfig)}`);
                 }
                 if (cameraSizes.sortedVideo) {
                     const videoConfig = results.videoConfig.map(item => {
@@ -94,7 +94,7 @@ function gstChecks() {
 
 async function getVideoStreamCommand() {
 
-        if (hasRun) {
+        if (hasRun && gstCompleted) {
             return results;
         }
 
@@ -102,6 +102,8 @@ async function getVideoStreamCommand() {
         if (gresults) {
             results.imageConfig = gresults.imageConfig;
             results.videoConfig = gresults.videoConfig;
+            logger.info(`Final results for camera sizes have been updated!`);
+            gstCompleted = true;
         }
 
         await libcameraChecks();
