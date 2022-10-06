@@ -10,7 +10,7 @@ const basedir = process.cwd(),
         runCommand
     } = require(`${basedir}/libs/spawnUtils`),
     gstreamer = require(`${basedir}/libs/libcamera/gstreamer`),
-    gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`), 
+    gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`),
     defaultImageConfig = require(`${basedir}/libs/libcamera/stillConfig`),
     defaultVideoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
 
@@ -53,51 +53,56 @@ async function libcameraChecks() {
     }
 }
 
-async function getVideoStreamCommand() {
+function getVideoStreamCommand() {
 
-    if (hasRun) {
-        return results;
-    }
+    return new Promise(async resolve => {
 
-    await libcameraChecks();
-
-    const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
-    if (ffmpeg) {
-        const executable = await runCommand('ffmpeg', ['--help']).catch(errorHandler);
-        if (executable) {
-            results.FFMPEG = ffmpeg;
+        if (hasRun) {
+            return results;
         }
-    }
 
-    const gresults = await gstreamer();
-    logger.debug(`Processed gstreamer ${stringify(gresults)}`);
-    if (gresults && gresults.data) {
-        const cameraSizes = await gstreamerProcessor();
-        logger.debug(`Processed camera sizes ${stringify(cameraSizes)}`);
-        if (cameraSizes) {
-            if (cameraSizes.sortedStill) {
-                const imageConfig = results.imageConfig.map(item => {
-                    if (item.name === 'imageSize') {
-                        item.values = cameraSizes.sortedStill;
-                    }
-                    return item;
-                });
-                results.imageConfig = imageConfig;
-                logger.info(`Final results for camera sizes ${stringify(imageConfig)}`);
-            }
-            if (cameraSizes.sortedVideo) {
-                results.videoConfig.forEach(item => {
-                    if (item.name === 'videoSize') {
-                        item.values = cameraSizes.sortedVideo;
-                    }
-                });
+        await libcameraChecks();
+
+        const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
+        if (ffmpeg) {
+            const executable = await runCommand('ffmpeg', ['--help']).catch(errorHandler);
+            if (executable) {
+                results.FFMPEG = ffmpeg;
             }
         }
-    }
 
-    hasRun = true;
+        const gresults = await gstreamer();
+        logger.debug(`Processed gstreamer ${stringify(gresults)}`);
+        if (gresults && gresults.data) {
+            const cameraSizes = await gstreamerProcessor();
+            logger.debug(`Processed camera sizes ${stringify(cameraSizes)}`);
+            if (cameraSizes) {
+                if (cameraSizes.sortedStill) {
+                    const imageConfig = results.imageConfig.map(item => {
+                        if (item.name === 'imageSize') {
+                            item.values = cameraSizes.sortedStill;
+                        }
+                        return item;
+                    });
+                    results.imageConfig = imageConfig;
+                    logger.info(`Final results for camera sizes ${stringify(imageConfig)}`);
+                }
+                if (cameraSizes.sortedVideo) {
+                    const videoConfig = results.videoConfig.map(item => {
+                        if (item.name === 'videoSize') {
+                            item.values = cameraSizes.sortedVideo;
+                        }
+                        return item;
+                    });
+                    results.videoConfig = videoConfig;
+                }
+            }
+        }
 
-    return results;
+        hasRun = true;
+
+        return resolve(results);
+    });
 }
 
 module.exports = getVideoStreamCommand;
