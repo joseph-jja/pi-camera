@@ -70,17 +70,19 @@ async function getVideoStreamCommand() {
     }
 
     const gresults = await gstreamer();
-    logger.info(`Processed gstreamer ${stringify(gresults)}`);
+    logger.debug(`Processed gstreamer ${stringify(gresults)}`);
     if (gresults && gresults.data) {
         const cameraSizes = await gstreamerProcessor();
-        logger.info(`Processed camera sizes ${stringify(cameraSizes)}`);
+        logger.debug(`Processed camera sizes ${stringify(cameraSizes)}`);
         if (cameraSizes) {
             if (cameraSizes.sortedStill) {
-                results.imageConfig.forEach(item => {
+                const imageConfig = results.imageConfig.map(item => {
                     if (item.name === 'imageSize') {
                         item.values = cameraSizes.sortedStill;
                     }
+                    return item;
                 });
+                results.imageConfig = imageConfig;
             }
             if (cameraSizes.sortedVideo) {
                 results.videoConfig.forEach(item => {
@@ -89,6 +91,7 @@ async function getVideoStreamCommand() {
                     }
                 });
             }
+            logger.info(`Final results for camera sizes ${stringify(imageConfig)}`);
         }
     }
 

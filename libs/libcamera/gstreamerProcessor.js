@@ -117,7 +117,7 @@ async function gstreamerProcessor() {
                 }
             });
 
-            logger.info(`Done still! ${stringify(sortedStill)}`);
+            logger.debug(`Done still! ${stringify(sortedStill)}`);
             logger.info(`Done video! ${stringify(filteredSizes)}`);
 
             return resolve({
