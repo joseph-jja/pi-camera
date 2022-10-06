@@ -427,13 +427,17 @@ function saveVideoProcess(options = [], request, response) {
 
     const mjpegDataProcess = saveMjpeg(spawnOptions);
     mjpegDataProcess.on('close', (code) => {
-        fs.rename(filename, resultFilename, err => {
+        fs.copyFile(filename, resultFilename, err => {
             response.writeHead(200, {});
             if (err) {
                 response.end(`ERROR ${stringify(err)} Finished with code ${code} using options ${stringify(spawnOptions)}.`);
-
             } else {
                 response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
+                fs.unlink(filename, err => {
+                    if (e) {
+                        logger.error(stringify(e));
+                    }
+                });
             }
             captureEmitter.emit('button-exec', {
                 method: 'saveVideoProcess',
