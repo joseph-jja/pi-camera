@@ -29,6 +29,7 @@ const V2_VIDEO_CAMERA = [
     '--width 1152 --height 864',
     '--width 1280 --height 720',
     '--width 1280 --height 800',
+    '--width 1280 --height 960',
     '--width 1280 --height 1024',
     '--width 1280 --height 1080',
     '--width 1360 --height 768',
