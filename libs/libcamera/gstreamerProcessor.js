@@ -87,6 +87,14 @@ async function gstreamerProcessor() {
             const [maxWidth, maxHeight] = lastItem.replace('--width ', '').replace('--height ', '').split(' ');
             const halfMaxWidth = maxWidth / 2,
                 halfMaxHeight = maxHeight / 2;
+
+            // make sure this is in there
+            const middleSize = `--width ${halfMaxWidth} --height ${halfMaxHeight}`;
+            if (!sortedStill.includex(middleSize)) {
+                sortedStill.push(middleSize);
+                sortedStill.sort(sortFn);
+            }
+
             const filteredSizes = sortedVideo.filter(item => {
                 const [width, height] = item.replace('--width ', '').replace('--height ', '').split(' ');
                 if (width <= 1920 && height <= 1080) {
