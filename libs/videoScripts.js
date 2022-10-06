@@ -433,7 +433,7 @@ function saveVideoProcess(options = [], request, response) {
                 response.end(`ERROR ${stringify(err)} Finished with code ${code} using options ${stringify(spawnOptions)}.`);
             } else {
                 response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
-                fs.unlink(filename, err => {
+                fs.unlink(filename, e => {
                     if (e) {
                         logger.error(stringify(e));
                     }
