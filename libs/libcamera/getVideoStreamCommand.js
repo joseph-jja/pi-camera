@@ -51,33 +51,6 @@ async function libcameraChecks() {
     }
 }
 
-async function raspiChecks() {
-
-    if (!results.STILL) {
-        // first check for libcamera
-        const raspistill = await whichCommand('raspistill').catch(errorHandler);
-        if (raspistill) {
-            const executable = await runCommand('raspistill', ['--help']).catch(errorHandler);
-            if (executable) {
-                results.STILL = raspistill;
-                results.imageConfig = require(`${basedir}/libs/libcamera/rstillConfig`);
-            }
-        }
-    }
-
-    if (!results.VIDEO) {
-        // first check for libcamera
-        const raspivid = await whichCommand('raspivid').catch(errorHandler);
-        if (raspivid) {
-            const executable = await runCommand(raspivid, ['--help']).catch(errorHandler);
-            if (executable) {
-                results.VIDEO = raspivid;
-                results.videoConfig = require(`${basedir}/libs/libcamera/rvideoConfig`);
-            }
-        }
-    }
-}
-
 async function getVideoStreamCommand() {
 
     if (hasRun) {
@@ -85,8 +58,6 @@ async function getVideoStreamCommand() {
     }
 
     await libcameraChecks();
-
-    await raspiChecks();
 
     const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
     if (ffmpeg) {
