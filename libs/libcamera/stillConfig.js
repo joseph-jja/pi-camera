@@ -42,6 +42,7 @@ const V2_STILL_CAMERA = [
     '--width 2048 --height 1152',
     '--width 2560 --height 1080',
     '--width 2048 --height 1536',
+    '--width 2048 --height 1520',
     '--width 2560 --height 1440',
     '--width 2560 --height 1600',
     '--width 2960 --height 1440',
@@ -51,7 +52,8 @@ const V2_STILL_CAMERA = [
     '--width 3200 --height 2400',
     '--width 3264 --height 2448',
     '--width 1640 --height 1232',
-    '--width 3280 --height 2464'
+    '--width 3280 --height 2464',
+    '--width 4056 --height 3040'
 ];
 
 const PIVARITY_16MP_STILL_CAMERA = [
