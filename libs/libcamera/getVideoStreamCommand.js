@@ -53,24 +53,15 @@ async function libcameraChecks() {
     }
 }
 
-async function getVideoStreamCommand() {
+function gstChecks() {
 
-        if (hasRun) {
-            return results;
-        }
+    return new Promise(async resolve => {
 
-        await libcameraChecks();
-
-        const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
-        if (ffmpeg) {
-            const executable = await runCommand('ffmpeg', ['--help']).catch(errorHandler);
-            if (executable) {
-                results.FFMPEG = ffmpeg;
-            }
-        }
+        const data = {};
 
         const gresults = await gstreamer();
         logger.debug(`Processed gstreamer ${stringify(gresults)}`);
+
         if (gresults && gresults.data) {
             const cameraSizes = await gstreamerProcessor();
             logger.debug(`Processed camera sizes ${stringify(cameraSizes)}`);
@@ -82,7 +73,7 @@ async function getVideoStreamCommand() {
                         }
                         return item;
                     });
-                    results.imageConfig = imageConfig;
+                    data.imageConfig = imageConfig;
                     logger.info(`Final results for camera sizes ${stringify(imageConfig)}`);
                 }
                 if (cameraSizes.sortedVideo) {
@@ -92,8 +83,34 @@ async function getVideoStreamCommand() {
                         }
                         return item;
                     });
-                    results.videoConfig = videoConfig;
+                    data.videoConfig = videoConfig;
                 }
+            }
+        }
+        return resolve(data);
+    });
+
+}
+
+async function getVideoStreamCommand() {
+
+        if (hasRun) {
+            return results;
+        }
+
+        const gresults = await gstChecks();
+        if (gresults) {
+            results.imageConfig = gresults.imageConfig;
+            results.videoConfig = gresults.videoConfig;
+        }
+
+        await libcameraChecks();
+
+        const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
+        if (ffmpeg) {
+            const executable = await runCommand('ffmpeg', ['--help']).catch(errorHandler);
+            if (executable) {
+                results.FFMPEG = ffmpeg;
             }
         }
 
