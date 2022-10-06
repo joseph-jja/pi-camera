@@ -16,67 +16,73 @@ function errorHandler(e) {
     return Promise.resolve();
 }
 
-let hasRun = false;
+let hasRun = false,
+    data;
 
-async function gstreamer() {
+function gstreamer() {
 
-    if (hasRun) {
-        return true;
-    }
+    return new Promise(async (resolve, reject) => {
 
-    const gst = await whichCommand('gst-device-monitor-1.0').catch(errorHandler);
-    if (gst) {
-        const command = spawn('gst-device-monitor-1.0');
-        const grep = spawn('grep', ['format']);
-        const vgrep1 = spawn('grep', ['-v', 'v4l2_videodevice']);
-        const outStream = createWriteStream('/tmp/fmts.log');
+        if (hasRun) {
+            return resolve(data);
+        }
 
-        command.stdout.pipe(grep.stdin);
-        command.stderr.pipe(grep.stdin);
-
-        grep.stdout.pipe(vgrep1.stdin);
-        grep.stderr.pipe(vgrep1.stdin);
-
-        vgrep1.stdout.pipe(outStream);
-        vgrep1.stderr.pipe(outStream);
-
-        outStream.once('finish', () => {
-            hasRun = true;
-            return Promise.resolve({
-                type: 'gst',
-                data: '/tmp/fmts.log'
-            });
-        });
-
-    } else {
-        const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
-        if (ffmpeg) {
-            const command = spawn('ffmpeg', ['-f', 'video4linux2', '-list_formats', 'all', '-i', '/dev/video0']);
-            const grep = spawn('grep', ['Raw']);
+        const gst = await whichCommand('gst-device-monitor-1.0').catch(errorHandler);
+        if (gst) {
+            const command = spawn('gst-device-monitor-1.0');
+            const grep = spawn('grep', ['format']);
+            const vgrep1 = spawn('grep', ['-v', 'v4l2_videodevice']);
             const outStream = createWriteStream('/tmp/fmts.log');
 
             command.stdout.pipe(grep.stdin);
             command.stderr.pipe(grep.stdin);
 
-            grep.stdout.pipe(outStream);
-            grep.stderr.pipe(outStream);
+            grep.stdout.pipe(vgrep1.stdin);
+            grep.stderr.pipe(vgrep1.stdin);
+
+            vgrep1.stdout.pipe(outStream);
+            vgrep1.stderr.pipe(outStream);
 
             outStream.once('finish', () => {
                 hasRun = true;
-                return Promise.resolve({
-                    type: 'ffmpeg',
+                data = {
+                    type: 'gst',
                     data: '/tmp/fmts.log'
-                });
+                };
+                return resolve(data);
             });
 
         } else {
-            logger.error(`Install gst-device-monitor-1.0 to get video modes`);
-            return Promise.reject({
-                type: 'none',
-                data: null
-            })
+            const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
+            if (ffmpeg) {
+                const command = spawn('ffmpeg', ['-f', 'video4linux2', '-list_formats', 'all', '-i', '/dev/video0']);
+                const grep = spawn('grep', ['Raw']);
+                const outStream = createWriteStream('/tmp/fmts.log');
+
+                command.stdout.pipe(grep.stdin);
+                command.stderr.pipe(grep.stdin);
+
+                grep.stdout.pipe(outStream);
+                grep.stderr.pipe(outStream);
+
+                outStream.once('finish', () => {
+                    hasRun = true;
+                    data = {
+                        type: 'fffmpeg',
+                        data: '/tmp/fmts.log'
+                    };
+                    return resolve(data);
+                });
+
+            } else {
+                logger.error(`Install gst-device-monitor-1.0 to get video modes`);
+                return reject({
+                    type: 'none',
+                    data: null
+                })
+            }
         }
-    }
+    });
 }
 
 module.exports = gstreamer;
