@@ -83,6 +83,7 @@ async function getVideoStreamCommand() {
                     return item;
                 });
                 results.imageConfig = imageConfig;
+                logger.info(`Final results for camera sizes ${stringify(imageConfig)}`);
             }
             if (cameraSizes.sortedVideo) {
                 results.videoConfig.forEach(item => {
@@ -91,7 +92,6 @@ async function getVideoStreamCommand() {
                     }
                 });
             }
-            logger.info(`Final results for camera sizes ${stringify(imageConfig)}`);
         }
     }
 
