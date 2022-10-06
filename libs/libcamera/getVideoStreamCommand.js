@@ -1,3 +1,7 @@
+const {
+    createWriteStream
+} = require('fs');
+
 const basedir = process.cwd(),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
@@ -39,6 +43,10 @@ async function libcameraChecks() {
         if (executable) {
             results.VIDEO = libcameraVid;
             results.videoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
+        }
+        const cameraDetails = await runCommand(libcameraVid, ['--list-cameras']).catch(errorHandler);
+        if (cameraDetails) {
+            createWriteStream('/tmp/cameraInfo.txt', cameraDetails);
         }
     }
 }
