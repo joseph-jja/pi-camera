@@ -25,12 +25,13 @@ async function gstreamerProcessor() {
             const iWidth = line.split('width=')[1];
             const iHeight = line.split('height=')[1];
 
-            let width;
+            let width = '';
             if (iWidth.indexOf(']') > -1) {
-                width = iWidth.split(',')[1].trim();
+                width = iWidth.split(',')[1];
             } else {
                 width = iWidth.split(',')[0];
             }
+            width = width.replace(',', '').trim();
 
             let height;
             if (iHeight.indexOf(']') > -1) {
@@ -38,6 +39,7 @@ async function gstreamerProcessor() {
             } else {
                 height = iHeight.split(',')[0];;
             }
+            height = height.replace(',', '').trim();
 
             if (!isNaN(width) && !isNaN(height)) {
                 still.add(`--width ${width} --height ${height}`);
