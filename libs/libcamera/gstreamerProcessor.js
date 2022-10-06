@@ -34,14 +34,14 @@ async function gstreamerProcessor() {
 
             let width;
             if (iWidth.indexOf(']') > -1) {
-                //width = line.substring(iw + 6).split(' ')[0].trim().replace(/\,/g, '');
+                width = iWidth.split(',')[1].trim();
             } else {
                 width = iWidth;
             }
 
             let height;
             if (iHeight.indexOf(']') > -1) {
-                
+                height = iHeight.split(',')[1].trim();
             } else {
                 height = iHeight;
             }
