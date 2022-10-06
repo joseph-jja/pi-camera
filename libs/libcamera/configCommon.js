@@ -1,7 +1,15 @@
 const prefixConfig = [{
     name: 'preview',
     paramName: '',
-    values: ['--nopreview']
+    values: ['--nopreview', '--preview 0,100,640,480']
+}, {
+    name: 'viewfinder',
+    paramName: '',
+    values: [
+        '--viewfinder-width 1280 --viewfinder-height 800',
+        '--viewfinder-width 800 --viewfinder-height 600',
+        '--viewfinder-width 640 --viewfinder-height 480'
+    ]
 }, {
     name: 'autofocus',
     paramName: '',
