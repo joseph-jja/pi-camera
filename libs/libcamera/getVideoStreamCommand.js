@@ -11,7 +11,7 @@ const basedir = process.cwd(),
     } = require(`${basedir}/libs/spawnUtils`),
     gstreamer = require(`${basedir}/libs/libcamera/gstreamer`),
     gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`), 
-    defaultImageConfig = require(`${basedir}/libs/libcamera/stillConfig`,
+    defaultImageConfig = require(`${basedir}/libs/libcamera/stillConfig`),
     defaultVideoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
 
 function errorHandler(e) {
