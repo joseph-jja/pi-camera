@@ -17,8 +17,8 @@ if (args[3]) {
         changeMode: config.changeModeKey
     };
 }
-setTimeout(function() {
-    client.send(config.listenMessage, msg, function(resp) {
+setTimeout(function () {
+    client.send(config.listenMessage, msg, function (resp) {
         console.log(`Done: ${JSON.stringify(resp)}`);
         // client does not exit :(
         process.exit(0);

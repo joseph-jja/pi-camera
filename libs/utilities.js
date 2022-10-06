@@ -18,7 +18,7 @@ function safeUnlink(filename) {
         // remove sent video
         // in a perfect world we would be we cant here :(
         try {
-            fs.unlink(filename, function(err) {
+            fs.unlink(filename, function (err) {
                 if (err) {
                     logger.error(err);
                     return;

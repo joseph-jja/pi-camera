@@ -30,11 +30,11 @@ let led = new Leds((typeof options.useLight !== 'undefined' && options.useLight)
 const Sendmail = new Mailer();
 Sendmail.setupTransport(options.email.host, options.email.port, options.email.auth.user, options.email.auth.pass, options.secure);
 
-Sendmail.on('start', function(data) {
+Sendmail.on('start', function (data) {
     logger.info('Sending ' + JSON.stringify(data));
 });
 
-Sendmail.on('end', function(data) {
+Sendmail.on('end', function (data) {
     if (data.error) {
         logger.info('An error has occured: ' + data.error);
     } else if (data.info) {
@@ -86,7 +86,7 @@ function watchCB(err, value) {
         const ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
         logger.debug('Video record command: ' + cmd);
         logger.debug('Video convert command: ' + ffmpegCmd);
-        exec(cmd, function(errorA, stdoutA, stderrA) {
+        exec(cmd, function (errorA, stdoutA, stderrA) {
             if (stderrA) {
                 logger.error(JSON.stringify(stderrA));
             } else if (errorA) {
@@ -97,7 +97,7 @@ function watchCB(err, value) {
             // output is in stdout
             logger.debug('Video saved: ', videoPath);
             // convert video to be smaller
-            exec(ffmpegCmd, function(errorB, stdoutB, stderrB) {
+            exec(ffmpegCmd, function (errorB, stdoutB, stderrB) {
                 if (stderrB) {
                     logger.error(JSON.stringify(stderrB));
                 } else if (errorB) {
@@ -118,7 +118,7 @@ function watchCB(err, value) {
 pir.watch(watchCB);
 
 const listener = messenger.createListener(options.listenPort);
-listener.on(options.listenMessage, function(m, data) {
+listener.on(options.listenMessage, function (m, data) {
     var response = {};
     if (data.changeMode === options.changeModeKey) {
         doSend = !doSend;

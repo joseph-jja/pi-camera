@@ -13,22 +13,22 @@ function Leds(enabled, ledPin) {
 
 }
 
-Leds.prototype.changeState = function(value) {
+Leds.prototype.changeState = function (value) {
 
     if (this.enabled) {
         if (value === 1) {
-            led.write(1, function(err) {
+            led.write(1, function (err) {
                 logger.info("On " + err);
             });
         } else {
-            led.write(0, function(err) {
+            led.write(0, function (err) {
                 logger.info("Off " + err);
             });
         }
     }
 };
 
-Leds.prototype.cleanup = function() {
+Leds.prototype.cleanup = function () {
 
     if (this.enabled) {
         led.writeSync(0);

@@ -17,7 +17,7 @@ function whichCommand(checkCommand) {
         });
 
 
-        whichCmd.on('close', (code) => {
+        whichCmd.once('close', (code) => {
             if (commandPath) {
                 return resolve(commandPath);
             } else {
@@ -47,7 +47,7 @@ function runCommand(command, args) {
         });
 
 
-        commandToRun.on('close', (code) => {
+        commandToRun.once('close', (code) => {
             if (results) {
                 return resolve(Buffer.concat(results).toString());
             } else {

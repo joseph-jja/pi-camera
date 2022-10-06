@@ -12,7 +12,7 @@ class Mailer extends events.EventEmitter {
     }
 }
 
-Mailer.prototype.setupTransport = function(host, port, user, pass, opts = {}) {
+Mailer.prototype.setupTransport = function (host, port, user, pass, opts = {}) {
     const options = Object.assign({}, {
         host: host,
         port: port,
@@ -24,7 +24,7 @@ Mailer.prototype.setupTransport = function(host, port, user, pass, opts = {}) {
     transporter = nodemailer.createTransport(options);
 };
 
-Mailer.prototype.sendEmail = function(user, file, opts = {}) {
+Mailer.prototype.sendEmail = function (user, file, opts = {}) {
     const self = this;
 
     this.emit("start", {
@@ -52,7 +52,7 @@ Mailer.prototype.sendEmail = function(user, file, opts = {}) {
     }
 
     logger.debug('DEBUG -- Sendig an Email..' + transporter.sendMail);
-    transporter.sendMail(mailOptions, function(error, info) {
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             logger.error("An error occured: " + error);
         } else {

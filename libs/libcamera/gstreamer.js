@@ -40,8 +40,12 @@ async function getGSTCommand() {
         vgrep1.stdout.pipe(outStream);
         vgrep1.stderr.pipe(outStream);
 
-        vgrep1.stdout.on('finish', () => {
-
+        outStream.once('finish', () => {
+            hasRun = true;
+            return Promise.resolve({
+                type: 'gst',
+                data: '/tmp/fmts.log'
+            });
         });
 
     } else {
@@ -56,14 +60,23 @@ async function getGSTCommand() {
 
             grep.stdout.pipe(outStream);
             grep.stderr.pipe(outStream);
+
+            outStream.once('finish', () => {
+                hasRun = true;
+                return Promise.resolve({
+                    type: 'ffmpeg',
+                    data: '/tmp/fmts.log'
+                });
+            });
+
         } else {
             logger.error(`Install gst-device-monitor-1.0 to get video modes`);
+            Promise.reject({
+                type: 'none',
+                data: null
+            })
         }
     }
-
-    hasRun = true;
-
-    return results;
 }
 
 module.exports = getGSTCommand;
