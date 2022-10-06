@@ -71,7 +71,7 @@ async function gstreamer() {
 
         } else {
             logger.error(`Install gst-device-monitor-1.0 to get video modes`);
-            Promise.reject({
+            return Promise.reject({
                 type: 'none',
                 data: null
             })

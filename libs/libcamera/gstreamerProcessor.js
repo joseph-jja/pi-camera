@@ -3,6 +3,9 @@ const readline = require('readline'),
         createReadStream
     } = require('fs');
 
+const basedir = process.cwd(),
+    logger = require(`${basedir}/libs/logger`)(__filename);
+
 async function gstreamerProcessor() {
 
     const fmts = createReadStream('/tmp/fmts.log');
@@ -23,14 +26,8 @@ async function gstreamerProcessor() {
         const height = line.substring(ih + 7).trim();
 
         if (!isNaN(width) && !isNaN(height)) {
-
-            //if (width >= 640 && height >= 480 ) {
-
             still.add(`--width ${width} --height ${height}`);
-            //    if (width <=1920 && height <= 1080 ) {
             video.add(`--width ${width} --height ${height}`);
-            //    }
-            //}
         }
 
     });
@@ -55,10 +52,20 @@ async function gstreamerProcessor() {
     };
 
     rl.on('close', () => {
-        const skeys = Array.from(still.keys()),
-            vkeys = Array.from(video.keys());
-        console.log('Done still! ', skeys.sort(sortFn));
-        console.log('Done video! ', vkeys.sort(sortFn));
+        const sortedStill = Array.from(still.keys()),
+            sortedVideo = Array.from(video.keys());
+
+        sortedStill.sort(sortFn);
+        sortedVideo.sort(sortFn);
+
+        logger.info('Done still! ', sortedStill);
+        logger.info('Done video! ', sortedVideo);
+
+        return Promise.resolve({
+            sortedStill: sortedStill,
+            sortedVideo: sortedVideo
+        });
+
     });
 
 }
