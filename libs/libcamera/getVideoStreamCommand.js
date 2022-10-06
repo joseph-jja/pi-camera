@@ -23,9 +23,9 @@ let hasRun = false,
     gstCompleted = false;
 const results = {
     STILL: undefined,
-    imageConfig: defaultImageConfig,
+    imageConfig: undefined,
     VIDEO: undefined,
-    videoConfig: defaultVideoConfig,
+    videoConfig: undefined,
     FFMPEG: undefined
 };
 
@@ -68,7 +68,7 @@ function gstChecks() {
             logger.debug(`Processed camera sizes ${stringify(cameraSizes)}`);
             if (cameraSizes) {
                 if (cameraSizes.sortedStill) {
-                    const imageConfig = results.imageConfig.map(item => {
+                    const imageConfig = defaultImageConfig.map(item => {
                         if (item.name === 'imageSize') {
                             item.values = cameraSizes.sortedStill;
                         }
@@ -77,7 +77,7 @@ function gstChecks() {
                     data.imageConfig = imageConfig;
                 }
                 if (cameraSizes.sortedVideo) {
-                    const videoConfig = results.videoConfig.map(item => {
+                    const videoConfig = defaultVideoConfig.map(item => {
                         if (item.name === 'videoSize') {
                             item.values = cameraSizes.sortedVideo;
                         }

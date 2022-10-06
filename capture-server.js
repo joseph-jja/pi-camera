@@ -4,10 +4,6 @@ const os = require('os'),
     {
         randomBytes
     } = require('crypto'),
-    {
-        resolve,
-        basename
-    } = require('path'),
     childProcess = require('child_process');
 
 const express = require('express'),
