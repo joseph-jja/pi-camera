@@ -104,6 +104,7 @@ async function getVideoStreamCommand() {
             results.videoConfig = gresults.videoConfig;
             logger.info(`Final results for camera sizes have been updated!`);
             gstCompleted = true;
+            logger.info(`Config ${JSON.stringify(results)}`);
         }
 
         await libcameraChecks();
