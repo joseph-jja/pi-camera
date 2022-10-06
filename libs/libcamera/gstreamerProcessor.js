@@ -22,28 +22,21 @@ async function gstreamerProcessor() {
 
         rl.on('line', line => {
 
-            const lineParts = line.split(',');
-
-            const iWidth = lineParts.filter(item => {
-                return item.trim().startsWith('width');
-            })[0]?.split('=')[1];
-
-            const iHeight = lineParts.filter(item => {
-                return item.trim().startsWith('height');
-            })[0]?.split('=')[1];
+            const iWidth = line.split('width=')[1];
+            const iHeight = line.split('height=')[1];
 
             let width;
             if (iWidth.indexOf(']') > -1) {
                 width = iWidth.split(',')[1].trim();
             } else {
-                width = iWidth;
+                width = iWidth.split(',')[0];
             }
 
             let height;
             if (iHeight.indexOf(']') > -1) {
                 height = iHeight.split(',')[1].trim();
             } else {
-                height = iHeight;
+                height = iHeight.split(',')[0];;
             }
 
             if (!isNaN(width) && !isNaN(height)) {
