@@ -7,13 +7,14 @@ const prefixConfig = [{
     paramName: '',
     values: [
         '--viewfinder-width 1280 --viewfinder-height 800',
-        '--viewfinder-width 800 --viewfinder-height 600',
+        '--viewfinder-width 1280 --viewfinder-height 720',
         '--viewfinder-width 640 --viewfinder-height 480'
     ]
 }, {
     name: 'mode',
     paramName: '',
     values: [
+        '--mode 1280:800:10',
         '--mode 1280:720:10',
         '--mode 640:480:10'
     ]
