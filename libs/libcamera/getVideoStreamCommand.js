@@ -1,11 +1,11 @@
-const basedir = process.cwd();
-
-const logger = require(`${basedir}/libs/logger`)(__filename),
+const basedir = process.cwd(),
+    logger = require(`${basedir}/libs/logger`)(__filename),
     {
         whichCommand,
         runCommand
     } = require(`${basedir}/libs/spawnUtils`),
-    gstreamer = require(`${basedir}/libs/libcamera/gstreamer`);
+    gstreamer = require(`${basedir}/libs/libcamera/gstreamer`),
+    gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`);
 
 function errorHandler(e) {
     logger.error(e);
@@ -88,7 +88,41 @@ async function getVideoStreamCommand() {
         }
     }
 
-    await gstreamer();
+    const results = await gstreamer();
+    if (results.data) {
+        const cameraSizes = gstreamerProcessor();
+        console.log(cameraSizes);
+        if (cameraSizes.sortedStill) {
+            results.imageConfig.forEach(item => {
+                if (item.name === 'imageSize') {
+                    item.values = cameraSizes.sortedStill;
+                }
+            });
+        }
+        if (cameraSizes.sortedVideo) {
+            const lastItem = cameraSizes.sortedVideo[cameraSizes.sortedVideo.length - 1];
+            const [maxWidth, maxHeight] = lastItem.replace('--width ', '').replace('--height', '').split(' ');
+            const halfMaxWidth = maxWidth/2,
+                halfMaxHeight = maxHeight/2;
+            const filteredSizes = cameraSizes.sortedVideo.filter(item => {
+                const [width, height] = item.replace('--width ', '').replace('--height', '').split(' ');
+                if (width <= 1920 && height <= 1080) {
+                    return true;
+                } else if (width === halfMaxWidth && height === halfMaxHeight) {
+                    return true;
+                } else if (width === maxWidth && height === maxHeight) {
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+            results.videoConfig.forEach(item => {
+                if (item.name === 'videoSize') {
+                    item.values = filteredSizes;
+                }
+            });
+        }
+    }
 
     hasRun = true;
 
