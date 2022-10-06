@@ -46,7 +46,8 @@ async function libcameraChecks() {
         }
         const cameraDetails = await runCommand(libcameraVid, ['--list-cameras']).catch(errorHandler);
         if (cameraDetails) {
-            createWriteStream('/tmp/cameraInfo.txt', cameraDetails);
+            const handle = createWriteStream('/tmp/cameraInfo.txt');
+            handle.write(cameraDetails);
         }
     }
 }
