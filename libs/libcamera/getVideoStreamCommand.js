@@ -3,6 +3,7 @@ const {
 } = require('fs');
 
 const basedir = process.cwd(),
+    stringify = require(`${basedir}/libs/stringify`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
         whichCommand,
@@ -69,9 +70,10 @@ async function getVideoStreamCommand() {
     }
 
     const gresults = await gstreamer();
+    logger.info(`Processed gstreamer ${stringify(gresults)}`);
     if (gresults && gresults.data) {
         const cameraSizes = gstreamerProcessor();
-        console.log(cameraSizes);
+        logger.info(`Processed camera sizes${stringify(cameraSizes)}`);
         if (cameraSizes.sortedStill) {
             results.imageConfig.forEach(item => {
                 if (item.name === 'imageSize') {
