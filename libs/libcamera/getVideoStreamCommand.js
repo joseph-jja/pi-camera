@@ -73,7 +73,7 @@ async function getVideoStreamCommand() {
     logger.info(`Processed gstreamer ${stringify(gresults)}`);
     if (gresults && gresults.data) {
         const cameraSizes = gstreamerProcessor();
-        logger.info(`Processed camera sizes${stringify(cameraSizes)}`);
+        logger.info(`Processed camera sizes ${stringify(cameraSizes)}`);
         if (cameraSizes.sortedStill) {
             results.imageConfig.forEach(item => {
                 if (item.name === 'imageSize') {
