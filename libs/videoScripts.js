@@ -178,7 +178,8 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     }
 
     const basefilename = getVideoFilename('h264');
-    const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
+    const filename = `/tmp/${getVideoFilename()}`;
+    const resultFilename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);
     const running = killAllRunning();
@@ -190,14 +191,25 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
 
     const rawDataProcess = saveH264(spawnOptions);
     rawDataProcess.on('close', (code) => {
-        response.writeHead(200, {});
-        response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
-        captureEmitter.emit('button-exec', {
-            method: 'saveRawVideoData',
-            status: 'Saved raw h264 completed'
+        fs.copyFile(filename, resultFilename, err => {
+            response.writeHead(200, {});
+            if (err) {
+                response.end(`ERROR ${stringify(err)} Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+            } else {
+                response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+                fs.unlink(filename, e => {
+                    if (e) {
+                        logger.error(stringify(e));
+                    }
+                });
+            }
+            captureEmitter.emit('button-exec', {
+                method: 'saveRawVideoData',
+                status: 'Saved raw h264 completed'
+            });
+            // after the test continue video streaming until image capture :)
+            directStream(getVideoUpdateOptions());
         });
-        // after the test continue video streaming until image capture :)
-        directStream(getVideoUpdateOptions());
     });
     saveConfig(stringify(spawnOptions), basefilename);
 
