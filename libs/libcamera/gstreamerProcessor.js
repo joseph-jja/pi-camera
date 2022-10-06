@@ -26,11 +26,11 @@ async function gstreamerProcessor() {
 
             const iWidth = lineParts.filter(item => {
                 return item.trim().startsWith('width');
-            }).?split('=')[1];
+            })?.split('=')[1];
 
             const iHeight = lineParts.filter(item => {
                 return item.trim().startsWith('height');
-            }).?split('=')[1];
+            })?.split('=')[1];
 
             let width;
             if (iWidth.indexOf(']') > -1) {
