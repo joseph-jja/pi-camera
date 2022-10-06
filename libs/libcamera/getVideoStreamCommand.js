@@ -10,7 +10,9 @@ const basedir = process.cwd(),
         runCommand
     } = require(`${basedir}/libs/spawnUtils`),
     gstreamer = require(`${basedir}/libs/libcamera/gstreamer`),
-    gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`);
+    gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`), 
+    defaultImageConfig = require(`${basedir}/libs/libcamera/stillConfig`,
+    defaultVideoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
 
 function errorHandler(e) {
     logger.error(e);
@@ -20,9 +22,9 @@ function errorHandler(e) {
 let hasRun = false;
 const results = {
     STILL: undefined,
-    imageConfig: undefined,
+    imageConfig: defaultImageConfig,
     VIDEO: undefined,
-    videoConfig: undefined,
+    videoConfig: defaultVideoConfig,
     FFMPEG: undefined
 };
 
@@ -34,7 +36,6 @@ async function libcameraChecks() {
         const executable = await runCommand(libcameraStill, ['--help']).catch(errorHandler);
         if (executable) {
             results.STILL = libcameraStill;
-            results.imageConfig = require(`${basedir}/libs/libcamera/stillConfig`);
         }
     }
 
@@ -43,7 +44,6 @@ async function libcameraChecks() {
         const executable = await runCommand(libcameraVid, ['--help']).catch(errorHandler);
         if (executable) {
             results.VIDEO = libcameraVid;
-            results.videoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
         }
         const cameraDetails = await runCommand(libcameraVid, ['--list-cameras']).catch(errorHandler);
         if (cameraDetails) {
