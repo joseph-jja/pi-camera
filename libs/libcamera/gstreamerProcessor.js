@@ -73,6 +73,10 @@ async function gstreamerProcessor() {
         const filteredSizes = cameraSizes.sortedVideo.filter(item => {
             const [width, height] = item.replace('--width ', '').replace('--height', '').split(' ');
             if (width <= 1920 && height <= 1080) {
+                // FHD
+                return true;
+            } else if (width === 3840 && height === 2160) {
+                // 4K
                 return true;
             } else if (width === halfMaxWidth && height === halfMaxHeight) {
                 return true;
