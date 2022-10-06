@@ -102,15 +102,15 @@ async function gstreamerProcessor() {
 
             const filteredSizes = sortedVideo.filter(item => {
                 const [width, height] = item.replace('--width ', '').replace('--height ', '').split(' ');
-                if (width <= 1920 && height <= 1080) {
+                if (+width <= 1920 && +height <= 1080) {
                     // FHD
                     return true;
-                } else if (width === 3840 && height === 2160) {
+                } else if (+width === 3840 && +height === 2160) {
                     // 4K
                     return true;
-                } else if (width === halfMaxWidth && height === halfMaxHeight) {
+                } else if (+width === +halfMaxWidth && +height === +halfMaxHeight) {
                     return true;
-                } else if (width === maxWidth && height === maxHeight) {
+                } else if (+width === +maxWidth && +height === +maxHeight) {
                     return true;
                 } else {
                     return false;
