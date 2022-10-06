@@ -90,7 +90,7 @@ async function gstreamerProcessor() {
 
             // make sure this is in there
             const middleSize = `--width ${halfMaxWidth} --height ${halfMaxHeight}`;
-            if (!sortedStill.includex(middleSize)) {
+            if (!sortedStill.includes(middleSize)) {
                 sortedStill.push(middleSize);
                 sortedStill.sort(sortFn);
             }
