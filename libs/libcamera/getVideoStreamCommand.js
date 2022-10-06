@@ -58,7 +58,7 @@ function getVideoStreamCommand() {
     return new Promise(async resolve => {
 
         if (hasRun) {
-            return results;
+            return resolve(results);
         }
 
         await libcameraChecks();
