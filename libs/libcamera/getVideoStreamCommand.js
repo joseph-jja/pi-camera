@@ -100,25 +100,9 @@ async function getVideoStreamCommand() {
             });
         }
         if (cameraSizes.sortedVideo) {
-            const lastItem = cameraSizes.sortedVideo[cameraSizes.sortedVideo.length - 1];
-            const [maxWidth, maxHeight] = lastItem.replace('--width ', '').replace('--height', '').split(' ');
-            const halfMaxWidth = maxWidth/2,
-                halfMaxHeight = maxHeight/2;
-            const filteredSizes = cameraSizes.sortedVideo.filter(item => {
-                const [width, height] = item.replace('--width ', '').replace('--height', '').split(' ');
-                if (width <= 1920 && height <= 1080) {
-                    return true;
-                } else if (width === halfMaxWidth && height === halfMaxHeight) {
-                    return true;
-                } else if (width === maxWidth && height === maxHeight) {
-                    return true;
-                } else {
-                    return false;
-                }
-            })
             results.videoConfig.forEach(item => {
                 if (item.name === 'videoSize') {
-                    item.values = filteredSizes;
+                    item.values = cameraSizes.sortedVideo;
                 }
             });
         }

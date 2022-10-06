@@ -58,12 +58,31 @@ async function gstreamerProcessor() {
         sortedStill.sort(sortFn);
         sortedVideo.sort(sortFn);
 
+        // for video we filter out some sizes
+        const lastItem = sortedVideo[cameraSizes.sortedVideo.length - 1];
+        const [maxWidth, maxHeight] = lastItem.replace('--width ', '').replace('--height', '').split(' ');
+        const halfMaxWidth = maxWidth/2,
+            halfMaxHeight = maxHeight/2;
+        const filteredSizes = cameraSizes.sortedVideo.filter(item => {
+            const [width, height] = item.replace('--width ', '').replace('--height', '').split(' ');
+            if (width <= 1920 && height <= 1080) {
+                return true;
+            } else if (width === halfMaxWidth && height === halfMaxHeight) {
+                return true;
+            } else if (width === maxWidth && height === maxHeight) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        
+
         logger.info('Done still! ', sortedStill);
-        logger.info('Done video! ', sortedVideo);
+        logger.info('Done video! ', filteredSizes);
 
         return Promise.resolve({
             sortedStill: sortedStill,
-            sortedVideo: sortedVideo
+            sortedVideo: filteredSizes
         });
 
     });
