@@ -4,6 +4,7 @@ const readline = require('readline'),
     } = require('fs');
 
 const basedir = process.cwd(),
+    stringify = require(`${basedir}/libs/stringify`),
     logger = require(`${basedir}/libs/logger`)(__filename);
 
 async function gstreamerProcessor() {
@@ -56,6 +57,7 @@ async function gstreamerProcessor() {
             sortedVideo = Array.from(video.keys());
 
         if (sortedStill.length === 0 || sortedVideo.length === 0) {
+            logger.warn('Error getting keys from fmts.log file!');
             return Promise.reject({
                 sortedStill: sortedStill,
                 sortedVideo: filteredSizes
@@ -87,8 +89,8 @@ async function gstreamerProcessor() {
             }
         });
         
-        logger.info('Done still! ', sortedStill);
-        logger.info('Done video! ', filteredSizes);
+        logger.info('Done still! ', stringify(sortedStill));
+        logger.info('Done video! ', stringify(filteredSizes));
 
         return Promise.resolve({
             sortedStill: sortedStill,
