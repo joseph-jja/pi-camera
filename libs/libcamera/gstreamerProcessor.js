@@ -95,6 +95,11 @@ async function gstreamerProcessor() {
                 sortedStill.sort(sortFn);
             }
 
+            if (!sortedVideo.includes(middleSize)) {
+                sortedVideo.push(middleSize);
+                sortedVideo.sort(sortFn);
+            }
+
             const filteredSizes = sortedVideo.filter(item => {
                 const [width, height] = item.replace('--width ', '').replace('--height ', '').split(' ');
                 if (width <= 1920 && height <= 1080) {
