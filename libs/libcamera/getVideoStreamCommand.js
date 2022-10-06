@@ -53,12 +53,10 @@ async function libcameraChecks() {
     }
 }
 
-function getVideoStreamCommand() {
-
-    return new Promise(async resolve => {
+async function getVideoStreamCommand() {
 
         if (hasRun) {
-            return resolve(results);
+            return results;
         }
 
         await libcameraChecks();
@@ -101,8 +99,7 @@ function getVideoStreamCommand() {
 
         hasRun = true;
 
-        return resolve(results);
-    });
+        return results;
 }
 
 module.exports = getVideoStreamCommand;
