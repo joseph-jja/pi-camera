@@ -18,7 +18,7 @@ function errorHandler(e) {
 
 let hasRun = false;
 
-async function getGSTCommand() {
+async function gstreamer() {
 
     if (hasRun) {
         return true;
@@ -79,4 +79,4 @@ async function getGSTCommand() {
     }
 }
 
-module.exports = getGSTCommand;
+module.exports = gstreamer;

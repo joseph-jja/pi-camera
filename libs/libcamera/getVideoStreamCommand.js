@@ -4,7 +4,8 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
     {
         whichCommand,
         runCommand
-    } = require(`${basedir}/libs/spawnUtils`);
+    } = require(`${basedir}/libs/spawnUtils`), 
+    gstreamer = require(`${basedir}/libs/libcamera/gstreamer`);
 
 function errorHandler(e) {
     logger.error(e);
@@ -86,6 +87,8 @@ async function getVideoStreamCommand() {
             results.FFMPEG = ffmpeg;
         }
     }
+
+    await gstreamer();
 
     hasRun = true;
 
