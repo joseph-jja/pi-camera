@@ -402,7 +402,8 @@ async function directStream(options = []) {
 function saveVideoProcess(options = [], request, response) {
 
     const basefilename = getVideoFilename();
-    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
+    const filename = `/tmp/${getVideoFilename()}`;
+    const resultFilename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
 
     const spawnOptions = options.concat();
     spawnOptions.push('-o');
@@ -426,14 +427,21 @@ function saveVideoProcess(options = [], request, response) {
 
     const mjpegDataProcess = saveMjpeg(spawnOptions);
     mjpegDataProcess.on('close', (code) => {
-        response.writeHead(200, {});
-        response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
-        captureEmitter.emit('button-exec', {
-            method: 'saveVideoProcess',
-            status: 'running save mjpeg completed'
+        fs.rename(filename, resultFilename, err => {
+            response.writeHead(200, {});
+            if (err) {
+                response.end(`ERROR ${stringify(err)} Finished with code ${code} using options ${stringify(spawnOptions)}.`);
+
+            } else {
+                response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
+            }
+            captureEmitter.emit('button-exec', {
+                method: 'saveVideoProcess',
+                status: 'running save mjpeg completed'
+            });
+            // after the test continue video streaming until image capture :)
+            directStream(getVideoUpdateOptions());
         });
-        // after the test continue video streaming until image capture :)
-        directStream(getVideoUpdateOptions());
     });
     saveConfig(stringify(options), basefilename);
 
