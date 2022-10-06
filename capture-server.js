@@ -21,6 +21,7 @@ process.on('uncaughtException', (e) => {
 });
 
 const stringify = require(`${basedir}/libs/stringify`),
+    getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`),
     {
         getIPAddress,
         getHostname
@@ -65,9 +66,7 @@ const jsFiles = fs.readdirSync(`${basedir}/js`).map(item => {
     return `/js/${item}`;
 }).concat(jsLibFiles).concat(jsMjpegFiles);
 
-const videoConfig = require(`${basedir}/libs/libcamera/videoConfig`),
-    imageConfig = require(`${basedir}/libs/libcamera/stillConfig`),
-    profileConfig = require(`${basedir}/libs/libcamera/configProfiles`);
+const profileConfig = require(`${basedir}/libs/libcamera/configProfiles`);
 
 const VIDEO_HTML = fs.readFileSync(`${basedir}/views/capture.html`).toString();
 
@@ -92,6 +91,11 @@ setInterval(() => {
 
 async function getFormData() {
     const formFields = await import('./libs/form.mjs');
+
+    const {
+        videoConfig,
+        imageConfig
+    } = await getVideoStreamCommand();
 
     const formBuilder = item => {
 
