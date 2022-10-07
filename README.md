@@ -20,3 +20,6 @@ This is some simple code and some of scripts for making a motion detection camer
 - openssl req -newkey rsa:2048 -nodes -keyout domain.key -out domain.csr
 == pass in you info for -subj "/C=US/ST=New York/L=Brooklyn/O=Example Brooklyn Company/CN=examplebrooklyn.com"
 
+# There is also the capture server program which uses libcamera-vid and libcamera-still
+- this has dependencies on ffmpeg and gstreamer plugins 
+- on raspian you need to sudo apt-get install gstreamer1.0-plugins-base-apps ffmpeg
