@@ -20,13 +20,16 @@ Available cameras
 
 const CAMERA_ID_RE = /(imx\d*) (\[\d*x\d*\])/;
 
-const CAMEERA_MODES = /(\d*x\d*) (\[\d*\.\d* fps - \(\d*, \d*\)\/\d*x\d* crop\])/;
+const CAMERA_MODES = /(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
 
-async function processModes(configFile) {
+async function getModes(configFile) {
 
     return new Promise(resolve => {
 
         const modes = createReadStream('/tmp/cameraInfo.txt');
+
+        let imxCameraInfo = {},
+            lastCameraId;
 
         const rl = readline.createInterface({
             input: modes
@@ -34,11 +37,41 @@ async function processModes(configFile) {
         
         rl.on('line', line => {
             
+            const cameraId = line.match(CAMERA_ID_RE), 
+                cameraModes = line.match(CAMERA_MODES);
+
+            if (cameraId && cameraId.length > 1) {
+                lastCameraId = cameraId[1];
+                if (!imxCameraInfo[lastCameraId]) {
+                    imxCameraInfo[lastCameraId] = {};
+                    imxCameraInfo[lastCameraId].count = 0;
+                    imxCameraInfo[lastCameraId].maxResolution = cameraId[2].replace('[', '').replace(']', '');
+                }
+                imxCameraInfo[lastCameraId].count++;
+            } else if (cameraModes && cameraModes.length > 1) {
+                if (!imxCameraInfo[lastCameraId].modes) {
+                    imxCameraInfo[lastCameraId].modes = [];
+                }
+                const resolution = cameraModes[1],
+                    binningResolution = cameraModes[3];
+                const [x, y] = resolution.split('x'),
+                    [bx, by] = binningResolution.split('x');
+                const binned = `${x/bx}x${y/by}`;
+                const mode = {
+                    resolution: resolution,
+                    fps: cameraModes[2],
+                    binned: binned
+                };
+                imxCameraInfo[lastCameraId].modes.push(mode);
+            }
+
         });
         
         rl.on('close', () => {
 
-            return resolve();
+            return resolve(imxCameraInfo);
         });
     });
 }
+
+module.exports = getModes;
