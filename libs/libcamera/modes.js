@@ -1,4 +1,7 @@
-const fs = require('fs');
+const readline = require('readline'),
+    {
+        createReadStream
+    } = require('fs');
 
 // example modes 
 /* 
@@ -21,5 +24,21 @@ const CAMEERA_MODES = /(\d*x\d*) (\[\d*\.\d* fps - \(\d*, \d*\)\/\d*x\d* crop\])
 
 async function processModes(configFile) {
 
+    return new Promise(resolve => {
 
+        const modes = createReadStream('/tmp/cameraInfo.txt');
+
+        const rl = readline.createInterface({
+            input: modes
+        });
+        
+        rl.on('line', line => {
+            
+        });
+        
+        rl.on('close', () => {
+
+            return resolve();
+        });
+    });
 }
