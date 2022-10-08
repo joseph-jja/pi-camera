@@ -22,7 +22,7 @@ export function buildSelect(item) {
         defaultvalue
     } = item;
 
-    const options = values.map((element, index) => {
+    const options = values.length === 0 ? '' : values.map((element, index) => {
         const selectedValue = (paramName.startsWith('-') ? `${paramName} ${element}` : `${paramName}${element}`);
         const selected = (defaultvalue && defaultvalue.trim() === selectedValue.trim() ? 'selected' : '');
         const name = valueNames && valueNames[index] ? valueNames[index] : element;
