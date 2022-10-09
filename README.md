@@ -22,6 +22,6 @@ This is some simple code and some of scripts for making a motion detection camer
 
 # There is also the capture server program which uses libcamera-vid and libcamera-still
 - this has dependencies on ffmpeg and gstreamer plugins 
-- on raspian you need to sudo apt-get install gstreamer1.0-plugins-base-apps ffmpeg
+- on raspian you need to sudo apt-get install git nodejs npm gstreamer1.0-plugins-base-apps ffmpeg
 - it save to /tmp so setting up tmpfs for /tmp can save disk writes during image capture
     tmpfs            /tmp            tmpfs   defaults,noatime,nosuid,nodev,noexec,mode=1777,size=64M          0       0
