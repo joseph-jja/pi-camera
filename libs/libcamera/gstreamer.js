@@ -62,7 +62,7 @@ function gstreamer() {
                 outStream.once('finish', () => {
                     hasRun = true;
                     data = {
-                        type: 'fffmpeg',
+                        type: 'ffmpeg',
                         data: '/tmp/fmts.log'
                     };
                     return resolve(data);
