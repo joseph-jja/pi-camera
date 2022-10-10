@@ -1,6 +1,6 @@
 const {
-    createWriteStream
-} = require('fs');
+    writeFile
+} = require('fs/promises');
 
 const basedir = process.cwd(),
     stringify = require(`${basedir}/libs/stringify`),
@@ -50,14 +50,11 @@ async function libcameraChecks() {
         }
         const cameraDetails = await runCommand(libcameraVid, ['--list-cameras']).catch(errorHandler);
         if (cameraDetails) {
-            const handle = createWriteStream('/tmp/cameraInfo.txt');
-            handle.write(cameraDetails);
-            handle.on('finish', async () => {
-                const modes = await getModes();
-                if (modes) {
-                    results.modes = modes;
-                }
-            });
+            await writeFile('/tmp/cameraInfo.txt', cameraDetails);
+            const modes = await getModes();
+            if (modes) {
+                results.modes = modes;
+            }
         }
     }
 }
