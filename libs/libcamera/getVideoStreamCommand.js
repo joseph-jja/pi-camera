@@ -10,6 +10,7 @@ const basedir = process.cwd(),
         runCommand
     } = require(`${basedir}/libs/spawnUtils`),
     gstreamer = require(`${basedir}/libs/libcamera/gstreamer`),
+    getModes = require(`${basedir}/libs/libcamera/modes`),
     gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`),
     defaultImageConfig = require(`${basedir}/libs/libcamera/stillConfig`),
     defaultVideoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
@@ -26,7 +27,8 @@ const results = {
     imageConfig: undefined,
     VIDEO: undefined,
     videoConfig: undefined,
-    FFMPEG: undefined
+    FFMPEG: undefined,
+    modes: undefined
 };
 
 async function libcameraChecks() {
@@ -50,6 +52,12 @@ async function libcameraChecks() {
         if (cameraDetails) {
             const handle = createWriteStream('/tmp/cameraInfo.txt');
             handle.write(cameraDetails);
+            handle.on('finish', async () => {
+                const modes = await getModes();
+                if (modes) {
+                    results.modes = modes;
+                }
+            });
         }
     }
 }
