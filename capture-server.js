@@ -182,7 +182,7 @@ async function getFormData() {
         const nMode = Object.assign({}, mode);
         nMode.comment = `${nMode.resX}x${nMode.res}@${nMode.fps} with binning ${nMode.binned}`;
         return nMode;
-    }) : [];
+    }) : []);
 
     const nVideoConfig = videoConfig.map(item => {
         const nItem = Object.assign({}, item);
