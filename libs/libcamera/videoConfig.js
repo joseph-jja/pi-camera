@@ -10,6 +10,15 @@ const videoConfig = [{
     paramName: '',
     values: [],
     defaultvalue: '--width 1920 --height 1080'
+}, {
+    name: 'mode',
+    paramName: '',
+    values: [
+        '--mode 1280:960:10',
+        '--mode 1280:800:10',
+        '--mode 1280:720:10',
+        '--mode 640:480:10'
+    ]
 }];
 
 module.exports = prefixConfig.concat(brightnessConfig).concat(videoConfig).concat(suffixConfig);

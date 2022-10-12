@@ -58,7 +58,7 @@ async function getModes(configFile) {
                     [bx, by] = binningResolution.split('x');
                 const binned = `${bx/x}x${by/y}`;
                 const mode = {
-                    resolution: resolution,
+                    resolution: `--mode ${x}:${y}`,
                     fps: cameraModes[2],
                     binned: binned
                 };

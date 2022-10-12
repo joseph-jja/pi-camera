@@ -12,15 +12,6 @@ const prefixConfig = [{
         '--viewfinder-width 640 --viewfinder-height 480'
     ]
 }, {
-    name: 'mode',
-    paramName: '',
-    values: [
-        '--mode 1280:960:10',
-        '--mode 1280:800:10',
-        '--mode 1280:720:10',
-        '--mode 640:480:10'
-    ]
-}, {
     name: 'autofocus',
     paramName: '',
     values: [
