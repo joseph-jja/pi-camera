@@ -198,7 +198,7 @@ async function getFormData() {
 
     const nVideoConfig = videoConfig.map(item => {
         const nItem = Object.assign({}, item);
-        if (nItem.name === 'modes' && xModes.length > 0) {
+        if (nItem.name === 'mode' && xModes.length > 0) {
             //console
             //const nValues = nItem.values.concat(xModes);
             //nItem.values = nValues;
