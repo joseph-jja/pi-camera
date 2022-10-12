@@ -177,7 +177,7 @@ async function getFormData() {
 
     const modeData = Object.keys(modes)[0]?.modes;
 
-    const xModes = modes.map(mode => {
+    const xModes = modeData.map(mode => {
         const nMode = Object.assign({}, mode);
         nMode.comment = `${nMode.resX}x${nMode.res}@${nMode.fps} with binning ${nMode.binned}`;
         return xModes;
