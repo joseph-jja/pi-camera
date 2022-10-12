@@ -196,14 +196,15 @@ async function getFormData() {
         return { comment: `${acc.comment}<br>${next.comment}` };
     }) : undefined;
 
+    const modeResolutions = (xModes && xModes.length > 0) ? xModes.map(item => item.resolution) : [];
+
     const nVideoConfig = videoConfig.map(item => {
         const nItem = Object.assign({}, item);
-        if (nItem.name === 'mode' && xModes.length > 0) {
-            //console
-            //const nValues = nItem.values.concat(xModes);
-            //nItem.values = nValues;
+        if (nItem.name === 'mode' && modeResolutions.length > 0) {
+            const nValues = nItem.values.concat(modeResolutions);
+            nItem.values = nValues;
             if (modeComment) {
-                nItem.comment = modeComment;
+                nItem.comment = modeComment.comment;
             }
         }
         return nItem;
