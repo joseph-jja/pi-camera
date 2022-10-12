@@ -94,7 +94,8 @@ async function getFormData() {
 
     const {
         videoConfig,
-        imageConfig
+        imageConfig, 
+        modes
     } = await getVideoStreamCommand();
 
     const formBuilder = item => {
@@ -174,7 +175,22 @@ async function getFormData() {
         return `${acc}${os.EOL}${next}`;
     });
 
-    const fields = videoConfig.map(formBuilder).reduce((acc, next) => {
+    const xModes = modes.map(mode => {
+        const nMode = Object.assign({}, mode);
+        nMode.comment = `${nMode.resX}x${nMode.res}@${nMode.fps} with binning ${nMode.binned}`;
+        return xModes;
+    });
+
+    const nVideoConfig = videoConfig.map(item => {
+        const nItem = Object.assign({}, item);
+        if (nItem.name === 'modes' && xModes.length > 0) {
+            const nValues = nItem.values.concat(xModes);
+            nItem.values = nValues;
+        }
+        return nItem;
+    });
+
+    const fields = nVideoConfig.map(formBuilder).reduce((acc, next) => {
         return `${acc}<br><br>${os.EOL}${next}`;
     });
     const imageFields = imageConfig.map(formBuilder).reduce((acc, next) => {

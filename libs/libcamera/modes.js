@@ -59,6 +59,8 @@ async function getModes(configFile) {
                 const binned = `${bx/x}x${by/y}`;
                 const mode = {
                     resolution: `--mode ${x}:${y}`,
+                    resX: x, 
+                    resY: y,
                     fps: cameraModes[2],
                     binned: binned
                 };
