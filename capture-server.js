@@ -99,8 +99,6 @@ async function getFormData() {
         modes
     } = await getVideoStreamCommand();
 
-    gVideoConfig = videoConfig;
-
     const formBuilder = item => {
 
         if (item.values) {
@@ -212,6 +210,8 @@ async function getFormData() {
         }
         return nItem;
     });
+    
+    gVideoConfig = nVideoConfig;
 
     const fields = nVideoConfig.map(formBuilder).reduce((acc, next) => {
         return `${acc}<br><br>${os.EOL}${next}`;
