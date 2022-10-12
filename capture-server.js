@@ -193,7 +193,7 @@ async function getFormData() {
     }) : []);
 
     const modeComment = (xModes && xModes.length > 0) ? xModes.reduce((acc, next) => {
-        return `${acc.comment}<br>${next.comment}`;
+        return { comment: `${acc.comment}<br>${next.comment}` };
     }) : undefined;
 
     const nVideoConfig = videoConfig.map(item => {
