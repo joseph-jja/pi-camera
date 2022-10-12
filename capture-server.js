@@ -175,13 +175,14 @@ async function getFormData() {
         return `${acc}${os.EOL}${next}`;
     });
 
-    const modeData = Object.keys(modes)[0]?.modes;
+    const modeKey = Object.keys(modes) ? Object.keys(modes)[0] : undefined;
+    const modeData = modes[modeKey]?.modes;
 
-    const xModes = modeData.map(mode => {
+    const xModes = (modeData ? modeData.map(mode => {
         const nMode = Object.assign({}, mode);
         nMode.comment = `${nMode.resX}x${nMode.res}@${nMode.fps} with binning ${nMode.binned}`;
-        return xModes;
-    });
+        return nMode;
+    }) : [];
 
     const nVideoConfig = videoConfig.map(item => {
         const nItem = Object.assign({}, item);
