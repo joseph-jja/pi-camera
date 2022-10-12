@@ -179,16 +179,32 @@ async function getFormData() {
     const modeData = modes[modeKey]?.modes;
 
     const xModes = ((modeData && modeData.length > 0) ? modeData.map(mode => {
-        const nMode = Object.assign({}, mode);
-        nMode.comment = `${nMode.resX}x${nMode.resY}@${nMode.fps} with binning ${nMode.binned}`;
+        const {
+            resX,
+            resY,
+            fps,
+            binned,
+            resolution
+        } = mode;
+        const nMode = {};
+        nMode.comment = `${resX}x${resY}@${fps} with binning ${binned}`;
+        nMode.resolution = resolution;
         return nMode;
     }) : []);
+
+    const modeComment = (xModes && xModes.length > 0) ? xModes.reduce((acc, next) => {
+        return `${acc.comment}<br>${next.comment}`;
+    }) : undefined;
 
     const nVideoConfig = videoConfig.map(item => {
         const nItem = Object.assign({}, item);
         if (nItem.name === 'modes' && xModes.length > 0) {
-            const nValues = nItem.values.concat(xModes);
-            nItem.values = nValues;
+            //console
+            //const nValues = nItem.values.concat(xModes);
+            //nItem.values = nValues;
+            if (modeComment) {
+                nItem.comment = modeComment;
+            }
         }
         return nItem;
     });
