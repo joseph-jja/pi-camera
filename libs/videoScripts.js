@@ -178,8 +178,8 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     }
 
     const basefilename = getVideoFilename('h264');
-    const filename = `/tmp/${getVideoFilename()}`;
-    const resultFilename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
+    const filename = `/tmp/${basefilename}`;
+    const resultFilename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);
     const running = killAllRunning();
