@@ -89,6 +89,7 @@ setInterval(() => {
     }
 }, 10000);
 
+let gVideoConfig;
 async function getFormData() {
     const formFields = await import('./libs/form.mjs');
 
@@ -97,6 +98,8 @@ async function getFormData() {
         imageConfig, 
         modes
     } = await getVideoStreamCommand();
+
+    gVideoConfig = videoConfig;
 
     const formBuilder = item => {
 
@@ -275,7 +278,7 @@ async function start() {
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
 
     app.get('/saveRawStream', (request, response) => {
-        saveRawVideoData(getVideoUpdateOptions(), request, response, videoConfig);
+        saveRawVideoData(getVideoUpdateOptions(), request, response, gVideoConfig);
     });
 
     app.get('/config', (request, response) => {
