@@ -180,7 +180,7 @@ async function getFormData() {
 
     const xModes = ((modeData && modeData.length > 0) ? modeData.map(mode => {
         const nMode = Object.assign({}, mode);
-        nMode.comment = `${nMode.resX}x${nMode.res}@${nMode.fps} with binning ${nMode.binned}`;
+        nMode.comment = `${nMode.resX}x${nMode.resY}@${nMode.fps} with binning ${nMode.binned}`;
         return nMode;
     }) : []);
 
