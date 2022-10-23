@@ -157,7 +157,7 @@ function saveConfig(options, captureFilename) {
     });
 }
 
-function saveRawVideoData(options = [], request, response, videoConfig) {
+function saveH264VideoData(options = [], request, response, videoConfig) {
 
     const optionsStr = options.join(' ');
     const bitRate = getH264Bitrate(videoConfig, optionsStr);
@@ -178,6 +178,62 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     }
 
     const basefilename = getVideoFilename('h264');
+    const filename = `/tmp/${basefilename}`;
+    const resultFilename = `${BASE_IMAGE_PATH}/${basefilename}`;
+    spawnOptions.push('-o');
+    spawnOptions.push(filename);
+    const running = killAllRunning();
+    logger.info('Results of stopping all: ' + stringify(running));
+
+    libcameraProcess = undefined;
+    directStreamProcess = undefined;
+    imageStreamProcess = undefined;
+
+    const rawDataProcess = saveH264(spawnOptions);
+    rawDataProcess.on('close', (code) => {
+        fs.copyFile(filename, resultFilename, err => {
+            response.writeHead(200, {});
+            if (err) {
+                response.end(`ERROR ${stringify(err)} Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+            } else {
+                response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
+                fs.unlink(filename, e => {
+                    if (e) {
+                        logger.error(stringify(e));
+                    }
+                });
+            }
+            captureEmitter.emit('button-exec', {
+                method: 'saveRawVideoData',
+                status: 'Saved raw h264 completed'
+            });
+            // after the test continue video streaming until image capture :)
+            directStream(getVideoUpdateOptions());
+        });
+    });
+    saveConfig(stringify(spawnOptions), basefilename);
+
+    captureEmitter.emit('button-exec', {
+        method: 'saveRawVideoData',
+        status: 'running save raw h264'
+    });
+}
+
+function saveRawVideoData(options = [], request, response, videoConfig) {
+
+    const optionsStr = options.join(' ');
+    const spawnOptions = options.concat();
+
+    const recordingTime = request.query.recordingTime || 60000;
+    const recordTimeIndex = spawnOptions.indexOf('t');
+    if (recordTimeIndex > -1) {
+        spawnOptions[recordingTimeIndex + 1] = recordingTime;
+    } else {
+        spawnOptions.push('-t');
+        spawnOptions.push(recordingTime);
+    }
+
+    const basefilename = getVideoFilename('raw');
     const filename = `/tmp/${basefilename}`;
     const resultFilename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
@@ -526,6 +582,7 @@ module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
     getVideoFilename,
+    saveH264VideoData,
     saveRawVideoData,
     saveImagesData,
     directStream,

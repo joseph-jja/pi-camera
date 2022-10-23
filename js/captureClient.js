@@ -117,6 +117,9 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'saveStream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             executeGETRequest(`/saveStream?recordingTime=${videoLength}`).then(listImageCaptures);
+        } else if (target.id === 'saveH264Stream') {
+            const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
+            executeGETRequest(`/saveH264Stream?recordingTime=${videoLength}`).then(listImageCaptures);
         } else if (target.id === 'saveRawStream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             executeGETRequest(`/saveRawStream?recordingTime=${videoLength}`).then(listImageCaptures);

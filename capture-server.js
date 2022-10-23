@@ -29,6 +29,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
         saveRawVideoData,
+        saveH264VideoData,
         saveVideoProcess,
         saveImagesData,
         directStream,
@@ -276,6 +277,10 @@ async function start() {
     app.get('/deleteFile', deleteFileAction);
 
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
+
+    app.get('/saveH264Stream', (request, response) => {
+        saveH264VideoData(getVideoUpdateOptions(), request, response, gVideoConfig);
+    });
 
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), request, response, gVideoConfig);
