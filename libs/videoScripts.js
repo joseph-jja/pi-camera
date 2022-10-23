@@ -204,7 +204,7 @@ function saveH264VideoData(options = [], request, response, videoConfig) {
                 });
             }
             captureEmitter.emit('button-exec', {
-                method: 'saveRawVideoData',
+                method: 'saveH264VideoData',
                 status: 'Saved raw h264 completed'
             });
             // after the test continue video streaming until image capture :)
@@ -214,7 +214,7 @@ function saveH264VideoData(options = [], request, response, videoConfig) {
     saveConfig(stringify(spawnOptions), basefilename);
 
     captureEmitter.emit('button-exec', {
-        method: 'saveRawVideoData',
+        method: 'saveH264VideoData',
         status: 'running save raw h264'
     });
 }
@@ -261,7 +261,7 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
             }
             captureEmitter.emit('button-exec', {
                 method: 'saveRawVideoData',
-                status: 'Saved raw h264 completed'
+                status: 'Saved RAW completed'
             });
             // after the test continue video streaming until image capture :)
             directStream(getVideoUpdateOptions());
