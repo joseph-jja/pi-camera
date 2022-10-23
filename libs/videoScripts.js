@@ -24,6 +24,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         setVideoUpdateOptions,
         streamMjpeg,
         saveH264,
+        saveRAW,
         saveMjpeg,
         initVideo
     } = require(`${basedir}/libs/libcamera/video`),
@@ -245,7 +246,7 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     directStreamProcess = undefined;
     imageStreamProcess = undefined;
 
-    const rawDataProcess = saveH264(spawnOptions);
+    const rawDataProcess = saveRAW(spawnOptions);
     rawDataProcess.on('close', (code) => {
         fs.copyFile(filename, resultFilename, err => {
             response.writeHead(200, {});

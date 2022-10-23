@@ -26,6 +26,7 @@ const results = {
     STILL: undefined,
     imageConfig: undefined,
     VIDEO: undefined,
+    RAW_VIDEO: undefined,
     videoConfig: undefined,
     FFMPEG: undefined,
     modes: undefined
@@ -55,6 +56,14 @@ async function libcameraChecks() {
             if (modes) {
                 results.modes = modes;
             }
+        }
+    }
+
+    const libcameraRaw = await whichCommand('libcamera-raw').catch(errorHandler);
+    if (libcameraRaw) {
+        const executable = await runCommand(libcameraRaw, ['--help']).catch(errorHandler);
+        if (executable) {
+            results.RAW_VIDEO = libcameraRaw;
         }
     }
 }

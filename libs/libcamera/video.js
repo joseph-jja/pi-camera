@@ -25,6 +25,7 @@ function setVideoUpdateOptions(opts) {
 }
 
 let VIDEO,
+    RAW_VIDEO,
     FFMPEG,
     config,
     streamCommand = (options) => {
@@ -111,6 +112,23 @@ function saveH264(options = []) {
     });
 }
 
+function saveRAW(options = []) {
+
+    const defaultOptions = [];
+    if (options.indexOf('-t') < 0) {
+        defaultOptions.push('-t');
+        defaultOptions.push(60000);
+    }
+
+    const spawnOptions = defaultOptions.concat(options);
+
+    logger.info(`Libcamera video save RAW options: ${stringify(spawnOptions)}`);
+
+    return spawn(RAW_VIDEO, spawnOptions, {
+        env: process.env
+    });
+}
+
 function saveMjpeg(options = []) {
 
     const defaultOptions = MJPEG_DEFAULT_OPTIONS.concat();
@@ -134,5 +152,6 @@ module.exports = {
     setVideoUpdateOptions,
     streamMjpeg: streamCommand,
     saveH264,
+    saveRAW,
     saveMjpeg
 };
