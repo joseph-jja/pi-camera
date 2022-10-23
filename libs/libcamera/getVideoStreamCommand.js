@@ -32,6 +32,28 @@ const results = {
     modes: undefined
 };
 
+function addVideoModes() {
+ 
+    if (results.modes && results.videoConfig) {
+        // converts the modes object to an array of something for resolutions
+        const modes = results.modes.map(item => {
+           return `--width ${item.resX} --height ${item.resY}`; 
+        });
+        // find the videoSizes 
+        const videoSizeConfig = results.videoConfig.find(config => {
+            return (config.name === 'videoSize');
+        });
+        if (videoSizeConfig) {
+            modes.forEach(item => {
+                if (!videoSizeConfig.values.includes(item)) {
+                    videoSizeConfig.values.push(item);
+                }
+            });
+        }
+        results.videoConfig = newConfig;
+    }
+}   
+
 async function libcameraChecks() {
 
     // first check for libcamera
@@ -56,6 +78,7 @@ async function libcameraChecks() {
             if (modes) {
                 results.modes = modes;
             }
+            addVideoModes();
         }
     }
 
