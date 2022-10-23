@@ -49,6 +49,12 @@ function addVideoModes() {
                     videoSizeConfig.values.push(item);
                 }
             });
+            const newConfig = results.videoConfig.map(config => {
+                if (config.name === 'videoSize') {
+                    config.values = videoSizeConfig;
+                }
+                return config;
+            });
         }
         results.videoConfig = newConfig;
     }
