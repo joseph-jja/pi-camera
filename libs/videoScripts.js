@@ -272,7 +272,7 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
 
     captureEmitter.emit('button-exec', {
         method: 'saveRawVideoData',
-        status: 'running save raw h264'
+        status: 'running save RAW'
     });
 }
 
