@@ -36,7 +36,7 @@ function addVideoModes() {
  
     if (results.modes && results.videoConfig) {
         // converts the modes object to an array of something for resolutions
-        const modes = results.modes.map(item => {
+        const modes = Object.keys(results.modes)[0].modes.map(item => {
            return `--width ${item.resX} --height ${item.resY}`; 
         });
         // find the videoSizes 
