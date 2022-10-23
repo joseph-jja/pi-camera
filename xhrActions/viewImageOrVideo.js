@@ -46,7 +46,7 @@ module.exports = (request, response) => {
                 status: (err || data).toString()
             });
         });
-    } else if (filename.endsWith('.mjpeg') || filename.endsWith('.h264')) {
+    } else if (filename.endsWith('.mjpeg') || filename.endsWith('.h264') || filename.endsWith('.raw')) {
         response.writeHead(200, {
             'Content-Type': 'multipart/x-mixed-replace;boundary=ffmpeg',
             'Cache-Control': 'no-cache'
