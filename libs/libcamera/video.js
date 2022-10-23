@@ -41,6 +41,7 @@ async function initVideo() {
 
     const commands = await getVideoStreamCommand();
     VIDEO = commands.VIDEO;
+    RAW_VIDEO = commands.RAW_VIDEO;
     config = commands.videoConfig;
     FFMPEG = commands.FFMPEG;
 
