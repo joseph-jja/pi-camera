@@ -247,6 +247,9 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     imageStreamProcess = undefined;
 
     const rawDataProcess = saveRAW(spawnOptions);
+    rawDataProcess.stderr.on('data', data => {
+        logger.info(data.toString());
+    });
     rawDataProcess.on('close', (code) => {
         fs.copyFile(filename, resultFilename, err => {
             response.writeHead(200, {});
