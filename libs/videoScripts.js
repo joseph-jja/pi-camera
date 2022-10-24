@@ -247,8 +247,10 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     imageStreamProcess = undefined;
 
     const rawDataProcess = saveRAW(spawnOptions);
+    const logData = [];
     rawDataProcess.stderr.on('data', data => {
         logger.info(data.toString());
+        logData.push(data.toString());
     });
     rawDataProcess.on('close', (code) => {
         fs.copyFile(filename, resultFilename, err => {
@@ -269,6 +271,9 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
             });
             // after the test continue video streaming until image capture :)
             directStream(getVideoUpdateOptions());
+            // save config again
+            spawnOptions.push(logData.joing(' '));
+            saveConfig(stringify(spawnOptions), basefilename);
         });
     });
     saveConfig(stringify(spawnOptions), basefilename);
