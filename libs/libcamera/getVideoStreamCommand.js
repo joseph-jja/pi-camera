@@ -56,8 +56,8 @@ function addVideoModes() {
                 }
                 return config;
             });
+            results.videoConfig = newConfig;
         }
-        results.videoConfig = newConfig;
     }
 }   
 
