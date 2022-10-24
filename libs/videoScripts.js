@@ -15,7 +15,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     {
         getImageUpdateOptions,
         setImageUpdateOptions,
-        streamJpeg,
+        imageTest,
         saveImage,
         initStill
     } = require(`${basedir}/libs/libcamera/still`),
@@ -410,7 +410,7 @@ function imageStream(options = [], response) {
     libcameraProcess = undefined;
     directStreamProcess = undefined;
 
-    imageStreamProcess = streamJpeg(spawnOptions);
+    imageStreamProcess = imageTest(spawnOptions);
 
     imageStreamProcess.stderr.on('error', errorHandler);
 

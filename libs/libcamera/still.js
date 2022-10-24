@@ -43,7 +43,7 @@ async function initStill() {
 
 // misnamed function
 // really this is just to test the options for image capture
-function streamJpeg(options) {
+function imageTest(options) {
 
     // default image streaming options
     // this is more a default image test
@@ -91,6 +91,6 @@ module.exports = {
     initStill,
     getImageUpdateOptions,
     setImageUpdateOptions,
-    streamJpeg,
+    imageTest,
     saveImage
 };
