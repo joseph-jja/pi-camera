@@ -288,7 +288,7 @@ function saveSingle(options, callback, count, total) {
 
     const spawnOptions = options.concat();
 
-    const basefilename = getVideoFilename('jpg');
+    const basefilename = getVideoFilename('png');
     const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);

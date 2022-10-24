@@ -99,11 +99,6 @@ const brightnessConfig = [{
     values: ['centre', 'spot', 'average'], // 'custom'
     defaultValue: '--metering centre'
 }, {
-    name: 'quality',
-    paramName: '--quality',
-    range: [1, 100],
-    step: 1
-}, {
     name: 'exposure_profile',
     paramName: '--exposure',
     values: ['normal', 'sport', 'long'],
