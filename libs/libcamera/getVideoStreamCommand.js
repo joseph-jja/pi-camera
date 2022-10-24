@@ -52,7 +52,7 @@ function addVideoModes() {
             });
             const newConfig = results.videoConfig.map(config => {
                 if (config.name === 'videoSize') {
-                    config.values = videoSizeConfig;
+                    config.values = videoSizeConfig.values;
                 }
                 return config;
             });
