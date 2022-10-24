@@ -272,7 +272,7 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
             // after the test continue video streaming until image capture :)
             directStream(getVideoUpdateOptions());
             // save config again
-            spawnOptions.push(logData.joing(' '));
+            spawnOptions.push(logData.join(' '));
             saveConfig(stringify(spawnOptions), basefilename);
         });
     });
