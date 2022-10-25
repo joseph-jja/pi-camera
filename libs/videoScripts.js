@@ -270,7 +270,7 @@ function calculateTimelapse(options, total) {
     replacementOptions.push(' --framestart');
     replacementOptions.push('1');
     if (shutterTime > -1) {
-        const shutterSpeed = options[shutterTime + 1];
+        const shutterSpeed = options[shutterTime + 1 / 1000];
         const totalTime = ((shutterSpeed + LAPSE_TIME) * total);
         replacementOptions.push('-t');
         replacementOptions.push(totalTime);
