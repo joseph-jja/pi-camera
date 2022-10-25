@@ -33,9 +33,9 @@ module.exports = (request, response) => {
         logger.info('Invalid file name, nothing done!');
         return;
     }
-    if (filename.endsWith('.jpg')) {
+    if (filename.endsWith('.png')) {
         response.writeHead(200, {
-            'Content-type': 'image/jpeg'
+            'Content-type': 'image/png'
         });
         readFile(`${BASE_IMAGE_PATH}/${filename}`, (err, data) => {
             response.end(data);
