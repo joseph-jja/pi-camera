@@ -295,7 +295,7 @@ function saveImagesData(request, response) {
     // need to add in the percent 4 d for timelapse filenames
     const basefilename = getVideoFilename('png');
     if (total > 1) {
-        const filename = `${BASE_IMAGE_PATH}/${basefilename.replace(/\.jpg$/, '')}%5d.png`;
+        const filename = `${BASE_IMAGE_PATH}/${basefilename.replace(/\.png$/, '')}%5d.png`;
         spawnOptions.push('-o');
         spawnOptions.push(filename);
         // add 
