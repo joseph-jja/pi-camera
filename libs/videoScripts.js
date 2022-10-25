@@ -267,7 +267,7 @@ function calculateTimelapse(options, total) {
     const replacementOptions = [];
     replacementOptions.push('--timelapse');
     replacementOptions.push(LAPSE_TIME);
-    replacementOptions.push(' --framestart');
+    replacementOptions.push('--framestart');
     replacementOptions.push('1');
     if (shutterTime > -1) {
         const shutterSpeed = options[shutterTime + 1] / 1000;
@@ -313,6 +313,8 @@ function saveImagesData(request, response) {
     const imageDataProcess = saveImage(spawnOptions);
     imageDataProcess.on('close', (code) => {
         saveConfig(stringify(spawnOptions), basefilename);
+        response.writeHead(200, {});
+        response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
         captureEmitter.emit('button-exec', {
             method: 'saveImagesData',
             status: `Saved a total of ${total} images`
