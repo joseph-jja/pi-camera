@@ -90,13 +90,15 @@ function getH264Bitrate(videoConfig, paramString) {
             return parseInt(item);
         });
         const wxh = width * height;
-        let bitrate = 20000000;
+        let bitrate = 15000000;
         if (wxh === 307200 || wxh === 480000) {
             // 640 x 480
             bitrate = 40000000;
         } else if (wxh === 921600) {
             // 1280 x 720
             bitrate = 30000000;
+        } else if (wxh === 2073600) {
+            bitrate = 20000000;
         } else {
             // everything else
             bitrate = 15000000;
