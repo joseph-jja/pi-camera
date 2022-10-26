@@ -283,7 +283,7 @@ async function start() {
     });
 
     app.get('/saveRawStream', (request, response) => {
-        saveRawVideoData(getVideoUpdateOptions(), request, response, gVideoConfig);
+        saveRawVideoData(getVideoUpdateOptions(), request, response);
     });
 
     app.get('/config', (request, response) => {

@@ -151,7 +151,7 @@ function saveMjpeg(options = []) {
     return saveVideo(MJPEG_CODEC, options);
 }
 
-function saveMjpegYUV420(options = []) {
+function saveYUV420(options = []) {
     return saveVideo(YUV420_CODEC, options);
 }
 
@@ -163,5 +163,5 @@ module.exports = {
     saveH264,
     saveRAW,
     saveMjpeg,
-    saveMjpegYUV420
+    saveYUV420
 };

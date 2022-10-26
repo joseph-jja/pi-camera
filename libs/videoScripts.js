@@ -24,6 +24,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         setVideoUpdateOptions,
         streamMjpeg,
         saveH264,
+        saveYUV420,
         saveRAW,
         saveMjpeg,
         initVideo
@@ -155,125 +156,6 @@ function saveConfig(options, captureFilename) {
         } else {
             logger.verbose(stringify(res));
         }
-    });
-}
-
-function saveH264VideoData(options = [], request, response, videoConfig) {
-
-    const optionsStr = options.join(' ');
-    const bitRate = getH264Bitrate(videoConfig, optionsStr);
-    const spawnOptions = options.concat();
-    if (bitRate && bitRate.length > 0) {
-        bitRate.split(' ').forEach(x => {
-            spawnOptions.push(x);
-        });
-    }
-
-    const recordingTime = request.query.recordingTime || 60000;
-    const recordTimeIndex = spawnOptions.indexOf('t');
-    if (recordTimeIndex > -1) {
-        spawnOptions[recordingTimeIndex + 1] = recordingTime;
-    } else {
-        spawnOptions.push('-t');
-        spawnOptions.push(recordingTime);
-    }
-
-    const basefilename = getVideoFilename('h264');
-    const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
-    spawnOptions.push('-o');
-    spawnOptions.push(filename);
-    const running = killAllRunning();
-    logger.info('Results of stopping all: ' + stringify(running));
-
-    libcameraProcess = undefined;
-    directStreamProcess = undefined;
-    imageStreamProcess = undefined;
-
-    const rawDataProcess = saveH264(spawnOptions);
-    rawDataProcess.on('close', (code) => {
-        response.writeHead(200, {});
-        response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
-        captureEmitter.emit('button-exec', {
-            method: 'saveH264VideoData',
-            status: 'Saved raw h264 completed'
-        });
-        // after the test continue video streaming until image capture :)
-        directStream(getVideoUpdateOptions());
-    });
-    rawDataProcess.on('error', (err) => {
-        const errorMsg = `ERROR: ${stringify(err)}`;
-        logger.error(errorMsg);
-        captureEmitter.emit('button-exec', {
-            method: 'saveH264VideoData',
-            status: errorMsg
-        });
-    });
-    saveConfig(stringify(spawnOptions), basefilename);
-
-    captureEmitter.emit('button-exec', {
-        method: 'saveH264VideoData',
-        status: 'running save raw h264'
-    });
-}
-
-function saveRawVideoData(options = [], request, response, videoConfig) {
-
-    const optionsStr = options.join(' ');
-    const spawnOptions = options.concat();
-
-    const recordingTime = request.query.recordingTime || 60000;
-    const recordTimeIndex = spawnOptions.indexOf('t');
-    if (recordTimeIndex > -1) {
-        spawnOptions[recordingTimeIndex + 1] = recordingTime;
-    } else {
-        spawnOptions.push('-t');
-        spawnOptions.push(recordingTime);
-    }
-
-    const basefilename = getVideoFilename('raw');
-    const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
-    spawnOptions.push('-o');
-    spawnOptions.push(filename);
-    const running = killAllRunning();
-    logger.info('Results of stopping all: ' + stringify(running));
-
-    libcameraProcess = undefined;
-    directStreamProcess = undefined;
-    imageStreamProcess = undefined;
-
-    const rawDataProcess = saveRAW(spawnOptions);
-    const logData = [];
-    rawDataProcess.stderr.on('data', data => {
-        logger.info(data.toString());
-        logData.push(data.toString());
-    });
-    rawDataProcess.on('close', (code) => {
-        response.writeHead(200, {});
-        response.end(`Saved raw data with status code ${code} using options ${stringify(spawnOptions)}.`);
-            
-        captureEmitter.emit('button-exec', {
-            method: 'saveRawVideoData',
-            status: 'Saved RAW completed'
-        });
-        // after the test continue video streaming until image capture :)
-        directStream(getVideoUpdateOptions());
-        // save config again
-        spawnOptions.push(logData.join(' '));
-        saveConfig(stringify(spawnOptions), basefilename);
-    });
-    rawDataProcess.on('error', (err) => {
-        const errorMsg = `ERROR: ${stringify(err)}`;
-        logger.error(errorMsg);
-        captureEmitter.emit('button-exec', {
-            method: 'saveRawVideoData',
-            status: errorMsg
-        });
-    });
-    saveConfig(stringify(spawnOptions), basefilename);
-
-    captureEmitter.emit('button-exec', {
-        method: 'saveRawVideoData',
-        status: 'running save RAW'
     });
 }
 
@@ -424,27 +306,57 @@ async function directStream(options = []) {
     });
 }
 
-function saveVideoProcess(options = [], request, response) {
+const MJPEG_CODEC = 'mjpeg', 
+    YUV420_CODEC = 'yuv420',
+    H264_CODEC = 'h264',
+    RAW_CODEC = 'raw';
 
-    const basefilename = getVideoFilename();
-    const filename = `${BASE_IMAGE_PATH}/${getVideoFilename()}`;
+function saveVideoData(codec, options = [], request, response, videoConfig) {
 
     const spawnOptions = options.concat();
+
+    let extension = MJPEG_CODEC, 
+        videoRecordingMethod = saveMjpeg;
+    switch (codec) {
+        case RAW_CODEC:
+            extension = RAW_CODEC;
+            videoRecordingMethod = saveRAW;
+            break;
+        case H264_CODEC:
+            extension = H264_CODEC;
+            videoRecordingMethod = saveH264;
+
+            const optionsStr = options.join(' ');
+            const bitRate = getH264Bitrate(videoConfig, optionsStr);
+            if (bitRate && bitRate.length > 0) {
+                bitRate.split(' ').forEach(x => {
+                    spawnOptions.push(x);
+                });
+            }
+            break;
+        case YUV420_CODEC:
+            extension = YUV420_CODEC;
+            videoRecordingMethod = saveYUV420;
+            break;
+        default:
+            extension = MJPEG_CODEC;
+            videoRecordingMethod = saveMjpeg;
+            break;
+    }
+
+    const basefilename = getVideoFilename(extension);
+    const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
+
     spawnOptions.push('-o');
     spawnOptions.push(filename);
 
     const recordingTime = request.query.recordingTime || 60000;
     const recordTimeIndex = spawnOptions.indexOf('t');
     if (recordTimeIndex > -1) {
-        spawnOptions[recordingTimeIndex + 1] = recordingTime;
+        spawnOptions[recordTimeIndex + 1] = recordingTime;
     } else {
         spawnOptions.push('-t');
         spawnOptions.push(recordingTime);
-    }
-
-    if (options.indexOf('--quality') < 0) {
-        spawnOptions.push('--quality');
-        spawnOptions.push(100);
     }
 
     const running = killAllRunning();
@@ -454,31 +366,51 @@ function saveVideoProcess(options = [], request, response) {
     directStreamProcess = undefined;
     imageStreamProcess = undefined;
 
-    const mjpegDataProcess = saveMjpeg(spawnOptions);
-    mjpegDataProcess.on('close', (code) => {
+    const saveDataProcess = videoRecordingMethod(spawnOptions);
+    const logData = [];
+    if (codec === RAW_CODEC) {
+        saveDataProcess.stderr.on('data', data => {
+            logger.info(data.toString());
+            logData.push(data.toString());
+        });
+    }
+    saveDataProcess.on('close', (code) => {
         response.writeHead(200, {});
-        response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
+        response.end(`Finished with code ${code} using codeec ${codec} with options ${stringify(spawnOptions)}.`);
         captureEmitter.emit('button-exec', {
-            method: 'saveVideoProcess',
-            status: 'running save mjpeg completed'
+            method: 'saveVideoData',
+            status: `running save ${codec} completed`
         });
         // after the test continue video streaming until image capture :)
+        const saveSpawnOptions = spawnOptions.concat(logData);
+        saveConfig(stringify(saveSpawnOptions), basefilename);
         directStream(getVideoUpdateOptions());
     });
-    mjpegDataProcess.on('error', (err) => {
+    saveDataProcess.on('error', (err) => {
         const errorMsg = `ERROR: ${stringify(err)}`;
         logger.error(errorMsg);
         captureEmitter.emit('button-exec', {
-            method: 'saveVideoProcess',
+            method: 'saveVideoData',
             status: errorMsg
         });
     });
-    saveConfig(stringify(spawnOptions), basefilename);
 
     captureEmitter.emit('button-exec', {
-        method: 'saveVideoProcess',
-        status: 'running save mjpeg'
+        method: 'saveVideoData',
+        status: `running save ${codec}`
     });
+}
+
+function saveVideoProcess(options = [], request, response) {
+    saveVideoData(MJPEG_CODEC, options, request, response);
+}
+
+function saveRawVideoData(options = [], request, response) {
+    saveVideoData(RAW_CODEC, options, request, response);
+}
+
+function saveH264VideoData(options = [], request, response, videoConfig) {
+    saveVideoData(H264_CODEC, options, request, response, videoConfig);
 }
 
 function promiseifiedRead(filename) {
