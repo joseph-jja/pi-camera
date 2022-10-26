@@ -261,21 +261,30 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     });
 }
 
-const LAPSE_TIME = 25;
-function calculateTimelapse(options, total) {
-    const shutterTime = options.indexOf('--shutter');
-    const replacementOptions = [];
-    replacementOptions.push('--timelapse');
-    replacementOptions.push(LAPSE_TIME);
-    replacementOptions.push('--framestart');
-    replacementOptions.push('1');
-    if (shutterTime > -1) {
-        const shutterSpeed = options[shutterTime + 1] / 1000;
-        const totalTime = ((shutterSpeed + LAPSE_TIME) * total);
-        replacementOptions.push('-t');
-        replacementOptions.push(totalTime);
-    } 
-    return replacementOptions;
+function saveImage(options, count, total, callback) {
+
+    const spawnOptions = options.concat();
+    const basefilename = getVideoFilename('png');
+    const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
+    spawnOptions.push('-o');
+    spawnOptions.push(filename); 
+
+    logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
+
+    saveConfig(stringify(spawnOptions), basefilename);
+    const imageDataProcess = saveImage(spawnOptions);
+    imageDataProcess.on('close', code => {
+        const nextCount = count + 1;
+        captureEmitter.emit('button-exec', {
+            method: 'saveImagesData',
+            status: `Saved a total of ${nextCount} images of ${total} with code ${code}`
+        });
+        if (nextCount < total) {
+            saveImage(options, nextCount, total, callback);
+        } else {
+            callback(code);
+        }
+    });
 }
 
 function saveImagesData(request, response) {
@@ -292,27 +301,7 @@ function saveImagesData(request, response) {
 
     const spawnOptions = options.concat();
 
-    // need to add in the percent 4 d for timelapse filenames
-    const basefilename = getVideoFilename('png');
-    if (total > 1) {
-        const filename = `${BASE_IMAGE_PATH}/${basefilename.replace(/\.png$/, '')}%05d.png`;
-        spawnOptions.push('-o');
-        spawnOptions.push(filename);
-        // add 
-        calculateTimelapse(spawnOptions, total).forEach(o => {
-            spawnOptions.push(o);
-        });
-    } else {
-        const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
-        spawnOptions.push('-o');
-        spawnOptions.push(filename);
-    }
-
-    logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
-
-    const imageDataProcess = saveImage(spawnOptions);
-    imageDataProcess.on('close', (code) => {
-        saveConfig(stringify(spawnOptions), basefilename);
+    const callback = (code) => {
         response.writeHead(200, {});
         response.end(`Finished with code ${code} using options ${stringify(spawnOptions)}.`);
         captureEmitter.emit('button-exec', {
@@ -320,7 +309,10 @@ function saveImagesData(request, response) {
             status: `Saved a total of ${total} images`
         });
         directStream(getVideoUpdateOptions());
-    });
+    }
+
+    const count = 0;
+    saveImage(options, count, total, callback)
 
     captureEmitter.emit('button-exec', {
         method: 'saveImagesData',
