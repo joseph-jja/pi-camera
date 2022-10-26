@@ -261,7 +261,7 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
     });
 }
 
-function saveImage(options, count, total, callback) {
+function callSaveImage(options, count, total, callback) {
 
     const spawnOptions = options.concat();
     const basefilename = getVideoFilename('png');
@@ -280,7 +280,7 @@ function saveImage(options, count, total, callback) {
             status: `Saved a total of ${nextCount} images of ${total} with code ${code}`
         });
         if (nextCount < total) {
-            saveImage(options, nextCount, total, callback);
+            callSaveImage(options, nextCount, total, callback);
         } else {
             callback(code);
         }
@@ -312,7 +312,7 @@ function saveImagesData(request, response) {
     }
 
     const count = 0;
-    saveImage(options, count, total, callback)
+    callSaveImage(options, count, total, callback)
 
     captureEmitter.emit('button-exec', {
         method: 'saveImagesData',
