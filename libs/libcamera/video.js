@@ -11,8 +11,9 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 const DEFAULT_OPTIONS = [];
 
-const MJPEG_DEFAULT_OPTIONS = ['--codec', 'mjpeg'],
-    H264_DEFAULT_OPTIONS = ['--codec', 'h264'];
+const MJPEG_CODEC = 'mjpeg',
+    H264_CODEC = 'h264',
+    YUV420_CODEC = 'yuv420';
 
 let lastVideoUpdateOpts;
 
@@ -96,23 +97,6 @@ async function piStreamMjpeg(options = []) {
     });
 }
 
-function saveH264(options = []) {
-
-    const defaultOptions = H264_DEFAULT_OPTIONS.concat();
-    if (options.indexOf('-t') < 0) {
-        defaultOptions.push('-t');
-        defaultOptions.push(60000);
-    }
-
-    const spawnOptions = defaultOptions.concat(options);
-
-    logger.info(`Libcamera video save h264 options: ${stringify(spawnOptions)}`);
-
-    return spawn(VIDEO, spawnOptions, {
-        env: process.env
-    });
-}
-
 function saveRAW(options = []) {
 
     const defaultOptions = [];
@@ -130,21 +114,45 @@ function saveRAW(options = []) {
     });
 }
 
-function saveMjpeg(options = []) {
-
-    const defaultOptions = MJPEG_DEFAULT_OPTIONS.concat();
+function saveVideo(codec = 'mjpeg', options = []) {
+    const defaultOptions = [];
     if (options.indexOf('-t') < 0) {
         defaultOptions.push('-t');
         defaultOptions.push(60000);
     }
 
-    const spawnOptions = defaultOptions.concat(options);
+    defaultOptions.push('--codec')
+    switch (codec) {
+        case YUV420_CODEC:
+            defaultOptions.push(YUV420_CODEC);
+            break;
+        case H264_CODEC:
+            defaultOptions.push(H264_CODEC);
+            break;
+        default:
+            defaultOptions.push(MJPEG_CODEC);
+            break;
+    }
 
-    logger.info(`Libcamera video save mjpeg options: ${stringify(spawnOptions)}`);
+    const spawnOptions = defaultOptions.concat(options);
+    
+    logger.info(`Libcamera video save ${codec} options: ${stringify(spawnOptions)}`);
 
     return spawn(VIDEO, spawnOptions, {
         env: process.env
     });
+}
+
+function saveH264(options = []) {
+    return saveVideo(H264_CODEC, options);
+}
+
+function saveMjpeg(options = []) {
+    return saveVideo(MJPEG_CODEC, options);
+}
+
+function saveMjpegYUV420(options = []) {
+    return saveVideo(YUV420_CODEC, options);
 }
 
 module.exports = {
@@ -154,5 +162,6 @@ module.exports = {
     streamMjpeg: streamCommand,
     saveH264,
     saveRAW,
-    saveMjpeg
+    saveMjpeg,
+    saveMjpegYUV420
 };
