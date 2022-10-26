@@ -201,9 +201,11 @@ function saveH264VideoData(options = [], request, response, videoConfig) {
         directStream(getVideoUpdateOptions());
     });
     rawDataProcess.on('error', (err) => {
+        const errorMsg = `ERROR: ${stringify(err)}`;
+        logger.error(errorMsg);
         captureEmitter.emit('button-exec', {
             method: 'saveH264VideoData',
-            status: `ERROR: ${stringify(err)}`
+            status: errorMsg
         });
     });
     saveConfig(stringify(spawnOptions), basefilename);
@@ -260,9 +262,11 @@ function saveRawVideoData(options = [], request, response, videoConfig) {
         saveConfig(stringify(spawnOptions), basefilename);
     });
     rawDataProcess.on('error', (err) => {
+        const errorMsg = `ERROR: ${stringify(err)}`;
+        logger.error(errorMsg);
         captureEmitter.emit('button-exec', {
             method: 'saveRawVideoData',
-            status: `ERROR: ${stringify(err)}`
+            status: errorMsg
         });
     });
     saveConfig(stringify(spawnOptions), basefilename);
@@ -298,9 +302,11 @@ function callSaveImage(options, count, total, callback) {
         }
     });
     imageDataProcess.on('error', (err) => {
+        const errorMsg = `ERROR: ${stringify(err)}`;
+        logger.error(errorMsg);
         captureEmitter.emit('button-exec', {
             method: 'saveImagesData',
-            status: `ERROR: ${stringify(err)}`
+            status: errorMsg
         });
     });
 }
@@ -460,9 +466,11 @@ function saveVideoProcess(options = [], request, response) {
         directStream(getVideoUpdateOptions());
     });
     mjpegDataProcess.on('error', (err) => {
+        const errorMsg = `ERROR: ${stringify(err)}`;
+        logger.error(errorMsg);
         captureEmitter.emit('button-exec', {
             method: 'saveVideoProcess',
-            status: `ERROR: ${stringify(err)}`
+            status: errorMsg
         });
     });
     saveConfig(stringify(spawnOptions), basefilename);
