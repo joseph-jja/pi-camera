@@ -409,6 +409,10 @@ function saveRawVideoData(options = [], request, response) {
     saveVideoData(RAW_CODEC, options, request, response);
 }
 
+function saveYUV420VideoData(options = [], request, response) {
+    saveVideoData(YUV420_CODEC, options, request, response);
+}
+
 function saveH264VideoData(options = [], request, response, videoConfig) {
     saveVideoData(H264_CODEC, options, request, response, videoConfig);
 }
@@ -474,6 +478,7 @@ module.exports = {
     getVideoFilename,
     saveH264VideoData,
     saveRawVideoData,
+    saveYUV420VideoData,
     saveImagesData,
     directStream,
     imageStream,
