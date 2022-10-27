@@ -96,7 +96,7 @@ async function getFormData() {
 
     const {
         videoConfig,
-        imageConfig, 
+        imageConfig,
         modes
     } = await getVideoStreamCommand();
 
@@ -195,7 +195,9 @@ async function getFormData() {
     }) : []);
 
     const modeComment = (xModes && xModes.length > 0) ? xModes.reduce((acc, next) => {
-        return { comment: `${acc.comment}<br>${next.comment}` };
+        return {
+            comment: `${acc.comment}<br>${next.comment}`
+        };
     }) : undefined;
 
     const modeResolutions = (xModes && xModes.length > 0) ? xModes.map(item => item.resolution) : [];
@@ -211,7 +213,7 @@ async function getFormData() {
         }
         return nItem;
     });
-    
+
     gVideoConfig = nVideoConfig;
 
     const fields = nVideoConfig.map(formBuilder).reduce((acc, next) => {

@@ -68,14 +68,14 @@ async function gstreamerProcessor() {
         };
 
         rl.on('close', () => {
-            
+
             if (still.size === 0 || video.size === 0) {
                 return resolve({
                     sortedStill: [],
                     sortedVideo: []
                 });
             }
-            
+
             const sortedStill = Array.from(still.keys()),
                 sortedVideo = Array.from(video.keys());
 

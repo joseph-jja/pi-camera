@@ -165,7 +165,7 @@ function callSaveImage(options, count, total, callback) {
     const basefilename = getVideoFilename('png');
     const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
-    spawnOptions.push(filename); 
+    spawnOptions.push(filename);
 
     logger.info(`Saving image with options: ${stringify(spawnOptions)}`);
 
@@ -306,7 +306,7 @@ async function directStream(options = []) {
     });
 }
 
-const MJPEG_CODEC = 'mjpeg', 
+const MJPEG_CODEC = 'mjpeg',
     YUV420_CODEC = 'yuv420',
     H264_CODEC = 'h264',
     RAW_CODEC = 'raw';
@@ -315,33 +315,33 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
 
     const spawnOptions = options.concat();
 
-    let extension = MJPEG_CODEC, 
+    let extension = MJPEG_CODEC,
         videoRecordingMethod = saveMjpeg;
     switch (codec) {
-        case RAW_CODEC:
-            extension = RAW_CODEC;
-            videoRecordingMethod = saveRAW;
-            break;
-        case H264_CODEC:
-            extension = H264_CODEC;
-            videoRecordingMethod = saveH264;
+    case RAW_CODEC:
+        extension = RAW_CODEC;
+        videoRecordingMethod = saveRAW;
+        break;
+    case H264_CODEC:
+        extension = H264_CODEC;
+        videoRecordingMethod = saveH264;
 
-            const optionsStr = options.join(' ');
-            const bitRate = getH264Bitrate(videoConfig, optionsStr);
-            if (bitRate && bitRate.length > 0) {
-                bitRate.split(' ').forEach(x => {
-                    spawnOptions.push(x);
-                });
-            }
-            break;
-        case YUV420_CODEC:
-            extension = YUV420_CODEC;
-            videoRecordingMethod = saveYUV420;
-            break;
-        default:
-            extension = MJPEG_CODEC;
-            videoRecordingMethod = saveMjpeg;
-            break;
+        const optionsStr = options.join(' ');
+        const bitRate = getH264Bitrate(videoConfig, optionsStr);
+        if (bitRate && bitRate.length > 0) {
+            bitRate.split(' ').forEach(x => {
+                spawnOptions.push(x);
+            });
+        }
+        break;
+    case YUV420_CODEC:
+        extension = YUV420_CODEC;
+        videoRecordingMethod = saveYUV420;
+        break;
+    default:
+        extension = MJPEG_CODEC;
+        videoRecordingMethod = saveMjpeg;
+        break;
     }
 
     const basefilename = getVideoFilename(extension);

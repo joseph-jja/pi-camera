@@ -34,10 +34,10 @@ async function getModes(configFile) {
         const rl = readline.createInterface({
             input: modes
         });
-        
+
         rl.on('line', line => {
-            
-            const cameraId = line.match(CAMERA_ID_RE), 
+
+            const cameraId = line.match(CAMERA_ID_RE),
                 cameraModes = line.match(CAMERA_MODES);
 
             if (cameraId && cameraId.length > 1) {
@@ -59,7 +59,7 @@ async function getModes(configFile) {
                 const binned = `${bx/x}x${by/y}`;
                 const mode = {
                     resolution: `--mode ${x}:${y}`,
-                    resX: x, 
+                    resX: x,
                     resY: y,
                     fps: cameraModes[2],
                     binned: binned
@@ -68,7 +68,7 @@ async function getModes(configFile) {
             }
 
         });
-        
+
         rl.on('close', () => {
 
             return resolve(imxCameraInfo);

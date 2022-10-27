@@ -123,19 +123,19 @@ function saveVideo(codec = 'mjpeg', options = []) {
 
     defaultOptions.push('--codec')
     switch (codec) {
-        case YUV420_CODEC:
-            defaultOptions.push(YUV420_CODEC);
-            break;
-        case H264_CODEC:
-            defaultOptions.push(H264_CODEC);
-            break;
-        default:
-            defaultOptions.push(MJPEG_CODEC);
-            break;
+    case YUV420_CODEC:
+        defaultOptions.push(YUV420_CODEC);
+        break;
+    case H264_CODEC:
+        defaultOptions.push(H264_CODEC);
+        break;
+    default:
+        defaultOptions.push(MJPEG_CODEC);
+        break;
     }
 
     const spawnOptions = defaultOptions.concat(options);
-    
+
     logger.info(`Libcamera video save ${codec} options: ${stringify(spawnOptions)}`);
 
     return spawn(VIDEO, spawnOptions, {

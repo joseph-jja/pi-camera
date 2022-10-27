@@ -33,12 +33,12 @@ const results = {
 };
 
 function addVideoModes() {
- 
+
     if (results.modes && Object.keys(results.modes) && Object.keys(results.modes).length > 0 && results.videoConfig) {
         // converts the modes object to an array of something for resolutions
         const key = Object.keys(results.modes)[0];
         const modes = results.modes[key].modes.map(item => {
-           return `--width ${item.resX} --height ${item.resY}`; 
+            return `--width ${item.resX} --height ${item.resY}`;
         });
         // find the videoSizes 
         const videoSizeConfig = results.videoConfig.find(config => {
@@ -59,7 +59,7 @@ function addVideoModes() {
             results.videoConfig = newConfig;
         }
     }
-}   
+}
 
 async function libcameraChecks() {
 
@@ -138,32 +138,32 @@ function gstChecks() {
 
 async function getVideoStreamCommand() {
 
-        if (hasRun && gstCompleted) {
-            return results;
-        }
-
-        const gresults = await gstChecks();
-        if (gresults) {
-            results.imageConfig = gresults.imageConfig;
-            results.videoConfig = gresults.videoConfig;
-            logger.info(`Final results for camera sizes have been updated!`);
-            gstCompleted = true;
-            logger.debug(`Config ${JSON.stringify(results)}`);
-        }
-
-        await libcameraChecks();
-
-        const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
-        if (ffmpeg) {
-            const executable = await runCommand('ffmpeg', ['--help']).catch(errorHandler);
-            if (executable) {
-                results.FFMPEG = ffmpeg;
-            }
-        }
-
-        hasRun = true;
-
+    if (hasRun && gstCompleted) {
         return results;
+    }
+
+    const gresults = await gstChecks();
+    if (gresults) {
+        results.imageConfig = gresults.imageConfig;
+        results.videoConfig = gresults.videoConfig;
+        logger.info(`Final results for camera sizes have been updated!`);
+        gstCompleted = true;
+        logger.debug(`Config ${JSON.stringify(results)}`);
+    }
+
+    await libcameraChecks();
+
+    const ffmpeg = await whichCommand('ffmpeg').catch(errorHandler);
+    if (ffmpeg) {
+        const executable = await runCommand('ffmpeg', ['--help']).catch(errorHandler);
+        if (executable) {
+            results.FFMPEG = ffmpeg;
+        }
+    }
+
+    hasRun = true;
+
+    return results;
 }
 
 module.exports = getVideoStreamCommand;
