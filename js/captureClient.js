@@ -116,7 +116,7 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.selectedOptions[0].value.trim();
             executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
-        } else if (target.id === 'saveStream') {
+        } else if (target.id === 'saveMJPEGStream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             executeGETRequest(`/saveStream?recordingTime=${videoLength}`).then(listImageCaptures);
         } else if (target.id === 'saveH264Stream') {

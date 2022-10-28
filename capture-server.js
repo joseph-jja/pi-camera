@@ -261,10 +261,6 @@ async function start() {
 
     app.get('/stopPreview', stopPreviewAction);
 
-    app.get('/saveStream', (request, response) => {
-        saveVideoProcess(getVideoUpdateOptions(), request, response);
-    });
-
     app.get('/saveImage', (request, response) => {
         saveImagesData(request, response);
     });
@@ -280,6 +276,10 @@ async function start() {
     app.get('/deleteFile', deleteFileAction);
 
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
+
+    app.get('/saveMJPEGStream', (request, response) => {
+        saveVideoProcess(getVideoUpdateOptions(), request, response);
+    });
 
     app.get('/saveH264Stream', (request, response) => {
         saveH264VideoData(getVideoUpdateOptions(), request, response, gVideoConfig);
