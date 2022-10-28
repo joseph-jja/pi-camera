@@ -118,7 +118,10 @@ window.addEventListener('DOMContentLoaded', () => {
             executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
         } else if (target.id === 'saveMJPEGStream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveStream?recordingTime=${videoLength}`).then(listImageCaptures);
+            executeGETRequest(`/saveMJPEGStream?recordingTime=${videoLength}`).then(listImageCaptures);
+        } else if (target.id === 'saveYUV420Stream') {
+            const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
+            executeGETRequest(`/saveYUV420Stream?recordingTime=${videoLength}`).then(listImageCaptures);
         } else if (target.id === 'saveH264Stream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             executeGETRequest(`/saveH264Stream?recordingTime=${videoLength}`).then(listImageCaptures);
