@@ -30,6 +30,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     {
         saveRawVideoData,
         saveH264VideoData,
+        saveYUV420VideoData,
         saveVideoProcess,
         saveImagesData,
         directStream,
@@ -286,6 +287,10 @@ async function start() {
 
     app.get('/saveRawStream', (request, response) => {
         saveRawVideoData(getVideoUpdateOptions(), request, response);
+    });
+
+    app.get('/saveYUV420Stream', (request, response) => {
+        saveYUV420VideoData(getVideoUpdateOptions(), request, response);
     });
 
     app.get('/config', (request, response) => {
