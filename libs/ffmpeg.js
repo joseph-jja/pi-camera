@@ -69,9 +69,35 @@ function playFile(filename, config) {
     });
 }
 
+function converetYUV420(filename, config, outfilename) {
+
+    const width = config[config.indexOf('--width + 1')],
+        height = config[config.indexOf('--height + 1')],
+        framerate = config[config.indexOf('--framerate + 1')];
+
+    const convertOptions = [
+        '-f', 'rawvideo',
+        '-vcodec', 'rawvideo',
+        '-r', framerate,
+        '-q:v', '2',
+        '-s', `${width}x${height}`,
+        '-r', framerate,
+        '-pix_fmt', 'yuv420p',
+        '-i', filename,
+        '-c:v', 'libx264',
+        '-preset', 'ultrafast',
+        '-qp', '0', outfilename
+    ];
+
+    return spawn(FFMPEG, convertOptions, {
+        env: process.env
+    });
+}
+
 module.exports = {
     initFfmpeg,
     getFfmpegWebmStream,
     getFfmpegStream,
-    playFile
+    playFile,
+    converetYUV420
 };
