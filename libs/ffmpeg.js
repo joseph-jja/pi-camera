@@ -69,7 +69,7 @@ function playFile(filename, config) {
     });
 }
 
-function converetYUV420(filename, config, outfilename) {
+function convertYUV420(filename, config, outfilename) {
 
     const width = config[config.indexOf('--width + 1')],
         height = config[config.indexOf('--height + 1')],
@@ -99,5 +99,5 @@ module.exports = {
     getFfmpegWebmStream,
     getFfmpegStream,
     playFile,
-    converetYUV420
+    convertYUV420
 };
