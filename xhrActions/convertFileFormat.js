@@ -47,7 +47,11 @@ module.exports = (request, response) => {
     
     const files = await getFiles();
 
-    files.forEach(async filename => {
+    let converted = 0;
+    files.forEach(async file => {
+
+        // make sure filename contains the image path
+        const filename = (file.indexOf('/images/') > -1) ? file : `${BASE_IMAGE_PATH}/${file}`;
 
         const configFileName = `${filename}.cfg`.replace(/\/images\//, '/imageConfig/');
 
@@ -55,15 +59,18 @@ module.exports = (request, response) => {
 
         if (filename.endsWith(MJPEG_EXT)) {
             convertMJPEG(filename, config, filename.replace(MJPEG_EXT, MP4_EXT));
+            converted++;
         } else if (filename.endsWith(YUV420_EXT)) {
             convertYUV420(filename, config, filename.replace(YUV420_EXT, MP4_EXT));
+            converted++;
         } else if (filename.endsWith(H264_EXT)) {
             convertH264(filename, config, filename.replace(H264_EXT, MP4_EXT));
+            converted++;
         } else if (filename.endsWith(RAW_EXT)) {
             logger.warn('Cannot convert RAW files at this time');
         }
     });
 
     response.writeHead(200, {});
-    response.end('Conversion completed!');
+    response.end(`Conversion completed! Converted ${converted} number of files.`);
 };
