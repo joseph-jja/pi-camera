@@ -94,10 +94,20 @@ function convertYUV420(filename, config, outfilename) {
     });
 }
 
+function convertH264(filename, config, outfilename) {
+
+}
+
+function convertMJPEG(filename, config, outfilename) {
+
+}
+
 module.exports = {
     initFfmpeg,
     getFfmpegWebmStream,
     getFfmpegStream,
     playFile,
-    convertYUV420
+    convertYUV420,
+    convertH264,
+    convertMJPEG
 };
