@@ -81,11 +81,11 @@ function convertYUV420(filename, config, outfilename) {
         '-r', framerate,
         '-q:v', '2',
         '-s', `${width}x${height}`,
-        '-r', framerate,
         '-pix_fmt', 'yuv420p',
         '-i', filename,
         '-c:v', 'libx264',
         '-preset', 'ultrafast',
+        '-r', framerate,
         '-qp', '0', outfilename
     ];
 
@@ -96,9 +96,40 @@ function convertYUV420(filename, config, outfilename) {
 
 function convertH264(filename, config, outfilename) {
 
+    const width = config[config.indexOf('--width + 1')],
+        height = config[config.indexOf('--height + 1')],
+        framerate = config[config.indexOf('--framerate + 1')];
+
+    const convertOptions = [
+        '-r', framerate,
+        '-s', `${width}x${height}`,
+        '-i', filename,
+        '-r', framerate,
+        outfilename
+    ];
+
+    return spawn(FFMPEG, convertOptions, {
+        env: process.env
+    });
 }
 
 function convertMJPEG(filename, config, outfilename) {
+
+    const width = config[config.indexOf('--width + 1')],
+        height = config[config.indexOf('--height + 1')],
+        framerate = config[config.indexOf('--framerate + 1')];
+
+    const convertOptions = [
+        '-r', framerate,
+        '-s', `${width}x${height}`,
+        '-i', filename,
+        '-r', framerate,
+        outfilename
+    ];
+
+    return spawn(FFMPEG, convertOptions, {
+        env: process.env
+    });
 
 }
 
