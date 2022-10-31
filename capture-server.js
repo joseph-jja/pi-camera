@@ -47,6 +47,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     jsFilesAction = require(`${basedir}/xhrActions/jsFiles`),
     shutdownAction = require(`${basedir}/xhrActions/shutdown`),
     updateXHRAction = require(`${basedir}/xhrActions/update`),
+    convertXHRAction = require(`${basedir}/xhrActions/convertFileFormat`),
     imageListAction = require(`${basedir}/xhrActions/imageList`);
 
 const app = express();
