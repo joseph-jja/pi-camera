@@ -1,6 +1,6 @@
 const {
     writeFile
-} = require('fs/promises');
+} = require('fs').promises;
 
 const basedir = process.cwd(),
     stringify = require(`${basedir}/libs/stringify`),
