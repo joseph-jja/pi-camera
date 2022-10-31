@@ -3,6 +3,7 @@ const {
 } = require('fs').promises;
 
 const basedir = process.cwd(),
+    promiseWrapper = require(`${basedir}/libs/PromiseWrapper`),
     stringify = require(`${basedir}/libs/stringify`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
@@ -78,7 +79,7 @@ async function libcameraChecks() {
         if (executable) {
             results.VIDEO = libcameraVid;
         }
-        const cameraDetails = await runCommand(libcameraVid, ['--list-cameras']).catch(errorHandler);
+        const [err, cameraDetails] = await promiseWrapper(runCommand(libcameraVid, ['--list-cameras']).catch(errorHandler));
         if (cameraDetails) {
             await writeFile('/tmp/cameraInfo.txt', cameraDetails);
             const modes = await getModes();
@@ -86,6 +87,8 @@ async function libcameraChecks() {
                 results.modes = modes;
             }
             addVideoModes();
+        } else if (err) {
+            logger.error(stringify(err));
         }
     }
 
