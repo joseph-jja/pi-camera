@@ -18,7 +18,7 @@ Available cameras
                       3280x2464 [21.19 fps - (0, 0)/3280x2464 crop]
 */
 
-const CAMERA_ID_RE = /(imx\d*) (\[\d*x\d*\])/;
+const CAMERA_ID_RE = /(ov|imx\d*) (\[\d*x\d*\])/;
 
 const CAMERA_MODES = /(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
 
@@ -48,7 +48,7 @@ async function getModes(configFile) {
                     imxCameraInfo[lastCameraId].maxResolution = cameraId[2].replace('[', '').replace(']', '');
                 }
                 imxCameraInfo[lastCameraId].count++;
-            } else if (cameraModes && cameraModes.length > 1) {
+            } else if (cameraModes && cameraModes.length > 1 && imxCameraInfo[lastCameraId]) {
                 if (!imxCameraInfo[lastCameraId].modes) {
                     imxCameraInfo[lastCameraId].modes = [];
                 }
