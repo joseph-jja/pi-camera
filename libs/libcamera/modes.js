@@ -16,9 +16,15 @@ Available cameras
                       1640x1232 [41.85 fps - (0, 0)/3280x2464 crop]
                       1920x1080 [47.57 fps - (680, 692)/1920x1080 crop]
                       3280x2464 [21.19 fps - (0, 0)/3280x2464 crop]
+OR
+0 : ov5647 [2592x1944] (/base/soc/i2c0mux/i2c@1/ov5647@36)
+    Modes: 'SGBRG10_CSI2P' : 640x480 [58.92 fps - (16, 0)/2560x1920 crop]
+                             1296x972 [43.25 fps - (0, 0)/2592x1944 crop]
+                             1920x1080 [30.62 fps - (348, 434)/1928x1080 crop]
+                             2592x1944 [15.63 fps - (0, 0)/2592x1944 crop]
 */
 
-const CAMERA_ID_RE = /(ov|imx\d*) (\[\d*x\d*\])/;
+const CAMERA_ID_RE = /(ov\d*|imx\d*) (\[\d*x\d*\])/;
 
 const CAMERA_MODES = /(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
 
