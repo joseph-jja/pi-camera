@@ -3,10 +3,10 @@ const {
     readdir
 } = require('fs/promises');
 
-const basdir = process.cwd(),
+const basedir = process.cwd(),
     {
         BASE_CONFIG_PATH
-    } = = require(`${basedir}/libs/videoScripts`),
+    } = require(`${basedir}/libs/videoScripts`),
     {
         convertYUV420,
         convertH264,
@@ -19,7 +19,7 @@ const MJPEG_EXT = '.mjpeg',
     RAW_EXT = '.raw',
     YUV420_EXT = '.yuv420',
     H264_EXT = '.h264', 
-    MP4_EXT = '.mp4;
+    MP4_EXT = '.mp4';
 
 async function readConfigFile(configFile) {
 
@@ -35,7 +35,7 @@ async function readConfigFile(configFile) {
 }
 
 // read all the video files only
-function getFiles() {
+async function getFiles() {
 
     const [err, videoFileList] = await promiseWrapper(readdir(BASE_CONFIG_PATH));
     
@@ -84,7 +84,7 @@ function processFile(filename, config) {
     });
 }
 
-module.exports = (request, response) => {
+module.exports = async (request, response) => {
     
     const files = await getFiles();
 
