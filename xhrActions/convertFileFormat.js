@@ -23,9 +23,12 @@ const MJPEG_EXT = '.mjpeg',
 
 async function readConfigFile(configFile) {
 
-    const fileData = await readFile(configFile).toString();
+    const [err, fileData] = await promiseWrapper(readFile(configFile));
 
-    const jsonOptions = JSON.parse(fileData);
+    if (err) {
+        return undefined;
+    }
+    const jsonOptions = JSON.parse(fileData.toString());
 
     return jsonOptions;
 
@@ -52,6 +55,10 @@ function getFiles() {
 function processFile(filename, config) {
 
     return new Promise((resolve, reject) => {
+
+        if (!config) {
+            reject('No config found, cannot convert!');
+        }
         
         if (filename.endsWith(MJPEG_EXT)) {
             const convert = convertMJPEG(filename, config, filename.replace(MJPEG_EXT, MP4_EXT));
