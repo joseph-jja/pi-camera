@@ -3,7 +3,8 @@ This is some simple code and some of scripts for making a motion detection camer
 
 ## to install
 - install nodejs and forever or pm2
-  - currently known to work with node 8.11.1 or later
+  - currently known to work with node 12.x or later
+    - for node 12.x you must start node with `--experimental-modules`
 - install ffmpeg for avconv
 - clone this repo 
 - create a config.json for the mail (see the other readme for config.json)
