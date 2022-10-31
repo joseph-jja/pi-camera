@@ -1,7 +1,7 @@
 const {
     readFile,
     readdir
-} = require('fs'.promises;
+} = require('fs').promises;
 
 const basedir = process.cwd(),
     {
