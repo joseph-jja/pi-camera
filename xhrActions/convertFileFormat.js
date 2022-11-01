@@ -90,6 +90,8 @@ module.exports = async (request, response) => {
     
     const files = await getFiles();
 
+    logger.info(`Found ${files.length} number of files in ${BASE_IMAGE_PATH}`);
+
     let converted = 0;
     files.forEach(async file => {
 
