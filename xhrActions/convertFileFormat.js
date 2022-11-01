@@ -59,11 +59,11 @@ function processFile(filename, configFilename) {
 
     return new Promise(async (resolve, reject) => {
 
+        const config = await readConfigFile(configFilename);
+
         if (!config) {
             reject('No config found, cannot convert!');
         }
-
-        const config = await readConfigFile(configFilename);
 
         logger.info(`Image file ${filename} and config data ${JSON.stringify(config)}`);
 
@@ -98,7 +98,7 @@ module.exports = async (request, response) => {
     logger.info(`Found ${files.length} files in ${BASE_IMAGE_PATH}`);
 
     const fileList = [];
-    files.forEach(async file => {
+    files.forEach(file => {
 
         // make sure filename contains the image path
         const imageFile = `${BASE_IMAGE_PATH}/${file}`;
