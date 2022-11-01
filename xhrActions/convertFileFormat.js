@@ -106,7 +106,7 @@ module.exports = async (request, response) => {
 
         //logger.info(`Image file ${imageFile} and config files ${configFileName}`);
         
-        fileList.push(processFile(imageFile, config));
+        fileList.push(processFile(imageFile, configFileName));
     });
 
     Promise.all(fileList).then(results => {
