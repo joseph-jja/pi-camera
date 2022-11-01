@@ -65,10 +65,11 @@ function processFile(filename, configFilename) {
             reject('No config found, cannot convert!');
         }
 
-        logger.info(`Image file ${filename} and config data ${JSON.stringify(config)}`);
+        //logger.info(`Image file ${filename} and config data ${JSON.stringify(config)}`);
 
         if (filename.endsWith(MJPEG_EXT)) {
             const convert = convertMJPEG(filename, config, filename.replace(MJPEG_EXT, MP4_EXT));
+            console.log(convert)
             convert.once('close', (code) => {
                 return resolve(code);
             });
