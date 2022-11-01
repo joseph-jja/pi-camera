@@ -71,10 +71,10 @@ function playFile(filename, config) {
 
 function convertYUV420(filename, config, outfilename) {
 
-    const width = config[config.indexOf('--width + 1')],
-        height = config[config.indexOf('--height + 1')],
-        framerate = config[config.indexOf('--framerate + 1')];
-console.log(config)
+    const width = config[config.indexOf('--width' + 1)],
+        height = config[config.indexOf('--height' + 1)],
+        framerate = config[config.indexOf('--framerate' + 1)];
+
     const convertOptions = [
         '-f', 'rawvideo',
         '-vcodec', 'rawvideo',
@@ -96,9 +96,9 @@ console.log(config)
 
 function convertH264(filename, config, outfilename) {
 
-    const width = config[config.indexOf('--width + 1')],
-        height = config[config.indexOf('--height + 1')],
-        framerate = config[config.indexOf('--framerate + 1')];
+    const width = config[config.indexOf('--width' + 1)],
+        height = config[config.indexOf('--height' + 1)],
+        framerate = config[config.indexOf('--framerate' + 1)];
 
     const convertOptions = [
         '-r', framerate,
@@ -115,9 +115,9 @@ function convertH264(filename, config, outfilename) {
 
 function convertMJPEG(filename, config, outfilename) {
 
-    const width = config[config.indexOf('--width + 1')],
-        height = config[config.indexOf('--height + 1')],
-        framerate = config[config.indexOf('--framerate + 1')];
+    const width = config[config.indexOf('--width' + 1)],
+        height = config[config.indexOf('--height' + 1)],
+        framerate = config[config.indexOf('--framerate' + 1)];
 
     const convertOptions = [
         '-r', framerate,
