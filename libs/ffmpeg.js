@@ -74,7 +74,7 @@ function convertYUV420(filename, config, outfilename) {
     const width = config[config.indexOf('--width + 1')],
         height = config[config.indexOf('--height + 1')],
         framerate = config[config.indexOf('--framerate + 1')];
-
+console.log(config)
     const convertOptions = [
         '-f', 'rawvideo',
         '-vcodec', 'rawvideo',

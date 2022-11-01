@@ -69,7 +69,6 @@ function processFile(filename, configFilename) {
 
         if (filename.endsWith(MJPEG_EXT)) {
             const convert = convertMJPEG(filename, config, filename.replace(MJPEG_EXT, MP4_EXT));
-            console.log(convert)
             convert.once('close', (code) => {
                 return resolve(code);
             });
