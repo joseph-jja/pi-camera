@@ -57,10 +57,10 @@ async function getFiles() {
                 const mp4Filename = filename.replace(MJPEG_EXT, MP4_EXT);
                 return (!files.includes(mp4Filename));
             } else if (filename.endsWith(YUV420_EXT)) {
-                const mp4Filename = filename.replace(MJPEG_EXT, YUV420_EXT);
+                const mp4Filename = filename.replace(YUV420_EXT, MP4_EXT);
                 return (!files.includes(mp4Filename));
             } else if (filename.endsWith(H264_EXT)) {
-                const mp4Filename = filename.replace(MJPEG_EXT, H264_EXT);
+                const mp4Filename = filename.replace(H264_EXT, MP4_EXT);
                 return (!files.includes(mp4Filename));
             } else {
                 return true;
