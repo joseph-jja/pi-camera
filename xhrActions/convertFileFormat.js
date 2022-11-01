@@ -5,7 +5,8 @@ const {
 
 const basedir = process.cwd(),
     {
-        BASE_CONFIG_PATH
+        BASE_CONFIG_PATH, 
+        BASE_IMAGE_PATH
     } = require(`${basedir}/libs/videoScripts`),
     {
         convertYUV420,
@@ -37,10 +38,10 @@ async function readConfigFile(configFile) {
 // read all the video files only
 async function getFiles() {
 
-    const [err, videoFileList] = await promiseWrapper(readdir(BASE_CONFIG_PATH));
+    const [err, videoFileList] = await promiseWrapper(readdir(BASE_IMAGE_PATH));
     
     if (err) {
-        logger.error(`No files found in ${BASE_CONFIG_PATH}`);
+        logger.error(`No files found in ${BASE_IMAGE_PATH}`);
         return [];
     }
     
