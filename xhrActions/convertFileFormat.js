@@ -117,25 +117,19 @@ module.exports = async (request, response) => {
 
     logger.info(`Found ${files.length} files in ${BASE_IMAGE_PATH}`);
 
-    const fileList = [];
-    files.forEach(file => {
+    let count = 0;
+    files.fore(async file => {
 
         // make sure filename contains the image path
         const imageFile = `${BASE_IMAGE_PATH}/${file}`;
         const configFileName = `${BASE_CONFIG_PATH}/${file}.cfg`;
 
         //logger.info(`Image file ${imageFile} and config files ${configFileName}`);
-        
-        fileList.push(processFile(imageFile, configFileName));
-    });
-
-    Promise.all(fileList).then(results => {
+        const results = await processFile(imageFile, configFileName);
         logger.info(`Result from converting files ${results}`);
-
-        response.writeHead(200, {});
-        response.end(`Conversion completed! Converted ${results} number of files.`);    
-    }).catch(err => {
-        response.writeHead(422, {});
-        response.end(`Conversion completed, with an error ${stringify(err)}.`);
+        count++;count
     });
+
+    response.writeHead(200, {});
+    response.end(`Conversion completed! Converted ${count} number of files.`); 
 };
