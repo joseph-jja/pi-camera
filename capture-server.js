@@ -295,7 +295,7 @@ async function start() {
     });
 
     app.get('/convertFiles', (request, response) => {
-        convertXHRAction(request, response));
+        convertXHRAction(request, response);
     });
 
     app.get('/config', (request, response) => {
