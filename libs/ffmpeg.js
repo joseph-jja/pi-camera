@@ -96,13 +96,10 @@ function convertYUV420(filename, config, outfilename) {
 
 function convertH264(filename, config, outfilename) {
 
-    const width = config[config.indexOf('--width') + 1],
-        height = config[config.indexOf('--height') + 1],
-        framerate = config[config.indexOf('--framerate') + 1];
+    const framerate = config[config.indexOf('--framerate') + 1];
 
     const convertOptions = [
         '-r', framerate,
-        '-s', `${width}x${height}`,
         '-i', filename,
         '-r', framerate,
         outfilename
