@@ -61,7 +61,8 @@ function processFile(filename, config) {
         if (!config) {
             reject('No config found, cannot convert!');
         }
-        
+        logger.info(`Image file ${filename} and config data ${JSON.stringify(config)}`);
+
         if (filename.endsWith(MJPEG_EXT)) {
             const convert = convertMJPEG(filename, config, filename.replace(MJPEG_EXT, MP4_EXT));
             convert.once('close', (code) => {
@@ -99,7 +100,7 @@ module.exports = async (request, response) => {
         const imageFile = `${BASE_IMAGE_PATH}/${file}`;
         const configFileName = `${BASE_CONFIG_PATH}/${file}.cfg`;
 
-        logger.info(`Image file ${imageFile} and config files ${configFileName}`);
+        //logger.info(`Image file ${imageFile} and config files ${configFileName}`);
 
         const config = await readConfigFile(configFileName);
         
