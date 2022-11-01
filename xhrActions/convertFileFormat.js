@@ -90,7 +90,7 @@ module.exports = async (request, response) => {
     
     const files = await getFiles();
 
-    logger.info(`Found ${files.length} number of files in ${BASE_IMAGE_PATH}`);
+    logger.info(`Found ${files.length} files in ${BASE_IMAGE_PATH}`);
 
     let converted = 0;
     files.forEach(async file => {
@@ -99,6 +99,7 @@ module.exports = async (request, response) => {
         const filename = (file.indexOf('/images/') > -1) ? file : `${BASE_IMAGE_PATH}/${file}`;
 
         const configFileName = `${filename}.cfg`.replace(/\/images\//, '/imageConfig/');
+        logger.info(`Image file ${file} and config files ${configFileName}`);
 
         const config = await readConfigFile(configFileName);
         
