@@ -52,18 +52,20 @@ async function getFiles() {
     });
 
     if (files.length > 0) {
-        if (filename.endsWith(MJPEG_EXT)) {
-            const mp4Filename = filename.replace(MJPEG_EXT, MP4_EXT);
-            return (!files.includes(mp4Filename));
-        } else if (filename.endsWith(YUV420_EXT)) {
-            const mp4Filename = filename.replace(MJPEG_EXT, YUV420_EXT);
-            return (!files.includes(mp4Filename));
-        } else if (filename.endsWith(H264_EXT)) {
-            const mp4Filename = filename.replace(MJPEG_EXT, H264_EXT);
-            return (!files.includes(mp4Filename));
-        } else {
-            return true;
-        }
+        return files.filter(filename => {
+            if (filename.endsWith(MJPEG_EXT)) {
+                const mp4Filename = filename.replace(MJPEG_EXT, MP4_EXT);
+                return (!files.includes(mp4Filename));
+            } else if (filename.endsWith(YUV420_EXT)) {
+                const mp4Filename = filename.replace(MJPEG_EXT, YUV420_EXT);
+                return (!files.includes(mp4Filename));
+            } else if (filename.endsWith(H264_EXT)) {
+                const mp4Filename = filename.replace(MJPEG_EXT, H264_EXT);
+                return (!files.includes(mp4Filename));
+            } else {
+                return true;
+            }    
+        });
     }
 
     return files;
