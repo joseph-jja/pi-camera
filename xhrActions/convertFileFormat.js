@@ -51,6 +51,21 @@ async function getFiles() {
             file.endsWith(H264_EXT) || file.endsWith(H264_EXT) );    
     });
 
+    if (files.length > 0) {
+        if (filename.endsWith(MJPEG_EXT)) {
+            const mp4Filename = filename.replace(MJPEG_EXT, MP4_EXT);
+            return (!files.includes(mp4Filename));
+        } else if (filename.endsWith(YUV420_EXT)) {
+            const mp4Filename = filename.replace(MJPEG_EXT, YUV420_EXT);
+            return (!files.includes(mp4Filename));
+        } else if (filename.endsWith(H264_EXT)) {
+            const mp4Filename = filename.replace(MJPEG_EXT, H264_EXT);
+            return (!files.includes(mp4Filename));
+        } else {
+            return true;
+        }
+    }
+
     return files;
 }
 
@@ -70,16 +85,19 @@ function processFile(filename, configFilename) {
         if (filename.endsWith(MJPEG_EXT)) {
             const convert = convertMJPEG(filename, config, filename.replace(MJPEG_EXT, MP4_EXT));
             convert.once('close', (code) => {
+                logger.info(`Converting file ${filename} completed with code ${code}`);
                 return resolve(code);
             });
         } else if (filename.endsWith(YUV420_EXT)) {
             const convert = convertYUV420(filename, config, filename.replace(YUV420_EXT, MP4_EXT));
             convert.once('close', (code) => {
+                logger.info(`Converting file ${filename} completed with code ${code}`);
                 return resolve(code);
             });
         } else if (filename.endsWith(H264_EXT)) {
             const convert = convertH264(filename, config, filename.replace(H264_EXT, MP4_EXT));
             convert.once('close', (code) => {
+                logger.info(`Converting file ${filename} completed with code ${code}`);
                 return resolve(code);
             });
         } else if (filename.endsWith(RAW_EXT)) {
