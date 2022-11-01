@@ -105,6 +105,7 @@ module.exports = async (request, response) => {
         const config = await readConfigFile(configFileName);
         
         const [err, result] = await promiseWrapper(processFile(imageFile, config));
+        logger.info(`Result from converting files ${result}`);
         if (!err) {
             converted++;
         }
