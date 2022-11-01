@@ -13,6 +13,7 @@ const basedir = process.cwd(),
         convertH264,
         convertMJPEG
     } = require(`${basedir}/libs/ffmpeg`),
+    stringify = require(`${basedir}/libs/stringify`),
     promiseWrapper = require(`${basedir}/libs/PromiseWrapper`),
     logger = require(`${basedir}/libs/logger`)(__filename);
 
@@ -54,13 +55,16 @@ async function getFiles() {
 }
 
 
-function processFile(filename, config) {
+function processFile(filename, configFilename) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
         if (!config) {
             reject('No config found, cannot convert!');
         }
+
+        const config = await readConfigFile(configFilename);
+
         logger.info(`Image file ${filename} and config data ${JSON.stringify(config)}`);
 
         if (filename.endsWith(MJPEG_EXT)) {
@@ -93,7 +97,7 @@ module.exports = async (request, response) => {
 
     logger.info(`Found ${files.length} files in ${BASE_IMAGE_PATH}`);
 
-    let converted = 0;
+    const fileList = [];
     files.forEach(async file => {
 
         // make sure filename contains the image path
@@ -101,16 +105,17 @@ module.exports = async (request, response) => {
         const configFileName = `${BASE_CONFIG_PATH}/${file}.cfg`;
 
         //logger.info(`Image file ${imageFile} and config files ${configFileName}`);
-
-        const config = await readConfigFile(configFileName);
         
-        const [err, result] = await promiseWrapper(processFile(imageFile, config));
-        logger.info(`Result from converting files ${result}`);
-        if (!err) {
-            converted++;
-        }
+        fileList.push(processFile(imageFile, config));
     });
 
-    response.writeHead(200, {});
-    response.end(`Conversion completed! Converted ${converted} number of files.`);
+    Promise.all(fileList).then(results => {
+        logger.info(`Result from converting files ${results}`);
+
+        response.writeHead(200, {});
+        response.end(`Conversion completed! Converted ${results} number of files.`);    
+    }).catch(err => {
+        response.writeHead(422, {});
+        response.end(`Conversion completed, with an error ${stringify(err)}.`);
+    });
 };
