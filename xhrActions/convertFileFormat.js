@@ -40,6 +40,7 @@ async function getFiles() {
     const [err, videoFileList] = await promiseWrapper(readdir(BASE_CONFIG_PATH));
     
     if (err) {
+        logger.error(`No files found in ${BASE_CONFIG_PATH}`);
         return [];
     }
     
