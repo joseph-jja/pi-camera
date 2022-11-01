@@ -96,10 +96,10 @@ module.exports = async (request, response) => {
     files.forEach(async file => {
 
         // make sure filename contains the image path
-        const filename = (file.indexOf('/images/') > -1) ? file : `${BASE_IMAGE_PATH}/${file}`;
+        const imageFile = `${BASE_IMAGE_PATH}/${file}`;
+        const configFileName = `${BASE_CONFIG_PATH}/${file}.cfg`;
 
-        const configFileName = `${filename}.cfg`.replace(/\/images\//, '/imageConfig/');
-        logger.info(`Image file ${file} and config files ${configFileName}`);
+        logger.info(`Image file ${imageFile} and config files ${configFileName}`);
 
         const config = await readConfigFile(configFileName);
         
