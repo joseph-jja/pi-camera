@@ -76,6 +76,7 @@ function convertYUV420(filename, config, outfilename) {
         framerate = config[config.indexOf('--framerate') + 1];
 
     const convertOptions = [
+        '-y',
         '-f', 'rawvideo',
         '-vcodec', 'rawvideo',
         '-r', framerate,
@@ -99,6 +100,7 @@ function convertH264(filename, config, outfilename) {
     const framerate = config[config.indexOf('--framerate') + 1];
 
     const convertOptions = [
+        '-y',
         '-r', framerate,
         '-i', filename,
         '-r', framerate,
@@ -115,6 +117,7 @@ function convertMJPEG(filename, config, outfilename) {
     const framerate = config[config.indexOf('--framerate') + 1];
         
     const convertOptions = [
+        '-y',
         '-r', framerate,
         '-i', filename,
         '-r', framerate,
