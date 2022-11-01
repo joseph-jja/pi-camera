@@ -294,6 +294,10 @@ async function start() {
         saveYUV420VideoData(getVideoUpdateOptions(), request, response);
     });
 
+    app.get('/convertFiles', (request, response) => {
+        convertXHRAction(request, response));
+    });
+
     app.get('/config', (request, response) => {
         const uuid = randomBytes(26).toString('hex');
         response.writeHead(200, {
