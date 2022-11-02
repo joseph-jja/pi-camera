@@ -70,7 +70,9 @@ async function getModes(configFile) {
                     fps: cameraModes[2],
                     binned: binned
                 };
-                imxCameraInfo[lastCameraId].modes.push(mode);
+                if (!imxCameraInfo[lastCameraId].modes.includes(mode)) {
+                    imxCameraInfo[lastCameraId].modes.push(mode);
+                }
             }
 
         });
