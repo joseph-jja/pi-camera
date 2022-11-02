@@ -77,7 +77,6 @@ async function getModes(configFile) {
                     } 
                     return false;
                 });
-                console.log(found)
                 if (!found) {
                     imxCameraInfo[lastCameraId].modes.push(mode);
                 }
