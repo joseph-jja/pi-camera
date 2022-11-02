@@ -160,7 +160,7 @@ module.exports = async (request, response) => {
             const msg = `ERROR: Converting file ${videoFile} is ${strringify(err)} index ${index} of ${fileList.length}`;
             handleNext();
             logger.error(msg);
-        };
+        });
     };
 
     convertFile(filesToConvert, 0);
