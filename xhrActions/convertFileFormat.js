@@ -6,7 +6,8 @@ const {
 const basedir = process.cwd(),
     {
         BASE_CONFIG_PATH, 
-        BASE_IMAGE_PATH
+        BASE_IMAGE_PATH,
+        captureEmitter
     } = require(`${basedir}/libs/videoScripts`),
     {
         convertYUV420,
@@ -111,25 +112,59 @@ function processFile(filename, configFilename) {
     });
 }
 
+function emitMessage(msg) {
+    captureEmitter.emit('button-exec', {
+        method: 'conveeretFileFormat',
+        status: msg
+    });
+}
+
 module.exports = async (request, response) => {
     
     const files = await getFiles();
 
     logger.info(`Found ${files.length} files in ${BASE_IMAGE_PATH}`);
 
-    let count = 0;
-    files.fore(async file => {
+    const filesToConvert = files.map(file => {
 
         // make sure filename contains the image path
-        const imageFile = `${BASE_IMAGE_PATH}/${file}`;
+        const videoFile = `${BASE_IMAGE_PATH}/${file}`;
         const configFileName = `${BASE_CONFIG_PATH}/${file}.cfg`;
 
-        //logger.info(`Image file ${imageFile} and config files ${configFileName}`);
-        const results = await processFile(imageFile, configFileName);
-        logger.info(`Result from converting files ${results}`);
-        count++;count
+        return {
+            videoFile: videoFile,
+            configFileName: configFileName
+        };
     });
 
+    const convertFile = (fileList, index) => {
+
+        const {
+            videoFile,
+            configFileName
+        } = fileList[index];
+
+        const handleNext = (msg) => {
+            index++;
+            if (index < filesToConvert.length) {
+                convertFile(filesToConvert, index);
+            }
+            emitMessage(msg);
+        };
+
+        processFile(videoFile, configFileName).then(results => {
+            const msg = `SUCCESS: Converting file ${videoFile} is ${results} index ${index} of ${fileList.length}`;
+            handleNext();
+            logger.info(msg);
+        }).catch(err => {
+            const msg = `ERROR: Converting file ${videoFile} is ${strringify(err)} index ${index} of ${fileList.length}`;
+            handleNext();
+            logger.error(msg);
+        };
+    };
+
+    convertFile(filesToConvert, 0);
+
     response.writeHead(200, {});
-    response.end(`Conversion completed! Converted ${count} number of files.`); 
+    response.end(`Conversion in progrress!`); 
 };
