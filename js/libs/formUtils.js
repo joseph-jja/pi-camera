@@ -3,39 +3,58 @@ export function getFormOptions(formObj) {
     const formElements = Array.from(formObj);
     //const bitrate = setBitrate(formElements);
 
-    const filtered = formElements.filter(element => {
+    const filtered = (formElements || []).filter(element => {
+        if (!element || !element.nodeName) { 
+            return false;
+        }
         const nodeName = element.nodeName.toLowerCase();
         return (nodeName !== 'button' && nodeName !== 'input');
     });
 
-    const storage = filtered.filter(element => {
+    const storageElements = (filtered || []).filter(element => {
+        if (!element || !element.tagName) { 
+            return false;
+        }
         const tagName = element.tagName.toLowerCase();
-        return (tagName === 'select' &&
+        return (tagName === 'select' && element.selectedOptions &&
+            element.selectedOptions.length > 0 &&    
             element.selectedOptions[0].value &&
             element.selectedOptions[0].value.length > 0);
-    }).map(element => {
-        //const tagName = element.tagName.toLowerCase();
-        return {
-            [element.name]: `${element.selectedOptions[0].value}`
-        };
     });
-    localStorage.setItem(formObj.name, JSON.stringify(storage));
-
-    const options = filtered.map(element => {
+    
+    if (storageElements && storageElements.length > 0) {
+    
+        const storage = storageElements.map(element => {
+            //const tagName = element.tagName.toLowerCase();
+            return {
+                [element.name]: `${element.selectedOptions[0].value}`
+            };
+        });
+        localStorage.setItem(formObj.name, JSON.stringify(storage));
+    }
+    
+    const optionsMapped = (filtered || []).map(element => {
+        if (!element || !element.tagName) { 
+            return false;
+        }
         const tagName = element.tagName.toLowerCase();
         if (tagName === 'select') {
             return element.selectedOptions[0].value;
         } else {
             return '';
         }
-    }).reduce((acc, next) => {
-        return `${acc}${next.startsWith('-') ? ' ': ''}${next}`.trim();
     });
-    return options;
+    if (optionsMapped && optionsMapped.length > 0) {
+    const options = optionsMapped.reduce((acc, next) => {
+            return `${acc}${next.startsWith('-') ? ' ': ''}${next}`.trim();
+        });
+        return options;
+    }
+    return [];
 }
 
 export function getParams() {
-    const queryString = window.location.search;
+    const queryString = (window && window.location ? window.location.search : undefined);
     return (queryString && queryString.length > 1) ?
         new URLSearchParams(queryString.substring(1)) :
         undefined;
@@ -48,7 +67,9 @@ export function getParamValue(paramName) {
 
 function setMessage(msg) {
     const serverMsg = document.getElementById('server-messages');
-    serverMsg.innerHTML = msg;
+    if (serverMsg) {
+        serverMsg.innerHTML = msg;
+    }
 }
 //    const msg = await resp.text();
 
