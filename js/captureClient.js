@@ -110,6 +110,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (event) => {
         const target = event.target;
+        if (!target) {
+            return;
+        }
         const name = target.nodeName;
         if (name.toLowerCase() !== 'button') {
             return;
