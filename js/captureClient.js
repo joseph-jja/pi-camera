@@ -12,6 +12,15 @@ const {
     updateImage
 } = formUtils;
 
+function safelyParse(jsonIn) {
+    try {
+        return JSON.parse(jsonIn);
+    } catch(e) {
+        console.log(e);
+        return undefined;
+    }
+}
+
 function restore() {
 
     const processForm = (formName) => {
@@ -19,19 +28,25 @@ function restore() {
         if (!formData) {
             return;
         }
-        const data = JSON.parse(formData);
+        const data = safelyParse(formData);
+        if (!data || !Array.isArray(data)) {
+            return;
+        }
         const formObj = document.forms[formName];
         data.forEach(item => {
-            const key = Object.keys(item)[0];
-            const value = item[key];
-            const selectObj = formObj[key];
-            if (selectObj) {
-                const selectOpts = selectObj.options;
-                const index = Array.from(selectOpts).findIndex(item => {
-                    return (value === item.value);
-                });
-                if (index > 0) {
-                    selectObj.selectedIndex = index;
+            const keys = Object.keys(item);
+            if (keys && keys.length > 0) {
+                const key = Object.keys(item)[0];
+                const value = item[key];
+                const selectObj = formObj[key];
+                if (selectObj && value) {
+                    const selectOpts = selectObj.options;
+                    const index = Array.from(selectOpts).findIndex(item => {
+                        return (value === item.value);
+                    });
+                    if (index > 0) {
+                        selectObj.selectedIndex = index;
+                    }
                 }
             }
         });
@@ -43,24 +58,32 @@ function restore() {
 
 function profileUpdate() {
     const mainForm = document.forms['mainForm'];
+    if (!mainForm && !mainForm.profiles && !mainForm.profiles.selectedOptions) { 
+        return;
+    }
     const selected = mainForm.profiles.selectedOptions[0].value;
     if (selected.length > 0) {
-        const options = JSON.parse(decodeURIComponent(selected));
+        const options = safelyParse(decodeURIComponent(selected));
+        if (!options) {
+            return;
+        }
         Object.keys(options).forEach(key => {
             const opts = options[key];
             const form = document.forms[key];
-            opts.forEach(field => {
-                const selectObj = form[field.name];
-                if (selectObj) {
-                    const selectOpts = selectObj.options;
-                    const index = Array.from(selectOpts).findIndex(item => {
-                        return (field.value === item.value);
-                    });
-                    if (index > 0) {
-                        selectObj.selectedIndex = index;
+            if (opts && Array.isArray(opts)) {
+                opts.forEach(field => {
+                    const selectObj = form[field.name];
+                    if (selectObj) {
+                        const selectOpts = selectObj.options;
+                        const index = Array.from(selectOpts).findIndex(item => {
+                            return (field.value === item.value);
+                        });
+                        if (index > 0) {
+                            selectObj.selectedIndex = index;
+                        }
                     }
-                }
-            });
+                });
+            }
         });
         updateImage().catch().finally(() => {
             videoUpdate();

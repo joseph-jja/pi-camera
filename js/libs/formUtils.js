@@ -30,7 +30,9 @@ export function getFormOptions(formObj) {
                 [element.name]: `${element.selectedOptions[0].value}`
             };
         });
-        localStorage.setItem(formObj.name, JSON.stringify(storage));
+        if (storage) {
+            localStorage.setItem(formObj.name, JSON.stringify(storage));
+        }
     }
     
     const optionsMapped = (filtered || []).map(element => {
