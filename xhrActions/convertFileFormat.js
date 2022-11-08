@@ -5,7 +5,7 @@ const {
 
 const basedir = process.cwd(),
     {
-        BASE_CONFIG_PATH, 
+        BASE_CONFIG_PATH,
         BASE_IMAGE_PATH,
         captureEmitter
     } = require(`${basedir}/libs/videoScripts`),
@@ -21,7 +21,7 @@ const basedir = process.cwd(),
 const MJPEG_EXT = '.mjpeg',
     RAW_EXT = '.raw',
     YUV420_EXT = '.yuv420',
-    H264_EXT = '.h264', 
+    H264_EXT = '.h264',
     MP4_EXT = '.mp4';
 
 async function readConfigFile(configFile) {
@@ -41,15 +41,15 @@ async function readConfigFile(configFile) {
 async function getFiles() {
 
     const [err, videoFileList] = await promiseWrapper(readdir(BASE_IMAGE_PATH));
-    
+
     if (err) {
         logger.error(`No files found in ${BASE_IMAGE_PATH}`);
         return [];
     }
-    
+
     const files = videoFileList.filter(file => {
         return (file.endsWith(MJPEG_EXT) || file.endsWith(YUV420_EXT) ||
-            file.endsWith(H264_EXT) || file.endsWith(H264_EXT) );    
+            file.endsWith(H264_EXT) || file.endsWith(H264_EXT));
     });
 
     if (files.length > 0) {
@@ -65,7 +65,7 @@ async function getFiles() {
                 return (!files.includes(mp4Filename));
             } else {
                 return true;
-            }    
+            }
         });
     }
 
@@ -120,7 +120,7 @@ function emitMessage(msg) {
 }
 
 module.exports = async (request, response) => {
-    
+
     const files = await getFiles();
 
     logger.info(`Found ${files.length} files in ${BASE_IMAGE_PATH}`);
@@ -166,5 +166,5 @@ module.exports = async (request, response) => {
     convertFile(filesToConvert, 0);
 
     response.writeHead(200, {});
-    response.end(`Conversion in progrress!`); 
+    response.end(`Conversion in progrress!`);
 };

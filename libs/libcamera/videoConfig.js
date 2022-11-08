@@ -24,6 +24,10 @@ const videoConfig = [{
     paramName: '--quality',
     range: [1, 100],
     step: 1
+}, {
+    name: 'denoise',
+    paramName: '',
+    values: ['--denoise cdn_off']
 }];
 
 module.exports = prefixConfig.concat(brightnessConfig).concat(videoConfig).concat(suffixConfig);

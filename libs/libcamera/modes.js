@@ -72,9 +72,9 @@ async function getModes(configFile) {
                 };
                 const found = imxCameraInfo[lastCameraId].modes.find(m => {
                     if (m.resolution === mode.resolution &&
-                       m.fps === mode.fps && m.binned === mode.binned) {
-                            return true;
-                    } 
+                        m.fps === mode.fps && m.binned === mode.binned) {
+                        return true;
+                    }
                     return false;
                 });
                 if (!found) {

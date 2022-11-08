@@ -115,7 +115,7 @@ function convertH264(filename, config, outfilename) {
 function convertMJPEG(filename, config, outfilename) {
 
     const framerate = config[config.indexOf('--framerate') + 1];
-        
+
     const convertOptions = [
         '-y',
         '-r', framerate,

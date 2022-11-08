@@ -15,7 +15,7 @@ const {
 function safelyParse(jsonIn) {
     try {
         return JSON.parse(jsonIn);
-    } catch(e) {
+    } catch (e) {
         console.log(e);
         return undefined;
     }
@@ -58,7 +58,7 @@ function restore() {
 
 function profileUpdate() {
     const mainForm = document.forms['mainForm'];
-    if (!mainForm && !mainForm.profiles && !mainForm.profiles.selectedOptions) { 
+    if (!mainForm && !mainForm.profiles && !mainForm.profiles.selectedOptions) {
         return;
     }
     const selected = mainForm.profiles.selectedOptions[0].value;
