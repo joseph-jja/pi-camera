@@ -146,6 +146,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             const codec = document.forms['videoRecord'].recordingCodec.selectedOptions[0].value.trim();
             executeGETRequest(`/saveStream?recordingTime=${videoLength}&codec=${encodeURIComponent(codec)}`).then(listImageCaptures);
+        } else if (target.id === 'convertImages') {
+            executeGETRequest('/convertFiles').then(listImageCaptures);
         } else if (target.id === 'listCaptures') {
             listImageCaptures();
         } else if (target.id === 'shutdownButton') {
