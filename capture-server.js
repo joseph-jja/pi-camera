@@ -28,10 +28,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     } = require(`${basedir}/libs/utils`),
     logger = require(`${basedir}/libs/logger`)(__filename),
     {
-        saveRawVideoData,
-        saveH264VideoData,
-        saveYUV420VideoData,
-        saveVideoProcess,
+        saveVideoData,
         saveImagesData,
         directStream,
         getVideoUpdateOptions,
@@ -278,20 +275,10 @@ async function start() {
 
     app.get('/viewImageOrVideo', viewImageOrVideoAction);
 
-    app.get('/saveMJPEGStream', (request, response) => {
-        saveVideoProcess(getVideoUpdateOptions(), request, response);
-    });
-
-    app.get('/saveH264Stream', (request, response) => {
-        saveH264VideoData(getVideoUpdateOptions(), request, response, gVideoConfig);
-    });
-
-    app.get('/saveRawStream', (request, response) => {
-        saveRawVideoData(getVideoUpdateOptions(), request, response);
-    });
-
-    app.get('/saveYUV420Stream', (request, response) => {
-        saveYUV420VideoData(getVideoUpdateOptions(), request, response);
+    app.get('/saveStream', (request, response) => {
+        const codec = (request.query || {}).codec;
+        const playCodec = (codec ? decodeURIComponent(codec).split(' ')[0] : 'mjpeg');
+        saveVideoData(playCodec, getVideoUpdateOptions(), request, response, gVideoConfig);
     });
 
     app.get('/convertFiles', (request, response) => {

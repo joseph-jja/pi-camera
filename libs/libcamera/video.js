@@ -13,6 +13,7 @@ const DEFAULT_OPTIONS = [];
 
 const MJPEG_CODEC = 'mjpeg',
     H264_CODEC = 'h264',
+    LIBAV_CODEC = 'libav',
     YUV420_CODEC = 'yuv420';
 
 let lastVideoUpdateOpts;
@@ -129,6 +130,9 @@ function saveVideo(codec = 'mjpeg', options = []) {
     case H264_CODEC:
         defaultOptions.push(H264_CODEC);
         break;
+    case LIBAV_CODEC:
+        defaultOptions.push(LIBAV_CODEC);
+        break;
     default:
         defaultOptions.push(MJPEG_CODEC);
         break;
@@ -155,6 +159,10 @@ function saveYUV420(options = []) {
     return saveVideo(YUV420_CODEC, options);
 }
 
+function saveLibav(options = []) {
+    return saveVideo(LIBAV_CODEC, options);
+}
+
 module.exports = {
     initVideo,
     getVideoUpdateOptions,
@@ -163,5 +171,6 @@ module.exports = {
     saveH264,
     saveRAW,
     saveMjpeg,
-    saveYUV420
+    saveYUV420,
+    saveLibav
 };

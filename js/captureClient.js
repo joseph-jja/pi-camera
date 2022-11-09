@@ -142,18 +142,10 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.selectedOptions[0].value.trim();
             executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
-        } else if (target.id === 'saveMJPEGStream') {
+        } else if (target.id === 'saveStream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveMJPEGStream?recordingTime=${videoLength}`).then(listImageCaptures);
-        } else if (target.id === 'saveYUV420Stream') {
-            const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveYUV420Stream?recordingTime=${videoLength}`).then(listImageCaptures);
-        } else if (target.id === 'saveH264Stream') {
-            const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveH264Stream?recordingTime=${videoLength}`).then(listImageCaptures);
-        } else if (target.id === 'saveRawStream') {
-            const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveRawStream?recordingTime=${videoLength}`).then(listImageCaptures);
+            const codec = document.forms['videoRecord'].recordingCodec.selectedOptions[0].value.trim();
+            executeGETRequest(`/saveStream?recordingTime=${videoLength}&codec=${encodeURIComponent(codec)}`).then(listImageCaptures);
         } else if (target.id === 'listCaptures') {
             listImageCaptures();
         } else if (target.id === 'shutdownButton') {

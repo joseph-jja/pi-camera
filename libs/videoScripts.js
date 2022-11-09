@@ -27,6 +27,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         saveYUV420,
         saveRAW,
         saveMjpeg,
+        saveLibav,
         initVideo
     } = require(`${basedir}/libs/libcamera/video`),
     {
@@ -309,7 +310,8 @@ async function directStream(options = []) {
 const MJPEG_CODEC = 'mjpeg',
     YUV420_CODEC = 'yuv420',
     H264_CODEC = 'h264',
-    RAW_CODEC = 'raw';
+    RAW_CODEC = 'raw',
+    LIBAV_CODEC = 'libav';
 
 function saveVideoData(codec, options = [], request, response, videoConfig) {
 
@@ -337,6 +339,16 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     case YUV420_CODEC:
         extension = YUV420_CODEC;
         videoRecordingMethod = saveYUV420;
+        break;
+    case LIBAV_CODEC:
+        extension = MJPEG_CODEC;
+        const codecOptions = decodeURIComponent(request.query.codec).split(' ');
+        codecOptions.forEach(opt => {
+            if (opt !== LIBAV_CODEC) {
+                spawnOptions.push(opt);
+            }
+        });
+        videoRecordingMethod = saveLibav;
         break;
     default:
         extension = MJPEG_CODEC;
@@ -401,22 +413,6 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     });
 }
 
-function saveVideoProcess(options = [], request, response) {
-    saveVideoData(MJPEG_CODEC, options, request, response);
-}
-
-function saveRawVideoData(options = [], request, response) {
-    saveVideoData(RAW_CODEC, options, request, response);
-}
-
-function saveYUV420VideoData(options = [], request, response) {
-    saveVideoData(YUV420_CODEC, options, request, response);
-}
-
-function saveH264VideoData(options = [], request, response, videoConfig) {
-    saveVideoData(H264_CODEC, options, request, response, videoConfig);
-}
-
 function promiseifiedRead(filename) {
     return new Promise((resolve, reject) => {
         fs.readFile(filename, (err, data) => {
@@ -476,13 +472,10 @@ module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
     getVideoFilename,
-    saveH264VideoData,
-    saveRawVideoData,
-    saveYUV420VideoData,
+    saveVideoData,
     saveImagesData,
     directStream,
     imageStream,
-    saveVideoProcess,
     getVideoUpdateOptions,
     setVideoUpdateOptions,
     getImageUpdateOptions,

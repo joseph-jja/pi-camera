@@ -115,10 +115,11 @@
                 </form>
                 <form name="videoRecord" onsubmit="return false;">
                     <select name="recordingTime">
+                        <option value="10000">5 seconds</option>
                         <option value="10000">10 seconds</option>
-                        <option value="15000">15 seconds</option>
+                        <option value="15000" selected>15 seconds</option>
                         <option value="30000">30 seconds</option>
-                        <option value="60000" selected>60 seconds</option>
+                        <option value="60000">60 seconds</option>
                         <option value="120000">2 minutes</option>
                         <option value="300000">5 minutes</option>
                         <option value="600000">10 minutes</option>
@@ -127,20 +128,16 @@
                         <option value="3600000">1 hour</option>
                     </select>
                     <br><br>
-                    <button type="submit" id="saveMJPEGStream">
-                        Capture mjpeg
-                    </button>
-                    <br><br>
-                    <button type="submit" id="saveYUV420Stream">
-                        Capture YUV420
-                    </button>
-                    <br><br>
-                    <button type="submit" id="saveH264Stream">
-                        Capture H264
-                    </button>
-                    <br><br>
-                    <button type="submit" id="saveRawStream">
-                        Capture RAW
+                    <select name="recordingCodec">
+                        <option value="mjpeg" selected>mjpeg</option>
+                        <option value="yuv420">yuv420</option>
+                        <option value="libav --libav-format mjpeg">libav mjpeg</option>
+                        <option value="libav --libav-format mjpeg_2000">libav mjpeg 2000</option>
+                        <option value="h264">h264</option>
+                        <option value="raw">raw</option>
+                    </select>
+                    <button type="submit" id="saveStream">
+                        Capture Stream
                     </button>
                 </form>
             </fieldset>
