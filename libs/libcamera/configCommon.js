@@ -1,8 +1,4 @@
 const prefixConfig = [{
-    name: 'preview',
-    paramName: '',
-    values: ['--nopreview', '--preview 0,100,640,480']
-}, {
     name: 'viewfinder',
     paramName: '',
     values: [

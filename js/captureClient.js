@@ -141,11 +141,13 @@ window.addEventListener('DOMContentLoaded', () => {
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveImage?imagecount=${imageCount}`).then(listImageCaptures);
+            const previewVideo = document.forms['videoRecord'].previewVideo.selectedOptions[0].value.trim();
+            executeGETRequest(`/saveImage?imagecount=${imageCount}&preview=${previewVideo}`).then(listImageCaptures);
         } else if (target.id === 'saveStream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             const codec = document.forms['videoRecord'].recordingCodec.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveStream?recordingTime=${videoLength}&codec=${encodeURIComponent(codec)}`).then(listImageCaptures);
+            const previewVideo = document.forms['videoRecord'].previewVideo.selectedOptions[0].value.trim();
+            executeGETRequest(`/saveStream?recordingTime=${videoLength}&codec=${encodeURIComponent(codec)}&preview=${previewVideo}`).then(listImageCaptures);
         } else if (target.id === 'convertImages') {
             executeGETRequest('/convertFiles').then(listImageCaptures);
         } else if (target.id === 'listCaptures') {
