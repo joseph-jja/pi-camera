@@ -210,7 +210,7 @@ function saveImagesData(request, response) {
 
     // no preview for saving 
     if (request.query.preview && decodeURIComponent(request.query.preview) === '--nopreview') {
-        spawnOptions.push(--nopreview);
+        spawnOptions.push('--nopreview');
     }    
 
     const callback = (code) => {
@@ -324,7 +324,7 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
 
     // no preview for saving 
     if (request.query.preview && decodeURIComponent(request.query.preview) === '--nopreview') {
-        spawnOptions.push(--nopreview);
+        spawnOptions.push('--nopreview');
     }
 
     let extension = MJPEG_CODEC,
