@@ -40,12 +40,14 @@ function restore() {
                 const value = item[key];
                 const selectObj = formObj[key];
                 if (selectObj && value) {
-                    const selectOpts = selectObj.options;
-                    const index = Array.from(selectOpts).findIndex(item => {
-                        return (value === item.value);
-                    });
-                    if (index > 0) {
-                        selectObj.selectedIndex = index;
+                    const selectOpts = selectObj.options;A
+			        if (selectOpts &&Array.isArray(selectOpts)) {
+                        const index = Array.from(selectOpts).findIndex(item => {
+                            return (value === item.value);
+                        });
+                        if (index > 0) {
+                            selectObj.selectedIndex = index;
+                        }
                     }
                 }
             }
