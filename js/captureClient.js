@@ -40,7 +40,7 @@ function restore() {
                 const value = item[key];
                 const selectObj = formObj[key];
                 if (selectObj && value) {
-                    const selectOpts = selectObj.options;A
+                    const selectOpts = selectObj.options;
 			        if (selectOpts &&Array.isArray(selectOpts)) {
                         const index = Array.from(selectOpts).findIndex(item => {
                             return (value === item.value);
