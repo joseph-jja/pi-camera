@@ -144,7 +144,7 @@ async function getFormData() {
         }
     };
 
-    const profiles = profileConfig.map(item => {
+    const profiles = (profileConfig && profileConfig.length > 0 ? profileConfig.map(item => {
         const reducedVideo = item.fields.filter(field => {
             return (field.forms.indexOf('videoOptions') > -1);
         }).map(field => {
@@ -173,7 +173,7 @@ async function getFormData() {
         return `<option value="${encodeURIComponent(stringify(item.value))}">${item.name}</option>`;
     }).reduce((acc, next) => {
         return `${acc}${os.EOL}${next}`;
-    });
+    }) : []);
 
     const modeKey = Object.keys(modes) ? Object.keys(modes)[0] : undefined;
     const modeData = (modes[modeKey] ? modes[modeKey].modes : undefined);
