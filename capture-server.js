@@ -45,7 +45,8 @@ const stringify = require(`${basedir}/libs/stringify`),
     shutdownAction = require(`${basedir}/xhrActions/shutdown`),
     updateXHRAction = require(`${basedir}/xhrActions/update`),
     convertXHRAction = require(`${basedir}/xhrActions/convertFileFormat`),
-    imageListAction = require(`${basedir}/xhrActions/imageList`);
+    imageListAction = require(`${basedir}/xhrActions/imageList`),
+    profileConfig = require(`${basedir}/libs/libcamera/configProfiles`);
 
 const app = express();
 app.disable('x-powered-by');
@@ -65,8 +66,6 @@ const jsMjpegFiles = fs.readdirSync(`${basedir}/js/mjpeg`).map(item => {
 const jsFiles = fs.readdirSync(`${basedir}/js`).map(item => {
     return `/js/${item}`;
 }).concat(jsLibFiles).concat(jsMjpegFiles);
-
-const profileConfig = require(`${basedir}/libs/libcamera/configProfiles`);
 
 const VIDEO_HTML = fs.readFileSync(`${basedir}/views/capture.html`).toString();
 
