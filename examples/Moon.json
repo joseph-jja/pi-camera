@@ -1,0 +1,24 @@
+{
+    name: 'Moon Capture - No Tracking',
+    fields: [{
+        name: 'ISO_Gain',
+        value: '--gain 1.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev -1.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'framerate',
+        value: '--framerate 30',
+        forms: ['videoOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1920 --height 1080',
+        forms: ['videoOptions']
+    }, {
+        name: 'imageSize',
+        value: IMAGE_RESOLUTION,
+        forms: ['imageOptions']
+    }]
+}

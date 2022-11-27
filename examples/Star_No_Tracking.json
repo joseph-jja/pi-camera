@@ -1,0 +1,28 @@
+{
+    name: 'Star Capture - No tracking',
+    fields: [{
+        name: 'ISO_Gain',
+        value: '--gain 40.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'EV_compensation',
+        value: '--ev 10.0',
+        forms: ['videoOptions', 'imageOptions']
+    }, {
+        name: 'framerate',
+        value: '--framerate 4',
+        forms: ['videoOptions']
+    }, {
+        name: 'shutter_speed',
+        value: '--shutter 250000',
+        forms: ['imageOptions']
+    }, {
+        name: 'quality',
+        value: '--quality 100',
+        forms: ['imageOptions']
+    }, {
+        name: 'videoSize',
+        value: '--width 1920 --height 1080',
+        forms: ['videoOptions']
+    }]
+}
