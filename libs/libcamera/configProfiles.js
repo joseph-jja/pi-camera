@@ -18,23 +18,25 @@ const HOME_DIR = getEnvVar('HOME');
 const PROFILE_DIR = `${HOME_DIR}/profiles`;
       
 async function getProfiles() {
-    
-    const captureProfiles = [];
-    const [err, profiles] = await asyncWrapper(readdir(PROFILE_DIR));
-    if (!err && Array.isArray(profiles) && profiles.length > 0) {
-        profiles.forEach(async item => {
-            const [e, filedata] = await asyncWrapper(readFile(`${PROFILE_DIR}/${item}`));
-            if (!e && filedata) {
-               try {
-                   const data = JSON.parse(filedata.toString());
-                   captureProfiles.push(data);
-               } catch(e) {
-                   logger.error(stringify(e.message)); 
-               }
-            }
-        });
-    }
-    return captureProfiles;
+
+    return new Promise(async resolve => {
+        const captureProfiles = [];
+        const [err, profiles] = await asyncWrapper(readdir(PROFILE_DIR));
+        if (!err && Array.isArray(profiles) && profiles.length > 0) {
+            profiles.forEach(async item => {
+                const [e, filedata] = await asyncWrapper(readFile(`${PROFILE_DIR}/${item}`));
+                if (!e && filedata) {
+                   try {
+                       const data = JSON.parse(filedata.toString());
+                       captureProfiles.push(data);
+                   } catch(e) {
+                       logger.error(stringify(e.message)); 
+                   }
+                }
+            });
+        }
+        return resolve(captureProfiles);
+    });
 }
 
 function init() {
