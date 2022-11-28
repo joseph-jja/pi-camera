@@ -27,7 +27,7 @@ async function getProfiles() {
             if (!e && filedata) {
                try {
                    const data = JSON.parse(filedata.toString());
-                   CAPTURE_PROFILES.push(data);
+                   captureProfiles.push(data);
                } catch(e) {
                    logger.info(stringify(e)); 
                }
