@@ -17,15 +17,6 @@ const HOME_DIR = getEnvVar('HOME');
 
 const PROFILE_DIR = `${HOME_DIR}/profiles`;
 
-function init() {
-    try {
-        mkdirSync(PROFILE_DIR);
-    } catch (e) {
-        logger.verbose(e);
-    }
-}
-init();
-
 const CAPTURE_PROFILES = [];
       
 async function getProfiles() {
@@ -45,6 +36,16 @@ async function getProfiles() {
         });
     }
 }
+
+function init() {
+    try {
+        mkdirSync(PROFILE_DIR);
+    } catch (e) {
+        logger.verbose(e);
+    }
+    getProfiles();
+}
+init();
 
 const IMAGE_RESOLUTION = (getEnvVar('PIVARITY_16MP') ? '--width 2328 --height 1748' : '--width 1640 --height 1232');
 
