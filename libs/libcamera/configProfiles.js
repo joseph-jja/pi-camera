@@ -28,8 +28,8 @@ async function getProfiles() {
         if (!err && Array.isArray(profiles) && profiles.length > 0) {
             profiles.forEach(item => {
                 const filedata = readFileSync(`${PROFILE_DIR}/${item}`);
+                    console.log('here', filedata.toString());
                 if (filedata) {
-                    console.log('here');
                    try {
                        const data = JSON.parse(filedata.toString());
                        captureProfiles.push(data);
