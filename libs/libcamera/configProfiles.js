@@ -43,10 +43,12 @@ function init() {
     } catch (e) {
         logger.verbose(e);
     }
-    getProfiles();
 }
 init();
 
 const IMAGE_RESOLUTION = (getEnvVar('PIVARITY_16MP') ? '--width 2328 --height 1748' : '--width 1640 --height 1232');
 
-module.exports = CAPTURE_PROFILES;
+module.exports = {
+    profileConfig: CAPTURE_PROFILES,
+    getProfiles
+};
