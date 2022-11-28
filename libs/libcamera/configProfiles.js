@@ -23,7 +23,7 @@ async function getProfiles() {
     const [err, profiles] = await asyncWrapper(readdir(PROFILE_DIR));
     if (!err && Array.isArray(profiles) && profiles.length > 0) {
         profiles.forEach(async item => {
-            const [e, filedata] = await asyncWrapper(readFile(item));
+            const [e, filedata] = await asyncWrapper(readFile(`${PROFILE_DIR}/${item}`));
             if (!e) {
                try {
                    const data = JSON.parse(filedata);
