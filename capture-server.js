@@ -46,10 +46,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     updateXHRAction = require(`${basedir}/xhrActions/update`),
     convertXHRAction = require(`${basedir}/xhrActions/convertFileFormat`),
     imageListAction = require(`${basedir}/xhrActions/imageList`),
-    {
-        profileConfig,
-        getProfiles
-    } = require(`${basedir}/libs/libcamera/configProfiles`);
+    getProfiles = require(`${basedir}/libs/libcamera/configProfiles`);
 
 const app = express();
 app.disable('x-powered-by');
@@ -147,7 +144,7 @@ async function getFormData() {
         }
     };
 
-    await getProfiles();
+    const profileConfig = await getProfiles();
     const profiles = (profileConfig && profileConfig.length > 0 ? profileConfig.map(item => {
         const reducedVideo = item.fields.filter(field => {
             return (field.forms.indexOf('videoOptions') > -1);
