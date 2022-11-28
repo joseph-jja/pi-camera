@@ -1,28 +1,28 @@
 {
-    name: 'Saturn Capture',
-    fields: [{
-        name: 'ISO_Gain',
-        value: '--gain 40.0',
-        forms: ['videoOptions', 'imageOptions']
+    "name": "Saturn Capture PI HQ",
+    "fields": [{
+        "name": "ISO_Gain",
+        "value": "--gain 30.0",
+        "forms": ["videoOptions", "imageOptions"]
     }, {
-        name: 'EV_compensation',
-        value: '--ev 10.0',
-        forms: ['videoOptions', 'imageOptions']
+        "name": "EV_compensation",
+        "value": "--ev 8.0",
+        "forms": ["videoOptions", "imageOptions"]
     }, {
-        name: 'framerate',
-        value: '--framerate 60',
-        forms: ['videoOptions']
+        "name": "framerate",
+        "value": "--framerate 60",
+        "forms": ["videoOptions"]
     }, {
-        name: 'videoSize',
-        value: '--width 1280 --height 720',
-        forms: ['videoOptions']
+        "name": "videoSize",
+        "value": "--width 1280 --height 720",
+        "forms": ["videoOptions"]
     }, {
-        name: 'denoise',
-        value: '--denoise cdn_off',
-        forms: ['videoOptions']
+        "name": "denoise",
+        "value": "--denoise cdn_off",
+        "forms": ["videoOptions"]
     }, {
-        name: 'saturation',
-        value: 0.3,
-        forms: ['videoOptions', 'imageOptions']
+        "name": "saturation",
+        "value": 0.3,
+        "forms": ["videoOptions", "imageOptions"]
     }]
-}, 
+}
