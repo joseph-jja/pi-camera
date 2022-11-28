@@ -1,28 +1,33 @@
 {
-    name: 'Star Capture - No tracking',
-    fields: [{
-        name: 'ISO_Gain',
-        value: '--gain 40.0',
-        forms: ['videoOptions', 'imageOptions']
+    "name": "Star Capture - No tracking",
+    "fields": [{
+        "name": "ISO_Gain",
+        "value": "--gain 40.0",
+        "forms": ["videoOptions", "imageOptions"]
     }, {
-        name: 'EV_compensation',
-        value: '--ev 10.0',
-        forms: ['videoOptions', 'imageOptions']
+        "name": "EV_compensation",
+        "value": "--ev 10.0",
+        "forms": ["videoOptions", "imageOptions"]
     }, {
-        name: 'framerate',
-        value: '--framerate 4',
-        forms: ['videoOptions']
+        "name": "framerate",
+        "value": "--framerate 4",
+        "forms": ["videoOptions"]
     }, {
-        name: 'shutter_speed',
-        value: '--shutter 250000',
-        forms: ['imageOptions']
+        "name": "videoSize",
+        "value": "--width 1920 --height 1080",
+        "forms": ["videoOptions"]
     }, {
-        name: 'quality',
-        value: '--quality 100',
-        forms: ['imageOptions']
+        "name": "shutter_speed",
+        "value": "--shutter 250000",
+        "forms": ["imageOptions"]
     }, {
-        name: 'videoSize',
-        value: '--width 1920 --height 1080',
-        forms: ['videoOptions']
+        "name": "denoise",
+        "value": "--denoise cdn_off",
+        "forms": ["videoOptions"]
+    }, {
+        "name": "saturation",
+        "value": 0.3,
+        "forms": ["videoOptions", "imageOptions"]
     }]
 }
+
