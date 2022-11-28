@@ -29,7 +29,7 @@ async function getProfiles() {
                    const data = JSON.parse(filedata.toString());
                    captureProfiles.push(data);
                } catch(e) {
-                   logger.info(stringify(e)); 
+                   logger.error(stringify(e.message)); 
                }
             }
         });
