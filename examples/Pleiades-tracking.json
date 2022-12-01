@@ -1,0 +1,37 @@
+{
+    "name": "Star Capture - pivarity w/ tracking",
+    "fields": [{
+        "name": "ISO_Gain",
+        "value": "--gain 40.0",
+        "forms": ["videoOptions"]
+    }, {
+        "name": "ISO_Gain",
+        "value": "--gain 8.0",
+        "forms": ["imageOptions"]
+    }, {
+        "name": "EV_compensation",
+        "value": "--ev 10.0",
+        "forms": ["videoOptions"]
+    }, {
+        "name": "EV_compensation",
+        "value": "--ev -4.0",
+        "forms": ["imageOptions"]
+    }, {
+        "name": "framerate",
+        "value": "--framerate 4",
+        "forms": ["videoOptions"]
+    }, {
+        "name": "videoSize",
+        "value": "--width 1920 --height 1080",
+        "forms": ["videoOptions"]
+    }, {
+        "name": "shutter_speed",
+        "value": "--shutter 180000000",
+        "forms": ["imageOptions"]
+    }, {
+        "name": "denoise",
+        "value": "--denoise cdn_off",
+        "forms": ["videoOptions"]
+    }]
+}
+
