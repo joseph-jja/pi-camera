@@ -351,8 +351,22 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         videoRecordingMethod = saveYUV420;
         break;
     case LIBAV_CODEC:
-        extension = MJPEG_CODEC;
         const codecOptions = decodeURIComponent(request.query.codec).split(' ');
+        const codecType = codeOptions[2];
+        switch (codecType) {
+            case 'libopenjpeg':
+                extension = MJPEG_CODEC;
+                break;
+            case 'ljpeg':
+                extension = MJPEG_CODEC;
+                break;
+            case 'tiff':
+                extension = MJPEG_CODEC;
+                break;
+            default:
+                extension = MJPEG_CODEC;
+                break;
+        }
         codecOptions.forEach(opt => {
             if (opt !== LIBAV_CODEC) {
                 spawnOptions.push(opt);
