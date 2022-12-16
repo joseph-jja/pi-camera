@@ -27,7 +27,7 @@ const prefixConfig = [{
 const suffixConfig = [{
     name: 'framerate',
     paramName: '--framerate',
-    values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 60, 90, 120, 150, 180, 200],
+    values: [0.2, 0.5, 1, 2, 4, 8, 10, 15, 30, 40, 50, 60, 90, 120, 150, 180, 200],
     comment: '0.2 = 5 seconds frame and 0.5 = 2 second frame'
 }, {
     name: 'contrast',
@@ -39,8 +39,8 @@ const suffixConfig = [{
     name: 'saturation',
     paramName: '--saturation',
     range: [0, 1],
-    step: 0.1,
-    decimalPlaces: 1
+    step: 0.05,
+    decimalPlaces: 2
 }, {
     name: 'sharpness',
     paramName: '--sharpness',

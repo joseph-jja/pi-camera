@@ -176,8 +176,8 @@ async function getFormData() {
         return `${acc}${os.EOL}${next}`;
     }) : []);
 
-    const modeKey = Object.keys(modes) ? Object.keys(modes)[0] : undefined;
-    const modeData = (modes[modeKey] ? modes[modeKey].modes : undefined);
+    const modeKey = modes && Object.keys(modes) ? Object.keys(modes)[0] : undefined;
+    const modeData = (modeKey && modes[modeKey] ? modes[modeKey].modes : undefined);
 
     const xModes = ((modeData && modeData.length > 0) ? modeData.map(mode => {
         const {
