@@ -352,7 +352,7 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         break;
     case LIBAV_CODEC:
         const codecOptions = decodeURIComponent(request.query.codec).split(' ');
-        const codecType = codeOptions[2];
+        const codecType = codecOptions[2];
         switch (codecType) {
             case 'libopenjpeg':
                 extension = MJPEG_CODEC;
