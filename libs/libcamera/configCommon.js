@@ -39,8 +39,8 @@ const suffixConfig = [{
     name: 'saturation',
     paramName: '--saturation',
     range: [0, 1],
-    step: 0.05,
-    decimalPlaces: 2
+    step: 0.1
+    decimalPlaces: 1
 }, {
     name: 'sharpness',
     paramName: '--sharpness',
