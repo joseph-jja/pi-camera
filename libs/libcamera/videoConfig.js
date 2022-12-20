@@ -14,10 +14,13 @@ const videoConfig = [{
     name: 'mode',
     paramName: '',
     values: [
-        '--mode 1280:960:10',
-        '--mode 1280:800:10',
-        '--mode 1280:720:10',
-        '--mode 640:480:10'
+        '--mode 2028:1520:12:P',
+        '--mode 2028:1080:12:P',
+        '--mode 1332:990:10:P',
+        '--mode 1280:960:10:P',
+        '--mode 1280:800:10:P',
+        '--mode 1280:720:10:P',
+        '--mode 640:480:10:P'
     ]
 }, {
     name: 'quality',
