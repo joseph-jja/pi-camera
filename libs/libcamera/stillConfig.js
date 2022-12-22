@@ -50,7 +50,7 @@ const stillConfig = [{
         '10', '15', '30',
         '60', '120', '180'
     ],
-    comment: 'Time in seconds. (1/2000 fastest of hq?)'
+    comment: 'Time in seconds. (1/2000=500us fastest of hq?)'
 }, {
     name: 'captureRaw',
     paramName: '',
