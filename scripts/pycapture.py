@@ -30,4 +30,5 @@ picam2.start()
 time.sleep(0.1)
 
 data = io.BytesIO()
+picam2.capture_file(data, format='png')
 print(data.getbuffer().nbytes)
