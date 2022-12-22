@@ -21,8 +21,10 @@ from picamera2 import Picamera2
 picam2 = Picamera2()
 
 #picam2.preview_configuration
-config = picam2.still_configuration.size = (1920, 1080)
-#config = picam2.still_configuration.shutter = 100
+picam2.still_configuration.size = (1920, 1080)
+#picam2.still_configuration.shutter = 8000
+#picam2.still_configuration.color_space = 'SBGGR10'
+config = picam2.still_configuration
 
 picam2.configure(config)
 
