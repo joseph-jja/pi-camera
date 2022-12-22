@@ -16,12 +16,16 @@ const stillConfig = [{
     name: 'shutter_speed',
     paramName: '--shutter',
     values: [
+        // about 100us
         Math.round(1 / 10000 * MULTIPLIER_FOR_SHUTTER_SPEED),
         Math.round(1 / 6000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        // about 200us
         Math.round(1 / 5000 * MULTIPLIER_FOR_SHUTTER_SPEED),
         Math.round(1 / 4000 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        // this is about 333us
         Math.round(1 / 3000 * MULTIPLIER_FOR_SHUTTER_SPEED),
         Math.round(1 / 2500 * MULTIPLIER_FOR_SHUTTER_SPEED),
+        // this is about 500us
         Math.round(1 / 2000 * MULTIPLIER_FOR_SHUTTER_SPEED),
         Math.round(1 / 1500 * MULTIPLIER_FOR_SHUTTER_SPEED),
         Math.round(1 / 1000 * MULTIPLIER_FOR_SHUTTER_SPEED),
@@ -46,7 +50,7 @@ const stillConfig = [{
         '10', '15', '30',
         '60', '120', '180'
     ],
-    comment: 'Time in seconds, 1/3000 is fastest?'
+    comment: 'Time in seconds. (1/2000 fastest of hq?)'
 }, {
     name: 'captureRaw',
     paramName: '',
