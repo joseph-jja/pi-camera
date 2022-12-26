@@ -221,10 +221,10 @@ function saveImagesData(request, response) {
             status: `Saved a total of ${total} images`
         });
         directStream(getVideoUpdateOptions());
-    }
+    };
 
     const count = 0;
-    callSaveImage(options, count, total, callback)
+    callSaveImage(options, count, total, callback);
 
     captureEmitter.emit('button-exec', {
         method: 'saveImagesData',
@@ -316,7 +316,10 @@ const MJPEG_CODEC = 'mjpeg',
     YUV420_CODEC = 'yuv420',
     H264_CODEC = 'h264',
     RAW_CODEC = 'raw',
-    LIBAV_CODEC = 'libav';
+    LIBAV_MJPEGTS_CODEC = 'mjpegts', 
+    LIBAV_LIBOPENJPEG_CODEC = 'libopenjpeg', 
+    LIBAV_LJPEG_CODEC = 'ljpeg',
+    LIBAV_TIFF_CODEC = 'tiff';
 
 function saveVideoData(codec, options = [], request, response, videoConfig) {
 
@@ -350,28 +353,28 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         extension = YUV420_CODEC;
         videoRecordingMethod = saveYUV420;
         break;
-    case LIBAV_CODEC:
-        const codecOptions = decodeURIComponent(request.query.codec).split(' ');
-        const codecType = codecOptions[2];
-        switch (codecType) {
-            case 'libopenjpeg':
-                extension = MJPEG_CODEC;
-                break;
-            case 'ljpeg':
-                extension = MJPEG_CODEC;
-                break;
-            case 'tiff':
-                extension = MJPEG_CODEC;
-                break;
-            default:
-                extension = MJPEG_CODEC;
-                break;
-        }
-        codecOptions.forEach(opt => {
-            if (opt !== LIBAV_CODEC) {
-                spawnOptions.push(opt);
-            }
-        });
+    case LIBAV_MJPEGTS_CODEC:
+        extension = 'ts';
+        spawnOptions.push('--libav-format');
+        spawnOptions.push('mpegts');
+        videoRecordingMethod = saveLibav;
+        break;
+    case LIBAV_LIBOPENJPEG_CODEC:
+        extension = MJPEG_CODEC;
+        spawnOptions.push('--libav-format');
+        spawnOptions.push('libopenjpeg');
+        videoRecordingMethod = saveLibav;
+        break;
+    case LIBAV_LJPEG_CODEC:
+        extension = MJPEG_CODEC;
+        spawnOptions.push('--libav-format');
+        spawnOptions.push('ljpeg');
+        videoRecordingMethod = saveLibav;
+        break;
+    case LIBAV_LJPEG_CODEC:
+        extension = MJPEG_CODEC;
+        spawnOptions.push('--libav-format');
+        spawnOptions.push('tiff');
         videoRecordingMethod = saveLibav;
         break;
     default:

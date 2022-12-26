@@ -47,6 +47,7 @@ module.exports = (request, response) => {
             });
         });
     } else if (filename.endsWith('.mjpeg') ||
+        filename.endsWith('.ts') ||
         filename.endsWith('.mp4') ||
         filename.endsWith('.h264') ||
         filename.endsWith('.raw')) {
