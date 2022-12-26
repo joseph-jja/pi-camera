@@ -317,9 +317,9 @@ const MJPEG_CODEC = 'mjpeg',
     H264_CODEC = 'h264',
     RAW_CODEC = 'raw',
     LIBAV_MJPEGTS_CODEC = 'mjpegts', 
-    LIBAV_LIBOPENJPEG_CODEC = 'libopenjpeg', 
-    LIBAV_LJPEG_CODEC = 'ljpeg',
-    LIBAV_TIFF_CODEC = 'tiff';
+    LIBAV_MKS_CODEC = 'mks', 
+    LIBAV_FITS_CODEC = 'fits', 
+    LIBAV_AYUV_CODEC = 'ayuv';
 
 function saveVideoData(codec, options = [], request, response, videoConfig) {
 
@@ -359,25 +359,25 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         spawnOptions.push('mpegts');
         videoRecordingMethod = saveLibav;
         break;
-    case LIBAV_LIBOPENJPEG_CODEC:
-        extension = MJPEG_CODEC;
+    case LIBAV_MKS_CODEC:
+        extension = 'mks';
         spawnOptions.push('--libav-format');
-        spawnOptions.push('libopenjpeg');
+        spawnOptions.push('mks');
         videoRecordingMethod = saveLibav;
         break;
-    case LIBAV_LJPEG_CODEC:
-        extension = MJPEG_CODEC;
+    case LIBAV_AYUV_CODEC:
+        extension = 'avi';
         spawnOptions.push('--libav-format');
-        spawnOptions.push('ljpeg');
+        spawnOptions.push('ayuv');
         videoRecordingMethod = saveLibav;
         break;
-    case LIBAV_LJPEG_CODEC:
-        extension = MJPEG_CODEC;
+   case LIBAV_FITS_CODEC:
+        extension = 'fits';
         spawnOptions.push('--libav-format');
-        spawnOptions.push('tiff');
+        spawnOptions.push('fits');
         videoRecordingMethod = saveLibav;
         break;
-    default:
+     default:
         extension = MJPEG_CODEC;
         videoRecordingMethod = saveMjpeg;
         break;

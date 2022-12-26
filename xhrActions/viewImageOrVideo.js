@@ -48,6 +48,8 @@ module.exports = (request, response) => {
         });
     } else if (filename.endsWith('.mjpeg') ||
         filename.endsWith('.ts') ||
+        filename.endsWith('.avi') ||
+        filename.endsWith('.mks') ||
         filename.endsWith('.mp4') ||
         filename.endsWith('.h264') ||
         filename.endsWith('.raw')) {
