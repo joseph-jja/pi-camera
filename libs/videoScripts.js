@@ -385,12 +385,6 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
 
     const saveDataProcess = videoRecordingMethod(spawnOptions);
     const logData = [];
-    if (codec === RAW_CODEC) {
-        saveDataProcess.stderr.on('data', data => {
-            logger.info(data.toString());
-            logData.push(data.toString());
-        });
-    }
     saveDataProcess.on('close', (code) => {
         response.writeHead(200, {});
         response.end(`Finished with code ${code} using codeec ${codec} with options ${stringify(spawnOptions)}.`);
