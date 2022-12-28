@@ -313,6 +313,7 @@ async function directStream(options = []) {
 const MJPEG_CODEC = 'mjpeg',
     H264_CODEC = 'h264',
     YUV420_CODEC = 'yuv420',
+    LIBAV_H264_CODEC = 'libavh264', 
     LIBAV_MJPEGTS_CODEC = 'mjpegts', 
     LIBAV_AVI_CODEC = 'avi';
 
@@ -340,6 +341,12 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
             });
         }
         break;
+    case LIBAV_H264_CODEC:
+        extension = 'h264';
+        spawnOptions.push('--libav-format');
+        spawnOptions.push('h264');
+        videoRecordingMethod = saveLibav;
+        break;        
     case YUV420_CODEC:
         extension = 'yuv';
         videoRecordingMethod = saveLibav;
