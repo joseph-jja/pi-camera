@@ -24,8 +24,6 @@ const stringify = require(`${basedir}/libs/stringify`),
         setVideoUpdateOptions,
         streamMjpeg,
         saveH264,
-        saveYUV420,
-        saveRAW,
         saveMjpeg,
         saveLibav,
         initVideo
@@ -313,13 +311,10 @@ async function directStream(options = []) {
 }
 
 const MJPEG_CODEC = 'mjpeg',
-    YUV420_CODEC = 'yuv420',
     H264_CODEC = 'h264',
-    RAW_CODEC = 'raw',
+    YUV420_CODEC = 'yuv420',
     LIBAV_MJPEGTS_CODEC = 'mjpegts', 
-    LIBAV_MKS_CODEC = 'mks', 
-    LIBAV_FITS_CODEC = 'fits', 
-    LIBAV_AYUV_CODEC = 'ayuv';
+    LIBAV_AVI_CODEC = 'avi';
 
 function saveVideoData(codec, options = [], request, response, videoConfig) {
 
@@ -333,10 +328,6 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     let extension = MJPEG_CODEC,
         videoRecordingMethod = saveMjpeg;
     switch (codec) {
-    case RAW_CODEC:
-        extension = RAW_CODEC;
-        videoRecordingMethod = saveRAW;
-        break;
     case H264_CODEC:
         extension = H264_CODEC;
         videoRecordingMethod = saveH264;
@@ -350,8 +341,8 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         }
         break;
     case YUV420_CODEC:
-        extension = YUV420_CODEC;
-        videoRecordingMethod = saveYUV420;
+        extension = 'yuv';
+        videoRecordingMethod = saveLibav;
         break;
     case LIBAV_MJPEGTS_CODEC:
         extension = 'ts';
@@ -359,23 +350,10 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         spawnOptions.push('mpegts');
         videoRecordingMethod = saveLibav;
         break;
-    case LIBAV_MKS_CODEC:
-        extension = 'mks';
-        spawnOptions.push('--libav-format');
-        spawnOptions.push('mks');
-        videoRecordingMethod = saveLibav;
-        break;
-    case LIBAV_AYUV_CODEC:
+    case LIBAV_AVI_CODEC:
         extension = 'avi';
-        spawnOptions.push('--libav-format');
-        spawnOptions.push('ayuv');
         videoRecordingMethod = saveLibav;
         break;
-   case LIBAV_FITS_CODEC:
-        extension = 'fits';
-        spawnOptions.push('--libav-format');
-        spawnOptions.push('fits');
-        videoRecordingMethod = saveLibav;
         break;
      default:
         extension = MJPEG_CODEC;

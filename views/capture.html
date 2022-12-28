@@ -129,12 +129,11 @@
                     </select>
                     <br><br>
                     <select name="recordingCodec">
-                        <option value="mjpeg" selected>mjpeg</option>
-                        <option value="mjpegts">libav mjpegts</option>
-                        <option value="ayuv">libav ayuv (avi)</option>
-                        <option value="mks">libav mks</option>
-                        <option value="fits">libav fits</option>
-                        <option value="h264" selected>h264</option>
+                        <option value="mjpeg" selected>mjpeg (up to 30fps)</option>
+                        <option value="yuv420">libav yuv (up to 30fps)</option>
+                        <option value="mjpegts">libav mjpegts (up to 30fps)</option>
+                        <option value="avi">libav avi (up to 120fps@1332x990)</option>
+                        <option value="h264" selected>h264 (up to 60fps@720p)</option>
                     </select>
                     <br><br>
                     <select name="previewVideo">

@@ -13,8 +13,7 @@ const DEFAULT_OPTIONS = [];
 
 const MJPEG_CODEC = 'mjpeg',
     H264_CODEC = 'h264',
-    LIBAV_CODEC = 'libav',
-    YUV420_CODEC = 'yuv420';
+    LIBAV_CODEC = 'libav;
 
 let lastVideoUpdateOpts;
 
@@ -98,23 +97,6 @@ async function piStreamMjpeg(options = []) {
     });
 }
 
-function saveRAW(options = []) {
-
-    const defaultOptions = [];
-    if (options.indexOf('-t') < 0) {
-        defaultOptions.push('-t');
-        defaultOptions.push(60000);
-    }
-
-    const spawnOptions = defaultOptions.concat(options);
-
-    logger.info(`Libcamera video save RAW options: ${stringify(spawnOptions)}`);
-
-    return spawn(RAW_VIDEO, spawnOptions, {
-        env: process.env
-    });
-}
-
 function saveVideo(codec = 'mjpeg', options = []) {
     const defaultOptions = [];
     if (options.indexOf('-t') < 0) {
@@ -124,9 +106,6 @@ function saveVideo(codec = 'mjpeg', options = []) {
 
     defaultOptions.push('--codec')
     switch (codec) {
-    case YUV420_CODEC:
-        defaultOptions.push(YUV420_CODEC);
-        break;
     case H264_CODEC:
         defaultOptions.push(H264_CODEC);
         break;
@@ -155,10 +134,6 @@ function saveMjpeg(options = []) {
     return saveVideo(MJPEG_CODEC, options);
 }
 
-function saveYUV420(options = []) {
-    return saveVideo(YUV420_CODEC, options);
-}
-
 function saveLibav(options = []) {
     return saveVideo(LIBAV_CODEC, options);
 }
@@ -169,8 +144,6 @@ module.exports = {
     setVideoUpdateOptions,
     streamMjpeg: streamCommand,
     saveH264,
-    saveRAW,
     saveMjpeg,
-    saveYUV420,
     saveLibav
 };
