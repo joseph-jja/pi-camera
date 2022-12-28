@@ -13,7 +13,7 @@ const DEFAULT_OPTIONS = [];
 
 const MJPEG_CODEC = 'mjpeg',
     H264_CODEC = 'h264',
-    LIBAV_CODEC = 'libav;
+    LIBAV_CODEC = 'libav';
 
 let lastVideoUpdateOpts;
 
