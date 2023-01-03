@@ -93,7 +93,7 @@ async function piStreamMjpeg(options = []) {
     });
 }
 
-function saveVideo(codec = 'mjpeg', options = []) {
+function saveVideo(options = []) {
     const defaultOptions = [];
     if (options.indexOf('-t') < 0) {
         defaultOptions.push('-t');
