@@ -363,21 +363,28 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     case YUV420_CODEC:
         extension = 'yuv';
         videoRecordingMethod = saveLibav;
+        spawnOptions.push('--quality');
+        spawnOptions.push(100);    
         break;
     case LIBAV_MJPEGTS_CODEC:
         extension = 'ts';
         spawnOptions.push('--libav-format');
         spawnOptions.push('mpegts');
+        spawnOptions.push('--quality');
+        spawnOptions.push(100);    
         videoRecordingMethod = saveLibav;
         break;
     case LIBAV_AVI_CODEC:
         extension = 'avi';
         videoRecordingMethod = saveLibav;
-        break;
+        spawnOptions.push('--quality');
+        spawnOptions.push(100);    
         break;
      default:
         extension = MJPEG_CODEC;
         videoRecordingMethod = saveMjpeg;
+        spawnOptions.push('--quality');
+        spawnOptions.push(100);    
         break;
     }
 
