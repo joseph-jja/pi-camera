@@ -100,6 +100,9 @@ function getH264Bitrate(videoConfig, paramString) {
         } else if (wxh === 2073600) {
             // 1920 x 1080
             bitrate = 85000000;
+        } else if (wxh === 2190240) {
+            // 2028 x 1080
+            bitrate = 85000000;
         } else {
             // everything else
             bitrate = 18000000;
