@@ -107,7 +107,7 @@ function getH264Bitrate(videoConfig, paramString) {
             // everything else
             bitrate = 18000000;
         }
-        return `--bitrate ${bitrate}`;
+        return `--bitrate ${bitrate} --profile high`;
     }
     return '';
 }
