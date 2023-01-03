@@ -209,7 +209,7 @@ function saveImagesData(request, response) {
     // no preview for saving 
     if (request.query.preview && decodeURIComponent(request.query.preview) === '--nopreview') {
         spawnOptions.push('--nopreview');
-    }    
+    }
 
     const callback = (code) => {
         response.writeHead(200, {});
@@ -313,8 +313,8 @@ async function directStream(options = []) {
 const MJPEG_CODEC = 'mjpeg',
     H264_CODEC = 'h264',
     YUV420_CODEC = 'yuv420',
-    LIBAV_H264_CODEC = 'libavh264', 
-    LIBAV_MJPEGTS_CODEC = 'mjpegts', 
+    LIBAV_H264_CODEC = 'libavh264',
+    LIBAV_MJPEGTS_CODEC = 'mjpegts',
     LIBAV_AVI_CODEC = 'avi';
 
 function saveVideoData(codec, options = [], request, response, videoConfig) {
@@ -359,32 +359,32 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
             });
         }
         videoRecordingMethod = saveLibav;
-        break;        
+        break;
     case YUV420_CODEC:
         extension = 'yuv';
         videoRecordingMethod = saveLibav;
         spawnOptions.push('--quality');
-        spawnOptions.push(100);    
+        spawnOptions.push(100);
         break;
     case LIBAV_MJPEGTS_CODEC:
         extension = 'ts';
         spawnOptions.push('--libav-format');
         spawnOptions.push('mpegts');
         spawnOptions.push('--quality');
-        spawnOptions.push(100);    
+        spawnOptions.push(100);
         videoRecordingMethod = saveLibav;
         break;
     case LIBAV_AVI_CODEC:
         extension = 'avi';
         videoRecordingMethod = saveLibav;
         spawnOptions.push('--quality');
-        spawnOptions.push(100);    
+        spawnOptions.push(100);
         break;
-     default:
+    default:
         extension = MJPEG_CODEC;
         videoRecordingMethod = saveMjpeg;
         spawnOptions.push('--quality');
-        spawnOptions.push(100);    
+        spawnOptions.push(100);
         break;
     }
 
