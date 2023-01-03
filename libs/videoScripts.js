@@ -326,6 +326,12 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         spawnOptions.push('--nopreview');
     }
 
+    spawnOptions.push('--flush');
+    spawnOptions.push('--lores-width');
+    spawnOptions.push(0);
+    spawnOptions.push('--lores-height');
+    spawnOptions.push(0);
+
     let extension = MJPEG_CODEC,
         videoRecordingMethod = saveMjpeg;
     switch (codec) {
