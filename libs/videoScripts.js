@@ -406,6 +406,11 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         spawnOptions.push(recordingTime);
     }
 
+    if (spawnOptions.indexOf('-t') < 0) {
+        spawnOptions.push('-t');
+        spawnOptions.push(60000);
+    }
+
     const running = killAllRunning();
     logger.info('Results of stopping all: ' + stringify(running));
 

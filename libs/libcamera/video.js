@@ -94,15 +94,10 @@ async function piStreamMjpeg(options = []) {
 }
 
 function saveVideo(options = []) {
-    const defaultOptions = [];
-    if (options.indexOf('-t') < 0) {
-        defaultOptions.push('-t');
-        defaultOptions.push(60000);
-    }
 
-    const spawnOptions = defaultOptions.concat(options);
+    const spawnOptions = [].concat(options);
 
-    logger.info(`Libcamera video save ${codec} options: ${stringify(spawnOptions)}`);
+    logger.info(`Libcamera video save with options: ${stringify(spawnOptions)}`);
 
     return spawn(VIDEO, spawnOptions, {
         env: process.env
