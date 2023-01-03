@@ -345,6 +345,13 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         extension = 'h264';
         spawnOptions.push('--libav-format');
         spawnOptions.push('h264');
+        const libavOptions = options.join(' ');
+        const avbitRate = getH264Bitrate(videoConfig, libavOptions);
+        if (avbitRate && avbitRate.length > 0) {
+            avbitRate.split(' ').forEach(x => {
+                spawnOptions.push(x);
+            });
+        }
         videoRecordingMethod = saveLibav;
         break;        
     case YUV420_CODEC:
