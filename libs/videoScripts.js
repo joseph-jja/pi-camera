@@ -23,9 +23,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         getVideoUpdateOptions,
         setVideoUpdateOptions,
         streamMjpeg,
-        saveH264,
-        saveMjpeg,
-        saveLibav,
+        saveVideo,
         initVideo
     } = require(`${basedir}/libs/libcamera/video`),
     {
@@ -331,12 +329,12 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     spawnOptions.push('--lores-height');
     spawnOptions.push(0);
 
-    let extension = MJPEG_CODEC,
-        videoRecordingMethod = saveMjpeg;
+    let extension = MJPEG_CODEC;
     switch (codec) {
     case H264_CODEC:
         extension = H264_CODEC;
-        videoRecordingMethod = saveH264;
+        spawnOptions.push('--codec');
+        spawnOptions.push('h264');
 
         const optionsStr = options.join(' ');
         const bitRate = getH264Bitrate(videoConfig, optionsStr);
@@ -348,8 +346,11 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         break;
     case LIBAV_H264_CODEC:
         extension = 'h264';
+        spawnOptions.push('--codec');
+        spawnOptions.push('libav');
         spawnOptions.push('--libav-format');
         spawnOptions.push('h264');
+
         const libavOptions = options.join(' ');
         const avbitRate = getH264Bitrate(videoConfig, libavOptions);
         if (avbitRate && avbitRate.length > 0) {
@@ -357,31 +358,34 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
                 spawnOptions.push(x);
             });
         }
-        videoRecordingMethod = saveLibav;
         break;
     case YUV420_CODEC:
         extension = 'yuv';
-        videoRecordingMethod = saveLibav;
+        spawnOptions.push('--codec');
+        spawnOptions.push('libav');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
         break;
     case LIBAV_MJPEGTS_CODEC:
         extension = 'ts';
+        spawnOptions.push('--codec');
+        spawnOptions.push('libav');
         spawnOptions.push('--libav-format');
         spawnOptions.push('mpegts');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
-        videoRecordingMethod = saveLibav;
         break;
     case LIBAV_AVI_CODEC:
         extension = 'avi';
-        videoRecordingMethod = saveLibav;
+        spawnOptions.push('--codec');
+        spawnOptions.push('libav');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
         break;
     default:
         extension = MJPEG_CODEC;
-        videoRecordingMethod = saveMjpeg;
+        spawnOptions.push('--codec');
+        spawnOptions.push('mjpeg');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
         break;
@@ -409,7 +413,7 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     directStreamProcess = undefined;
     imageStreamProcess = undefined;
 
-    const saveDataProcess = videoRecordingMethod(spawnOptions);
+    const saveDataProcess = saveVideo(spawnOptions);
     const logData = [];
     saveDataProcess.on('close', (code) => {
         response.writeHead(200, {});

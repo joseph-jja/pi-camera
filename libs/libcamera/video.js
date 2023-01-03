@@ -11,10 +11,6 @@ const stringify = require(`${basedir}/libs/stringify`),
 
 const DEFAULT_OPTIONS = [];
 
-const MJPEG_CODEC = 'mjpeg',
-    H264_CODEC = 'h264',
-    LIBAV_CODEC = 'libav';
-
 let lastVideoUpdateOpts;
 
 function getVideoUpdateOptions() {
@@ -104,19 +100,6 @@ function saveVideo(codec = 'mjpeg', options = []) {
         defaultOptions.push(60000);
     }
 
-    defaultOptions.push('--codec')
-    switch (codec) {
-    case H264_CODEC:
-        defaultOptions.push(H264_CODEC);
-        break;
-    case LIBAV_CODEC:
-        defaultOptions.push(LIBAV_CODEC);
-        break;
-    default:
-        defaultOptions.push(MJPEG_CODEC);
-        break;
-    }
-
     const spawnOptions = defaultOptions.concat(options);
 
     logger.info(`Libcamera video save ${codec} options: ${stringify(spawnOptions)}`);
@@ -126,24 +109,10 @@ function saveVideo(codec = 'mjpeg', options = []) {
     });
 }
 
-function saveH264(options = []) {
-    return saveVideo(H264_CODEC, options);
-}
-
-function saveMjpeg(options = []) {
-    return saveVideo(MJPEG_CODEC, options);
-}
-
-function saveLibav(options = []) {
-    return saveVideo(LIBAV_CODEC, options);
-}
-
 module.exports = {
     initVideo,
     getVideoUpdateOptions,
     setVideoUpdateOptions,
     streamMjpeg: streamCommand,
-    saveH264,
-    saveMjpeg,
-    saveLibav
+    saveVideo
 };
