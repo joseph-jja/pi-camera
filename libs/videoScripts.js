@@ -329,20 +329,23 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     spawnOptions.push('--lores-height');
     spawnOptions.push(0);
 
+    // need to set bitrates to get any decent images for h264 or avi
+    if (codec === H264_CODEC || codec === LIBAV_H264_CODEC || codec === LIBAV_AVI_CODEC) {
+        const captureOptions = options.join(' ');
+        const bitRate = getH264Bitrate(videoConfig, captureOptions);
+        if (bitRate && bitRate.length > 0) {
+            bitRate.split(' ').forEach(x => {
+                spawnOptions.push(x);
+            });
+        }
+    }
+
     let extension = MJPEG_CODEC;
     switch (codec) {
     case H264_CODEC:
         extension = H264_CODEC;
         spawnOptions.push('--codec');
         spawnOptions.push('h264');
-
-        const optionsStr = options.join(' ');
-        const bitRate = getH264Bitrate(videoConfig, optionsStr);
-        if (bitRate && bitRate.length > 0) {
-            bitRate.split(' ').forEach(x => {
-                spawnOptions.push(x);
-            });
-        }
         break;
     case LIBAV_H264_CODEC:
         extension = 'h264';
@@ -350,14 +353,15 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         spawnOptions.push('libav');
         spawnOptions.push('--libav-format');
         spawnOptions.push('h264');
-
-        const libavOptions = options.join(' ');
-        const avbitRate = getH264Bitrate(videoConfig, libavOptions);
-        if (avbitRate && avbitRate.length > 0) {
-            avbitRate.split(' ').forEach(x => {
-                spawnOptions.push(x);
-            });
-        }
+        break;
+    case LIBAV_AVI_CODEC:
+        extension = 'avi';
+        spawnOptions.push('--codec');
+        spawnOptions.push('libav');
+        spawnOptions.push('--libav-format');
+        spawnOptions.push('avi');
+        spawnOptions.push('--quality');
+        spawnOptions.push(100);
         break;
     case YUV420_CODEC:
         extension = 'yuv';
@@ -374,15 +378,6 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         spawnOptions.push('libav');
         spawnOptions.push('--libav-format');
         spawnOptions.push('mpegts');
-        spawnOptions.push('--quality');
-        spawnOptions.push(100);
-        break;
-    case LIBAV_AVI_CODEC:
-        extension = 'avi';
-        spawnOptions.push('--codec');
-        spawnOptions.push('libav');
-        spawnOptions.push('--libav-format');
-        spawnOptions.push('avi');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
         break;
