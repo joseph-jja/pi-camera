@@ -363,6 +363,8 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         extension = 'yuv';
         spawnOptions.push('--codec');
         spawnOptions.push('libav');
+        //spawnOptions.push('--libav-format');
+        //spawnOptions.push('yuv4mpegpipe');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
         break;
@@ -379,6 +381,8 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         extension = 'avi';
         spawnOptions.push('--codec');
         spawnOptions.push('libav');
+        spawnOptions.push('--libav-format');
+        spawnOptions.push('avi');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
         break;
