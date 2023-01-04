@@ -330,7 +330,9 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     spawnOptions.push(0);
 
     // need to set bitrates to get any decent images for h264 or avi
-    if (codec === H264_CODEC || codec === LIBAV_H264_CODEC || codec === LIBAV_AVI_CODEC) {
+    if (codec === H264_CODEC || codec === LIBAV_H264_CODEC ||
+        codec === LIBAV_AVI_CODEC || YUV420_CODEC) {
+
         const captureOptions = options.join(' ');
         const bitRate = getH264Bitrate(videoConfig, captureOptions);
         if (bitRate && bitRate.length > 0) {
@@ -367,8 +369,6 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         extension = 'yuv';
         spawnOptions.push('--codec');
         spawnOptions.push('libav');
-        //spawnOptions.push('--libav-format');
-        //spawnOptions.push('yuv4mpegpipe');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
         break;
