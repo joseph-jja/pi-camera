@@ -331,7 +331,8 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
 
     // need to set bitrates to get any decent images for h264 or avi
     if (codec === H264_CODEC || codec === LIBAV_H264_CODEC ||
-        codec === LIBAV_AVI_CODEC || YUV420_CODEC) {
+        codec === LIBAV_AVI_CODEC || codec === YUV420_CODEC ||
+        codec === LIBAV_MJPEGTS_CODEC) {
 
         const captureOptions = options.join(' ');
         const bitRate = getH264Bitrate(videoConfig, captureOptions);
