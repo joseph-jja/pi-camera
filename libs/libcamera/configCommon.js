@@ -24,6 +24,8 @@ const prefixConfig = [{
     ]
 }];
 
+// brightness -1.0 to 1.0
+// contrast, sat and sharp to 15.99?
 const suffixConfig = [{
     name: 'framerate',
     paramName: '--framerate',
@@ -92,12 +94,12 @@ const brightnessConfig = [{
 }, {
     name: 'metering',
     paramName: '--metering',
-    values: ['centre', 'spot', 'average'], // 'custom'
+    values: ['centre', 'spot', 'average', 'matrix'], // 'custom'
     defaultValue: '--metering centre'
 }, {
     name: 'exposure_profile',
     paramName: '--exposure',
-    values: ['normal', 'sport', 'long'],
+    values: ['normal', 'sport', 'short', 'long'],
     defaultvalue: '--exposure normal'
 }];
 
