@@ -1,3 +1,5 @@
+const { loggers } = require('winston');
+
 const dns = require('dns').promises,
     statSync = require('fs').statSync,
     childProcess = require('child_process'),
@@ -74,6 +76,7 @@ async function listImageFiles(imageDir) {
     };
 }
 
+const GOP_SIZE = 12; // BPP ?
 function getH264Bitrate(videoConfig, paramString) {
 
     const videoSize = videoConfig.filter(item => {
@@ -108,6 +111,16 @@ function getH264Bitrate(videoConfig, paramString) {
             return parseInt(item);
         });
         const wxh = width * height;
+        let bitrateMaxNeeded = 0;
+        if (videoFramerateValue > 0) {
+            const fpsGOP = videoFramerateValue / GOP_SIZE;
+            const pixelsPerFPS = videoFramerateValue * wxh;
+            bitrateMaxNeeded = Math.ceil(pixelsPerFPS / fpsGOP);
+            loggers.info(`Bitrate max needed: ${bitrateMaxNeeded}`);
+        }
+
+        // 62208000
+
         let bitrate = 18000000;
         if (wxh >= 2190240) {
              // 2028 x 1080 or larger
@@ -135,6 +148,9 @@ function getH264Bitrate(videoConfig, paramString) {
         } else {
             // everything else
             bitrate = 18000000;
+        }
+        if (bitrateMaxNeeded > 0 && bitrate < bitrateMaxNeeded) {
+            loggers.info(`Using slower bitrate than needed ${bitrate} vs ${bitrateMaxNeeded}`);
         }
         return `--bitrate ${bitrate} --profile high`;
     }
