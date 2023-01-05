@@ -77,7 +77,7 @@ async function listImageFiles(imageDir) {
     };
 }
 
-const GOP_SIZE = 12; // BPP ?
+const GOP_SIZE = 16; // BPP ?
 function getH264Bitrate(videoConfig, paramString) {
 
     const videoSize = videoConfig.filter(item => {
@@ -112,16 +112,6 @@ function getH264Bitrate(videoConfig, paramString) {
             return parseInt(item);
         });
         const wxh = width * height;
-        let bitrateMaxNeeded = 0;
-        if (videoFramerateValue > 0) {
-            const fpsGOP = videoFramerateValue / GOP_SIZE;
-            const pixelsPerFPS = videoFramerateValue * wxh;
-            bitrateMaxNeeded = Math.ceil(pixelsPerFPS / fpsGOP);
-            logger.info(`Bitrate max needed: ${bitrateMaxNeeded}`);
-        }
-
-        // 62208000
-
         let bitrate = 18000000;
         if (wxh >= 2190240) {
              // 2028 x 1080 or larger
@@ -150,9 +140,17 @@ function getH264Bitrate(videoConfig, paramString) {
             // everything else
             bitrate = 18000000;
         }
-        if (bitrateMaxNeeded > 0 && bitrate < bitrateMaxNeeded) {
-            logger.info(`Using slower bitrate than needed ${bitrate} vs ${bitrateMaxNeeded}`);
+
+        if (videoFramerateValue > 0) {
+            const fpsGOP = videoFramerateValue / GOP_SIZE;
+            const pixelsPerFPS = videoFramerateValue * wxh;
+            const bitrateMaxNeeded = Math.ceil(pixelsPerFPS / fpsGOP);
+            if (bitrateMaxNeeded > 0 && bitrate < bitrateMaxNeeded) {
+                logger.info(`Using slower bitrate than needed ${bitrate} vs ${bitrateMaxNeeded}, adjusting bitrate!`);
+                bitrate = bitrateMaxNeeded;
+            }
         }
+        
         return `--bitrate ${bitrate} --profile high`;
     }
     return '';
