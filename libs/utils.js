@@ -1,11 +1,12 @@
-const { loggers } = require('winston');
-
 const dns = require('dns').promises,
     statSync = require('fs').statSync,
     childProcess = require('child_process'),
     {
         readdir
     } = require('fs');
+
+const basedir = process.cwd(),
+    logger = require(`${basedir}/libs/logger`)(__filename);
 
 function padNumber(num) {
     return new String(num).padStart(2, 0);
