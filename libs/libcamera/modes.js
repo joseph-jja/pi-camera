@@ -26,6 +26,8 @@ OR
 
 const CAMERA_ID_RE = /(ov\d*|imx\d*) (\[\d*x\d*\])/;
 
+const CAMERA_BITS = /\s*\'S([RGB]*)(\d*)(\_?)(C?S?I?\d?P?)\'\s*:\s*(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
+
 const CAMERA_MODES = /(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
 
 async function getModes(configFile) {
@@ -41,10 +43,18 @@ async function getModes(configFile) {
             input: modes
         });
 
+        let lastCameraBits,
+            packed;
         rl.on('line', line => {
 
             const cameraId = line.match(CAMERA_ID_RE),
-                cameraModes = line.match(CAMERA_MODES);
+                cameraModes = line.match(CAMERA_MODES),
+                cameraBits = line.match(CAMERA_BITS);
+            
+            if (cameraBits && cameraBits.length > 2) {
+                lastCameraBits = cameraBits[2];
+                packed = cameraBits[4];
+            }
 
             if (cameraId && cameraId.length > 1) {
                 lastCameraId = cameraId[1];
@@ -63,8 +73,10 @@ async function getModes(configFile) {
                 const [x, y] = resolution.split('x'),
                     [bx, by] = binningResolution.split('x');
                 const binned = `${bx/x}x${by/y}`;
+                const bits = (lastCameraBits && lastCameraBits.length > 0 ? `:${lastCameraBits}` : '');
+                const packing = (bits.length > 0 && packed && packed.length > 0? `:${packed}` : '');
                 const mode = {
-                    resolution: `--mode ${x}:${y}`,
+                    resolution: `--mode ${x}:${y}${bits}${packing}`,
                     resX: x,
                     resY: y,
                     fps: cameraModes[2],
