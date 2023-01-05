@@ -330,19 +330,14 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     spawnOptions.push(0);
 
     // need to set bitrates to get any decent images for h264 or avi
-    if (codec === H264_CODEC || codec === LIBAV_H264_CODEC ||
-        codec === LIBAV_AVI_CODEC || codec === YUV420_CODEC ||
-        codec === LIBAV_MJPEGTS_CODEC) {
-
-        const captureOptions = options.join(' ');
-        const bitRate = getH264Bitrate(videoConfig, captureOptions);
-        if (bitRate && bitRate.length > 0) {
-            bitRate.split(' ').forEach(x => {
-                spawnOptions.push(x);
-            });
-        }
+    const captureOptions = options.join(' ');
+    const bitRate = getH264Bitrate(videoConfig, captureOptions);
+    if (bitRate && bitRate.length > 0) {
+        bitRate.split(' ').forEach(x => {
+            spawnOptions.push(x);
+        });
     }
-
+   
     let extension = MJPEG_CODEC;
     switch (codec) {
     case H264_CODEC:
@@ -385,6 +380,8 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
     default:
         extension = MJPEG_CODEC;
         spawnOptions.push('--codec');
+        spawnOptions.push('libav');
+        spawnOptions.push('--libav-format');
         spawnOptions.push('mjpeg');
         spawnOptions.push('--quality');
         spawnOptions.push(100);
