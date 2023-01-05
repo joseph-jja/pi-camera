@@ -84,6 +84,14 @@ function getH264Bitrate(videoConfig, paramString) {
         return (paramString.indexOf(item) > -1);
     });
 
+    const videoFramerate = videoConfig.filter(item => {
+        return (item.name === 'framerate');
+    });
+
+    const videoFramerateValue = videoFramerate.values.filter(item => {
+        return (paramString.indexOf(item) > -1);
+    });
+
     if (videoSizeValue && videoSizeValue.length > 0) {
         const videoOption = videoSizeValue[0].split(' ');
         const [width, height] = videoOption.filter(item => {
@@ -91,18 +99,29 @@ function getH264Bitrate(videoConfig, paramString) {
         });
         const wxh = width * height;
         let bitrate = 18000000;
-        if (wxh === 307200 || wxh === 480000) {
-            // 640 x 480
-            bitrate = 18000000;
-        } else if (wxh === 921600) {
+        if (wxh >= 2190240) {
+             // 2028 x 1080 or larger
+             bitrate = 95000000;
+        } else if (wxh >= 2073600) {
+            // 1920 x 1080 or larger 
+            // but less than 2028 x 1080
+            bitrate = 85000000;
+        } else if (wxh >= 1318680) {
+            // 1332 x 990
+            // but less than 1920 x 1080
+            bitrate = 80000000;
+        } else if (wxh >= 921600) {
             // 1280 x 720
-            bitrate = 35000000;
-        } else if (wxh === 2073600) {
-            // 1920 x 1080
-            bitrate = 85000000;
-        } else if (wxh === 2190240) {
-            // 2028 x 1080
-            bitrate = 85000000;
+            // but less than 1332 x 990
+            bitrate = 50000000;
+        } else if (wxh >= 480000) {
+            // 800 x 600
+            // but less than 1280 x 720
+            bitrate = 30000000;
+        } else if (wxh >= 307200) {
+            // 640 x 480
+            // but less than 800 x 600
+            bitrate = 18000000;
         } else {
             // everything else
             bitrate = 18000000;
