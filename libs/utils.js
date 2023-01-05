@@ -117,7 +117,7 @@ function getH264Bitrate(videoConfig, paramString) {
             const fpsGOP = videoFramerateValue / GOP_SIZE;
             const pixelsPerFPS = videoFramerateValue * wxh;
             bitrateMaxNeeded = Math.ceil(pixelsPerFPS / fpsGOP);
-            loggers.info(`Bitrate max needed: ${bitrateMaxNeeded}`);
+            logger.info(`Bitrate max needed: ${bitrateMaxNeeded}`);
         }
 
         // 62208000
@@ -151,7 +151,7 @@ function getH264Bitrate(videoConfig, paramString) {
             bitrate = 18000000;
         }
         if (bitrateMaxNeeded > 0 && bitrate < bitrateMaxNeeded) {
-            loggers.info(`Using slower bitrate than needed ${bitrate} vs ${bitrateMaxNeeded}`);
+            logger.info(`Using slower bitrate than needed ${bitrate} vs ${bitrateMaxNeeded}`);
         }
         return `--bitrate ${bitrate} --profile high`;
     }
