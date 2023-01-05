@@ -80,6 +80,10 @@ function getH264Bitrate(videoConfig, paramString) {
         return (item.name === 'videoSize');
     })[0];
 
+    if (!videoSize || videoSize.length === 0) {
+        return '';
+    }
+
     const videoSizeValue = videoSize.values.filter(item => {
         return (paramString.indexOf(item) > -1);
     });
@@ -87,10 +91,11 @@ function getH264Bitrate(videoConfig, paramString) {
     const videoFramerate = videoConfig.filter(item => {
         return (item.name === 'framerate');
     });
+    console.log(videoFramerate);
 
-    const videoFramerateValue = videoFramerate.values.filter(item => {
+    /*const videoFramerateValue = videoFramerate.values.filter(item => {
         return (paramString.indexOf(item) > -1);
-    });
+    });*/
 
     if (videoSizeValue && videoSizeValue.length > 0) {
         const videoOption = videoSizeValue[0].split(' ');
