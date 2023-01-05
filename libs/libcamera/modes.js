@@ -26,7 +26,7 @@ OR
 
 const CAMERA_ID_RE = /(ov\d*|imx\d*) (\[\d*x\d*\])/;
 
-const CAMERA_BITS = /\s*\'S([RGB]*)(\d*)(\_?)(C?S?I?\d?P?)\'\s*:\s*(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
+const CAMERA_BITS = /\s*\'S([RGB]*)(\d*)(\_?)(C?S?I?\d?)(P?)\'\s*:\s*(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
 
 const CAMERA_MODES = /(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
 
@@ -53,7 +53,7 @@ async function getModes(configFile) {
             
             if (cameraBits && cameraBits.length > 2) {
                 lastCameraBits = cameraBits[2];
-                packed = cameraBits[4];
+                packed = cameraBits[5];
             }
 
             if (cameraId && cameraId.length > 1) {
