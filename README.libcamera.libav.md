@@ -7,5 +7,6 @@ Newer versions of the raspberry pi libcamera-apps libcamera-vid have support for
 - It helps to pass in --bitrate ${bitrate} --profile high to get good quality video 
 == see libs/utils.js getH264Bitrate() function for how based on resolution bitrate is caclulated here
 == higher resolution needs higher bitrate
-
+- currently libav supported formats codede here are 
+== avi, h264, mjpegts, yuv420, mjpeg
 
