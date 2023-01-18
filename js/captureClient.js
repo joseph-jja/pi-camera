@@ -24,7 +24,7 @@ function safelyParse(jsonIn) {
 function findAndSetOption(selectObj, value) {
     if (selectObj && value) {
         const selectOpts = selectObj.options;
-		if (selectOpts && Array.isArray(selectOpts)) {
+		if (selectOpts && typeof selectOpts !== 'string') {
             const index = Array.from(selectOpts).findIndex(item => {
                 return (value === item.value);
             });
