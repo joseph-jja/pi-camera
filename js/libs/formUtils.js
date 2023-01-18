@@ -73,11 +73,15 @@ export function getParamValue(paramName) {
     return (params ? params.get(paramName) : undefined);
 }
 
+function setInnerHTML(obj, value) {
+    if (obj) {
+        obj.innerHTML = value;
+    }
+}
+
 function setMessage(msg) {
     const serverMsg = document.getElementById('server-messages');
-    if (serverMsg) {
-        serverMsg.innerHTML = msg;
-    }
+    setInnerHTML(serverMsg, msg);
 }
 //    const msg = await resp.text();
 
@@ -99,12 +103,12 @@ export async function getConfig() {
     const saveOptionsObj = document.getElementById('previewOptions');
     return executeGETRequest('/config').then(data => {
         if (data) {
-            saveOptionsObj.innerHTML = data;
+            setInnerHTML(saveOptionsObj, data);
         }
         return Promise.resolve(data);
     }).catch(e => {
         console.log(e);
-        saveOptionsObj.innerHTML = 'Error: ' + e;
+        setInnerHTML(saveOptionsObj, 'Error: ' + e);
         return Promise.reject(e);
     });
 }
@@ -113,9 +117,9 @@ export async function listImageCaptures() {
     return executeGETRequest('/imageList', true).then(images => {
         const container = document.getElementById('image-files');
         if (images && images.indexOf('<select') > -1) {
-            container.innerHTML = images;
+            setInnerHTML(container, images);
         } else {
-            container.innerHTML = '';
+            setInnerHTML(container, '');
         }
         return Promise.resolve(images);
     }).catch(e => {
@@ -144,7 +148,9 @@ export function displayImages(url, isImage) {
         return;
     }
     const videoDisplay = document.getElementById('videoDisplay');
-    videoDisplay.src = url;
+    if (videoDisplay) {
+        videoDisplay.src = url;
+    }
 }
 
 export async function stopPreview() {
