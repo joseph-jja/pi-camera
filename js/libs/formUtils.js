@@ -1,9 +1,11 @@
 export function getFormOptions(formObj) {
 
     const formElements = Array.from(formObj);
-    //const bitrate = setBitrate(formElements);
+    if (!formElements || !Array.isArray(formElements)) {
+        return [];
+    }
 
-    const filtered = (formElements || []).filter(element => {
+    const filtered = formElements.filter(element => {
         if (!element || !element.nodeName) { 
             return false;
         }
@@ -11,7 +13,11 @@ export function getFormOptions(formObj) {
         return (nodeName !== 'button' && nodeName !== 'input');
     });
 
-    const storageElements = (filtered || []).filter(element => {
+    if (!filtered || !Array.isArray(filtered)) {
+        return [];
+    }
+
+    const storageElements = filtered.filter(element => {
         if (!element || !element.tagName) { 
             return false;
         }
