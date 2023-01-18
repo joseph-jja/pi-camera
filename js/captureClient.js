@@ -21,6 +21,20 @@ function safelyParse(jsonIn) {
     }
 }
 
+function findAndSetOption(selectObj, value) {
+    if (selectObj && value) {
+        const selectOpts = selectObj.options;
+		if (selectOpts && Array.isArray(selectOpts)) {
+            const index = Array.from(selectOpts).findIndex(item => {
+                return (value === item.value);
+            });
+            if (index > 0) {
+                selectObj.selectedIndex = index;
+            }
+        }
+    }
+}
+
 function restore() {
 
     const processForm = (formName) => {
@@ -36,20 +50,10 @@ function restore() {
         data.forEach(item => {
             const keys = Object.keys(item);
             if (keys && keys.length > 0) {
-                const key = Object.keys(item)[0];
+                const key = keys[0];
                 const value = item[key];
                 const selectObj = formObj[key];
-                if (selectObj && value) {
-                    const selectOpts = selectObj.options;
-			        if (selectOpts &&Array.isArray(selectOpts)) {
-                        const index = Array.from(selectOpts).findIndex(item => {
-                            return (value === item.value);
-                        });
-                        if (index > 0) {
-                            selectObj.selectedIndex = index;
-                        }
-                    }
-                }
+                findAndSetOption(selectObj, value);
             }
         });
     };
@@ -72,18 +76,11 @@ function profileUpdate() {
         Object.keys(options).forEach(key => {
             const opts = options[key];
             const form = document.forms[key];
-            if (opts && Array.isArray(opts)) {
+            if (opts && Array.isArray(opts) && form) {
                 opts.forEach(field => {
                     const selectObj = form[field.name];
-                    if (selectObj) {
-                        const selectOpts = selectObj.options;
-                        const index = Array.from(selectOpts).findIndex(item => {
-                            return (field.value === item.value);
-                        });
-                        if (index > 0) {
-                            selectObj.selectedIndex = index;
-                        }
-                    }
+                    const value = field.value;
+                    findAndSetOption(selectObj, value);
                 });
             }
         });
