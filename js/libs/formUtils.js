@@ -41,7 +41,7 @@ export function getFormOptions(formObj) {
         }
     }
     
-    const optionsMapped = (filtered || []).map(element => {
+    const optionsMapped = filtered.map(element => {
         if (!element || !element.tagName) { 
             return false;
         }
@@ -53,7 +53,7 @@ export function getFormOptions(formObj) {
         }
     });
     if (optionsMapped && optionsMapped.length > 0) {
-    const options = optionsMapped.reduce((acc, next) => {
+        const options = optionsMapped.reduce((acc, next) => {
             return `${acc}${next.startsWith('-') ? ' ': ''}${next}`.trim();
         });
         return options;
