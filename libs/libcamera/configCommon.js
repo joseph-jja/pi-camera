@@ -11,8 +11,25 @@ const prefixConfig = [{
     name: 'autofocus',
     paramName: '',
     values: [
-        '--autofocus 0',
-        '--autofocus 1'
+        '--autofocus-mode auto',
+        '--autofocus-mode default',
+        '--autofocus-mode manual',
+        '--autofocus-mode continuous'
+    ]
+}, {
+    name: 'autofocus_range',
+    paramName: '',
+    values: [
+        '--autofocus-range normal',
+        '--autofocus-range macro',
+        '--autofocus-range full'
+    ]
+}, {
+    name: 'autofocus_speed',
+    paramName: '',
+    values: [
+        '--autofocus-speed normal',
+        '--autofocus-speed fast'
     ]
 }, {
     name: 'zoom',

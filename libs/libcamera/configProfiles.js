@@ -1,12 +1,11 @@
 const {
-        mkdirSync,
-        readFileSync
-    } = require('fs'), 
-    {
-        writeFile,
-        readFile,
-        readdir
-    } = require('fs').promises;
+    mkdirSync,
+    readFileSync
+} = require('fs'), {
+    writeFile,
+    readFile,
+    readdir
+} = require('fs').promises;
 
 const basedir = process.cwd(),
     {
@@ -19,7 +18,7 @@ const basedir = process.cwd(),
 const HOME_DIR = getEnvVar('HOME');
 
 const PROFILE_DIR = `${HOME_DIR}/profiles`;
-      
+
 async function getProfiles() {
 
     return new Promise(async resolve => {
@@ -29,12 +28,12 @@ async function getProfiles() {
             profiles.forEach(item => {
                 const filedata = readFileSync(`${PROFILE_DIR}/${item}`);
                 if (filedata) {
-                   try {
-                       const data = JSON.parse(filedata.toString());
-                       captureProfiles.push(data);
-                   } catch(e) {
-                       logger.error(stringify(e.message)); 
-                   }
+                    try {
+                        const data = JSON.parse(filedata.toString());
+                        captureProfiles.push(data);
+                    } catch (e) {
+                        logger.error(stringify(e.message));
+                    }
                 }
             });
         }

@@ -114,8 +114,8 @@ function getH264Bitrate(videoConfig, paramString) {
         const wxh = width * height;
         let bitrate = 18000000;
         if (wxh >= 2190240) {
-             // 2028 x 1080 or larger
-             bitrate = 95000000;
+            // 2028 x 1080 or larger
+            bitrate = 95000000;
         } else if (wxh >= 2073600) {
             // 1920 x 1080 or larger 
             // but less than 2028 x 1080
@@ -150,7 +150,7 @@ function getH264Bitrate(videoConfig, paramString) {
                 bitrate = bitrateMaxNeeded;
             }
         }
-        
+
         return `--bitrate ${bitrate} --profile high`;
     }
     return '';

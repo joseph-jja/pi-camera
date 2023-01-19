@@ -337,7 +337,7 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
             spawnOptions.push(x);
         });
     }
-   
+
     let extension = MJPEG_CODEC;
     switch (codec) {
     case H264_CODEC:

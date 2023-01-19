@@ -50,7 +50,7 @@ async function getModes(configFile) {
             const cameraId = line.match(CAMERA_ID_RE),
                 cameraModes = line.match(CAMERA_MODES),
                 cameraBits = line.match(CAMERA_BITS);
-            
+
             if (cameraBits && cameraBits.length > 2) {
                 lastCameraBits = cameraBits[2];
                 packed = cameraBits[5];
@@ -74,7 +74,7 @@ async function getModes(configFile) {
                     [bx, by] = binningResolution.split('x');
                 const binned = `${bx/x}x${by/y}`;
                 const bits = (lastCameraBits && lastCameraBits.length > 0 ? `:${lastCameraBits}` : '');
-                const packing = (bits.length > 0 && packed && packed.length > 0? `:${packed}` : '');
+                const packing = (bits.length > 0 && packed && packed.length > 0 ? `:${packed}` : '');
                 const mode = {
                     resolution: `--mode ${x}:${y}${bits}${packing}`,
                     resX: x,
