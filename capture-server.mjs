@@ -1,3 +1,13 @@
+import {
+    resolve,
+    basename
+} from 'path';
+
+const filename = basename(resolve(import.meta.url));
+    
+import {createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 const os = require('os'),
     fs = require('fs'),
     http = require('http'),
@@ -26,7 +36,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         getIPAddress,
         getHostname
     } = require(`${basedir}/libs/utils`),
-    logger = require(`${basedir}/libs/logger`)(__filename),
+    logger = require(`${basedir}/libs/logger`)(filename),
     {
         saveVideoData,
         saveImagesData,
