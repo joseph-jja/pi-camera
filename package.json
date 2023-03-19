@@ -12,7 +12,7 @@
   },
   "imports": {
     "#libs": "./libs",
-    '#xhrActions': './xhrActions'
+    "#xhrActions": "./xhrActions"
   },
   "repository": {
     "type": "git",
