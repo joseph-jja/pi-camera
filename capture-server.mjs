@@ -3,24 +3,24 @@ import {
     basename
 } from 'path';
 
+import os from 'os';
+import fs from 'fs';
+import http from 'http';
+import {
+    randomBytes
+} from 'crypto';
+import * as childProcess from 'child_process';
+
+import express from 'express';
+import bodyParser from 'body-parser';
+import {
+    Server
+} from 'socket.io';
+
 const filename = basename(resolve(import.meta.url));
     
 import {createRequire } from "module";
 const require = createRequire(import.meta.url);
-
-const os = require('os'),
-    fs = require('fs'),
-    http = require('http'),
-    {
-        randomBytes
-    } = require('crypto'),
-    childProcess = require('child_process');
-
-const express = require('express'),
-    bodyParser = require('body-parser'),
-    {
-        Server
-    } = require("socket.io");
 
 const basedir = process.cwd();
 
