@@ -10,6 +10,10 @@
   "scripts": {
     "beautify": "bash ./bin/beautify.sh"
   },
+  "imports": {
+    "#libs": "./libs",
+    '#xhrActions': './xhrActions'
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/joseph-jja/pi-camera.git"

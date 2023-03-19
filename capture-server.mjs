@@ -30,6 +30,7 @@ process.on('uncaughtException', (e) => {
     console.error(e);
 });
 
+
 const stringify = require(`${basedir}/libs/stringify`),
     getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`),
     {
@@ -57,6 +58,8 @@ const stringify = require(`${basedir}/libs/stringify`),
     convertXHRAction = require(`${basedir}/xhrActions/convertFileFormat`),
     imageListAction = require(`${basedir}/xhrActions/imageList`),
     getProfiles = require(`${basedir}/libs/libcamera/configProfiles`);
+
+import * as formFields from '#libs/form.mjs';
 
 const app = express();
 app.disable('x-powered-by');
@@ -100,7 +103,6 @@ setInterval(() => {
 
 let gVideoConfig;
 async function getFormData() {
-    const formFields = await import('./libs/form.mjs');
 
     const {
         videoConfig,
