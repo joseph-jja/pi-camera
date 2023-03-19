@@ -59,7 +59,7 @@ const stringify = require(`${basedir}/libs/stringify`),
     imageListAction = require(`${basedir}/xhrActions/imageList`),
     getProfiles = require(`${basedir}/libs/libcamera/configProfiles`);
 
-import * as formFields from './libs/form.mjs';
+import * as formFields from '#libs/form';
 
 const app = express();
 app.disable('x-powered-by');

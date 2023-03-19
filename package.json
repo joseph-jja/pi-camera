@@ -11,8 +11,8 @@
     "beautify": "bash ./bin/beautify.sh"
   },
   "imports": {
-    "#libs": "./libs",
-    "#xhrActions": "./xhrActions"
+    "#libs/*": "./libs/*",
+    "#xhrActions/*": "./xhrActions/*"
   },
   "repository": {
     "type": "git",
