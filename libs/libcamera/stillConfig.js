@@ -64,10 +64,4 @@ const stillConfig = [{
     values: ['-r']
 }];
 
-module.exports = prefixConfig.concat(brightnessConfig).concat(stillConfig).concat(suffixConfig).concat([{
-    name: 'saturation',
-    paramName: '--saturation',
-    range: [0, 1],
-    step: 0.1,
-    decimalPlaces: 1
-}]);
+module.exports = prefixConfig.concat(brightnessConfig).concat(stillConfig).concat(suffixConfig);
