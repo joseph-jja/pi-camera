@@ -1,9 +1,9 @@
 {
   "name": "pi-camera",
   "version": "2.0.0",
-  "engines" : { 
-    "npm" : ">=8.0.0 <9.0.0",
-    "node" : ">=16.0.0 <20.0.0"
+  "engines": {
+    "npm": ">=8.0.0 <9.0.0",
+    "node": ">=16.0.0 <20.0.0"
   },
   "description": "A pi camera capture program",
   "main": "index.js",
@@ -30,6 +30,7 @@
     "messenger": "0.0.9",
     "nodemailer": "6.8.0",
     "onoff": "6.0.3",
+    "sharp": "^0.32.1",
     "socket.io": "4.5.3",
     "winston": "3.8.2"
   },

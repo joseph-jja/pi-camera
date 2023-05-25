@@ -1,35 +1,48 @@
-const cv = require('opencv4nodejs');
 const fs = require('fs');
-const { createCanvas, createImageData } = require('canvas');
-const { Image } = require('canvas');
 
-function createHistogram(imageStream) {
-  // Convert the image stream to a Buffer
-  const buffer = Buffer.from(imageStream);
+const sharp = require('sharp');
 
-  // Read the image from the buffer
-  const image = cv.imdecode(buffer);
+// Read the image stream
+const imageStream = fs.readFileSync('/home/josepha48/space/Betelguese-20230101190005.png');
 
-  // Convert the image to grayscale
-  const grayImage = image.bgrToGray();
+// Process the image stream
+sharp(imageStream)
+  .raw()
+  .toBuffer((err, data, info) => {
+    if (err) {
+      console.error('An error occurred while processing the image:', err);
+      return;
+    }
 
-  // Calculate the histogram
-  const histogram = grayImage.calcHist([0], [0], null, [256], [0, 256]);
+    // Calculate the histogram
+    const histogram = calculateHistogram(data, info.channels);
 
-  // Plot the histogram using canvas
-  const canvas = createCanvas(800, 600);
-  const ctx = canvas.getContext('2d');
+    // Print the histogram
+    console.log(histogram);
+  });
 
-  // Draw the histogram
-  const imageData = createImageData(new Uint8ClampedArray(histogram.getData()), histogram.rows, histogram.cols);
-  ctx.putImageData(imageData, 0, 0);
+// Function to calculate the histogram
+function calculateHistogram(data, channels) {
+  const histogram = {};
 
-  // Save the histogram as an image
-  const histogramImage = canvas.toBuffer('image/png');
-  fs.writeFileSync('histogram.png', histogramImage);
+  // Initialize the histogram bins
+  for (let i = 0; i < 256; i++) {
+    histogram[i] = 0;
+  }
+
+  // Iterate over the image data and update the histogram
+  for (let i = 0; i < data.length; i += channels) {
+    // Assuming the image has RGB channels
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+
+    // Calculate the grayscale value
+    const grayscale = Math.floor((r + g + b) / 3);
+
+    // Increment the corresponding bin in the histogram
+    histogram[grayscale]++;
+  }
+
+  return histogram;
 }
-
-// Example usage:
-// Assuming you have an image stream 'imageStream' containing the image data
-createHistogram(imageStream);
-
