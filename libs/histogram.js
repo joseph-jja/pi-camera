@@ -46,3 +46,28 @@ function calculateHistogram(data, channels) {
 
   return histogram;
 }
+
+/*
+partial code to graph histogtam
+const h = window.canvasRef.height;
+xp = 0;
+
+Object.keys(x).forEach(key => {
+
+
+    p = +key;// + +xp;
+    
+    
+    lx = p; 
+    ly = h - x[key];
+    xx = +lx + 1;
+    xy = h;
+    xp = +xx + 1;
+
+    //console.log(lx, ly, xx, xy);
+    window.canvasRef.line(lx, ly, lx, xy);
+    //window.canvasRef.line(xx, ly, xx, xy);
+    //window.canvasRef.line(xp, ly, xp, xy);
+});
+
+*/
