@@ -3,7 +3,7 @@ const fs = require('fs');
 const sharp = require('sharp');
 
 // Read the image stream
-const imageStream = fs.readFileSync('/home/josepha48/space/Betelguese-20230101190005.png');
+const imageStream = fs.readFileSync('/home/josepha48/space/Pleiades-2022-11-29-stacked_1.png');
 
 // Process the image stream
 sharp(imageStream)
@@ -49,25 +49,21 @@ function calculateHistogram(data, channels) {
 
 /*
 partial code to graph histogtam
-const h = window.canvasRef.height;
-xp = 0;
+const h = window.canvasRef.height-10;
+posx = 10;
 
 Object.keys(x).forEach(key => {
 
-
-    p = +key;// + +xp;
+  v = x[key];// value
     
-    
-    lx = p; 
-    ly = h - x[key];
-    xx = +lx + 1;
-    xy = h;
-    xp = +xx + 1;
+  ys = h;
+  ye =  h - Math.ceil(v/h);
 
-    //console.log(lx, ly, xx, xy);
-    window.canvasRef.line(lx, ly, lx, xy);
-    //window.canvasRef.line(xx, ly, xx, xy);
-    //window.canvasRef.line(xp, ly, xp, xy);
+  for ( let i = 0; i<2; i++ ) {
+    window.canvasRef.line(posx, ys, posx, ye);
+    posx++;
+  }
+
 });
 
 */
