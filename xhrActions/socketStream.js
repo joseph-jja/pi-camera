@@ -59,4 +59,8 @@ module.exports = (socket) => {
     });
     // on connection emit some info
     socket.emit('info', collectData());
+    
+    captureEmitter.on('histogram', message => {
+        socket.emit('histogram', message);
+    });
 };

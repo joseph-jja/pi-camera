@@ -15,7 +15,8 @@ const logger = require(`${basedir}/libs/logger`)(__filename),
     } = require(`${basedir}/libs/videoScripts`),
     {
         OLD_FILENAME_MATCH
-    } = require(`${basedir}/xhrActions/Constants`);
+    } = require(`${basedir}/xhrActions/Constants`),
+    getHistogram = require(`${basedir}/libs/histogram`);
 
 module.exports = (request, response) => {
     const query = (request.query || {});
@@ -44,6 +45,17 @@ module.exports = (request, response) => {
             captureEmitter.emit('button-exec', {
                 method: 'previewImageConfig',
                 status: (err || data).toString()
+            });
+        });
+        getHistogram(`${BASE_CONFIG_PATH}/${filename}`).then(histogramData => {
+            captureEmitter.emit('histogram', {
+                status: 'success',
+                status: histogramData
+            });
+        }).catch(e => {
+            captureEmitter.emit('histogram', {
+                status: 'error',
+                status: e
             });
         });
     } else if (filename.endsWith('.mjpeg') ||
