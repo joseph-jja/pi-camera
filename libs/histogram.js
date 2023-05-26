@@ -50,24 +50,3 @@ module.exports = async function getHistogram(filename) {
         });
     });
 }
-
-/*
-partial code to graph histogtam
-const h = window.canvasRef.height-10;
-posx = 10;
-
-Object.keys(x).forEach(key => {
-
-  v = x[key];// value
-    
-  ys = h;
-  ye =  h - Math.ceil(v/h);
-
-  for ( let i = 0; i<2; i++ ) {
-    window.canvasRef.line(posx, ys, posx, ye);
-    posx++;
-  }
-
-});
-
-*/
