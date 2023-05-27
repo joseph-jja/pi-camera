@@ -131,10 +131,21 @@ function convertMJPEG(filename, config, outfilename) {
 
 }
 
+// extract image from stream once every 5 seconds
+// ffmpeg -i input.mp4 -vf fps=1/5 %04d.png
+function captureImageFromFfmpegStream(framerate = 5) {
+    DIRECT_STREAM_OPTS[defaultFramerateIndex] = framerate;
+    const options = DIRECT.concat(['-vf', `fps=1/${framerate}`]);
+    return spawn(FFMPEG, options, {
+        env: process.env
+    });
+}
+
 module.exports = {
     initFfmpeg,
     getFfmpegWebmStream,
     getFfmpegStream,
+    captureImageFromFfmpegStream,
     playFile,
     convertYUV420,
     convertH264,
