@@ -33,7 +33,7 @@ socket.on('histogram', (data) => {
         const width = window.histogramCanvasRef.width;
         const canvasHeight = height-10;
         window.histogramCanvasRef.rectangle(0, 0, width, height, {
-            color: '#FF6347',
+            color: 'black',
             fillStrokeClear: 'fill'
         });
         let posx = 5;
@@ -46,7 +46,9 @@ socket.on('histogram', (data) => {
             const yEnd = canvasHeight - Math.ceil(val/canvasHeight);
 
             for ( let i = 0; i < 2; i++ ) {
-                window.histogramCanvasRef.line(posx, yStart, posx, yEnd);
+                window.histogramCanvasRef.line(posx, yStart, posx, yEnd, {
+                    color: '#FF6347'
+                });
                 posx++;
             }
 
