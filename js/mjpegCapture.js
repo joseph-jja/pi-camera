@@ -23,6 +23,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         iframe.src = `/preview?x-uuid=${window.xUuid}`;
         const parent = document.getElementById('center-aligner');
         parent.prepend(iframe);
+        parent.prepend(canvasObj);
         return;
     }
     canvasObj.style.display = 'block';

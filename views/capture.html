@@ -14,9 +14,9 @@
             width: 100%;
         }
 
-        #videoDisplay, #player {
-            display: block;
-            margin: 0 auto;
+        #videoDisplay, #player, #histogramDisplay {
+            display: inline;
+            margin: 0.25em;
             border: 2px white solid;
         }
 
@@ -49,6 +49,9 @@
 <body>
     <div id="center-aligner">
         <canvas id="player" style="background: #000;" width="640px" height="480px;">
+          Your browser sucks.
+        </canvas>
+        <canvas id="histogramDisplay" style="background: #000;" width="520px" height="450px;">
           Your browser sucks.
         </canvas>
         <br>
