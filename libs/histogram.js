@@ -2,6 +2,11 @@ const fs = require('fs/promises');
 
 const sharp = require('sharp');
 
+const basedir = process.cwd(),
+    {
+        captureEmitter
+    } = require(`${basedir}/libs/videoScripts`);
+
 // Function to calculate the histogram
 function calculateHistogram(data, channels) {
     const histogram = {};
@@ -28,25 +33,35 @@ function calculateHistogram(data, channels) {
     return histogram;
 }
 
+function histogramHandler(err, data, info) {
+
+    if (err) {
+        console.error('An error occurred while processing the image:', err);
+        
+        // send the histogram error
+        captureEmitter.emit('histogram', {
+            status: 'error',
+            error: err
+        });
+        
+        return;
+    }
+
+    // Calculate the histogram
+    const histogram = calculateHistogram(data, info.channels);
+
+    // send the histogram data
+    captureEmitter.emit('histogram', {
+        status: 'success',
+        data: histogram
+    });
+}
+
 module.exports = async function getHistogram(filename) {
 
     // Read the image stream
     const imageStream = await fs.readFile(filename);
 
     // Process the image stream
-    sharp(imageStream).raw().toBuffer((err, data, info) => {
-
-        return new Promise((resolve, reject) => {
-            if (err) {
-                console.error('An error occurred while processing the image:', err);
-                return reject(err);
-            }
-
-            // Calculate the histogram
-            const histogram = calculateHistogram(data, info.channels);
-
-            // Print the histogram
-            return resolve(histogram);
-        });
-    });
+    sharp(imageStream).raw().toBuffer(histogramHandler);
 }

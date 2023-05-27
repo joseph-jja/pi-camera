@@ -47,17 +47,8 @@ module.exports = (request, response) => {
                 status: (err || data).toString()
             });
         });
-        getHistogram(`${BASE_CONFIG_PATH}/${filename}`).then(histogramData => {
-            captureEmitter.emit('histogram', {
-                status: 'success',
-                status: histogramData
-            });
-        }).catch(e => {
-            captureEmitter.emit('histogram', {
-                status: 'error',
-                status: e
-            });
-        });
+        // generate and send the histogram data
+        getHistogram(`${BASE_IMAGE_PATH}/${filename}`);
     } else if (filename.endsWith('.mjpeg') ||
         filename.endsWith('.ts') ||
         filename.endsWith('.avi') ||
