@@ -6,7 +6,7 @@
     <style type="text/css">
         body {
             background-color: black;
-            color: white;
+            color: #FF6347;
             font-size: 1em;
         }
 
@@ -17,24 +17,29 @@
         #videoDisplay, #player, #histogram-display {
             display: inline;
             margin: 0.25em;
-            border: 2px white solid;
+            border: 2px #FF6347 solid;
         }
 
         #server-messages,
         #server-info,
-        #previewOptions,
+        #previewOptions {
+            width: 450px;
+            margin: 0 auto;
+        }
+
         div.content-container {
             width: 1000px;
             margin: 0 auto;
         }
 
         .full-width {
-            display: block;
-            margin: 0 auto;
+            display: inline;
+            margin: 0.25em;
         }
         .caution {
             background: red;
-            color: white;
+            color: black;
+            font-weight: bold;
         }
         .flex-container {
             display: flex;
@@ -54,57 +59,60 @@
         <canvas id="histogram-display" style="background: #000;" width="520px" height="450px;">
           Your browser sucks.
         </canvas>
-        <br>
-        <div id="server-messages"></div>
-        <br>
-        <div id="previewOptions"></div>
-        <br>
-        <div id="server-info" style="background: #000;color: white; " ></div>
-        <br>
-        <br>
-        <fieldset class="full-width" style="width: 650px; height:325px">
-            <form name="mainForm" onsubmit="return false;">
+        <div style="width: 1200px;">
+            <fieldset class="full-width" style="width: 640px; min-height:325px; ">
+                <form name="mainForm" onsubmit="return false;">
+                    <br>
+                    <div class="flex-container">
+                        <div id="image-files"></div>
+                    </div>
+                    <br>
+                    <button type="submit" id="listCaptures">
+                        List Captures
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" id="viewImageOrVideo">
+                        View Image
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <br><br>
+                    <input type="text" name="new-name">
+                    <button type="submit" id="renameFile">
+                        Rename File
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" id="deleteFile" class="caution">
+                        Delete File
+                    </button>
+                    <br><br>
+                    <button type="submit" id="startPreview">
+                        Start Preview
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" id="stopPreview">
+                        Stop Preview
+                    </button>
+                    <br><br>
+                    <label>Profile:</label>
+                    <select name="profiles">
+                        <option></option>
+                        [[PROFILE_OPTIONS]]
+                    </select>
+                    <button type="submit" id="useProfile">
+                        Set Profile
+                    </button>
+                </form>
+            </fieldset>
+            <fieldset class="full-width" style="width: 325px;">
                 <br>
-                <div class="flex-container">
-                    <div id="image-files"></div>
-                </div>
+                <div id="server-messages"></div>
                 <br>
-                <button type="submit" id="listCaptures">
-                    List Captures
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="viewImageOrVideo">
-                    View Image
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <br><br>
-                <input type="text" name="new-name">
-                <button type="submit" id="renameFile">
-                    Rename File
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="deleteFile" class="caution">
-                    Delete File
-                </button>
-                <br><br>
-                <button type="submit" id="startPreview">
-                    Start Preview
-                </button>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button type="submit" id="stopPreview">
-                    Stop Preview
-                </button>
-                <br><br>
-                <label>Profile:</label>
-                <select name="profiles">
-                    <option></option>
-                    [[PROFILE_OPTIONS]]
-                </select>
-                <button type="submit" id="useProfile">
-                    Set Profile
-                </button>
-            </form>
-        </fieldset>
+                <div id="previewOptions"></div>
+                <br>
+                <div id="server-info" style="background: #000;color: #FF6347; " ></div>
+            </fieldset>
+        <div>
+
         <div class="content-container">
             <fieldset style="width: 400px; min-height: 650px; float: left;">
                 <legend>Streaming options</legend>
