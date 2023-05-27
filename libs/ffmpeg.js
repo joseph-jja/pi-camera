@@ -135,7 +135,7 @@ function convertMJPEG(filename, config, outfilename) {
 // ffmpeg -i input.mp4 -vf fps=1/5 %04d.png
 function captureImageFromFfmpegStream(framerate = 5) {
     DIRECT_STREAM_OPTS[defaultFramerateIndex] = framerate;
-    const options = DIRECT.concat(['-vf', `fps=1/${framerate}`]);
+    const options = DIRECT.concat(['-vf', `fps=1/${framerate}`, '%02d.png']);
     return spawn(FFMPEG, options, {
         env: process.env
     });
