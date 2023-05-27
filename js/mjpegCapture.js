@@ -10,6 +10,16 @@ import {
 
 window.addEventListener('DOMContentLoaded', async () => {
     
+    if (window.histogramCanvasRef) {
+        const height = window.histogramCanvasRef.height;
+        const width = window.histogramCanvasRef.width;
+        const canvasHeight = height-10;
+        window.histogramCanvasRef.rectangle(0, 0, width, height, {
+            color: '#FF6347',
+            fillStrokeClear: 'fill'
+        });
+    }
+    
     const canvasObj = document.getElementById('player');
     if (!getParamValue('canvas')) {
         //not a canvas to do iframe impl
