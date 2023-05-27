@@ -23,27 +23,34 @@ socket.on('info', (data) => {
     socketInfo.innerHTML = results;
 });
 
+
+
 socket.on('histogram', (data) => {
+    if (data.status.toLowerCase() === 'success') {
+        const histoData = data.data;
 
+        const height = window.histogramCanvasRef.height;
+        const width = window.histogramCanvasRef.width;
+        const canvasHeight = height-10;
+        window.histogramCanvasRef.rectangle(0, 0, width, height, {
+            color: '#FF6347',
+            fillStrokeClear: 'fill'
+        });
+        let posx = 5;
+
+        Object.keys(histoData).forEach(key => {
+
+            const val = histoData[key]; // value
+            
+            const yStart = canvasHeight;
+            const yEnd = canvasHeight - Math.ceil(val/canvasHeight);
+
+            for ( let i = 0; i < 2; i++ ) {
+                window.histogramCanvasRef.line(posx, yStart, posx, yEnd);
+                posx++;
+            }
+
+        });
+    }
 });
-/*
-partial code to graph histogtam
-const h = window.canvasRef.height-10;
-posx = 10;
-
-Object.keys(x).forEach(key => {
-
-  v = x[key];// value
-    
-  ys = h;
-  ye =  h - Math.ceil(v/h);
-
-  for ( let i = 0; i<2; i++ ) {
-    window.canvasRef.line(posx, ys, posx, ye);
-    posx++;
-  }
-
-});
-
-*/
 

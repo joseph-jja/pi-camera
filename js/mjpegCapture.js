@@ -9,7 +9,7 @@ import {
 } from '/js/mjpeg/index.js';
 
 window.addEventListener('DOMContentLoaded', async () => {
-
+    
     const canvasObj = document.getElementById('player');
     if (!getParamValue('canvas')) {
         //not a canvas to do iframe impl
