@@ -14,7 +14,7 @@
             width: 100%;
         }
 
-        #videoDisplay, #player, #histogramDisplay {
+        #videoDisplay, #player, #histogram-display {
             display: inline;
             margin: 0.25em;
             border: 2px white solid;
@@ -51,7 +51,7 @@
         <canvas id="player" style="background: #000;" width="640px" height="480px;">
           Your browser sucks.
         </canvas>
-        <canvas id="histogramDisplay" style="background: #000;" width="520px" height="450px;">
+        <canvas id="histogram-display" style="background: #000;" width="520px" height="450px;">
           Your browser sucks.
         </canvas>
         <br>
@@ -202,6 +202,7 @@
     window.xUuid = '[[PAGE_UUID]]';
     window.player;
 </script>
+<script src="/js/histogramCanvas.js"></script>
 <script src="/js/sockImage.js" type="module"></script>
 <script type="module" src="/js/mjpegCapture.js"></script>
 <script src="/js/captureClient.js" type="module"></script>
