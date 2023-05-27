@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         const width = window.histogramCanvasRef.width;
         const canvasHeight = height-10;
         window.histogramCanvasRef.rectangle(0, 0, width, height, {
-            color: '#FF6347',
+            color: 'black',
             fillStrokeClear: 'fill'
         });
     }
