@@ -31,7 +31,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         iframe.height = 480;
         iframe.id = 'videoDisplay';
         iframe.src = `/preview?x-uuid=${window.xUuid}`;
-        const parent = document.getElementById('center-aligner');
+        const parent = canvasObj.parentElement;
         parent.prepend(iframe);
         parent.prepend(canvasObj);
         return;
