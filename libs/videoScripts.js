@@ -30,6 +30,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         initFfmpeg,
         getFfmpegStream,
         playFile,
+        //captureImageFromFfmpegStream,
         getFfmpegWebmStream
     } = require(`${basedir}/libs/ffmpeg`);
 
@@ -41,7 +42,8 @@ let libcameraProcess,
 const ffmpegStreamFunction = getEnvVar('STREAM_WEBM') ? getFfmpegWebmStream : getFfmpegStream;
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
-    BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`;
+    BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`,
+    HISTOGRAM_CONFIG_PATH = `${process.env.HOME}/histograms`;
 
 class CaptureProcessEmitter extends EventEmitter {
     constructor() {
@@ -68,6 +70,11 @@ function initSystem() {
     }
     try {
         fs.mkdirSync(BASE_CONFIG_PATH);
+    } catch (e) {
+        logger.verbose(e);
+    }
+    try {
+        fs.mkdirSync(HISTOGRAM_CONFIG_PATH);
     } catch (e) {
         logger.verbose(e);
     }
@@ -502,6 +509,7 @@ async function previewSavedVideo(filename, response) {
 module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
+    HISTOGRAM_CONFIG_PATH,
     getVideoFilename,
     saveVideoData,
     saveImagesData,
