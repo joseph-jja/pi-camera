@@ -2,6 +2,8 @@ const {
     request
 } = require('http');
 
+// module for executing http get requests
+// does not support POST or https
 async function httpGet(host, urlPath, headers = {}, extraOptions) {
 
     return new Promise((resolve, reject) => {

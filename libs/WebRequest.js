@@ -9,6 +9,8 @@ function getDiffTime(startTime) {
     return (((endTime[0] * 1e9) + endTime[1]) / 1e9);
 }
 
+// module for https requests
+// supports https, GET, POST, PUT and so on
 function WebRequest(options, payload) {
 
     return new Promise((resolve, reject) => {
