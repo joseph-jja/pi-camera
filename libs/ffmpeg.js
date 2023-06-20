@@ -15,6 +15,12 @@ const DIRECT_STREAM_OPTS = ['-i', 'pipe:',
         '-s', '640x480',
         '-f', 'mpjpeg', '-'
     ],
+    HISTOGRAM_STREAM_OPTS = ['-i', 'pipe:',
+        '-an',
+        '-filter_threads', '1',
+        '-r', '4',
+        '-q:v', '2'
+    ],
     WEB_DIRECT_STREAM_OPTS = ['-i', 'pipe:',
         '-an',
         '-filter_threads', '1',
@@ -133,9 +139,10 @@ function convertMJPEG(filename, config, outfilename) {
 
 // extract image from stream once every 5 seconds
 // ffmpeg -i input.mp4 -vf fps=1/5 %04d.png
-function captureImageFromFfmpegStream(framerate = 5) {
-    DIRECT_STREAM_OPTS[defaultFramerateIndex] = framerate;
-    const options = DIRECT.concat(['-vf', `fps=1/${framerate}`, '%02d.png']);
+const FRAMERATE_PER_SECOND = 2; // every 2 seconds
+function captureImageFromFfmpegStream(outputDir) {
+    const outputOptions = ['-vf', `fps=1/${FRAMERATE_PER_SECOND}`, `${outputDir}/%02d.png`];
+    const options = HISTOGRAM_STREAM_OPTS.concat(outputOptions);
     return spawn(FFMPEG, options, {
         env: process.env
     });
