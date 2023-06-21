@@ -29,20 +29,20 @@ const SECOND_PART_CONTENT_DISPOSITION = filename => `Content-Disposition: form-d
 const getPayloadData = (boundary, payload, filename, filedata) => {
     
     const prebuff = [];
-    prebuff.push(`${boundary}${CRLF}`);
+    prebuff.push(`--${boundary}${CRLF}`);
     prebuff.push(FIRST_PART_CONTENT_TYPE);
     prebuff.push(MIME_VERSION);
     prebuff.push(FIRST_PART_CONTENT_DISPOSITION);
     prebuff.push(payload);
-    prebuff.push(`${CRLF}${CRLF}${boundary}${CRLF}`);
+    prebuff.push(`${CRLF}${CRLF}--${boundary}${CRLF}`);
 
     prebuff.push(SECOND_PART_CONTENT_TYPE);
     prebuff.push(MIME_VERSION);
     prebuff.push(SECOND_PART_CONTENT_DISPOSITION(filename));
 
     return Buffer.concat([Buffer.from(prebuff.join(''), 'ascii'),
-        Buffer.from('hello world', 'binary'), 
-        Buffer.from(`${LF}${boundary}--${LF}`, 'ascii')]);
+        Buffer.from(filedata, 'binary'), 
+        Buffer.from(`${LF}--${boundary}--${LF}`, 'ascii')]);
 }
 
 // module for https requests
@@ -55,7 +55,8 @@ function WebRequest(options, payload, filename, filedata) {
         const startTime = process.hrtime();
 
         // specific to nova.astrometry.net file upload
-        const boundary = `--===============${Date.now()}==`;
+        // boundary does not include leading -- which is required though :/
+        const boundary = `===============${Date.now()}==`;
         const bodyMsg = (filedata ? getPayloadData(boundary, payload, filename, filedata) : undefined);
         if (filedata) {
             options.headers['Content-Type'] = `multipart/form-data; boundary=${boundary}`;
