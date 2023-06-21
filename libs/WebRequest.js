@@ -1,5 +1,5 @@
 /* eslint-disable object-curly-newline, prefer-promise-reject-errors */
-const fs = require('fs');
+const { readFile } =require('node:fs/promises');
 const httpsRequest = require('https').request;
 
 function getDiffTime(startTime) {
@@ -24,42 +24,44 @@ const MIME_VERSION = `MIME-Version: 1.0${CRLF}`;
 const FIRST_PART_CONTENT_TYPE = `Content-Type: text/plain${CRLF}`;
 const SECOND_PART_CONTENT_TYPE = `Content-Type: application/octet-stream${CRLF}`;
 const FIRST_PART_CONTENT_DISPOSITION = `Content-Disposition: form-data; name="request-json"${CRLF}${CRLF}`;
-
 const SECOND_PART_CONTENT_DISPOSITION = filename => `Content-Disposition: form-data; name="file"; filename="${filename}"${CRLF}${CRLF}`;
 
-const getPayloadSize = (boundary, filename, payload) => {
-    const stat = fs.statSync(filename);
+const getPayloadData = (boundary, payload, filename, filedata) => {
+    
+    const prebuff = [];
+    prebuff.push(`${boundary}${CRLF}`);
+    prebuff.push(FIRST_PART_CONTENT_TYPE);
+    prebuff.push(MIME_VERSION);
+    prebuff.push(FIRST_PART_CONTENT_DISPOSITION);
+    prebuff.push(payload);
+    prebuff.push(`${CRLF}${CRLF}${boundary}${CRLF}`);
 
-    let resultLen = `${boundary}${LF}`.length;
-    resultLen += FIRST_PART_CONTENT_TYPE.length;
-    resultLen += MIME_VERSION.length;
-    resultLen += FIRST_PART_CONTENT_DISPOSITION.length;
-    resultLen += payload.length;
-    resultLen += `${LF}${boundary}${LF}`.length;
+    prebuff.push(SECOND_PART_CONTENT_TYPE);
+    prebuff.push(MIME_VERSION);
+    prebuff.push(SECOND_PART_CONTENT_DISPOSITION(filename));
 
-    resultLen += SECOND_PART_CONTENT_TYPE.length;
-    resultLen += MIME_VERSION.length;
-    resultLen += SECOND_PART_CONTENT_DISPOSITION(filename).length;
-    resultLen += stat.size;
-    resultLen += `${LF}${boundary}--${LF}`.length;
-
-    return resultLen;
-};
+    return Buffer.concat([Buffer.from(prebuff.join(''), 'ascii'),
+        Buffer.from('hello world', 'binary'), 
+        Buffer.from(`${LF}${boundary}--${LF}`, 'ascii')]);
+}
 
 // module for https requests
 // supports https, GET, POST, PUT and so on
-function WebRequest(options, payload, filePath) {
+function WebRequest(options, payload, filename, filedata) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
         console.log(`Start time: ${new Date()}`);
         const startTime = process.hrtime();
 
         // specific to nova.astrometry.net file upload
         const boundary = `--===============${Date.now()}==`;
-        if (filePath) {
+        const bodyMsg = (filedata ? getPayloadData(boundary, payload, filename, filedata) : undefined);
+        if (filedata) {
             options.headers['Content-Type'] = `multipart/form-data; boundary=${boundary}`;
-            options.headers['Content-Length'] = getPayloadSize(boundary, filePath, payload);
+            options.headers['Content-Length'] = bodyMsg.length;
+            console.log(`Content Length: ${options.headers['Content-Length']}`, `Boundary: ${boundary}`);
+
         }
 
         // handle http and https requests
@@ -100,24 +102,10 @@ function WebRequest(options, payload, filePath) {
             console.error(err);
         });
 
-        if (filePath) {
+        if (filedata && bodyMsg && bodyMsg.length > 0) {
             // first part
-            request.write(`${boundary}${LF}`);
-            request.write(FIRST_PART_CONTENT_TYPE);
-            request.write(MIME_VERSION);
-            request.write(FIRST_PART_CONTENT_DISPOSITION);
-            request.write(payload);
-            request.write(`${LF}${boundary}${LF}`);
-            
-            // second part
-            const fileStream = fs.createReadStream(filePath);
-            request.write(SECOND_PART_CONTENT_TYPE);
-            request.write(MIME_VERSION);
-            request.write(SECOND_PART_CONTENT_DISPOSITION(filePath));
-            fileStream.pipe(request, { end: false });
-            fileStream.on('end', () => {
-                request.end(`${LF}${boundary}--${LF}`);
-            });
+            request.write(bodyMsg);
+            request.end();
         } else {
             request.end(payload);
         }
@@ -125,29 +113,3 @@ function WebRequest(options, payload, filePath) {
 }
 
 module.exports = WebRequest;
-
-/*
-
-    // Write the multipart/form-data body
-    req.write(`--${boundary}\r\n`);
-    req.write(`Content-Disposition: form-data; name="file"; filename="${filePath}"\r\n`);
-    req.write(`Content-Type: application/octet-stream\r\n\r\n`);
-    fileStream.pipe(req, { end: false });
-    fileStream.on('end', () => {
-      req.end(`\r\n--${boundary}--`);
-    });
-  });
-}
-
-// Example usage
-const uploadUrl = 'https://example.com/upload';
-const filePath = '/path/to/file.txt';
-
-createFormDataUpload(uploadUrl, filePath)
-  .then((response) => {
-    console.log('Upload successful:', response);
-  })
-  .catch((error) => {
-    console.error('Upload failed:', error);
-  });
-*/
