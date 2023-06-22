@@ -42,7 +42,7 @@ export const upload = (session, filename) => {
     const {
         ...headers
     } = DEFAULT_ASTROMETRY_HEADERS;
-    const uploadOptions = getOptions(uploadURL, headers);
+    const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
 
     const authData = getUploadPayload(session);
 
