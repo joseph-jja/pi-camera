@@ -6,6 +6,8 @@ import {
     upload
 } from '#libs/astrometry/fileupload.mjs';
 
+// TODO read this in from file
+// create action 
 const apiKey = '';
 
 login(apiKey).then(session => {
