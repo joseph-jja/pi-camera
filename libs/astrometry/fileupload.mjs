@@ -37,7 +37,7 @@ const getUploadPayload = session => {
     return JSON.stringify(uploadPayload);
 };
 
-export const upload = (session, filename) => {
+export const upload = async (session, filename) => {
 
     const {
         ...headers
@@ -48,14 +48,15 @@ export const upload = (session, filename) => {
 
     fs.readFile(filename, {encoding: 'binary'}, (err, data) => {
         if (!err) {
-            WebRequest(uploadOptions, authData, filename, data).then(status => {
-                console.log(status);
-            }).catch(xerr => {
-                console.log(xerr);
+            return WebRequest(uploadOptions, authData, filename, data).then(status => {
+                // TODO what do we need from this?
+                if (status.status === 'success' && status.subid) {
+                    return status.subid;
+                }
+                return Promise.reject(status);
             });
-            return;
         }
-        console.log(err);
+        Promise.reject(err);
     });
 };
     
