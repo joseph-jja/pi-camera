@@ -1,7 +1,8 @@
 import {
     DEFAULT_ASTROMETRY_HEADERS,
     ASTROMETRY_SUBISSIONS_URL,
-    ASTROMETRY_JOBS_STATUS_URL,
+    ASTROMETRY_JOBS_ANNOTATIONS_URL,
+    ASTROMETRY_JOBS_INFO_URL,
     ASTROMETRY_SUBMISSION_PENDING,
     ASTROMETRY_SUBMISSION_STARTED,
     ASTROMETRY_SUBMISSION_COMPLETED
@@ -14,8 +15,6 @@ import {
     resolve,
     basename
 } from 'path';
-
-const filename = basename(resolve(import.meta.url));
 
 import {
     createRequire
@@ -30,6 +29,8 @@ const buildRequest = (url) => {
     const {
         ...headers
     } = DEFAULT_ASTROMETRY_HEADERS;
+
+    headers.method = 'GET';
 
     return getOptions(url, headers);
 };
@@ -61,19 +62,40 @@ export const submissionStatus = (submissionID) => {
 
 };
 
-export const jobStatus = (jobId) => {
+export const jobAnnotations = (jobId) => {
 
-    const jobOptions = buildRequest(ASTROMETRY_JOBS_STATUS_URL(jobId));
+    const jobOptions = buildRequest(ASTROMETRY_JOBS_ANNOTATIONS_URL(jobId));
 
     // this is simple, it has a status field :) 
     return WebRequest(jobOptions, '').then(results => results?.status);
 };
 
-export const jobCalibration = (jobId) => {
+export const jobInfo = (jobId) => {
 
-    const jobOptions = buildRequest(ASTROMETRY_JOBS_CALIBRATION_URL(jobId));
+    const jobOptions = buildRequest(ASTROMETRY_JOBS_INFO_URL(jobId));
 
     // this is simple, it has a status field :) 
     return WebRequest(jobOptions, '');
 };
+
+/*
+// this can get all the different generated files
+// or selected can be specified, not sure which would be useful
+export const getJobFiles(jobId) {
+
+    const apiCalls = [
+        buildRequest(`/wcs_file/${jobId}`),
+        buildRequest(`/new_fits_file/${jobId}`),
+        buildRequest(`/rdls_file/${jobId}`),
+        buildRequest(`/axy_file/${jobId}`),
+        buildRequest(`/corr_file/${jobId}`),
+        buildRequest(`/annotated_display/${jobId}`),
+        buildRequest(`/red_green_image_display/${jobId}`),
+        buildRequest(`/extraction_image_display/${jobId}`)
+    ].map(options => {
+        return WebRequest(options, '');
+    });
+
+    return Promise.all(apiCalls);
+}*/
 

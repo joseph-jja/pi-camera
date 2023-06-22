@@ -13,8 +13,6 @@ import {
     basename
 } from 'path';
 
-const filename = basename(resolve(import.meta.url));
-
 import {
     createRequire
 } from "module";

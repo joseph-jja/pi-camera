@@ -4,8 +4,8 @@ export const ASTROMETRY_LOGIN_URL = '/api/login';
 export const ASTROMETRY_UPLOAD_URL = '/api/upload';
 
 export const ASTROMETRY_SUBISSIONS_URL = (subissionId) => `/api/submissions/${subissionId}`;
-export const ASTROMETRY_JOBS_STATUS_URL = (jobId) => `/api/jobs/${jobId}`;
-export const ASTROMETRY_JOBS_CALIBRATION_URL = (jobId) => `/api/jobs/${jobId}`;
+export const ASTROMETRY_JOBS_ANNOTATIONS_URL = (jobId) => `/api/jobs/${jobId}/annotations/`;
+export const ASTROMETRY_JOBS_INFO_URL = (jobId) => `/api/jobs/${jobId}/info/`;
 
 export const ASTROMETRY_SUBMISSION_PENDING = 'pending';
 export const ASTROMETRY_SUBMISSION_STARTED = 'started';
