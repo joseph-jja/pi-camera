@@ -3,6 +3,7 @@ import {
     ASTROMETRY_SUBISSIONS_URL,
     ASTROMETRY_JOBS_ANNOTATIONS_URL,
     ASTROMETRY_JOBS_INFO_URL,
+    ASTROMETRY_JOBS_STATUS_URL,
     ASTROMETRY_SUBMISSION_PENDING,
     ASTROMETRY_SUBMISSION_STARTED,
     ASTROMETRY_SUBMISSION_COMPLETED
@@ -66,15 +67,22 @@ export const jobAnnotations = (jobId) => {
 
     const jobOptions = buildRequest(ASTROMETRY_JOBS_ANNOTATIONS_URL(jobId));
 
-    // this is simple, it has a status field :) 
     return WebRequest(jobOptions, '').then(results => results?.status);
+};
+
+export const jobStatus = (jobId) => {
+
+    const jobOptions = buildRequest(ASTROMETRY_JOBS_STATUS_URL(jobId));
+
+    // this is simple, it has a status field :) 
+    return WebRequest(jobOptions, '');
 };
 
 export const jobInfo = (jobId) => {
 
     const jobOptions = buildRequest(ASTROMETRY_JOBS_INFO_URL(jobId));
 
-    // this is simple, it has a status field :) 
+    // this is simple, as we want more data
     return WebRequest(jobOptions, '');
 };
 
