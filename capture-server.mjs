@@ -9,7 +9,6 @@ import http from 'http';
 import {
     randomBytes
 } from 'crypto';
-import * as childProcess from 'child_process';
 
 import express from 'express';
 import bodyParser from 'body-parser';
