@@ -56,7 +56,7 @@ export const submissionStatus = (submissionID) => {
         return {
             'status': ASTROMETRY_SUBMISSION_PENDING,
             ...results
-        };;
+        };
     });
 
 };
@@ -65,7 +65,6 @@ export const jobStatus = (jobId) => {
 
     const jobOptions = buildRequest(ASTROMETRY_JOBS_URL(jobId));
 
-    return WebRequest(jobOptions, '').then(status => {
-        console.log(status);
-    });
+    // this is simple, it has a status field :) 
+    return WebRequest(jobOptions, '').then(results => results?.status);
 };
