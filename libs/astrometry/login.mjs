@@ -6,6 +6,11 @@ import {
     getOptions
 } from '#libs/astrometry/utils.mjs';
 
+import {
+    resolve,
+    basename
+} from 'path';
+
 const filename = basename(resolve(import.meta.url));
 
 import {
