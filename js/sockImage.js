@@ -3,6 +3,8 @@ import {
 } from "/js/socket.io.esm.min.js";
 
 const socketInfo = document.getElementById('server-info');
+const serverErrors = document.getElementById('server-messages');
+const plateSolveStatue = document.getElementById('previewOptions');
 
 const socket = io();
 socket.on('connect', () => {
@@ -21,6 +23,32 @@ socket.on('info', (data) => {
         return `${acc} <br> ${next}`;
     });
     socketInfo.innerHTML = results;
+});
+
+const stringify = data => {
+    try {
+        return JSON.stringify(data);
+    } catch(_e) {
+        return data;
+    }
+ }
+
+socket.on('plate-solve', (data) => {
+    const { 
+        status,
+        message
+    } = data;
+    // status can be
+    // plateSolveError
+    // plateSolvingInitiated
+    // plateSolvingJobStatus
+    // plateSolvingJobCompleted
+    // plateSolvingSubmissionStatus
+    if (status === plateSolveError) {
+        serverErrors.innerHTML = stringify(message);
+    } else {
+        plateSolveStatue.innerHTML = stringify(message);;
+    }
 });
 
 socket.on('histogram', (data) => {
