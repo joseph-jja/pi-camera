@@ -220,18 +220,8 @@ export async function videoUpdate() {
     });
 }
 
-export async function checkAstrometrySubmissionStatus(submissionId) {
-    return executeGETRequest(`/statusCheckAstrometry?${submissionId}`, true).then(resp => {
-        try {
-            return JSON.parse(resp);
-        } catch(_e) {
-            return resp;
-        }
-    });
-}
-
-export async function checkAstrometryJobStatus(jobId) {
-    return executeGETRequest(`/statusCheckAstrometry?${jobId}`, true).then(resp => {
+export async function checkAstrometrySubmissionStatus(type, typeId) {
+    return executeGETRequest(`/statusCheckAstrometry?${type}=${typeId}`, true).then(resp => {
         try {
             return JSON.parse(resp);
         } catch(_e) {

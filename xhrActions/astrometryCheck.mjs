@@ -94,7 +94,7 @@ export const statusCheckAstrometry = async (request, response) => {
 
     const query = (request.query || {});
     const jobId = query.jobId, 
-        submissionId = quer.submissionId;
+        submissionId = query.submissionId;
     if (!jobId && !submissionId) {
         sendError('No id to check!', response, 200);
         return;
