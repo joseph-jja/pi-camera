@@ -134,9 +134,17 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (target.id === 'deleteFile') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             executeGETRequest(`/deleteFile?name=${currentItem}`).then(listImageCaptures);
+        } else if (target.id === 'plateSolveImage') {
+            const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
+            const isImage = currentItem.endsWith('.jpg') || currentItem.endsWith('.png');
+            if (isImage) {
+                /*executeGETRequest(`/uploadAstrometryFile?name=${currentItem}`).then(res => {
+
+                });*/
+            }
         } else if (target.id === 'viewImageOrVideo') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
-            const isImage = currentItem.endsWith('.jpg');
+            const isImage = currentItem.endsWith('.jpg') || currentItem.endsWith('.png');
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
             const imageCount = document.forms['saveImages'].imagecount.selectedOptions[0].value.trim();
