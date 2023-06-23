@@ -114,7 +114,7 @@ function processFile(filename, configFilename) {
 
 function emitMessage(msg) {
     captureEmitter.emit('button-exec', {
-        method: 'conveeretFileFormat',
+        method: 'convertFileFormat',
         status: msg
     });
 }

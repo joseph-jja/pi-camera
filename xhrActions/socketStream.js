@@ -13,7 +13,8 @@ const stringify = require(`${basedir}/libs/stringify`),
         getImageUpdateOptions
     } = require(`${basedir}/libs/videoScripts`);
 
-let lastMessage = '';
+let lastMessage = '', 
+    previewConfig = '';
 
 const K_TO_M = 1024 * 1024;
 
@@ -36,6 +37,8 @@ function collectData() {
 
     return {
         messages: lastMessage,
+        'preview config': previewConfig,
+        'last update': new Date(),
         load: os.loadavg(),
         memory: filtered,
         'free / total': `${Math.round(os.freemem() / K_TO_M)}M out of ${Math.round(os.totalmem() / K_TO_M)}M`,
@@ -46,7 +49,20 @@ function collectData() {
 }
 
 captureEmitter.on('button-exec', message => {
-    lastMessage = message.status;
+    // saveImagesData - messages about saved images
+    // imageStream - messages about testing the image stream
+    // directStream - preview is enabled
+    // previewStream - error when preview service is not running 
+    // saveVideoData - messages about saved videos
+    // previewSavedVideo - preview saved video 
+    // previewImageConfig - sends config data to UI
+    // previewVideoConfig - sends config data to UI
+    // convertFileFormat - if we convert file formats this is where the messages go
+    if (message.method === 'previewImageConfig' || message.method === 'previewImageConfig') {
+        previewConfig = message.status;
+    } else {
+        lastMessage = message.status;
+    }
 });
 
 module.exports = (socket) => {
