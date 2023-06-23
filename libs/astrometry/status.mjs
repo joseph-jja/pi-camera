@@ -23,6 +23,9 @@ import {
 const require = createRequire(import.meta.url);
 
 const basedir = process.cwd(),
+    {
+        safelyParse
+    } = require(`${basedir}/libs/utils`),
     WebRequest = require(`${basedir}/libs/WebRequest`);
 
 const buildRequest = (url) => {
@@ -41,23 +44,23 @@ export const submissionStatus = (submissionID) => {
     const submissionOptions = buildRequest(ASTROMETRY_SUBISSIONS_URL(submissionID));
 
     return WebRequest(submissionOptions, '').then(results => {
-        if (results.jobs && results.jobs.length > 0) {
+        if (results.data.jobs && results.data.jobs.length > 0) {
             // processing started
-            if (results.job_calibrations && results.job_calibrations.length > 0) {
+            if (results.data.job_calibrations && results.data.job_calibrations.length > 0) {
                 // processing completed
                 return {
                     'status': ASTROMETRY_SUBMISSION_COMPLETED,
-                    ...results
+                    ...results.data
                 };
             }
             return {
                 'status': ASTROMETRY_SUBMISSION_STARTED,
-                ...results
+                ...results.data
             };
         }
         return {
             'status': ASTROMETRY_SUBMISSION_PENDING,
-            ...results
+            ...results.data
         };
     });
 
@@ -67,7 +70,7 @@ export const jobAnnotations = (jobId) => {
 
     const jobOptions = buildRequest(ASTROMETRY_JOBS_ANNOTATIONS_URL(jobId));
 
-    return WebRequest(jobOptions, '').then(results => results?.status);
+    return WebRequest(jobOptions, '').then(results => results.data?.status);
 };
 
 export const jobStatus = (jobId) => {
@@ -75,7 +78,7 @@ export const jobStatus = (jobId) => {
     const jobOptions = buildRequest(ASTROMETRY_JOBS_STATUS_URL(jobId));
 
     // this is simple, it has a status field :) 
-    return WebRequest(jobOptions, '');
+    return WebRequest(jobOptions, '').then(results => results.data);
 };
 
 export const jobInfo = (jobId) => {
@@ -83,7 +86,7 @@ export const jobInfo = (jobId) => {
     const jobOptions = buildRequest(ASTROMETRY_JOBS_INFO_URL(jobId));
 
     // this is simple, as we want more data
-    return WebRequest(jobOptions, '');
+    return WebRequest(jobOptions, '').then(results => results.data);
 };
 
 /*
@@ -101,7 +104,7 @@ export const getJobFiles(jobId) {
         buildRequest(`/red_green_image_display/${jobId}`),
         buildRequest(`/extraction_image_display/${jobId}`)
     ].map(options => {
-        return WebRequest(options, '');
+        return WebRequest(options, '').then(results => results.data);
     });
 
     return Promise.all(apiCalls);
