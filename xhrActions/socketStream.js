@@ -55,11 +55,11 @@ module.exports = (socket) => {
         const data = collectData();
         logger.debug(`System info: ${stringify(data)} `);
         socket.emit('info', data);
-
     });
+
     // on connection emit some info
     socket.emit('info', collectData());
-
+    
     captureEmitter.on('histogram', message => {
         socket.emit('histogram', message);
     });
