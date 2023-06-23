@@ -138,9 +138,8 @@ window.addEventListener('DOMContentLoaded', () => {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
             const isImage = currentItem.endsWith('.jpg') || currentItem.endsWith('.png');
             if (isImage) {
-                /*executeGETRequest(`/uploadAstrometryFile?name=${currentItem}`).then(res => {
-
-                });*/
+                // have image so make request to plate solve
+                executeGETRequest(`/uploadAstrometryFile?name=${currentItem}`);
             }
         } else if (target.id === 'viewImageOrVideo') {
             const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
