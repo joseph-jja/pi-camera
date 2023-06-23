@@ -308,7 +308,6 @@ async function start() {
     });
     /* astrometry plate solving stuff end */
 
-
     app.get('/convertFiles', (request, response) => {
         convertXHRAction(request, response);
     });
