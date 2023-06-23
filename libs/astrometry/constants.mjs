@@ -8,10 +8,6 @@ export const ASTROMETRY_JOBS_STATUS_URL = (jobId) => `/api/jobs/${jobId}`;
 export const ASTROMETRY_JOBS_ANNOTATIONS_URL = (jobId) => `/api/jobs/${jobId}/annotations/`;
 export const ASTROMETRY_JOBS_INFO_URL = (jobId) => `/api/jobs/${jobId}/info/`;
 
-export const ASTROMETRY_SUBMISSION_PENDING = 'pending';
-export const ASTROMETRY_SUBMISSION_STARTED = 'started';
-export const ASTROMETRY_SUBMISSION_COMPLETED = 'completed';
-
 export const DEFAULT_ASTROMETRY_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
