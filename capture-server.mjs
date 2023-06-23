@@ -16,6 +16,11 @@ import {
     Server
 } from 'socket.io';
 
+import {
+    uploadAstrometryFile,
+    statusCheckAstrometry
+} from '#xhrActions/astrometryCheck.mjs';
+
 const filename = basename(resolve(import.meta.url));
     
 import {createRequire } from "module";
@@ -291,6 +296,18 @@ async function start() {
         const playCodec = (codec ? decodeURIComponent(codec).split(' ')[0] : 'mjpeg');
         saveVideoData(playCodec, getVideoUpdateOptions(), request, response, gVideoConfig);
     });
+
+    /* astrometry plate solving stuff start */
+    // read in config 
+    app.get('/uploadAstrometryFile', (request, response) => {
+        uploadAstrometryFile(request, response);
+    });
+
+    app.get('/statusCheckAstrometry', (request, response) => {
+        convertXHRAction(request, response);
+    });
+    /* astrometry plate solving stuff end */
+
 
     app.get('/convertFiles', (request, response) => {
         convertXHRAction(request, response);
