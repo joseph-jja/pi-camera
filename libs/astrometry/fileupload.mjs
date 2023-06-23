@@ -46,12 +46,12 @@ export const upload = async (session, filename) => {
 
     fs.readFile(filename, {encoding: 'binary'}, (err, data) => {
         if (!err) {
-            return WebRequest(uploadOptions, authData, filename, data).then(status => {
+            return WebRequest(uploadOptions, authData, filename, data).then(results => {
                 // TODO what do we need from this?
-                if (status.status === 'success' && status.subid) {
-                    return status.subid;
+                if (results.status === 'success' && results.subid) {
+                    return results.subid;
                 }
-                return Promise.reject(status);
+                return Promise.reject(results);
             });
         }
         Promise.reject(err);
