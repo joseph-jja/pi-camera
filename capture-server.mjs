@@ -304,7 +304,7 @@ async function start() {
     });
 
     app.get('/statusCheckAstrometry', (request, response) => {
-        convertXHRAction(request, response);
+        statusCheckAstrometry(request, response);
     });
     /* astrometry plate solving stuff end */
 
