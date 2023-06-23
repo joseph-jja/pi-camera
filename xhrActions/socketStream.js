@@ -59,8 +59,12 @@ module.exports = (socket) => {
     });
     // on connection emit some info
     socket.emit('info', collectData());
-    
+
     captureEmitter.on('histogram', message => {
         socket.emit('histogram', message);
+    });
+
+    captureEmitter.on('plate-solve', message => {
+        socket.emit('plate-solve', message);
     });
 };

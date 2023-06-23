@@ -28,6 +28,9 @@ const basedir = process.cwd(),
     {
         OLD_FILENAME_MATCH
     } = require(`${basedir}/xhrActions/Constants`),
+    {
+        captureEmitter
+    } = require(`${basedir}/libs/videoScripts`),
     stringify = require(`${basedir}/libs/stringify`),
     promiseWrapper = require(`${basedir}/libs/PromiseWrapper`),
     logger = require(`${basedir}/libs/logger`)(filename);
@@ -35,6 +38,10 @@ const basedir = process.cwd(),
 const sendError = (err, response, statusCode = 500) => {
     response.writeHead(statusCode || 500, {});
     response.end(stringify(err));
+    captureEmitter.emit('plate-solve', {
+        status: 'plateSolveError',
+        message: (err).toString()
+    });
 };
 
 export const uploadAstrometryFile = async (request, response, apiKey) => {
@@ -69,6 +76,10 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
         if (status) {
             response.writeHead(200, {});
             response.end(stringify(status));
+            captureEmitter.emit('plate-solve', {
+                status: 'plateSolvingInitiated',
+                message: status
+            });
             return;
         }
         sendError(uErr, response);
@@ -105,10 +116,18 @@ export const statusCheckAstrometry = async (request, response) => {
             }
             response.writeHead(200, {});
             response.end(stringify(iResults));
+            captureEmitter.emit('plate-solve', {
+                status: 'plateSolvingJobCompleted',
+                message: iResults
+            });
             return;
         }
         response.writeHead(200, {});
         response.end(stringify(results));
+        captureEmitter.emit('plate-solve', {
+            status: 'plateSolvingJobStatus',
+            message: results
+        });
         return;
     } else if (submissionId) {
         const [uErr, results] = await promiseWrapper(submissionStatus(submissionId));
@@ -118,6 +137,10 @@ export const statusCheckAstrometry = async (request, response) => {
         }
         response.writeHead(200, {});
         response.end(stringify(results));
+        captureEmitter.emit('plate-solve', {
+            status: 'plateSolvingSubmissionStatus',
+            message: results
+        });
         return;
     } 
     sendError('No idea how we got here :)', response);

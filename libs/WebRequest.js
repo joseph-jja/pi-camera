@@ -1,5 +1,7 @@
 /* eslint-disable object-curly-newline, prefer-promise-reject-errors */
-const { readFile } =require('node:fs/promises');
+const {
+    readFile
+} = require('node:fs/promises');
 const httpsRequest = require('https').request;
 
 function getDiffTime(startTime) {
@@ -13,7 +15,7 @@ function getDiffTime(startTime) {
 function parse(jsonIn) {
     try {
         return JSON.parse(jsonIn);
-    } catch(_e) {
+    } catch (_e) {
         return jsonIn;
     }
 }
@@ -27,7 +29,7 @@ const FIRST_PART_CONTENT_DISPOSITION = `Content-Disposition: form-data; name="re
 const SECOND_PART_CONTENT_DISPOSITION = filename => `Content-Disposition: form-data; name="file"; filename="${filename}"${CRLF}${CRLF}`;
 
 const getPayloadData = (boundary, payload, filename, filedata) => {
-    
+
     const prebuff = [];
     prebuff.push(`--${boundary}${CRLF}`);
     prebuff.push(FIRST_PART_CONTENT_TYPE);
@@ -41,8 +43,9 @@ const getPayloadData = (boundary, payload, filename, filedata) => {
     prebuff.push(SECOND_PART_CONTENT_DISPOSITION(filename));
 
     return Buffer.concat([Buffer.from(prebuff.join(''), 'ascii'),
-        Buffer.from(filedata, 'binary'), 
-        Buffer.from(`${LF}--${boundary}--${LF}`, 'ascii')]);
+        Buffer.from(filedata, 'binary'),
+        Buffer.from(`${LF}--${boundary}--${LF}`, 'ascii')
+    ]);
 }
 
 // module for https requests
@@ -78,7 +81,7 @@ function WebRequest(options, payload, filename, filedata) {
             res.on('end', () => {
                 if (res.statusCode < 200 || res.statusCode >= 300) {
                     console.error(`Error: ${new Date()}`);
-                    reject({ 
+                    reject({
                         headers: res.headers,
                         data: parse(Buffer.concat(results).toString())
                     });

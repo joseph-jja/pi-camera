@@ -37,13 +37,13 @@ function histogramHandler(err, data, info) {
 
     if (err) {
         console.error('An error occurred while processing the image:', err);
-        
+
         // send the histogram error
         captureEmitter.emit('histogram', {
             status: 'error',
             error: err
         });
-        
+
         return;
     }
 
