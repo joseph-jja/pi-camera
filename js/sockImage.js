@@ -2,9 +2,15 @@ import {
     io
 } from "/js/socket.io.esm.min.js";
 
+import {
+    checkAstrometrySubmissionStatus,
+    checkAstrometryJobStatus
+} from '/js/libs/formUtils.js';
+
+
 const socketInfo = document.getElementById('server-info');
 const serverErrors = document.getElementById('server-messages');
-const plateSolveStatue = document.getElementById('previewOptions');
+const plateSolveStatus = document.getElementById('previewOptions');
 
 const socket = io();
 socket.on('connect', () => {
@@ -31,7 +37,7 @@ const stringify = data => {
     } catch(_e) {
         return data;
     }
- }
+}
 
 socket.on('plate-solve', (data) => {
     const { 
@@ -44,10 +50,43 @@ socket.on('plate-solve', (data) => {
     // plateSolvingJobStatus
     // plateSolvingJobCompleted
     // plateSolvingSubmissionStatus
-    if (status === plateSolveError) {
+    if (status === 'plateSolveError') {
         serverErrors.innerHTML = stringify(message);
+    } else if ( status === 'plateSolvingInitiated') {
+        // we have submit id
+        const submissionId = message;
+        let tries = 0;
+        const intervalId = setInterval(() => {
+            checkAstrometrySubmissionStatus(submissionId).then(results => {
+                const hasJobs = results.jobs && Array.isArray(results.jobs);
+                if (!hasJobs) {
+                    plateSolveStatus = 'Processing has not started!';
+                } else if (results.jobs.length > 0) {
+                    plateSolveStatus = 'Processing is started!';
+                    if (results['job_calibrations'] && Array.isArray(results['job_calibrations'])) {
+                        if (results['job_calibrations'].length > 0) {
+                            plateSolveStatus = 'Processing has completed!';
+                            clearInterval(intervalId);
+                            checkAstrometryJobStatus(results.jobs[0]);
+                            return;
+                        }
+                    }
+                } else {
+                    plateSolveStatus = 'Processing has not started!';
+                }
+                tries++;
+                if (tries > 10) {
+                    // at 30 second intervals the 10 tries makes 5 minutes
+                    // so after 10 minutes give up
+                    clearInterval(intervalId);
+                }
+            }).catch(err => {
+                plateSolveStatus = stringify(err);
+                clearInterval(intervalId);
+            });
+        }, 30000);  // 30 seconds
     } else {
-        plateSolveStatue.innerHTML = stringify(message);;
+        plateSolveStatus.innerHTML = stringify(message);
     }
 });
 

@@ -50,20 +50,19 @@ export const submissionStatus = (submissionID) => {
                 // processing completed
                 return {
                     'status': ASTROMETRY_SUBMISSION_COMPLETED,
-                    ...results.data
+                    data: results.data
                 };
             }
             return {
                 'status': ASTROMETRY_SUBMISSION_STARTED,
-                ...results.data
+                data: results.data
             };
         }
         return {
             'status': ASTROMETRY_SUBMISSION_PENDING,
-            ...results.data
+            data: results.data
         };
     });
-
 };
 
 export const jobAnnotations = (jobId) => {
