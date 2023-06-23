@@ -220,29 +220,22 @@ export async function videoUpdate() {
     });
 }
 
-// these need to match libs/astrometry/constants
-const ASTROMETRY_SUBMISSION_PENDING = 'pending';
-const ASTROMETRY_SUBMISSION_STARTED = 'started';
-const ASTROMETRY_SUBMISSION_COMPLETED = 'completed';
-
 export async function checkAstrometrySubmissionStatus(submissionId) {
     return executeGETRequest(`/statusCheckAstrometry?${submissionId}`, true).then(resp => {
-        const results = JSON.parse(resp);
-        if (results.status === ASTROMETRY_SUBMISSION_PENDING) {
-            plateSolveStatus = 'Processing is pending!';
-            return 0;
-        } else if (results.status === ASTROMETRY_SUBMISSION_STARTED) {
-            plateSolveStatus = 'Processing has started!';
-            jobId = results.data;
-            return jobId;
-        } else if (results.status === ASTROMETRY_SUBMISSION_COMPLETED) {
-            plateSolveStatus = 'Processing has completed!';
-            jobId = results.data;
+        try {
+            return JSON.parse(resp);
+        } catch(_e) {
+            return resp;
         }
-        return 0;
     });
 }
 
 export async function checkAstrometryJobStatus(jobId) {
-    return executeGETRequest(`/statusCheckAstrometry?${jobId}`, true);
+    return executeGETRequest(`/statusCheckAstrometry?${jobId}`, true).then(resp => {
+        try {
+            return JSON.parse(resp);
+        } catch(_e) {
+            return resp;
+        }
+    });
 }
