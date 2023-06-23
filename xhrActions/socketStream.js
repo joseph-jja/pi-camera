@@ -13,7 +13,7 @@ const stringify = require(`${basedir}/libs/stringify`),
         getImageUpdateOptions
     } = require(`${basedir}/libs/videoScripts`);
 
-let lastMessage = '', 
+let lastMessage = '',
     previewConfig = '';
 
 const K_TO_M = 1024 * 1024;
@@ -75,7 +75,7 @@ module.exports = (socket) => {
 
     // on connection emit some info
     socket.emit('info', collectData());
-    
+
     captureEmitter.on('histogram', message => {
         socket.emit('histogram', message);
     });

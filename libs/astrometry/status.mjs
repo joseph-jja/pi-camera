@@ -43,25 +43,29 @@ export const submissionStatus = (submissionID) => {
 
     const submissionOptions = buildRequest(ASTROMETRY_SUBISSIONS_URL(submissionID));
 
-    return WebRequest(submissionOptions, '').then(results => {
-        if (results.data.jobs && results.data.jobs.length > 0) {
-            // processing started
-            if (results.data.job_calibrations && results.data.job_calibrations.length > 0) {
-                // processing completed
-                return {
-                    'status': ASTROMETRY_SUBMISSION_COMPLETED,
-                    data: results.data
-                };
-            }
+    return WebRequest(submissionOptions, '').then(resp => {
+        const results = resp?.data || {};
+        const jobs = results.jobs;
+        const calibrations = results['job_calibrations'];
+        const hasJobs = jobs && Array.isArray(jobs) && jobs.length > 0;
+        const hasCalibrations = calibrations && Array.isArray(calibrations) && calibrations.length > 0;
+                
+        if (hasCalibrations) {
+            return {
+                'status': ASTROMETRY_SUBMISSION_COMPLETED,
+                data: results.data
+            };
+        } else if (hasJobs) {
             return {
                 'status': ASTROMETRY_SUBMISSION_STARTED,
                 data: results.data
             };
-        }
+        } else {
         return {
             'status': ASTROMETRY_SUBMISSION_PENDING,
             data: results.data
         };
+    }
     });
 };
 
