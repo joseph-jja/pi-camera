@@ -111,7 +111,8 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
             response.end(stringify(status));
             captureEmitter.emit('plate-solve', {
                 status: 'plateSolvingInitiated',
-                message: status
+                message: status,
+                filename: filename
             });
             // write file with sub id
             writeFile(subIdName, `{"submissionId": ${status}}`);
@@ -191,7 +192,8 @@ export const statusCheckAstrometry = async (request, response) => {
             .finally(() => {
                 captureEmitter.emit('plate-solve', {
                     status: 'plateSolvingSubmissionStatus',
-                    message: results
+                    message: results,
+                    filename: filename
                 });
             });
         return;
