@@ -33,13 +33,13 @@ socket.on('info', (data) => {
 const stringify = data => {
     try {
         return JSON.stringify(data);
-    } catch(_e) {
+    } catch (_e) {
         return data;
     }
 }
 
 socket.on('plate-solve', (data) => {
-    const { 
+    const {
         status,
         message
     } = data;
@@ -91,7 +91,7 @@ socket.on('plate-solve', (data) => {
                     jobId = results.jobs[0];
                 } else {
                     plateSolveStatus = 'Processing has NOT started!';
-                } 
+                }
                 tries++;
                 if (tries > 10) {
                     // at 30 second intervals the 10 tries makes 5 minutes
@@ -102,7 +102,7 @@ socket.on('plate-solve', (data) => {
                 plateSolveStatus = stringify(err);
                 clearInterval(intervalId);
             });
-        }, 30000);  // 30 seconds
+        }, 30000); // 30 seconds
     } else {
         plateSolveStatus.innerHTML = stringify(message);
     }
