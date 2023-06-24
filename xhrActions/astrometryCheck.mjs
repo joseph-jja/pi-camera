@@ -118,7 +118,7 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
             // write file with sub id
             const [fErr, _res] = await promiseWrapper(writeFile(subIdName, `{"submissionId": ${status}}`));
             if (fErr) {
-                logger.err(`Error writing submission file ${fErr}`);
+                logger.err(`Error writing submission file ${subIdFilename} => ${fErr}`);
             }
             return;
         }

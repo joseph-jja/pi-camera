@@ -88,6 +88,8 @@ export const upload = async (session, filename) => {
                     return Promise.resolve(results.subid);
                 }
                 return Promise.reject(results);
+            }).catch(e => {
+                return Promise.reject(e);
             });
         }
         Promise.reject(err);
