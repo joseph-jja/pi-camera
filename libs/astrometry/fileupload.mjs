@@ -85,7 +85,7 @@ export const upload = async (session, filename) => {
             return WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(results => {
                 // TODO what do we need from this?
                 if (results.status === 'success' && results.subid) {
-                    return results.subid;
+                    return Promise.resolve(results.subid);
                 }
                 return Promise.reject(results);
             });

@@ -51,7 +51,7 @@ const sendError = (err, response, statusCode = 500) => {
     response.end(stringify(err));
     captureEmitter.emit('plate-solve', {
         status: 'plateSolveError',
-        message: (err).toString()
+        message: (err || {}).toString()
     });
 };
 
