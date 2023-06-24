@@ -138,6 +138,8 @@ export const statusCheckAstrometry = async (request, response) => {
         return;
     }
 
+    const subIdName = subIdFilename(filename);
+
     if (jobId) {
         // given a job id check to see if it is done 
         // if success then get all the info from the plate solve
@@ -176,6 +178,8 @@ export const statusCheckAstrometry = async (request, response) => {
         }
         response.writeHead(200, {});
         response.end(stringify(results));
+        const submissionResults = Object.assign({}, results, { 'submissionId': submissionId });
+        writeFile(subIdName, stringify(submissionResults);
         captureEmitter.emit('plate-solve', {
             status: 'plateSolvingSubmissionStatus',
             message: results
