@@ -233,6 +233,7 @@ export async function checkAstrometrySubmissionStatus(type, typeId) {
             return {
                 hasCalibrations,
                 hasJobs,
+                jobs,
                 calibrations,
                 ...results
             };
