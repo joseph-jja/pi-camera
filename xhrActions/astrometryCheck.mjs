@@ -39,6 +39,7 @@ const basedir = process.cwd(),
         captureEmitter
     } = require(`${basedir}/libs/videoScripts`),
     {
+        BASE_IMAGE_PATH,
         SOLVED_INFO_PATH
     } = require(`${basedir}/libs/videoScripts`),
     stringify = require(`${basedir}/libs/stringify`),
