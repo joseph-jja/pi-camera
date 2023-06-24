@@ -22,12 +22,14 @@ import {
     basename
 } from 'path';
 
-const filename = basename(resolve(import.meta.url));
+const filename = basename(resolve(
+    import.meta.url));
 
 import {
     createRequire
 } from "module";
-const require = createRequire(import.meta.url);
+const require = createRequire(
+    import.meta.url);
 
 const basedir = process.cwd(),
     {
@@ -126,7 +128,7 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
 export const statusCheckAstrometry = async (request, response) => {
 
     const query = (request.query || {});
-    const jobId = query.jobId, 
+    const jobId = query.jobId,
         submissionId = query.submissionId;
     if (!jobId && !submissionId) {
         sendError('No id to check!', response, 200);
@@ -178,13 +180,21 @@ export const statusCheckAstrometry = async (request, response) => {
         }
         response.writeHead(200, {});
         response.end(stringify(results));
-        const submissionResults = Object.assign({}, results, { 'submissionId': submissionId });
-        writeFile(subIdName, stringify(submissionResults);
-        captureEmitter.emit('plate-solve', {
-            status: 'plateSolvingSubmissionStatus',
-            message: results
+        const submissionResults = Object.assign({}, results, {
+            'submissionId': submissionId
         });
+        writeFile(subIdName, stringify(submissionResults)).then(_res => {
+                logger.info(`File updated ${subIdName}`);
+            }).catch(_e => {
+                logger.error(`File was not updated ${subIdName}`);
+            })
+            .finally(() => {
+                captureEmitter.emit('plate-solve', {
+                    status: 'plateSolvingSubmissionStatus',
+                    message: results
+                });
+            });
         return;
-    } 
+    }
     sendError('No idea how we got here :)', response);
 };
