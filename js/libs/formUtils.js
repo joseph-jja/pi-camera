@@ -230,9 +230,11 @@ export async function checkAstrometrySubmissionStatus(type, typeId) {
             const hasJobs = jobs && Array.isArray(jobs) && jobs.length > 0;
             const hasCalibrations = calibrations && Array.isArray(calibrations) && calibrations.length > 0;
 
+            const hasErrors = results['error_message'];
             return {
                 hasCalibrations,
                 hasJobs,
+                hasErrors,
                 jobs,
                 calibrations,
                 ...results
