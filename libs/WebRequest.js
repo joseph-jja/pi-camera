@@ -1,8 +1,9 @@
 /* eslint-disable object-curly-newline, prefer-promise-reject-errors */
-const {
-    readFile
-} = require('node:fs/promises');
 const httpsRequest = require('https').request;
+
+const basedir = process.cwd(),
+    logger = require(`${basedir}/libs/logger`)(__filename);
+
 
 function getDiffTime(startTime) {
     if (!startTime) {
@@ -32,7 +33,7 @@ function WebRequest(options, payload) {
         // handle http and https requests
         const request = httpsRequest(options, res => {
 
-            console.log(`Response returned status code ${res.statusCode} took ${getDiffTime(startTime)}.`);
+            logger.info(`Response returned status code ${res.statusCode} took ${getDiffTime(startTime)}.`);
 
             const results = [];
 

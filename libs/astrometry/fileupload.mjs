@@ -13,13 +13,16 @@ import {
     basename
 } from 'path';
 
+const filename = basename(resolve(import.meta.url));
+
 import {
     createRequire
 } from "module";
 const require = createRequire(import.meta.url);
 
 const basedir = process.cwd(),
-    WebRequest = require(`${basedir}/libs/WebRequest`);
+    WebRequest = require(`${basedir}/libs/WebRequest`),
+    logger = require(`${basedir}/libs/logger`)(filename);
 
 const DEFAULT_ASTROMETRY_UPLOAD_PAYLOAD = {
     'allow_commercial_use': 'n',
@@ -37,14 +40,19 @@ const SECOND_PART_CONTENT_TYPE = `Content-Type: application/octet-stream${CRLF}`
 const FIRST_PART_CONTENT_DISPOSITION = `Content-Disposition: form-data; name="request-json"${CRLF}${CRLF}`;
 const SECOND_PART_CONTENT_DISPOSITION = filename => `Content-Disposition: form-data; name="file"; filename="${filename}"${CRLF}${CRLF}`;
 
-const getPayloadData = (boundary, payload, filename, filedata) => {
+const getPayloadData = (boundary, session, filename, filedata) => {
+
+    const uploadPayload = Object.assign({}, 
+        DEFAULT_ASTROMETRY_UPLOAD_PAYLOAD, {
+            'session': session
+        });
 
     const prebuff = [];
     prebuff.push(`--${boundary}${CRLF}`);
     prebuff.push(FIRST_PART_CONTENT_TYPE);
     prebuff.push(MIME_VERSION);
     prebuff.push(FIRST_PART_CONTENT_DISPOSITION);
-    prebuff.push(payload);
+    prebuff.push(JSON.stringify(uploadPayload));
     prebuff.push(`${CRLF}${CRLF}--${boundary}${CRLF}`);
 
     prebuff.push(SECOND_PART_CONTENT_TYPE);
@@ -57,26 +65,23 @@ const getPayloadData = (boundary, payload, filename, filedata) => {
     ]);
 }
 
-const getUploadPayload = session => {
-    const uploadPayload = Object.assign({}, 
-        DEFAULT_ASTROMETRY_UPLOAD_PAYLOAD, {
-            'session': session
-        });
-    return JSON.stringify(uploadPayload);
-};
-
 export const upload = async (session, filename) => {
 
     const {
         ...headers
     } = DEFAULT_ASTROMETRY_HEADERS;
-    const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
 
-    const authData = getUploadPayload(session);
+    headers['Content-Type'] = `multipart/form-data; boundary=${BOUNDARY}`;
 
     fs.readFile(filename, {encoding: 'binary'}, (err, filedata) => {
         if (!err) {
-            const bodyMsg = getPayloadData(BOUNDARY, authData, filename, filedata);
+            const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
+            const bodyMsg = getPayloadData(BOUNDARY, session, filename, filedata);
+
+            // need content length headers
+            uploadOptions.headers['Content-Length'] = bodyMsg.length;
+            logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
+
             return WebRequest(uploadOptions, authData, bodyMsg, BOUNDARY).then(results => {
                 // TODO what do we need from this?
                 if (results.status === 'success' && results.subid) {

@@ -40,7 +40,7 @@ export const submissionStatus = (submissionID) => {
 
     const submissionOptions = buildRequest(ASTROMETRY_SUBISSIONS_URL(submissionID));
 
-    return WebRequest(submissionOptions, '').then(resp => {
+    return WebRequest(submissionOptions).then(resp => {
         if (resp && resp.data) {
             return resp.data;
         } else {
@@ -53,7 +53,7 @@ export const jobAnnotations = (jobId) => {
 
     const jobOptions = buildRequest(ASTROMETRY_JOBS_ANNOTATIONS_URL(jobId));
 
-    return WebRequest(jobOptions, '').then(results => results.data?.status);
+    return WebRequest(jobOptions).then(results => results.data?.status);
 };
 
 export const jobStatus = (jobId) => {
@@ -61,7 +61,7 @@ export const jobStatus = (jobId) => {
     const jobOptions = buildRequest(ASTROMETRY_JOBS_STATUS_URL(jobId));
 
     // this is simple, it has a status field :) 
-    return WebRequest(jobOptions, '').then(results => results.data);
+    return WebRequest(jobOptions).then(results => results.data);
 };
 
 export const jobInfo = (jobId) => {
@@ -69,7 +69,7 @@ export const jobInfo = (jobId) => {
     const jobOptions = buildRequest(ASTROMETRY_JOBS_INFO_URL(jobId));
 
     // this is simple, as we want more data
-    return WebRequest(jobOptions, '').then(results => results.data);
+    return WebRequest(jobOptions).then(results => results.data);
 };
 
 /*
@@ -87,7 +87,7 @@ export const getJobFiles(jobId) {
         buildRequest(`/red_green_image_display/${jobId}`),
         buildRequest(`/extraction_image_display/${jobId}`)
     ].map(options => {
-        return WebRequest(options, '').then(results => results.data);
+        return WebRequest(options).then(results => results.data);
     });
 
     return Promise.all(apiCalls);
