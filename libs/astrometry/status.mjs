@@ -3,7 +3,7 @@ import {
     ASTROMETRY_SUBISSIONS_URL,
     ASTROMETRY_JOBS_ANNOTATIONS_URL,
     ASTROMETRY_JOBS_INFO_URL,
-    ASTROMETRY_JOBS_STATUS_URLD
+    ASTROMETRY_JOBS_STATUS_URL
 } from '#libs/astrometry/constants.mjs';
 import {
     getOptions

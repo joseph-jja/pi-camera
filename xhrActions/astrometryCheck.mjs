@@ -38,7 +38,7 @@ const basedir = process.cwd(),
     } = require(`${basedir}/libs/videoScripts`),
     {
         SOLVED_INFO_PATH
-    } = require(`${basedir}/libs/videoScripts`);
+    } = require(`${basedir}/libs/videoScripts`),
     stringify = require(`${basedir}/libs/stringify`),
     promiseWrapper = require(`${basedir}/libs/PromiseWrapper`),
     logger = require(`${basedir}/libs/logger`)(filename);
