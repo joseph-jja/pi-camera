@@ -50,30 +50,49 @@ socket.on('plate-solve', (data) => {
     // plateSolvingJobStatus
     // plateSolvingJobCompleted
     // plateSolvingSubmissionStatus
+    let intervalId;
     if (status === 'plateSolveError') {
         serverErrors.innerHTML = stringify(message);
-    } else if ( status === 'plateSolvingInitiated') {
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+    } else if (status === 'plateSolvingSubmissionStatus') {
+        // ignore this as we are polling 
+    } else if (status === 'plateSolvingInitiated') {
         // we have submit id
         const submissionId = message;
         let tries = 0;
-        const intervalId = setInterval(() => {
-            checkAstrometrySubmissionStatus(submissionId).then(results => {
-                const hasJobs = results.jobs && Array.isArray(results.jobs);
-                if (!hasJobs) {
-                    plateSolveStatus = 'Processing has not started!';
-                } else if (results.jobs.length > 0) {
-                    plateSolveStatus = 'Processing is started!';
-                    if (results['job_calibrations'] && Array.isArray(results['job_calibrations'])) {
-                        if (results['job_calibrations'].length > 0) {
-                            plateSolveStatus = 'Processing has completed!';
-                            clearInterval(intervalId);
-                            checkAstrometryJobStatus(results.jobs[0]);
-                            return;
-                        }
-                    }
+
+        intervalId = setInterval(() => {
+            checkAstrometrySubmissionStatus('submissionId', submissionId).then(results => {
+                const {
+                    jobs,
+                    hasJobs,
+                    hasCalibrations,
+                    hasErrors
+                } = results;
+
+                if (hasErrors) {
+                    plateSolveStatus = 'An error occured while processing!'
+                    console.error(hasErrors);
+                    clearInterval(intervalId);
+                } else if (hasCalibrations) {
+                    plateSolveStatus = 'Processing has completed!';
+                    const jobId = jobs[0];
+                    clearInterval(intervalId);
+                    checkAstrometrySubmissionStatus('jobId', jobId).then(results => {
+                        // this is the full job results
+                        const info = stringify(results);
+                        plateSolveStatus = info;
+                    }).catch(err => {
+                        plateSolveStatus = stringify(err);
+                    });
+                } else if (hasJobs) {
+                    plateSolveStatus = 'Processing has started!';
+                    jobId = results.jobs[0];
                 } else {
-                    plateSolveStatus = 'Processing has not started!';
-                }
+                    plateSolveStatus = 'Processing has NOT started!';
+                } 
                 tries++;
                 if (tries > 10) {
                     // at 30 second intervals the 10 tries makes 5 minutes
