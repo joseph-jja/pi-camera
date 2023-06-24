@@ -40,7 +40,7 @@ const SECOND_PART_CONTENT_TYPE = `Content-Type: application/octet-stream${CRLF}`
 const FIRST_PART_CONTENT_DISPOSITION = `Content-Disposition: form-data; name="request-json"${CRLF}${CRLF}`;
 const SECOND_PART_CONTENT_DISPOSITION = filename => `Content-Disposition: form-data; name="file"; filename="${filename}"${CRLF}${CRLF}`;
 
-const getPayloadData = (boundary, session, filename, filedata) => {
+const getPayloadData = (session, filename, filedata) => {
 
     const uploadPayload = Object.assign({}, 
         DEFAULT_ASTROMETRY_UPLOAD_PAYLOAD, {
@@ -48,12 +48,12 @@ const getPayloadData = (boundary, session, filename, filedata) => {
         });
 
     const prebuff = [];
-    prebuff.push(`--${boundary}${CRLF}`);
+    prebuff.push(`--${BOUNDARY}${CRLF}`);
     prebuff.push(FIRST_PART_CONTENT_TYPE);
     prebuff.push(MIME_VERSION);
     prebuff.push(FIRST_PART_CONTENT_DISPOSITION);
     prebuff.push(JSON.stringify(uploadPayload));
-    prebuff.push(`${CRLF}${CRLF}--${boundary}${CRLF}`);
+    prebuff.push(`${CRLF}${CRLF}--${BOUNDARY}${CRLF}`);
 
     prebuff.push(SECOND_PART_CONTENT_TYPE);
     prebuff.push(MIME_VERSION);
@@ -61,7 +61,7 @@ const getPayloadData = (boundary, session, filename, filedata) => {
 
     return Buffer.concat([Buffer.from(prebuff.join(''), 'ascii'),
         Buffer.from(filedata, 'binary'),
-        Buffer.from(`${LF}--${boundary}--${LF}`, 'ascii')
+        Buffer.from(`${LF}--${BOUNDARY}--${LF}`, 'ascii')
     ]);
 }
 
@@ -76,7 +76,7 @@ export const upload = async (session, filename) => {
     fs.readFile(filename, {encoding: 'binary'}, (err, filedata) => {
         if (!err) {
             const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
-            const bodyMsg = getPayloadData(BOUNDARY, session, filename, filedata);
+            const bodyMsg = getPayloadData(session, filename, filedata);
 
             // need content length headers
             uploadOptions.headers['Content-Length'] = bodyMsg.length;
