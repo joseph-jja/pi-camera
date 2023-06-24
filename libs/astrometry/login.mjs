@@ -40,6 +40,8 @@ export const login = (apiKey) => {
     const headers = getLoginHeaders();
     const options = getOptions(ASTROMETRY_LOGIN_URL, headers);
 
+    options.headers['Content-Length'] = payload.length;
+
     return WebRequest(options, payload).then(res => {
         return res?.data?.session;
     });
