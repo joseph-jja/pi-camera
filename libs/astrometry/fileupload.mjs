@@ -82,7 +82,7 @@ export const upload = async (session, filename) => {
             uploadOptions.headers['Content-Length'] = bodyMsg.length;
             logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
 
-            return WebRequest(uploadOptions, authData, bodyMsg, BOUNDARY).then(results => {
+            return WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(results => {
                 // TODO what do we need from this?
                 if (results.status === 'success' && results.subid) {
                     return results.subid;
