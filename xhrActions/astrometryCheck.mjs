@@ -52,6 +52,27 @@ const sendError = (err, response, statusCode = 500) => {
     });
 };
 
+const verifyFilename = (filename, response) => {
+
+    if (!filename) {
+        response.writeHead(200, {});
+        response.end('Missing parameters, nothing done!');
+        logger.info('Missing parameters, nothing done!');
+        return false;
+    }
+
+    const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
+    if (!filteredOldFilename || !filename.endsWith('.png')) {
+        response.writeHead(200, {});
+        response.end('Invalid file name, nothing done!');
+        logger.info('Invalid file name, nothing done!');
+        return false;
+    }
+    return true;
+}
+
+const subIdFilename = filename => `${SOLVED_INFO_PATH}/${filename}.subid`;
+
 export const uploadAstrometryFile = async (request, response, apiKey) => {
 
     if (!apiKey) {
@@ -63,22 +84,13 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
 
     const query = (request.query || {});
     const filename = query.name;
-    if (!filename) {
-        response.writeHead(200, {});
-        response.end('Missing parameters, nothing done!');
-        logger.info('Missing parameters, nothing done!');
+    if (!verifyFilename(filename, response)) {
         return;
     }
 
-    const filteredOldFilename = filename.match(OLD_FILENAME_MATCH);
-    if (!filteredOldFilename || !filename.endsWith('.png')) {
-        response.writeHead(200, {});
-        response.end('Invalid file name, nothing done!');
-        logger.info('Invalid file name, nothing done!');
-        return;
-    }
+    const subIdName = subIdFilename(filename);
 
-    const [_eErr, subId] = await promiseWrapper(readFile(`${SOLVED_INFO_PATH}/${filename}.subid`));
+    const [_eErr, subId] = await promiseWrapper(readFile(subIdName));
     if (subId) {
         response.writeHead(200, {});
         response.end(stringify(subId));
@@ -100,7 +112,7 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
                 message: status
             });
             // write file with sub id
-            writeFile(`${SOLVED_INFO_PATH}/${filename}.subid`, `${status}`);
+            writeFile(subIdName, `{"submissionId": ${status}}`);
             return;
         }
         sendError(uErr, response);
@@ -120,6 +132,12 @@ export const statusCheckAstrometry = async (request, response) => {
         sendError('No id to check!', response, 200);
         return;
     }
+
+    const filename = query.name;
+    if (!verifyFilename(filename, response)) {
+        return;
+    }
+
     if (jobId) {
         // given a job id check to see if it is done 
         // if success then get all the info from the plate solve
