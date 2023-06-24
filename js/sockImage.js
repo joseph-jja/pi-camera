@@ -95,9 +95,6 @@ socket.on('plate-solve', (data) => {
     // plateSolvingSubmissionStatus
     if (status === 'plateSolveError') {
         serverErrors.innerHTML = stringify(message);
-        if (intervalId) {
-            clearInterval(intervalId);
-        }
     } else if (status === 'plateSolvingSubmissionStatus' && tries < 10) {
         // tries more than 10 is 5 minutes
         tries += 1;
