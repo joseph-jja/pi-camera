@@ -43,6 +43,7 @@ const ffmpegStreamFunction = getEnvVar('STREAM_WEBM') ? getFfmpegWebmStream : ge
 
 const BASE_IMAGE_PATH = `${process.env.HOME}/images`,
     BASE_CONFIG_PATH = `${process.env.HOME}/imageConfig`,
+    SOLVED_INFO_PATH = `${process.env.HOME}/solvesInfo`,
     HISTOGRAM_CONFIG_PATH = `${process.env.HOME}/histograms`;
 
 class CaptureProcessEmitter extends EventEmitter {
@@ -75,6 +76,11 @@ function initSystem() {
     }
     try {
         fs.mkdirSync(HISTOGRAM_CONFIG_PATH);
+    } catch (e) {
+        logger.verbose(e);
+    }
+    try {
+        fs.mkdirSync(SOLVED_INFO_PATH);
     } catch (e) {
         logger.verbose(e);
     }
@@ -510,6 +516,7 @@ module.exports = {
     BASE_IMAGE_PATH,
     BASE_CONFIG_PATH,
     HISTOGRAM_CONFIG_PATH,
+    SOLVED_INFO_PATH,
     getVideoFilename,
     saveVideoData,
     saveImagesData,

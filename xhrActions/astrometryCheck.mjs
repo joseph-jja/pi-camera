@@ -1,4 +1,8 @@
 import {
+    writeFile
+} from 'fs';
+
+import {
     login
 } from '#libs/astrometry/login.mjs';
 
@@ -31,6 +35,9 @@ const basedir = process.cwd(),
     {
         captureEmitter
     } = require(`${basedir}/libs/videoScripts`),
+    {
+        SOLVED_INFO_PATH
+    } = require(`${basedir}/libs/videoScripts`);
     stringify = require(`${basedir}/libs/stringify`),
     promiseWrapper = require(`${basedir}/libs/PromiseWrapper`),
     logger = require(`${basedir}/libs/logger`)(filename);
@@ -80,6 +87,8 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
                 status: 'plateSolvingInitiated',
                 message: status
             });
+            // write file with sub id
+            writeFile(`${SOLVED_INFO_PATH}/${filename}.subid`, `${status}`);
             return;
         }
         sendError(uErr, response);
