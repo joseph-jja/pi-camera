@@ -34,7 +34,7 @@ process.on('uncaughtException', (e) => {
     console.error(e);
 });
 
-const ARGS = process.args;
+const ARGS = process.argv;
 let configFile;
 for (let i = 2, end = ARGS.length; i< end; i++) {
     configFile = ARGS[i];
