@@ -20,52 +20,19 @@ function parse(jsonIn) {
     }
 }
 
-const CRLF = '\r\n';
-const LF = '\n';
-const MIME_VERSION = `MIME-Version: 1.0${CRLF}`;
-const FIRST_PART_CONTENT_TYPE = `Content-Type: text/plain${CRLF}`;
-const SECOND_PART_CONTENT_TYPE = `Content-Type: application/octet-stream${CRLF}`;
-const FIRST_PART_CONTENT_DISPOSITION = `Content-Disposition: form-data; name="request-json"${CRLF}${CRLF}`;
-const SECOND_PART_CONTENT_DISPOSITION = filename => `Content-Disposition: form-data; name="file"; filename="${filename}"${CRLF}${CRLF}`;
-
-const getPayloadData = (boundary, payload, filename, filedata) => {
-
-    const prebuff = [];
-    prebuff.push(`--${boundary}${CRLF}`);
-    prebuff.push(FIRST_PART_CONTENT_TYPE);
-    prebuff.push(MIME_VERSION);
-    prebuff.push(FIRST_PART_CONTENT_DISPOSITION);
-    prebuff.push(payload);
-    prebuff.push(`${CRLF}${CRLF}--${boundary}${CRLF}`);
-
-    prebuff.push(SECOND_PART_CONTENT_TYPE);
-    prebuff.push(MIME_VERSION);
-    prebuff.push(SECOND_PART_CONTENT_DISPOSITION(filename));
-
-    return Buffer.concat([Buffer.from(prebuff.join(''), 'ascii'),
-        Buffer.from(filedata, 'binary'),
-        Buffer.from(`${LF}--${boundary}--${LF}`, 'ascii')
-    ]);
-}
-
 // module for https requests
 // supports https, GET, POST, PUT and so on
-function WebRequest(options, payload, filename, filedata) {
+function WebRequest(options, payload, bodyMsg, boundary) {
 
     return new Promise(async (resolve, reject) => {
 
         console.log(`Start time: ${new Date()}`);
         const startTime = process.hrtime();
 
-        // specific to nova.astrometry.net file upload
-        // boundary does not include leading -- which is required though :/
-        const boundary = `===============${Date.now()}==`;
-        const bodyMsg = (filedata ? getPayloadData(boundary, payload, filename, filedata) : undefined);
-        if (filedata) {
+        if (bodyMsg && boundary) {
             options.headers['Content-Type'] = `multipart/form-data; boundary=${boundary}`;
             options.headers['Content-Length'] = bodyMsg.length;
             console.log(`Content Length: ${options.headers['Content-Length']}`, `Boundary: ${boundary}`);
-
         }
 
         // handle http and https requests

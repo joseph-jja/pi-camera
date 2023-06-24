@@ -27,6 +27,36 @@ const DEFAULT_ASTROMETRY_UPLOAD_PAYLOAD = {
     'publicly_visible': 'n'
 };
     
+const BOUNDARY = `===============${Date.now()}==`;
+
+const CRLF = '\r\n';
+const LF = '\n';
+const MIME_VERSION = `MIME-Version: 1.0${CRLF}`;
+const FIRST_PART_CONTENT_TYPE = `Content-Type: text/plain${CRLF}`;
+const SECOND_PART_CONTENT_TYPE = `Content-Type: application/octet-stream${CRLF}`;
+const FIRST_PART_CONTENT_DISPOSITION = `Content-Disposition: form-data; name="request-json"${CRLF}${CRLF}`;
+const SECOND_PART_CONTENT_DISPOSITION = filename => `Content-Disposition: form-data; name="file"; filename="${filename}"${CRLF}${CRLF}`;
+
+const getPayloadData = (boundary, payload, filename, filedata) => {
+
+    const prebuff = [];
+    prebuff.push(`--${boundary}${CRLF}`);
+    prebuff.push(FIRST_PART_CONTENT_TYPE);
+    prebuff.push(MIME_VERSION);
+    prebuff.push(FIRST_PART_CONTENT_DISPOSITION);
+    prebuff.push(payload);
+    prebuff.push(`${CRLF}${CRLF}--${boundary}${CRLF}`);
+
+    prebuff.push(SECOND_PART_CONTENT_TYPE);
+    prebuff.push(MIME_VERSION);
+    prebuff.push(SECOND_PART_CONTENT_DISPOSITION(filename));
+
+    return Buffer.concat([Buffer.from(prebuff.join(''), 'ascii'),
+        Buffer.from(filedata, 'binary'),
+        Buffer.from(`${LF}--${boundary}--${LF}`, 'ascii')
+    ]);
+}
+
 const getUploadPayload = session => {
     const uploadPayload = Object.assign({}, 
         DEFAULT_ASTROMETRY_UPLOAD_PAYLOAD, {
@@ -44,9 +74,10 @@ export const upload = async (session, filename) => {
 
     const authData = getUploadPayload(session);
 
-    fs.readFile(filename, {encoding: 'binary'}, (err, data) => {
+    fs.readFile(filename, {encoding: 'binary'}, (err, filedata) => {
         if (!err) {
-            return WebRequest(uploadOptions, authData, filename, data).then(results => {
+            const bodyMsg = getPayloadData(BOUNDARY, authData, filename, filedata);
+            return WebRequest(uploadOptions, authData, bodyMsg, BOUNDARY).then(results => {
                 // TODO what do we need from this?
                 if (results.status === 'success' && results.subid) {
                     return results.subid;
