@@ -117,7 +117,7 @@ socket.on('plate-solve', (data) => {
 
                         plateSolveStatus = json.stringify(resp);
                     }, 5000);
-                } catch (e => console.error(e););
+                } catch (e => console.error(e));
             }
             return;
         }
@@ -129,7 +129,7 @@ socket.on('plate-solve', (data) => {
                 solveStatus = processResponse(resp);
 
             }, 30000);
-        } catch (e => console.error(e););
+        } catch (e => console.error(e));
 
     } else if (status === 'plateSolvingInitiated') {
         tries = 1;
@@ -143,7 +143,7 @@ socket.on('plate-solve', (data) => {
                 solveStatus = processResponse(resp);
 
             }, 30000);
-        } catch (e => console.error(e););
+        } catch (e => console.error(e));
 
     } else {
         plateSolveStatus.innerHTML = stringify(message);
