@@ -36,7 +36,7 @@ process.on('uncaughtException', (e) => {
 
 const ARGS = process.args;
 let configFile;
-for (let i -2, end = ARGS.length; i< end; i++) {
+for (let i = 2, end = ARGS.length; i< end; i++) {
     configFile = ARGS[i];
 }
 let apiKey;
