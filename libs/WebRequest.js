@@ -22,18 +22,12 @@ function parse(jsonIn) {
 
 // module for https requests
 // supports https, GET, POST, PUT and so on
-function WebRequest(options, payload, bodyMsg, boundary) {
+function WebRequest(options, payload) {
 
     return new Promise(async (resolve, reject) => {
 
         console.log(`Start time: ${new Date()}`);
         const startTime = process.hrtime();
-
-        if (bodyMsg && boundary) {
-            options.headers['Content-Type'] = `multipart/form-data; boundary=${boundary}`;
-            options.headers['Content-Length'] = bodyMsg.length;
-            console.log(`Content Length: ${options.headers['Content-Length']}`, `Boundary: ${boundary}`);
-        }
 
         // handle http and https requests
         const request = httpsRequest(options, res => {
@@ -73,12 +67,12 @@ function WebRequest(options, payload, bodyMsg, boundary) {
             console.error(err);
         });
 
-        if (filedata && bodyMsg && bodyMsg.length > 0) {
-            // first part
-            request.write(bodyMsg);
+        if (payload && payload.length > 0) {
+            // must be post
+            request.write(payload);
             request.end();
         } else {
-            request.end(payload);
+            request.end();
         }
     })
 }
