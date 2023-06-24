@@ -34,6 +34,20 @@ process.on('uncaughtException', (e) => {
     console.error(e);
 });
 
+const ARGS = process.args;
+let configFile;
+for (let i -2, end = ARGS.length; i< end; i++) {
+    configFile = ARGS[i];
+}
+let apiKey;
+if (configFile) {
+    try {
+        const data = JSON.parse(fs.readFileSync(configFile).toString());
+        apiKey = data.apiKey;
+    } catch(e) {
+        logger.error(`Could not read config file ${configFile}`);
+    }
+}
 
 const stringify = require(`${basedir}/libs/stringify`),
     getVideoStreamCommand = require(`${basedir}/libs/libcamera/getVideoStreamCommand`),
@@ -300,7 +314,7 @@ async function start() {
     /* astrometry plate solving stuff start */
     // read in config 
     app.get('/uploadAstrometryFile', (request, response) => {
-        uploadAstrometryFile(request, response);
+        uploadAstrometryFile(request, response, apiKey);
     });
 
     app.get('/statusCheckAstrometry', (request, response) => {
