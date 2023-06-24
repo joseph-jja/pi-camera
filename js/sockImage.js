@@ -3,8 +3,7 @@ import {
 } from "/js/socket.io.esm.min.js";
 
 import {
-    checkAstrometrySubmissionStatus,
-    checkAstrometryJobStatus
+    checkAstrometrySubmissionStatus
 } from '/js/libs/formUtils.js';
 
 
