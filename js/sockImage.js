@@ -38,10 +38,54 @@ const stringify = data => {
     }
 }
 
+// return codes
+const PROCESSING_NOT_STARTED = 0;
+const PROCESSING_STARTED = 1;
+const PROCESSING_COMPLETED = 2;
+const PROCESSING_ERROR = -1;
+
+const processResponse = resp => {
+    const {
+        jobs,
+        hasJobs,
+        hasCalibrations,
+        hasErrors
+    } = results;
+
+    if (hasErrors) {
+        plateSolveStatus = 'An error occured while processing!'
+        console.error(hasErrors);
+        return {
+            status: PROCESSING_ERROR
+        };
+    } else if (hasCalibrations) {
+        plateSolveStatus = 'Processing has completed!';
+        const jobId = jobs[0];
+        return {
+            status: PROCESSING_COMPLETED,
+            jobId: jobId
+        };
+    } else if (hasJobs) {
+        plateSolveStatus = 'Processing has started!';
+        jobId = results.jobs[0];
+        return {
+            status: PROCESSING_STARTED
+        };
+    } else {
+        plateSolveStatus = 'Processing has NOT started!';
+        return {
+            status: PROCESSING_NOT_STARTED
+        };
+    }
+};
+
+let tries = 0;
+let solveStatus;
 socket.on('plate-solve', (data) => {
     const {
         status,
-        message
+        message,
+        filename
     } = data;
     // status can be
     // plateSolveError
@@ -49,60 +93,58 @@ socket.on('plate-solve', (data) => {
     // plateSolvingJobStatus
     // plateSolvingJobCompleted
     // plateSolvingSubmissionStatus
-    let intervalId;
     if (status === 'plateSolveError') {
         serverErrors.innerHTML = stringify(message);
         if (intervalId) {
             clearInterval(intervalId);
         }
-    } else if (status === 'plateSolvingSubmissionStatus') {
-        // ignore this as we are polling 
-    } else if (status === 'plateSolvingInitiated') {
-        // we have submit id
+    } else if (status === 'plateSolvingSubmissionStatus' && tries < 10) {
+        // tries more than 10 is 5 minutes
+        tries += 1;
+
+        // we have submit id and filename 
         const submissionId = message;
-        let tries = 0;
 
-        intervalId = setInterval(() => {
-            checkAstrometrySubmissionStatus('submissionId', submissionId).then(results => {
-                const {
-                    jobs,
-                    hasJobs,
-                    hasCalibrations,
-                    hasErrors
-                } = results;
+        if (solveStatus.status === PROCESSING_ERROR) {
+            return;
+        }
 
-                if (hasErrors) {
-                    plateSolveStatus = 'An error occured while processing!'
-                    console.error(hasErrors);
-                    clearInterval(intervalId);
-                } else if (hasCalibrations) {
-                    plateSolveStatus = 'Processing has completed!';
-                    const jobId = jobs[0];
-                    clearInterval(intervalId);
-                    checkAstrometrySubmissionStatus('jobId', jobId).then(results => {
-                        // this is the full job results
-                        const info = stringify(results);
-                        plateSolveStatus = info;
-                    }).catch(err => {
-                        plateSolveStatus = stringify(err);
-                    });
-                } else if (hasJobs) {
-                    plateSolveStatus = 'Processing has started!';
-                    jobId = results.jobs[0];
-                } else {
-                    plateSolveStatus = 'Processing has NOT started!';
-                }
-                tries++;
-                if (tries > 10) {
-                    // at 30 second intervals the 10 tries makes 5 minutes
-                    // so after 10 minutes give up
-                    clearInterval(intervalId);
-                }
-            }).catch(err => {
-                plateSolveStatus = stringify(err);
-                clearInterval(intervalId);
-            });
-        }, 30000); // 30 seconds
+        if (solveStatus.status === PROCESSING_COMPLETED) {
+            if (solveStatus.jobId) {
+                try {
+                    setTimeout(async () => {
+                        const resp = await checkAstrometrySubmissionStatus('jobId', jobId, filename);
+
+                        plateSolveStatus = json.stringify(resp);
+                    }, 5000);
+                } catch (e => console.error(e););
+            }
+            return;
+        }
+
+        try {
+            setTimeout(async () => {
+                const resp = await checkAstrometrySubmissionStatus('submissionId', submissionId, filename);
+
+                solveStatus = processResponse(resp);
+
+            }, 30000);
+        } catch (e => console.error(e););
+
+    } else if (status === 'plateSolvingInitiated') {
+        tries = 1;
+        // we have submit id and filename 
+        const submissionId = message;
+
+        try {
+            setTimeout(async () => {
+                const resp = await checkAstrometrySubmissionStatus('submissionId', submissionId, filename);
+
+                solveStatus = processResponse(resp);
+
+            }, 30000);
+        } catch (e => console.error(e););
+
     } else {
         plateSolveStatus.innerHTML = stringify(message);
     }

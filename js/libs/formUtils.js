@@ -220,8 +220,8 @@ export async function videoUpdate() {
     });
 }
 
-export async function checkAstrometrySubmissionStatus(type, typeId) {
-    return executeGETRequest(`/statusCheckAstrometry?${type}=${typeId}`, true).then(resp => {
+export async function checkAstrometrySubmissionStatus(type, typeId, filename) {
+    return executeGETRequest(`/statusCheckAstrometry?${type}=${typeId}&name=${filename}`, true).then(resp => {
         try {
             const results = JSON.parse(resp);
             const jobs = results.jobs;
@@ -231,7 +231,8 @@ export async function checkAstrometrySubmissionStatus(type, typeId) {
             const hasCalibrations = calibrations && Array.isArray(calibrations) && calibrations.length > 0;
 
             const hasErrors = results['error_message'];
-            return {
+            
+            const data = {
                 hasCalibrations,
                 hasJobs,
                 hasErrors,
@@ -239,6 +240,11 @@ export async function checkAstrometrySubmissionStatus(type, typeId) {
                 calibrations,
                 ...results
             };
+            if (hasErrors) {
+                Promise.reject(data);
+            } else {
+                Promise.resolve(data);
+            }
         } catch(_e) {
             return resp;
         }
