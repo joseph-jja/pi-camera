@@ -223,9 +223,23 @@ export async function videoUpdate() {
 export async function checkAstrometrySubmissionStatus(type, typeId) {
     return executeGETRequest(`/statusCheckAstrometry?${type}=${typeId}`, true).then(resp => {
         try {
-            return JSON.parse(resp);
+            const results = JSON.parse(resp);
+            const jobs = results.jobs;
+            const calibrations = results['job_calibrations'];
+
+            const hasJobs = jobs && Array.isArray(jobs) && jobs.length > 0;
+            const hasCalibrations = calibrations && Array.isArray(calibrations) && calibrations.length > 0;
+
+            return {
+                hasCalibrations,
+                hasJobs,
+                calibrations,
+                ...results
+            };
         } catch(_e) {
             return resp;
         }
+    }).catch(e => {
+
     });
 }
