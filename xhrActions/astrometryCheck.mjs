@@ -1,6 +1,7 @@
 import {
-    writeFile
-} from 'fs';
+    writeFile,
+    readFile
+} from 'fs/promises';
 
 import {
     login
@@ -74,6 +75,17 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
         response.writeHead(200, {});
         response.end('Invalid file name, nothing done!');
         logger.info('Invalid file name, nothing done!');
+        return;
+    }
+
+    const [_eErr, subId] = await promiseWrapper(readFile(`${SOLVED_INFO_PATH}/${filename}.subid`));
+    if (subId) {
+        response.writeHead(200, {});
+        response.end(stringify(subId));
+        captureEmitter.emit('plate-solve', {
+            status: 'plateSolvingInitiated',
+            message: subId
+        });
         return;
     }
 
