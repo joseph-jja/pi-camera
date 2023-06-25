@@ -96,7 +96,8 @@ socket.on('plate-solve', (data) => {
         filename
     } = data;
     const {
-        subid
+        subid,
+        jobs
     } = safelyParse(message);
     // status can be
     // plateSolveError
@@ -118,10 +119,10 @@ socket.on('plate-solve', (data) => {
         }
 
         if (solveStatus.status === PROCESSING_COMPLETED) {
-            if (solveStatus.jobId) {
+            if (jobs && Array.isArray(jobs) && jobs.length >0) {
                 try {
                     setTimeout(async () => {
-                        const resp = await checkAstrometrySubmissionStatus('jobId', jobId, filename);
+                        const resp = await checkAstrometrySubmissionStatus('jobId', jobs[0], filename);
 
                         plateSolveStatus = json.stringify(resp);
                     }, 5000);
