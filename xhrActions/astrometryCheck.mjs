@@ -182,6 +182,24 @@ export const statusCheckAstrometry = async (request, response) => {
         });
         return;
     } else if (submissionId) {
+        const [_eErr, subId] = await promiseWrapper(readFile(subIdName));
+        if (subId) {
+            const resp = Buffer.from(subId).toString();
+            try {
+                const jsonData = JSON.parse(resp);
+                if (resp.subid && resp.jobs && resp.jobs.length > 0) {
+                    response.writeHead(200, {});
+                    response.end(resp);
+                    captureEmitter.emit('plate-solve', {
+                        status: 'plateSolvingSubmissionStatus',
+                        message: resp,
+                        filename: filename
+                    });
+                    return;
+                }
+            } catch (_e) {}
+        }
+
         const [uErr, results] = await promiseWrapper(submissionStatus(submissionId));
         if (uErr) {
             sendError(uErr, response);
