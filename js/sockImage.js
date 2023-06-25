@@ -116,7 +116,8 @@ socket.on('plate-solve', (data) => {
     } else if (status === 'plateSolvingInitiated' || status === 'plateSolvingSubmissionStatus') {
 
         if (tries > 10) {
-          }
+            return
+        }
 
         if (status === 'plateSolvingInitiated') {
             tries = 1;
