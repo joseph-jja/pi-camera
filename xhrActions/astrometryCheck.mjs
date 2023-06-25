@@ -99,7 +99,8 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
         response.end(stringify(subId));
         captureEmitter.emit('plate-solve', {
             status: 'plateSolvingInitiated',
-            message: subId
+            message: subId,
+            filename: filename
         });
         return;
     }
