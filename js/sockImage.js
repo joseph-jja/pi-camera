@@ -53,26 +53,26 @@ const processResponse = resp => {
     } = resp;
 
     if (hasErrors) {
-        plateSolveStatus = 'An error occured while processing!'
+        plateSolveStatus.innerHTML = 'An error occured while processing!'
         console.error(hasErrors);
         return {
             status: PROCESSING_ERROR
         };
     } else if (hasCalibrations) {
-        plateSolveStatus = 'Processing has completed!';
+        plateSolveStatus.innerHTML = 'Processing has completed!';
         const jobId = jobs[0];
         return {
             status: PROCESSING_COMPLETED,
             jobId: jobId
         };
     } else if (hasJobs) {
-        plateSolveStatus = 'Processing has started!';
+        plateSolveStatus.innerHTML = 'Processing has started!';
         jobId = results.jobs[0];
         return {
             status: PROCESSING_STARTED
         };
     } else {
-        plateSolveStatus = 'Processing has NOT started!';
+        plateSolveStatus.innerHTML = 'Processing has NOT started!';
         return {
             status: PROCESSING_NOT_STARTED
         };
