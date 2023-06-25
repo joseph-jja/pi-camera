@@ -182,7 +182,7 @@ export const statusCheckAstrometry = async (request, response) => {
         });
         return;
     } else if (submissionId) {
-        const [_eErr, subId] = await promiseWrapper(readFile(subIdName));
+        /*const [_eErr, subId] = await promiseWrapper(readFile(subIdName));
         if (subId) {
             const resp = Buffer.from(subId).toString();
             try {
@@ -198,7 +198,7 @@ export const statusCheckAstrometry = async (request, response) => {
                     return;
                 }
             } catch (_e) {}
-        }
+        }*/
 
         const [uErr, results] = await promiseWrapper(submissionStatus(submissionId));
         if (uErr) {
