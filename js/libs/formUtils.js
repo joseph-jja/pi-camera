@@ -221,6 +221,9 @@ export async function videoUpdate() {
 }
 
 export async function checkAstrometrySubmissionStatus(type, typeId, filename) {
+    if (!Number.isInteger(typeId)) {
+        return -1;
+    }
     return executeGETRequest(`/statusCheckAstrometry?${type}=${typeId}&name=${filename}`, true).then(resp => {
         try {
             const results = JSON.parse(resp);
@@ -241,14 +244,14 @@ export async function checkAstrometrySubmissionStatus(type, typeId, filename) {
                 ...results
             };
             if (hasErrors) {
-                Promise.reject(data);
+                return Promise.reject(data);
             } else {
-                Promise.resolve(data);
+                return Promise.resolve(data);
             }
         } catch(_e) {
             return resp;
         }
     }).catch(e => {
-
+        return Promise.reject(-2);
     });
 }
