@@ -94,10 +94,8 @@ export const upload = (session, filename) => {
                     return;
                 }
                 reject(results);
-                return;
             }).catch(e => {
                 reject(e);
-                return;
             });
         });
     });
