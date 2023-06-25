@@ -116,11 +116,11 @@ socket.on('plate-solve', (data) => {
         // we have submit id and filename 
         const submissionId = subid;
 
-        if (solveStatus.status === PROCESSING_ERROR) {
+        if (status === PROCESSING_ERROR) {
             return;
         }
 
-        if (solveStatus.status === PROCESSING_COMPLETED) {
+        if (status === PROCESSING_COMPLETED) {
             if (jobs && Array.isArray(jobs) && jobs.length >0) {
                 try {
                     setTimeout(async () => {
