@@ -98,6 +98,7 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
         const resp = Buffer.from(subId).toString();
         response.writeHead(200, {});
         response.end(stringify(resp));
+
         captureEmitter.emit('plate-solve', {
             status: 'plateSolvingInitiated',
             message: resp,
@@ -119,7 +120,7 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
             });
             logger.info(`File uploaded ${subIdName}`);
             // write file with sub id
-            const [fErr, fStatus] = await promiseWrapper(writeFile(subIdName, `{"submissionId": ${status}}`));
+            const [fErr, fStatus] = await promiseWrapper(writeFile(subIdName, `{"subid": ${status}}`));
             if (fErr) {
                 logger.err(`Error writing submission file ${subIdName} => ${fErr}`);
             }
@@ -189,7 +190,7 @@ export const statusCheckAstrometry = async (request, response) => {
         response.writeHead(200, {});
         response.end(stringify(results));
         const submissionResults = Object.assign({}, results, {
-            'submissionId': submissionId
+            'subid': submissionId
         });
         writeFile(subIdName, stringify(submissionResults)).then(_res => {
                 logger.info(`File updated ${subIdName}`);

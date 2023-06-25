@@ -79,6 +79,14 @@ const processResponse = resp => {
     }
 };
 
+function safelyParse(data) {
+    try {
+        return JSON.parse(data);
+    } catch(_e) {
+        return data;
+    }
+}
+
 let tries = 0;
 let solveStatus;
 socket.on('plate-solve', (data) => {
@@ -86,7 +94,7 @@ socket.on('plate-solve', (data) => {
         status,
         message,
         filename
-    } = data;
+    } = safelyParse(data);
     // status can be
     // plateSolveError
     // plateSolvingInitiated
