@@ -79,6 +79,10 @@ const processResponse = resp => {
     }
 };
 
+function x() {
+    statusCheckAstrometry
+}
+
 function safelyParse(data) {
     try {
         return JSON.parse(data);
@@ -109,54 +113,35 @@ socket.on('plate-solve', (data) => {
     // plateSolvingSubmissionStatus
     if (status === 'plateSolveError') {
         serverErrors.innerHTML = stringify(msgData);
-    } else if (status === 'plateSolvingSubmissionStatus' && tries < 10 && subid) {
-        // tries more than 10 is 5 minutes
-        tries += 1;
+    } else if (status === 'plateSolvingInitiated' || status === 'plateSolvingSubmissionStatus') {
 
-        // we have submit id and filename 
-        const submissionId = parseInt(subid);
-
-        if (status === PROCESSING_ERROR) {
+        if (tries > 10) {
             return;
         }
 
-        if (status === PROCESSING_COMPLETED) {
-            if (jobs && Array.isArray(jobs) && jobs.length >0) {
-                try {
-                    const jobId = parseInt(jobs[0]);
+        if (status === 'plateSolvingInitiated') {
+            tries = 1;
+            solveStatus = undefined;
+        } else {
+            tries += 1;
+        }
+        // we have submit id and filename 
+        const submissionId = parseInt(subid);
+
+        try {
+            setTimeout(async () => {
+                const resp = await checkAstrometrySubmissionStatus('submissionId', submissionId, filename);
+
+                solveStatus = processResponse(resp);
+                if (solveStatus.status === PROCESSING_COMPLETED) {
+
+                    const jobId = parseInt(solveStatus.jobId);
                     setTimeout(async () => {
                         const resp = await checkAstrometrySubmissionStatus('jobId', jobId, filename);
 
                         plateSolveStatus = json.stringify(resp);
-                    }, 5000);
-                } catch (e) {
-                    console.error(e);
+                    }, 2500);
                 }
-            }
-            return;
-        }
-
-        try {
-            setTimeout(async () => {
-                const resp = await checkAstrometrySubmissionStatus('submissionId', submissionId, filename);
-
-                solveStatus = processResponse(resp);
-
-            }, 30000);
-        } catch (e) {
-            console.error(e);
-        }
-
-    } else if (status === 'plateSolvingInitiated' && subid) {
-        tries = 1;
-        // we have submit id and filename 
-        const submissionId = parseInt(subid);
-
-        try {
-            setTimeout(async () => {
-                const resp = await checkAstrometrySubmissionStatus('submissionId', submissionId, filename);
-
-                solveStatus = processResponse(resp);
 
             }, 30000);
         } catch (e) {
