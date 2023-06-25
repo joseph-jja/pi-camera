@@ -50,7 +50,7 @@ const processResponse = resp => {
         hasJobs,
         hasCalibrations,
         hasErrors
-    } = results;
+    } = resp;
 
     if (hasErrors) {
         plateSolveStatus = 'An error occured while processing!'
