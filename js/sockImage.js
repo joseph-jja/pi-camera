@@ -94,11 +94,10 @@ socket.on('plate-solve', (data) => {
         status,
         message,
         filename
-    } = safelyParse(data);
-    console.log(typeof data, typeof message)
+    } = data;
     const {
         subid
-    } = message;
+    } = safelyParse(message);
     // status can be
     // plateSolveError
     // plateSolvingInitiated
