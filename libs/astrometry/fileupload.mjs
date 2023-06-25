@@ -65,13 +65,15 @@ const getPayloadData = (session, filename, filedata) => {
     ]);
 }
 
-export const upload = async (session, filename) => {
+export const upload = (session, filename) => {
 
     const {
         ...headers
     } = DEFAULT_ASTROMETRY_HEADERS;
 
     headers['Content-Type'] = `multipart/form-data; boundary=${BOUNDARY}`;
+
+    return new Promise((resolve, reject) => {
 
     fs.readFile(filename, {encoding: 'binary'}, (err, filedata) => {
         if (!err) {
@@ -82,8 +84,8 @@ export const upload = async (session, filename) => {
             uploadOptions.headers['Content-Length'] = bodyMsg.length;
             logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
 
-            return Promise.resolve(7930287);
-            /*return WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(results => {
+            return WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(resp => {
+                const results = resp.data;
                 // TODO what do we need from this?
                 if (results.status === 'success' && results.subid) {
                     return Promise.resolve(results.subid);
@@ -91,10 +93,11 @@ export const upload = async (session, filename) => {
                 return Promise.reject(results);
             }).catch(e => {
                 return Promise.reject(e);
-            });*/
+            });
             return;
         }
         return Promise.reject(err);
+    });
     });
 };
     

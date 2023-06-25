@@ -15,7 +15,8 @@ function getDiffTime(startTime) {
 
 function parse(jsonIn) {
     try {
-        return JSON.parse(jsonIn);
+        const data = Buffer.concat(jsonIn).toString();
+        return JSON.parse(data);
     } catch (_e) {
         return jsonIn;
     }
@@ -45,21 +46,21 @@ function WebRequest(options, payload) {
                     logger.error(`Error: ${new Date()}`);
                     reject({
                         headers: res.headers,
-                        data: parse(Buffer.concat(results).toString())
+                        data: parse(results)
                     });
                     return;
                 }
                 logger.info(`The end: ${new Date()}`);
                 resolve({
                     headers: res.headers,
-                    data: parse(Buffer.concat(results).toString())
+                    data: parse(results)
                 });
             });
             res.on('error', e => {
                 logger.error(e);
                 reject({
                     headers: res.headers,
-                    data: parse(Buffer.concat(results).toString())
+                    data: parse(results)
                 })
             });
         });
