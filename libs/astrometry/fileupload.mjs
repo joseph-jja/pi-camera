@@ -82,7 +82,8 @@ export const upload = async (session, filename) => {
             uploadOptions.headers['Content-Length'] = bodyMsg.length;
             logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
 
-            return WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(results => {
+            return Promise.resolve(7930287);
+            /*return WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(results => {
                 // TODO what do we need from this?
                 if (results.status === 'success' && results.subid) {
                     return Promise.resolve(results.subid);
@@ -90,7 +91,7 @@ export const upload = async (session, filename) => {
                 return Promise.reject(results);
             }).catch(e => {
                 return Promise.reject(e);
-            });
+            });*/
             return;
         }
         return Promise.reject(err);
