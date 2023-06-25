@@ -95,11 +95,12 @@ export const uploadAstrometryFile = async (request, response, apiKey) => {
 
     const [_eErr, subId] = await promiseWrapper(readFile(subIdName));
     if (subId) {
+        const resp = Buffer.from(subId).toString();
         response.writeHead(200, {});
-        response.end(stringify(subId));
+        response.end(stringify(resp));
         captureEmitter.emit('plate-solve', {
             status: 'plateSolvingInitiated',
-            message: (subId ||'').toString(),
+            message: resp,
             filename: filename
         });
         return;
