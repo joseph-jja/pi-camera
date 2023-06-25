@@ -114,7 +114,7 @@ socket.on('plate-solve', (data) => {
         tries += 1;
 
         // we have submit id and filename 
-        const submissionId = subid;
+        const submissionId = parseInt(subid);
 
         if (status === PROCESSING_ERROR) {
             return;
@@ -123,8 +123,9 @@ socket.on('plate-solve', (data) => {
         if (status === PROCESSING_COMPLETED) {
             if (jobs && Array.isArray(jobs) && jobs.length >0) {
                 try {
+                    const jobId = parseInt(jobs[0]);
                     setTimeout(async () => {
-                        const resp = await checkAstrometrySubmissionStatus('jobId', jobs[0], filename);
+                        const resp = await checkAstrometrySubmissionStatus('jobId', jobId, filename);
 
                         plateSolveStatus = json.stringify(resp);
                     }, 5000);
@@ -149,7 +150,7 @@ socket.on('plate-solve', (data) => {
     } else if (status === 'plateSolvingInitiated' && subid) {
         tries = 1;
         // we have submit id and filename 
-        const submissionId = subid;
+        const submissionId = parseInt(subid);
 
         try {
             setTimeout(async () => {
