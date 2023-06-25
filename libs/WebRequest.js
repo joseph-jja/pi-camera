@@ -42,21 +42,21 @@ function WebRequest(options, payload) {
             });
             res.on('end', () => {
                 if (res.statusCode < 200 || res.statusCode >= 300) {
-                    console.error(`Error: ${new Date()}`);
+                    logger.error(`Error: ${new Date()}`);
                     reject({
                         headers: res.headers,
                         data: parse(Buffer.concat(results).toString())
                     });
                     return;
                 }
-                console.log(`The end: ${new Date()}`);
+                logger.info(`The end: ${new Date()}`);
                 resolve({
                     headers: res.headers,
                     data: parse(Buffer.concat(results).toString())
                 });
             });
             res.on('error', e => {
-                console.error(e);
+                logger.error(e);
                 reject({
                     headers: res.headers,
                     data: parse(Buffer.concat(results).toString())
@@ -65,7 +65,8 @@ function WebRequest(options, payload) {
         });
 
         request.on('error', err => {
-            console.error(err);
+            logger.error(err);
+            reject(err);
         });
 
         if (payload && payload.length > 0) {
@@ -75,7 +76,7 @@ function WebRequest(options, payload) {
         } else {
             request.end();
         }
-    })
+    });
 }
 
 module.exports = WebRequest;
