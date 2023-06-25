@@ -76,29 +76,29 @@ export const upload = (session, filename) => {
     return new Promise((resolve, reject) => {
 
         fs.readFile(filename, {encoding: 'binary'}, (err, filedata) => {
-            if (!err) {
-                const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
-                const bodyMsg = getPayloadData(session, filename, filedata);
-
-                // need content length headers
-                uploadOptions.headers['Content-Length'] = bodyMsg.length;
-                logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
-
-                WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(resp => {
-                    const results = resp.data;
-                    if (results.status === 'success' && results.subid) {
-                         resolve(results.subid);
-                         return;
-                    }
-                    reject(results);
-                    return;
-                }).catch(e => {
-                    reject(e);
-                    return;
-                });
+            if (err) {
+                reject(err);
                 return;
             }
-            return reject(err);
+            const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
+            const bodyMsg = getPayloadData(session, filename, filedata);
+
+            // need content length headers
+            uploadOptions.headers['Content-Length'] = bodyMsg.length;
+            logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
+
+            WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(resp => {
+                const results = resp.data;
+                if (results.status === 'success' && results.subid) {
+                    resolve(results.subid);
+                    return;
+                }
+                reject(results);
+                return;
+            }).catch(e => {
+                reject(e);
+                return;
+            });
         });
     });
 };
