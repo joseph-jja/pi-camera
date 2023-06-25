@@ -139,7 +139,8 @@ socket.on('plate-solve', (data) => {
                     setTimeout(async () => {
                         const resp = await checkAstrometrySubmissionStatus('jobId', jobId, filename);
 
-                        plateSolveStatus = json.stringify(resp);
+                        plateSolveStatus.innerHTML = json.stringify(resp);
+                        tries = 100;
                     }, 2500);
                 }
 
