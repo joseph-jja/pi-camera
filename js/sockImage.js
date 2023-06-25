@@ -111,7 +111,7 @@ socket.on('plate-solve', (data) => {
         tries += 1;
 
         // we have submit id and filename 
-        const submissionId = message;
+        const submissionId = subid;
 
         if (solveStatus.status === PROCESSING_ERROR) {
             return;
@@ -147,7 +147,6 @@ socket.on('plate-solve', (data) => {
         tries = 1;
         // we have submit id and filename 
         const submissionId = subid;
-        console.log(subid);
 
         try {
             setTimeout(async () => {
