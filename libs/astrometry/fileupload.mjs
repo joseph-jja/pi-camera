@@ -75,29 +75,31 @@ export const upload = (session, filename) => {
 
     return new Promise((resolve, reject) => {
 
-    fs.readFile(filename, {encoding: 'binary'}, (err, filedata) => {
-        if (!err) {
-            const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
-            const bodyMsg = getPayloadData(session, filename, filedata);
+        fs.readFile(filename, {encoding: 'binary'}, (err, filedata) => {
+            if (!err) {
+                const uploadOptions = getOptions(ASTROMETRY_UPLOAD_URL, headers);
+                const bodyMsg = getPayloadData(session, filename, filedata);
 
-            // need content length headers
-            uploadOptions.headers['Content-Length'] = bodyMsg.length;
-            logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
+                // need content length headers
+                uploadOptions.headers['Content-Length'] = bodyMsg.length;
+                logger.info(`Content Length: ${uploadOptions.headers['Content-Length']}`);
 
-            return WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(resp => {
-                const results = resp.data;
-                // TODO what do we need from this?
-                if (results.status === 'success' && results.subid) {
-                    return Promise.resolve(results.subid);
-                }
-                return Promise.reject(results);
-            }).catch(e => {
-                return Promise.reject(e);
-            });
-            return;
-        }
-        return Promise.reject(err);
-    });
+                WebRequest(uploadOptions, bodyMsg, BOUNDARY).then(resp => {
+                    const results = resp.data;
+                    if (results.status === 'success' && results.subid) {
+                         resolve(results.subid);
+                         return;
+                    }
+                    reject(results);
+                    return;
+                }).catch(e => {
+                    reject(e);
+                    return;
+                });
+                return;
+            }
+            return reject(err);
+        });
     });
 };
     
