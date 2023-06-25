@@ -115,17 +115,18 @@ socket.on('plate-solve', (data) => {
         serverErrors.innerHTML = stringify(msgData);
     } else if (status === 'plateSolvingInitiated' || status === 'plateSolvingSubmissionStatus') {
 
-        if (tries > 10) {
-            return
-        }
-
         if (status === 'plateSolvingInitiated') {
             tries = 1;
             solveStatus = undefined;
         } else {
             tries += 1;
         }
-        // we have submit id and filename 
+
+        if (tries > 10) {
+            return
+        }
+
+        // we have submit id and filename
         const submissionId = parseInt(subid);
 
         try {
