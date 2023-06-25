@@ -111,7 +111,6 @@ socket.on('plate-solve', (data) => {
     // plateSolvingJobStatus
     // plateSolvingJobCompleted
     //       return;
-    plateSolvingSubmissionStatus
     if (status === 'plateSolveError') {
         serverErrors.innerHTML = stringify(msgData);
     } else if (status === 'plateSolvingInitiated' || status === 'plateSolvingSubmissionStatus') {
