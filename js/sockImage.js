@@ -95,6 +95,7 @@ socket.on('plate-solve', (data) => {
         message,
         filename
     } = safelyParse(data);
+    console.log(typeof data, typeof message)
     const {
         subid
     } = message;
@@ -147,6 +148,7 @@ socket.on('plate-solve', (data) => {
         tries = 1;
         // we have submit id and filename 
         const submissionId = subid;
+        console.log(subid);
 
         try {
             setTimeout(async () => {
