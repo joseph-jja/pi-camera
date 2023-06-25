@@ -187,11 +187,11 @@ export const statusCheckAstrometry = async (request, response) => {
             sendError(uErr, response);
             return;
         }
-        response.writeHead(200, {});
-        response.end(stringify(results));
         const submissionResults = Object.assign({}, results, {
             'subid': submissionId
         });
+        response.writeHead(200, {});
+        response.end(stringify(submissionResults));
         writeFile(subIdName, stringify(submissionResults)).then(_res => {
                 logger.info(`File updated ${subIdName}`);
             }).catch(_e => {
@@ -200,7 +200,7 @@ export const statusCheckAstrometry = async (request, response) => {
             .finally(() => {
                 captureEmitter.emit('plate-solve', {
                     status: 'plateSolvingSubmissionStatus',
-                    message: results,
+                    message: submissionResults,
                     filename: filename
                 });
             });

@@ -95,10 +95,12 @@ socket.on('plate-solve', (data) => {
         message,
         filename
     } = data;
+
+    const msgData =  safelyParse(message);
     const {
         subid,
         jobs
-    } = safelyParse(message);
+    } = msgData;;
     // status can be
     // plateSolveError
     // plateSolvingInitiated
@@ -106,7 +108,7 @@ socket.on('plate-solve', (data) => {
     // plateSolvingJobCompleted
     // plateSolvingSubmissionStatus
     if (status === 'plateSolveError') {
-        serverErrors.innerHTML = stringify(message);
+        serverErrors.innerHTML = stringify(msgData);
     } else if (status === 'plateSolvingSubmissionStatus' && tries < 10 && subid) {
         // tries more than 10 is 5 minutes
         tries += 1;
