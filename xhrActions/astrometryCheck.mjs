@@ -182,23 +182,22 @@ export const statusCheckAstrometry = async (request, response) => {
         });
         return;
     } else if (submissionId) {
-        /*const [_eErr, subId] = await promiseWrapper(readFile(subIdName));
+        const [_eErr, subId] = await promiseWrapper(readFile(subIdName));
         if (subId) {
-            const resp = Buffer.from(subId).toString();
             try {
-                const jsonData = JSON.parse(resp);
-                if (resp.subid && resp.jobs && resp.jobs.length > 0) {
-                    response.writeHead(200, {});
-                    response.end(resp);
+                const resp = Buffer.from(subId).toString();
+                if (jsonData.subid && jsonData.jobs && jsonData.jobs.length > 0) {
+                    /*response.writeHead(200, {});
+                    response.json(resp);
                     captureEmitter.emit('plate-solve', {
                         status: 'plateSolvingSubmissionStatus',
                         message: resp,
                         filename: filename
                     });
-                    return;
+                    return;*/
                 }
             } catch (_e) {}
-        }*/
+        }
 
         const [uErr, results] = await promiseWrapper(submissionStatus(submissionId));
         if (uErr) {
