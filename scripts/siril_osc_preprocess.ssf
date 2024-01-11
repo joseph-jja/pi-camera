@@ -62,13 +62,31 @@ calibrate light -dark=../masters/dark_stacked -flat=../masters/pp_flat_stacked -
 # Align lights
 register pp_light
 
+# stack light again without scaling
+# Stack calibrated lights to result.fit
+stack r_pp_light rej 3 3 -norm=add -output_norm -rgb_equal -out=result
+
+# flip if required
+load result
+mirrorx -bottomup
+save ../result_$LIVETIME:%d$s
+
 # Stack calibrated lights to result.fit
 stack r_pp_light rej 3 3 -norm=addscale -output_norm -rgb_equal -out=result
 
 # flip if required
 load result
 mirrorx -bottomup
-save ../result_$LIVETIME:%d$s
+save ../result_scaled_$LIVETIME:%d$s
+
+# stack light again with multiplicativescaling
+# Stack calibrated lights to result.fit
+stack r_pp_light rej 3 3 -norm=mulscale -output_norm -rgb_equal -out=result
+
+# flip if required
+load result
+mirrorx -bottomup
+save ../result_mul_scaled_$LIVETIME:%d$s
 
 cd ..
 close
