@@ -6,7 +6,7 @@
 #
 version=$(siril --version |awk '{print $2}')
 ext=fits
-$FILE=$1
+FILE=$1
 
 siril-cli -i ~/.siril/siril.cfg -s - <<ENDSIRIL >/dev/null 2>&1
 requires $version
