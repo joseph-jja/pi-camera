@@ -6,12 +6,14 @@
 #
 version=$(siril --version |awk '{print $2}')
 ext=fits
+$FILE=$1
 
 siril-cli -i ~/.siril/siril.cfg -s - <<ENDSIRIL >/dev/null 2>&1
 requires $version
 setext $ext
-load $1
-resample 2.0
-save $1
+load $FILE
+histo 0
+histo 1
+histo 2
 close
 ENDSIRIL
