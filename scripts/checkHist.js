@@ -1,0 +1,63 @@
+const fs = require('fs').promises;
+
+function findMax(histoIn) {
+
+    let maxIndex = 0,
+        maxValue = 0;
+    histoIn.forEach(item => {
+        const [ index, value ] = item.split(' ');
+        if (value > maxValue) {
+            maxIndex = index;
+            maxValue = value;
+        }
+     });
+     return {
+        maxIndex,
+        maxValue
+     };
+}
+
+async function run() {
+
+    const red = await fs.readFile('histo_red.dat');
+    const green = await fs.readFile('histo_green.dat');
+    const blue = await fs.readFile('histo_blue.dat');
+
+    const redHisto = red.toString().split(/\n/);
+    const greenHisto = green.toString().split(/\n/);
+    const blueHisto = blue.toString().split(/\n/);
+
+    const redMax = redHisto.length;
+    const greenMax = greenHisto.length;
+    const blueMax = blueHisto.length;
+
+    const redLow = Math.floor(redMax * 0.2),
+        redHigh = Math.floor(redMax * 0.3);
+    const greenLow = Math.floor(greenMax * 0.2),
+        greenHigh = Math.floor(greenMax * 0.3);
+    const blueLow = Math.floor(blueMax * 0.2),
+        blueHigh = Math.floor(blueMax * 0.3);
+
+    const redMaxes = findMax(redHisto);
+    const greenMaxes = findMax(greenHisto);
+    const blueMaxes = findMax(blueHisto);
+
+    if (redMaxes.maxIndex >= redLow && redMaxes.maxIndex <= redHigh) {
+        console.log('Red channel good');
+    } else {
+        console.log('Red channel bad');
+    }
+    if (greenMaxes.maxIndex >= greenLow && greenMaxes.maxIndex <= greenHigh) {
+        console.log('Green channel good');
+    } else {
+        console.log('Green channel bad');
+    }
+    if (blueMaxes.maxIndex >= blueLow && blueMaxes.maxIndex <= blueHigh) {
+        console.log('Blue channel good');
+    } else {
+        console.log('Blue channel bad');
+    }
+    console.log(redMaxes, greenMaxes, blueMaxes)
+
+}
+run();
