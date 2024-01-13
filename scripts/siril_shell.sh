@@ -7,13 +7,18 @@
 version=$(siril --version |awk '{print $2}')
 ext=fits
 FILE=$1
+SCRIPT=/tmp/script.ssf
 
-siril-cli -i ~/.siril/siril.cfg -s - <<ENDSIRIL >/dev/null 2>&1
-requires $version
-setext $ext
-load $FILE
-histo 0
-histo 1
-histo 2
-close
-ENDSIRIL
+mkdir process
+cp $FILE process/histo.fits
+echo "requires $version" > $SCRIPT
+echo "convert process -debayer -out=." >> $SCRIPT
+echo "load process_00001.fit" >> $SCRIPT
+echo "histo 0" >> $SCRIPT
+echo "histo 1" >> $SCRIPT
+echo "histo 2" >> $SCRIPT
+echo "close" >> $SCRIPT
+
+siril-cli -s $SCRIPT
+
+rm $SCRIPT
