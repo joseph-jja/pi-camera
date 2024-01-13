@@ -10,10 +10,13 @@ FILE=$1
 SCRIPT=/tmp/script.ssf
 
 mkdir process
+mkdir out
 cp $FILE process/histo.fits
 echo "requires $version" > $SCRIPT
-echo "convert process -debayer -out=." >> $SCRIPT
-echo "load process_00001.fit" >> $SCRIPT
+echo "cd process" >> $SCRIPT
+echo "convert histo -debayer -out=../out" >> $SCRIPT
+echo "cd .." >> $SCRIPT
+echo "load out/histo_00001.fit" >> $SCRIPT
 echo "histo 0" >> $SCRIPT
 echo "histo 1" >> $SCRIPT
 echo "histo 2" >> $SCRIPT
@@ -21,4 +24,4 @@ echo "close" >> $SCRIPT
 
 siril-cli -s $SCRIPT
 
-rm $SCRIPT
+rm $SCRIPT process/* out/*
