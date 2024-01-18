@@ -43,7 +43,7 @@ async function run() {
     const blueMaxes = findMax(blueHisto);
 
     if (redMaxes.maxIndex >= redLow && redMaxes.maxIndex <= redHigh) {
-        console.log('Red channel good');
+        console.log('Red channel good', redMaxes.maxIndex);
         if (redMaxes.maxIndex >= Math.floor(redMax * 0.24) && redMaxes.maxIndex <= Math.floor(redMax * 0.26) ) {
             console.log('Red channel is great');
         }
@@ -51,7 +51,7 @@ async function run() {
         console.log('Red channel bad');
     }
     if (greenMaxes.maxIndex >= greenLow && greenMaxes.maxIndex <= greenHigh) {
-        console.log('Green channel good');
+        console.log('Green channel good', greenMaxes.maxIndex);
         if (greenMaxes.maxIndex >= Math.floor(greenMax * 0.24) && greenMaxes.maxIndex <= Math.floor(greenMax * 0.26) ) {
             console.log('Green channel is great');
         }
@@ -59,7 +59,7 @@ async function run() {
         console.log('Green channel bad');
     }
     if (blueMaxes.maxIndex >= blueLow && blueMaxes.maxIndex <= blueHigh) {
-        console.log('Blue channel good');
+        console.log('Blue channel good', blueMaxes.maxIndex);
         if (blueMaxes.maxIndex >= Math.floor(blueMax * 0.24) && blueMaxes.maxIndex <= Math.floor(blueMax * 0.26) ) {
             console.log('Blue channel is great');
         }

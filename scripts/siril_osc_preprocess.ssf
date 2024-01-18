@@ -71,22 +71,32 @@ load result
 mirrorx -bottomup
 save ../result_$LIVETIME:%d$s
 
+# Align lights
+register pp_light -drizzle
+
 # Stack calibrated lights to result.fit
-stack r_pp_light rej 3 3 -norm=addscale -output_norm -rgb_equal -out=result
+stack r_pp_light rej 3 3 -norm=add -output_norm -rgb_equal -out=result_drizzlescale
 
 # flip if required
-load result
+load result_drizzlescale
 mirrorx -bottomup
-save ../result_scaled_$LIVETIME:%d$s
+save ../result_drizzlescale_$LIVETIME:%d$s
 
-# stack light again with multiplicativescaling
 # Stack calibrated lights to result.fit
-stack r_pp_light rej 3 3 -norm=mulscale -output_norm -rgb_equal -out=result
+stack r_pp_light rej 3 3 -norm=addscale -output_norm -rgb_equal -out=result_drizzleaddscale
 
 # flip if required
-load result
+load result_drizzleaddscale
 mirrorx -bottomup
-save ../result_mul_scaled_$LIVETIME:%d$s
+save ../result_drizzleaddscale_$LIVETIME:%d$s
+
+# Stack calibrated lights to result.fit
+stack r_pp_light rej 3 3 -norm=mulscale -output_norm -rgb_equal -out=result_drizzlemulscale
+
+# flip if required
+load result_drizzlemulscale
+mirrorx -bottomup
+save ../result_drizzlemulscale_$LIVETIME:%d$s
 
 cd ..
 close
