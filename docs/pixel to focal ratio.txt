@@ -1,0 +1,22 @@
+
+
+   4 = spread data across 4 pixels for details
+   ( 5 or 7 ) * pixel size = num 
+   pixel 3.75 => 18.75 or 26.25 
+   pixel 2.4 => 12 or 17.5
+
+   f no => 6 or 6.1
+   f no => 6 or 3.6 with reducer 
+   
+   num / barlow = f ratio
+   num / f ratio = barlow 3x or 4.3x
+
+   4.5 * barlow = num 
+
+   7 * pixel size = f ratio * 4
+
+   (7 / 4) * pixel size = f ratio
+
+   7 / 4 = 1.75
+
+   pixel size = f ratio / 1.75 
