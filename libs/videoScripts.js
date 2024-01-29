@@ -32,7 +32,10 @@ const stringify = require(`${basedir}/libs/stringify`),
         playFile,
         //captureImageFromFfmpegStream,
         getFfmpegWebmStream
-    } = require(`${basedir}/libs/ffmpeg`);
+    } = require(`${basedir}/libs/ffmpeg`),
+    {
+        VALID_CHARACTERS
+    } = require(`${basedir}/xhrActions/Constants`);
 
 let libcameraProcess,
     directStreamProcess,
@@ -169,10 +172,12 @@ function saveConfig(options, captureFilename) {
     });
 }
 
-function callSaveImage(options, count, total, callback) {
+function callSaveImage(options, count, total, saveFilename, callback) {
 
     const spawnOptions = options.concat();
-    const basefilename = getVideoFilename('png');
+    const basefilename = saveFilename ?
+        getVideoFilename('png').replace('capture', saveFilename) :
+        getVideoFilename('png');
     const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
     spawnOptions.push('-o');
     spawnOptions.push(filename);
@@ -188,7 +193,7 @@ function callSaveImage(options, count, total, callback) {
             status: `Saved a total of ${nextCount} images of ${total} with code ${code}`
         });
         if (nextCount < total) {
-            callSaveImage(options, nextCount, total, callback);
+            callSaveImage(options, nextCount, total, saveFilename, callback);
         } else {
             callback(code);
         }
@@ -212,13 +217,15 @@ function saveImagesData(request, response) {
     directStreamProcess = undefined;
     imageStreamProcess = undefined;
 
+    const queryOptions = (request.query || {});
+
     const options = getImageUpdateOptions();
-    const total = (request.query || {}).imagecount || 1;
+    const total = queryOptions.imagecount || 1;
 
     const spawnOptions = options.concat();
 
     // no preview for saving 
-    if (request.query.preview && decodeURIComponent(request.query.preview) === '--nopreview') {
+    if (queryOptions.preview && decodeURIComponent(queryOptions.preview) === '--nopreview') {
         spawnOptions.push('--nopreview');
     }
 
@@ -232,8 +239,14 @@ function saveImagesData(request, response) {
         directStream(getVideoUpdateOptions());
     };
 
+    // filename that they want these saved as
+    let saveFilename = queryOptions.saveFilename || undefined;
+    if (saveFilename) {
+        saveFilename = saveFilename.match(VALID_CHARACTERS).join('');
+    }
+    
     const count = 0;
-    callSaveImage(options, count, total, callback);
+    callSaveImage(options, count, total, saveFilename, callback);
 
     captureEmitter.emit('button-exec', {
         method: 'saveImagesData',
