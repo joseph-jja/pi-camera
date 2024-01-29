@@ -101,6 +101,14 @@ function usePlayer(playerMethod, altHandler) {
     }
 }
 
+function getSelectedImage(mainForm) {
+    const imageList = mainForm['image_list'];
+    if (!imageList || imageList.se;ectedOptions === 0) {
+        return;
+    }
+    return imageList.selectedOptions[0].value.trim();
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 
     const mainForm = document.forms['mainForm'];
@@ -128,27 +136,29 @@ window.addEventListener('DOMContentLoaded', () => {
             updateImage();
         } else if (target.id === 'renameFile') {
             const VALID_CHARACTERS = /[a-zA-Z]/g;
-            const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
+            const currentItem = getSelectedImage(mainForm);
             const fname = (mainForm['new-name'].value || '').match(VALID_CHARACTERS).join('');
             executeGETRequest(`/renameFile?oldname=${currentItem}&name=${fname}`).then(listImageCaptures);
         } else if (target.id === 'deleteFile') {
-            const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
+            const currentItem = getSelectedImage(mainForm);
             executeGETRequest(`/deleteFile?name=${currentItem}`).then(listImageCaptures);
         } else if (target.id === 'plateSolveImage') {
-            const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
+            const currentItem = getSelectedImage(mainForm);
             const isImage = currentItem.endsWith('.jpg') || currentItem.endsWith('.png');
             if (isImage) {
                 // have image so make request to plate solve
                 executeGETRequest(`/uploadAstrometryFile?name=${currentItem}`);
             }
         } else if (target.id === 'viewImageOrVideo') {
-            const currentItem = mainForm['image_list'].selectedOptions[0].value.trim();
+            const currentItem = getSelectedImage(mainForm);
             const isImage = currentItem.endsWith('.jpg') || currentItem.endsWith('.png');
             displayImages(`/viewImageOrVideo?name=${currentItem}`, isImage);
         } else if (target.id === 'imageCapture') {
+            const filename = document.forms['saveImages'].imageCaptureName.value.trim();
+            const saveFilename = (filename && filename.length > 0 ? `&saveFilename=${filename}` : '');
             const imageCount = document.forms['saveImages'].imagecount.selectedOptions[0].value.trim();
             const previewVideo = document.forms['videoRecord'].previewVideo.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveImage?imagecount=${imageCount}&preview=${previewVideo}`).then(listImageCaptures);
+            executeGETRequest(`/saveImage?imagecount=${imageCount}&preview=${previewVideo}${saveFilename}`).then(listImageCaptures);
         } else if (target.id === 'saveStream') {
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             const codec = document.forms['videoRecord'].recordingCodec.selectedOptions[0].value.trim();
