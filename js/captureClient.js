@@ -103,7 +103,7 @@ function usePlayer(playerMethod, altHandler) {
 
 function getSelectedImage(mainForm) {
     const imageList = mainForm['image_list'];
-    if (!imageList || imageList.se;ectedOptions === 0) {
+    if (!imageList || imageList.seectedOptions === 0) {
         return;
     }
     return imageList.selectedOptions[0].value.trim();
