@@ -160,10 +160,12 @@ window.addEventListener('DOMContentLoaded', () => {
             const previewVideo = document.forms['videoRecord'].previewVideo.selectedOptions[0].value.trim();
             executeGETRequest(`/saveImage?imagecount=${imageCount}&preview=${previewVideo}${saveFilename}`).then(listImageCaptures);
         } else if (target.id === 'saveStream') {
+            const filename = document.forms['videoRecord'].videoCaptureName.value.trim();
+            const saveFilename = (filename && filename.length > 0 ? `&saveFilename=${filename}` : '');
             const videoLength = document.forms['videoRecord'].recordingTime.selectedOptions[0].value.trim();
             const codec = document.forms['videoRecord'].recordingCodec.selectedOptions[0].value.trim();
             const previewVideo = document.forms['videoRecord'].previewVideo.selectedOptions[0].value.trim();
-            executeGETRequest(`/saveStream?recordingTime=${videoLength}&codec=${encodeURIComponent(codec)}&preview=${previewVideo}`).then(listImageCaptures);
+            executeGETRequest(`/saveStream?recordingTime=${videoLength}&codec=${encodeURIComponent(codec)}&preview=${previewVideo}${saveFilename}`).then(listImageCaptures);
         } else if (target.id === 'convertImages') {
             executeGETRequest('/convertFiles').then(listImageCaptures);
         } else if (target.id === 'listCaptures') {

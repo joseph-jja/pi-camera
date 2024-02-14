@@ -196,6 +196,9 @@
                 </button>
             </form>
         </fieldset>
+    </div>
+    <br clear="both">
+    <div class="content-container">
         <fieldset style="width: 400px; min-height: 650px; float: left;">
             <legend>Streaming Options</legend>
             <form name="videoOptions" onsubmit="return false;">
@@ -220,13 +223,15 @@
         </fieldset>
     </div>
     <br clear="both">
-    <fieldset class="full-width" style="width: 480px; height:80px">
-        <form name="shutdown" onsubmit="return false;">
-            <button type="submit" id="shutdownButton">
-                Shutdown
-            </button>
-        </form>
-    </fieldset>
+    <div class="content-container">
+        <fieldset class="full-width" style="width: 480px; height:80px">
+            <form name="shutdown" onsubmit="return false;">
+                <button type="submit" id="shutdownButton">
+                    Shutdown
+                </button>
+            </form>
+        </fieldset>
+    </div>
 </body>
 <script>
     window.xUuid = '[[PAGE_UUID]]';
