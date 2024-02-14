@@ -124,31 +124,12 @@
     </div>
 
     <div class="content-container">
-        <fieldset style="width: 400px; min-height: 650px; float: left;">
-            <legend>Streaming Options</legend>
-            <form name="videoOptions" onsubmit="return false;">
-                [[VIDEO_FORM]]
-                <br><br>
-                <button type="submit" id="updateButton">
-                    Run Video Stream w/ Options
-                </button>
-                <br><br>
-            </form>
-        </fieldset>
-        <fieldset style="width: 400px; min-height: 650px; float: left;">
-            <legend>Image Options</legend>
-            <form name="imageOptions" onsubmit="return false;">
-                [[IMAGE_FORM]]
-                <br><br>
-                <button type="submit" id="imageUpdate">
-                    Run Image Stream w/ Options
-                </button>
-                <br><br>
-            </form>
-        </fieldset>
-        <fieldset style="width: 400px; min-height: 650px; float: left;">
+        <fieldset style="width: 400px; min-height: 250px; float: left;">
             <legend>Video Capture Options</legend>
             <form name="videoRecord" onsubmit="return false;">
+                <label>Video Name: </label>
+                <input type="text" name="videoCaptureName">
+                <br><br>
                 <select name="recordingTime">
                     <option value="5000">5 seconds</option>
                     <option value="10000">10 seconds</option>
@@ -182,11 +163,12 @@
                 </button>
             </form>
         </fieldset>
-        <fieldset style="width: 400px; min-height: 650px; float: left;">
+        <fieldset style="width: 400px; min-height: 250px; float: left;">
             <legend>Image Capture Options</legend>
             <form name="saveImages" onsubmit="return false;">
                 <label>Image Name: </label>
                 <input type="text" name="imageCaptureName">
+                <br>
                 <br>
                 <label>How many images: </label>
                 <select name="imagecount">
@@ -212,6 +194,28 @@
                 <button type="submit" id="imageCapture">
                     Capture Images
                 </button>
+            </form>
+        </fieldset>
+        <fieldset style="width: 400px; min-height: 650px; float: left;">
+            <legend>Streaming Options</legend>
+            <form name="videoOptions" onsubmit="return false;">
+                [[VIDEO_FORM]]
+                <br><br>
+                <button type="submit" id="updateButton">
+                    Run Video Stream w/ Options
+                </button>
+                <br><br>
+            </form>
+        </fieldset>
+        <fieldset style="width: 400px; min-height: 650px; float: left;">
+            <legend>Image Options</legend>
+            <form name="imageOptions" onsubmit="return false;">
+                [[IMAGE_FORM]]
+                <br><br>
+                <button type="submit" id="imageUpdate">
+                    Run Image Stream w/ Options
+                </button>
+                <br><br>
             </form>
         </fieldset>
     </div>
