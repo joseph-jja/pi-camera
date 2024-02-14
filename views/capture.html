@@ -8,13 +8,12 @@
             background-color: black;
             color: #FF6347;
             font-size: 1em;
-        }
-
-        #center-aligner {
             width: 100%;
         }
 
-        #videoDisplay, #player, #histogram-display {
+        #videoDisplay,
+        #player,
+        #histogram-display {
             display: inline;
             margin: 0.25em;
             border: 2px #FF6347 solid;
@@ -36,15 +35,18 @@
             display: inline;
             margin: 0.25em;
         }
+
         .caution {
             background: red;
             color: black;
             font-weight: bold;
         }
+
         .flex-container {
             display: flex;
         }
-        .flex-container > div {
+
+        .flex-container>div {
             margin: 10px;
             padding: 20px;
         }
@@ -52,167 +54,165 @@
 </head>
 
 <body>
-    <div id="center-aligner">
-        <div id="image-container" style="width: 1350px;">
-            <canvas id="player" style="background: #000;" width="640px" height="480px;">
-              Your browser sucks.
-            </canvas>
-            <canvas id="histogram-display" style="background: #000;" width="640px" height="480px;">
-              Your browser sucks.
-            </canvas>
-        </div>
-        <div style="width: 1350px;">
-            <fieldset class="full-width" style="width: 640px; min-height:325px; ">
-                <form name="mainForm" onsubmit="return false;">
-                    <div class="flex-container">
-                        <div id="image-files"></div>
-                    </div>
-                    <br>
-                    <button type="submit" id="listCaptures">
-                        List Captures
-                    </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button type="submit" id="viewImageOrVideo">
-                        View Image
-                    </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <br><br>
-                    <input type="text" name="new-name">
-                    <button type="submit" id="renameFile">
-                        Rename File
-                    </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button type="submit" id="deleteFile" class="caution">
-                        Delete File
-                    </button>
-                    <br><br>
-                    <button type="submit" id="startPreview">
-                        Start Preview
-                    </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button type="submit" id="stopPreview">
-                        Stop Preview
-                    </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button type="submit" id="plateSolveImage">
-                        Plate Solve
-                    </button>
-                    <br><br>
-                    <label>Profile:</label>
-                    <select name="profiles">
-                        <option></option>
-                        [[PROFILE_OPTIONS]]
-                    </select>
-                    <button type="submit" id="useProfile">
-                        Set Profile
-                    </button>
-                </form>
-            </fieldset>
-            <fieldset class="full-width" style="width: 325px;">
+    <div id="image-container" style="width: 1350px;">
+        <canvas id="player" style="background: #000;" width="640px" height="480px;">
+            Your browser sucks.
+        </canvas>
+        <canvas id="histogram-display" style="background: #000;" width="640px" height="480px;">
+            Your browser sucks.
+        </canvas>
+    </div>
+    <div style="width: 1350px;">
+        <fieldset class="full-width" style="width: 640px; min-height:325px; ">
+            <form name="mainForm" onsubmit="return false;">
+                <div class="flex-container">
+                    <div id="image-files"></div>
+                </div>
                 <br>
-                <div id="server-messages"></div>
-                <br>
-                <div id="previewOptions"></div>
-                <br>
-                <div id="server-info" style="background: #000;color: #FF6347; " ></div>
-            </fieldset>
-        </div>
+                <button type="submit" id="listCaptures">
+                    List Captures
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="viewImageOrVideo">
+                    View Image
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <br><br>
+                <input type="text" name="new-name">
+                <button type="submit" id="renameFile">
+                    Rename File
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="deleteFile" class="caution">
+                    Delete File
+                </button>
+                <br><br>
+                <button type="submit" id="startPreview">
+                    Start Preview
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="stopPreview">
+                    Stop Preview
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" id="plateSolveImage">
+                    Plate Solve
+                </button>
+                <br><br>
+                <label>Profile:</label>
+                <select name="profiles">
+                    <option></option>
+                    [[PROFILE_OPTIONS]]
+                </select>
+                <button type="submit" id="useProfile">
+                    Set Profile
+                </button>
+            </form>
+        </fieldset>
+        <fieldset class="full-width" style="width: 325px;">
+            <br>
+            <div id="server-messages"></div>
+            <br>
+            <div id="previewOptions"></div>
+            <br>
+            <div id="server-info" style="background: #000;color: #FF6347; "></div>
+        </fieldset>
+    </div>
 
-        <div class="content-container">
-            <fieldset style="width: 400px; min-height: 650px; float: left;">
-                <legend>Streaming options</legend>
-                <form name="videoOptions" onsubmit="return false;">
-                    [[VIDEO_FORM]]
-                    <br><br>
-                    <button type="submit" id="updateButton">
-                        Run Video Stream w/ Options
-                    </button>
-                    <br><br>
-                </form>
-                <form name="videoRecord" onsubmit="return false;">
-                    <select name="recordingTime">
-                        <option value="5000">5 seconds</option>
-                        <option value="10000">10 seconds</option>
-                        <option value="15000" selected>15 seconds</option>
-                        <option value="30000">30 seconds</option>
-                        <option value="60000">60 seconds</option>
-                        <option value="120000">2 minutes</option>
-                        <option value="300000">5 minutes</option>
-                        <option value="600000">10 minutes</option>
-                        <option value="900000">15 minutes</option>
-                        <option value="1800000">30 minutes</option>
-                        <option value="3600000">1 hour</option>
-                    </select>
-                    <br><br>
-                    <select name="recordingCodec">
-                        <option value="mjpeg" selected>libav mjpeg (up to 20fps@1920x1080)</option>
-                        <option value="yuv420">libav yuv (up to 60fps@1332x990)</option>
-                        <option value="mjpegts">libav mjpegts (up to 30fps)</option>
-                        <option value="avi" selected>libav avi (up to 120fps@1332x990)</option>
-                        <option value="libavh264">libav h264 (up to 60fps@1332x990)</option>
-                        <option value="h264">h264 (up to 60fps@720p)</option>
-                    </select>
-                    <br><br>
-                    <select name="previewVideo">
-                        <option value="--nopreview" selected>no preview</option>
-                        <option value="">preview</option>
-                    </select>
-                    <br><br>
-                    <button type="submit" id="saveStream">
-                        Capture Stream
-                    </button>
-                </form>
-            </fieldset>
-            <fieldset style="width: 400px; min-height: 650px; float: left;">
-                <legend>Image options</legend>
-                <form name="imageOptions" onsubmit="return false;">
-                    [[IMAGE_FORM]]
-                    <br><br>
-                    <button type="submit" id="imageUpdate">
-                        Run Image Stream w/ Options
-                    </button>
-                    <br><br>
-                </form>
-                <form name="saveImages" onsubmit="return false;">
-                    <label>Image Name: </label>
-                    <input type="text" name="imageCaptureName">
-                    <br>
-                    <label>How many images: </label>
-                    <select name="imagecount">
-                        <option value="1" selected>1</option>
-                        <option value="2">2</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                        <option value="200">200</option>
-                        <option value="300">300</option>
-                        <option value="500">500</option>
-                    </select>
-                    <br><br>
-                    <select name="previewVideo">
-                        <option value="--nopreview" selected>no preview</option>
-                        <option value="">preview</option>
-                    </select>
-                    <br><br>
-                    <button type="submit" id="imageCapture">
-                        Capture Images
-                    </button>
-                </form>
-            </fieldset>
-        </div>
-        <br clear="both">
-        <fieldset class="full-width" style="width: 480px; height:80px">
-            <form name="shutdown" onsubmit="return false;">
-                <button type="submit" id="shutdownButton">
-                    Shutdown
+    <div class="content-container">
+        <fieldset style="width: 400px; min-height: 650px; float: left;">
+            <legend>Streaming options</legend>
+            <form name="videoOptions" onsubmit="return false;">
+                [[VIDEO_FORM]]
+                <br><br>
+                <button type="submit" id="updateButton">
+                    Run Video Stream w/ Options
+                </button>
+                <br><br>
+            </form>
+            <form name="videoRecord" onsubmit="return false;">
+                <select name="recordingTime">
+                    <option value="5000">5 seconds</option>
+                    <option value="10000">10 seconds</option>
+                    <option value="15000" selected>15 seconds</option>
+                    <option value="30000">30 seconds</option>
+                    <option value="60000">60 seconds</option>
+                    <option value="120000">2 minutes</option>
+                    <option value="300000">5 minutes</option>
+                    <option value="600000">10 minutes</option>
+                    <option value="900000">15 minutes</option>
+                    <option value="1800000">30 minutes</option>
+                    <option value="3600000">1 hour</option>
+                </select>
+                <br><br>
+                <select name="recordingCodec">
+                    <option value="mjpeg" selected>libav mjpeg (up to 20fps@1920x1080)</option>
+                    <option value="yuv420">libav yuv (up to 60fps@1332x990)</option>
+                    <option value="mjpegts">libav mjpegts (up to 30fps)</option>
+                    <option value="avi" selected>libav avi (up to 120fps@1332x990)</option>
+                    <option value="libavh264">libav h264 (up to 60fps@1332x990)</option>
+                    <option value="h264">h264 (up to 60fps@720p)</option>
+                </select>
+                <br><br>
+                <select name="previewVideo">
+                    <option value="--nopreview" selected>no preview</option>
+                    <option value="">preview</option>
+                </select>
+                <br><br>
+                <button type="submit" id="saveStream">
+                    Capture Stream
+                </button>
+            </form>
+        </fieldset>
+        <fieldset style="width: 400px; min-height: 650px; float: left;">
+            <legend>Image options</legend>
+            <form name="imageOptions" onsubmit="return false;">
+                [[IMAGE_FORM]]
+                <br><br>
+                <button type="submit" id="imageUpdate">
+                    Run Image Stream w/ Options
+                </button>
+                <br><br>
+            </form>
+            <form name="saveImages" onsubmit="return false;">
+                <label>Image Name: </label>
+                <input type="text" name="imageCaptureName">
+                <br>
+                <label>How many images: </label>
+                <select name="imagecount">
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="500">500</option>
+                </select>
+                <br><br>
+                <select name="previewVideo">
+                    <option value="--nopreview" selected>no preview</option>
+                    <option value="">preview</option>
+                </select>
+                <br><br>
+                <button type="submit" id="imageCapture">
+                    Capture Images
                 </button>
             </form>
         </fieldset>
     </div>
+    <br clear="both">
+    <fieldset class="full-width" style="width: 480px; height:80px">
+        <form name="shutdown" onsubmit="return false;">
+            <button type="submit" id="shutdownButton">
+                Shutdown
+            </button>
+        </form>
+    </fieldset>
 </body>
 <script>
     window.xUuid = '[[PAGE_UUID]]';
