@@ -84,7 +84,7 @@ const suffixConfig = [{
 const brightnessConfig = [{
     name: 'ISO_Gain',
     paramName: '--gain',
-    range: [0.5, 40],
+    range: [0.5, 100],
     step: 0.5,
     decimalPlaces: 1,
     comment: 'Higher value is higher ISO'
