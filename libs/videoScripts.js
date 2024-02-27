@@ -414,13 +414,22 @@ function saveVideoData(codec, options = [], request, response, videoConfig) {
         break;
     }
 
-    const basefilename = getVideoFilename(extension);
+    const queryOptions = (request.query || {});
+
+    // filename that they want these saved as
+    let saveFilename = queryOptions.saveFilename || undefined;
+    if (saveFilename) {
+        saveFilename = saveFilename.match(VALID_CHARACTERS).join('');
+    }
+    const basefilename = saveFilename ?
+        getVideoFilename(extension).replace('capture', saveFilename) :
+        getVideoFilename(extension);
     const filename = `${BASE_IMAGE_PATH}/${basefilename}`;
 
     spawnOptions.push('-o');
     spawnOptions.push(filename);
 
-    const recordingTime = request.query.recordingTime || 60000;
+    const recordingTime = queryOptions.recordingTime || 60000;
     const recordTimeIndex = spawnOptions.indexOf('t');
     if (recordTimeIndex > -1) {
         spawnOptions[recordTimeIndex + 1] = recordingTime;
