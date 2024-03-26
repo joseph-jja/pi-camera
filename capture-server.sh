@@ -24,6 +24,7 @@ export USR_BIN
 export PATH=$USR_BIN:$PATH
 
 # setup full path to binary files
+NODE_DIR=`find /home/pi/.nvm/versions/node -maxdepth 1 -type d |tail -1`
 FOREVER_BIN=/home/pi/.nvm/versions/node/v16.14.0/bin/forever
 NODE_BIN=/home/pi/.nvm/versions/node/v16.14.0/bin
 export PATH=$NODE_BIN:$PATH
