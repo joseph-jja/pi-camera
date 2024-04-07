@@ -1,0 +1,15 @@
+
+requires 1.2.0
+
+cd multistack
+convert light -out=../mprocess
+
+cd ../mprocess
+register m_light
+stack r_m_light rej 3 3 -norm=add -output_norm -rgb_equal -out=result
+
+load result
+mirrorx -bottomup
+save ../m_result_stacked
+
+
