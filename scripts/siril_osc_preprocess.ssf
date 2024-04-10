@@ -81,6 +81,7 @@ stack r_pp_light rej 3 3 -norm=add -output_norm -rgb_equal -out=result_drizzlesc
 load result_drizzlescale
 mirrorx -bottomup
 save ../result_stacked_drizzlescale
+save ../drizzle/result_drizzle_001
 
 # Stack calibrated lights to result.fit
 stack r_pp_light rej 3 3 -norm=addscale -output_norm -rgb_equal -out=result_drizzleaddscale
@@ -89,6 +90,7 @@ stack r_pp_light rej 3 3 -norm=addscale -output_norm -rgb_equal -out=result_driz
 load result_drizzleaddscale
 mirrorx -bottomup
 save ../result_stacked_drizzleaddscale
+save ../drizzle/result_drizzle_002
 
 # Stack calibrated lights to result.fit
 stack r_pp_light rej 3 3 -norm=mulscale -output_norm -rgb_equal -out=result_drizzlemulscale
@@ -97,6 +99,14 @@ stack r_pp_light rej 3 3 -norm=mulscale -output_norm -rgb_equal -out=result_driz
 load result_drizzlemulscale
 mirrorx -bottomup
 save ../result_stacked_drizzlemulscale
+save ../drizzle/result_drizzle_003
 
+cd ../drizzle
+convert drizzle -debayer -out=../process
+cd ../process
+stack drizzle rej 3 3 -output_norm -rgb_equal  -out=result_drizzle_combined
+load result_drizzle_combined
+save ../result_drizzle_combined
 cd ..
+
 close
