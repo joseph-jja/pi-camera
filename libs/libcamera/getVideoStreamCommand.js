@@ -76,6 +76,23 @@ function addVideoModes() {
             });
             results.videoConfig = newConfig;
         }
+        const imageSizeConfig = results.imageConfig.find(config => {
+            return (config.name === 'imageSize');
+        });
+        if (imageSizeConfig) {
+            modes.forEach(item => {
+                if (!imageSizeConfig.values.includes(item)) {
+                    imageSizeConfig.values.push(item);
+                }
+            });
+            const newConfig = results.imageConfig.map(config => {
+                if (config.name === 'imageSize') {
+                    config.values = imageSizeConfig.values;
+                }
+                return config;
+            });
+            results.imageConfig = newConfig;
+        }
     }
 }
 
