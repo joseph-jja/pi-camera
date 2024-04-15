@@ -21,7 +21,7 @@ const CAMERA_CONFIG = getEnvVar('CAMERA_CONFIG');
 if (CAMERA_CONFIG) {
     const {
         videoSize
-    } = require(CAMERA_CONFIG);
+    } = require(`${basedir}/${CAMERA_CONFIG}`);
     videoConfig.forEach(item => {
         if (item.name === 'videoSize') {
             item.values = videoSize;
