@@ -22,7 +22,16 @@ if (CAMERA_CONFIG) {
     const {
         videoSize
     } = require(CAMERA_CONFIG);
-    //configData.videoSize = videoSize;
+    videoConfig.forEach(item => {
+        if (item.name === 'videoSize') {
+            item.values = videoSize;
+        }
+    });
+    imageConfig.forEach(item => {
+        if (item.name === 'imageSize') {
+            item.values = videoSize;
+        }
+    });
 }
 
 function errorHandler(e) {
