@@ -10,11 +10,19 @@ const basedir = process.cwd(),
         whichCommand,
         runCommand
     } = require(`${basedir}/libs/spawnUtils`),
-    gstreamer = require(`${basedir}/libs/libcamera/gstreamer`),
+    { getEnvVar } = require(`${basedir}/libs/env`),
     getModes = require(`${basedir}/libs/libcamera/modes`),
-    gstreamerProcessor = require(`${basedir}/libs/libcamera/gstreamerProcessor`),
     defaultImageConfig = require(`${basedir}/libs/libcamera/stillConfig`),
     defaultVideoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
+
+const CAMERA_CONFIG = getEnvVar('CAMERA_CONFIG', {
+    videoSize: [
+        '--width 640 --height 480'
+        '--width 800 --height 600',
+        '--width 1280 --height 720',
+        '--width 1920 --height 1080',
+    ]
+});
 
 function errorHandler(e) {
     logger.error(e);
@@ -101,58 +109,16 @@ async function libcameraChecks() {
     }
 }
 
-function gstChecks() {
-
-    return new Promise(async resolve => {
-
-        const data = {};
-
-        const gresults = await gstreamer();
-        logger.debug(`Processed gstreamer ${stringify(gresults)}`);
-
-        if (gresults && gresults.data) {
-            const cameraSizes = await gstreamerProcessor();
-            logger.debug(`Processed camera sizes ${stringify(cameraSizes)}`);
-            if (cameraSizes) {
-                if (cameraSizes.sortedStill) {
-                    const imageConfig = defaultImageConfig.map(item => {
-                        if (item.name === 'imageSize') {
-                            item.values = cameraSizes.sortedStill;
-                        }
-                        return item;
-                    });
-                    data.imageConfig = imageConfig;
-                }
-                if (cameraSizes.sortedVideo) {
-                    const videoConfig = defaultVideoConfig.map(item => {
-                        if (item.name === 'videoSize') {
-                            item.values = cameraSizes.sortedVideo;
-                        }
-                        return item;
-                    });
-                    data.videoConfig = videoConfig;
-                }
-            }
-        }
-        return resolve(data);
-    });
-
-}
-
 async function getVideoStreamCommand() {
 
-    if (hasRun && gstCompleted) {
+    if (hasRun) {
         return results;
     }
 
-    const gresults = await gstChecks();
-    if (gresults) {
-        results.imageConfig = gresults.imageConfig;
-        results.videoConfig = gresults.videoConfig;
-        logger.info(`Final results for camera sizes have been updated!`);
-        gstCompleted = true;
-        logger.debug(`Config ${JSON.stringify(results)}`);
-    }
+    results.imageConfig = CAMERA_CONFIG.videoSize;
+    results.videoConfig = CAMERA_CONFIG.videoSize;
+    logger.info(`Final results for camera sizes have been updated!`);
+    logger.debug(`Config ${JSON.stringify(results)}`);
 
     await libcameraChecks();
 
