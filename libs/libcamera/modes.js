@@ -24,7 +24,7 @@ OR
                              2592x1944 [15.63 fps - (0, 0)/2592x1944 crop]
 */
 
-const CAMERA_ID_RE = /(ov\d*|imx\d*) (\[\d*x\d*\])/;
+const CAMERA_ID_RE = /(ov\d*|imx\d*) (\[\d*x\d*\ ?[a-zA-Z0-9\-\ ]*\])/;
 
 const CAMERA_BITS = /\s*\'S([RGB]*)(\d*)(\_?)(C?S?I?\d?)(P?)\'\s*:\s*(\d*x\d*) \[(\d*\.\d*) fps - \(\d*, \d*\)\/(\d*x\d*) crop\]/;
 
