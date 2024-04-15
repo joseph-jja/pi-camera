@@ -17,10 +17,10 @@ const basedir = process.cwd(),
 
 let configData = {
     videoSize: [
-        { '--width 640 --height 480': '--width 640 --height 480' },
-        { '--width 800 --height 600': '--width 800 --height 600' },
-        { '--width 1280 --height 720': '--width 1280 --height 720' },
-        { '--width 1920 --height 1080': '--width 1920 --height 1080' }
+        '--width 640 --height 480',
+        '--width 800 --height 600',
+        '--width 1280 --height 720',
+        '--width 1920 --height 1080'
     ]
 };
 const CAMERA_CONFIG = getEnvVar('CAMERA_CONFIG');
@@ -122,8 +122,8 @@ async function getVideoStreamCommand() {
         return results;
     }
 
-    results.imageConfig = configData.videoSize;
-    results.videoConfig = configData.videoSize;
+    results.imageConfig = { values: configData.videoSize };
+    results.videoConfig = { values: configData.videoSize };
     logger.info(`Final results for camera sizes have been updated!`);
     logger.debug(`Config ${JSON.stringify(results)}`);
 
