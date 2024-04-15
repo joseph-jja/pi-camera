@@ -15,22 +15,31 @@ const basedir = process.cwd(),
     defaultImageConfig = require(`${basedir}/libs/libcamera/stillConfig`),
     defaultVideoConfig = require(`${basedir}/libs/libcamera/videoConfig`);
 
-const CAMERA_CONFIG = getEnvVar('CAMERA_CONFIG', {
-    videoSize: [
-        '--width 640 --height 480'
-        '--width 800 --height 600',
-        '--width 1280 --height 720',
-        '--width 1920 --height 1080',
-    ]
-});
+let configData = {
+    {
+        videoSize: [
+            '--width 640 --height 480'
+            '--width 800 --height 600',
+            '--width 1280 --height 720',
+            '--width 1920 --height 1080',
+        ]
+    }
+};
+const CAMERA_CONFIG = getEnvVar('CAMERA_CONFIG');
+if (CAMERA_CONFIG) {
+    const {
+        videoSize,
+        mode
+    } = require(CAMERA_CONFIG);
+    configData.videoSize = videoSize;
+}
 
 function errorHandler(e) {
     logger.error(e);
     return Promise.resolve();
 }
 
-let hasRun = false,
-    gstCompleted = false;
+let hasRun = false;
 const results = {
     STILL: undefined,
     imageConfig: undefined,
@@ -115,8 +124,10 @@ async function getVideoStreamCommand() {
         return results;
     }
 
-    results.imageConfig = CAMERA_CONFIG.videoSize;
-    results.videoConfig = CAMERA_CONFIG.videoSize;
+    if ( CAMERA_CONFIG
+
+    results.imageConfig = configData.videoSize;
+    results.videoConfig = configData.videoSize;
     logger.info(`Final results for camera sizes have been updated!`);
     logger.debug(`Config ${JSON.stringify(results)}`);
 
