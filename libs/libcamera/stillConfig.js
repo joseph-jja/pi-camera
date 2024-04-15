@@ -10,8 +10,13 @@ const MULTIPLIER_FOR_SHUTTER_SPEED = 1000000;
 const stillConfig = [{
     name: 'imageSize',
     paramName: '',
-    values: [],
-    defaultvalue: '--width 3200 --height 2400'
+    values: [
+        '--width 640 --height 480',
+        '--width 800 --height 600',
+        '--width 1280 --height 720',
+        '--width 1920 --height 1080'
+    ],
+    defaultvalue: '--width 1920 --height 1080'
 }, {
     name: 'shutter_speed',
     paramName: '--shutter',
