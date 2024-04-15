@@ -10,6 +10,9 @@ const videoSize = [
 '--width 4640 --height 3472'
 ];
 
+const modes = [];
+
 module.exports = {
-    videoSize
+    videoSize,
+    modes
 }
