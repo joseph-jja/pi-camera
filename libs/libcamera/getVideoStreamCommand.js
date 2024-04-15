@@ -122,8 +122,6 @@ async function getVideoStreamCommand() {
         return results;
     }
 
-    if ( CAMERA_CONFIG
-
     results.imageConfig = configData.videoSize;
     results.videoConfig = configData.videoSize;
     logger.info(`Final results for camera sizes have been updated!`);
