@@ -11,9 +11,14 @@ hdr = hdul[0].header
 
 expTime = hdr['EXPTIME']
 
-print("Exposure time: ", expTime)
 print("Telescope: ", hdr['TELESCOP'])
+print("Exposure time: ", expTime)
+print("Object: ", hdr['OBJECT'])
+print("Gain: ", hdr['GAIN'])
+print("Offset:", hdr['OFFSET'])
 print("Binning: ", hdr['XBINNING'], "x", hdr['YBINNING'])
+print("Bits per pixel:", hdr['BITPIX'])
+print("Width: ", hdr['NAXIS1'], " x Height: ", hdr['NAXIS2'])
 
 hdul.close()
 
