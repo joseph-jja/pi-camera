@@ -72,7 +72,6 @@ function watchCB(err, value) {
         const timestamp = new Date();
         const videPathBase = '/tmp/video_' + timestamp.getHours() + '_' + timestamp.getMinutes() + '_' + timestamp.getSeconds();
         const videoPath = videPathBase + '.mp4';
-        const mpegPath = videoPath;
 
         // brightness
         let nightMode = '-br 60';
@@ -98,9 +97,7 @@ function watchCB(err, value) {
 
             // send the video
             if (doSend) {
-                Sendmail.sendEmail(options.user, mpegPath);
-            } else {
-                utilities.safeUnlink(mpegPath);
+                Sendmail.sendEmail(options.user, videoPath);
             }
             // unlink the video now that it is converted
             utilities.safeUnlink(videoPath);
