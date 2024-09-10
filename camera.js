@@ -71,8 +71,8 @@ function watchCB(err, value) {
 
         const timestamp = new Date();
         const videPathBase = '/tmp/video_' + timestamp.getHours() + '_' + timestamp.getMinutes() + '_' + timestamp.getSeconds();
-        const videoPath = videPathBase + '.h264';
-        const mpegPath = videPathBase + '.mp4';
+        const videoPath = videPathBase + '.mp4';
+        const mpegPath = videoPath;
 
         // brightness
         let nightMode = '-br 60';
@@ -83,10 +83,8 @@ function watchCB(err, value) {
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark
         // fps we want low also for email
-        const cmd = 'libcamera-vid ' + ' --width 800 --height 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
-        const ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
+        const cmd = 'rpicam-vid ' + ' --width 800 --height 600 --framerate 20 --output ' + videoPath + ' -t ' + waitTime;
         logger.debug('Video record command: ' + cmd);
-        logger.debug('Video convert command: ' + ffmpegCmd);
         exec(cmd, function (errorA, stdoutA, stderrA) {
             if (stderrA) {
                 logger.error(JSON.stringify(stderrA));
@@ -97,13 +95,7 @@ function watchCB(err, value) {
             isRec = false;
             // output is in stdout
             logger.debug('Video saved: ', videoPath);
-            // convert video to be smaller
-            exec(ffmpegCmd, function (errorB, stdoutB, stderrB) {
-                if (stderrB) {
-                    logger.error(JSON.stringify(stderrB));
-                } else if (errorB) {
-                    logger.error(JSON.stringify(errorB));
-                }
+
                 // send the video
                 if (doSend) {
                     Sendmail.sendEmail(options.user, mpegPath);
@@ -112,7 +104,6 @@ function watchCB(err, value) {
                 }
                 // unlink the video now that it is converted
                 utilities.safeUnlink(videoPath);
-            });
         });
     }
 }
