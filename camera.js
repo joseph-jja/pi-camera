@@ -99,8 +99,6 @@ function watchCB(err, value) {
             if (doSend) {
                 Sendmail.sendEmail(options.user, videoPath);
             }
-            // unlink the video now that it is converted
-            utilities.safeUnlink(videoPath);
         });
     }
 }
