@@ -86,9 +86,9 @@ function watchCB(err, value) {
         logger.debug('Video record command: ' + cmd);
         exec(cmd, function (errorA, stdoutA, stderrA) {
             if (stderrA) {
-                logger.error(JSON.stringify(stderrA));
+                logger.error('STDERR: ' + JSON.stringify(stderrA));
             } else if (errorA) {
-                logger.error(JSON.stringify(errorA));
+                logger.error('ERROR: ' + JSON.stringify(errorA));
             }
             // turn recording flag off ASAP
             isRec = false;
