@@ -9,8 +9,9 @@ const fs = require('fs'),
     utilities = require(`${baseDir}/libs/utilities`);
 
 // constants
-const sensorPin = 23,
-    ledPin = 24,
+// look at /sys/kernel/debug/gpio for pin mapping
+const sensorPin = 535, //23,
+    ledPin = 536, //24,
     // module variables
     waitTime = 10000;
 
@@ -82,7 +83,7 @@ function watchCB(err, value) {
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark
         // fps we want low also for email
-        const cmd = 'raspivid -n -ISO 800 --exposure auto ' + nightMode + ' -w 800 -h 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
+        const cmd = 'libcamera-vid ' + ' --width 800 --height 600 -fps 20 -o ' + videoPath + ' -t ' + waitTime;
         const ffmpegCmd = 'avconv -r 20 -i ' + videoPath + ' -r 15 ' + mpegPath;
         logger.debug('Video record command: ' + cmd);
         logger.debug('Video convert command: ' + ffmpegCmd);
