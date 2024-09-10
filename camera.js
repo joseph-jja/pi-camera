@@ -83,7 +83,7 @@ function watchCB(err, value) {
         // we don't want a preview, we want video 800x600 because we are emailing
         // we want exposure to auto for when it is dark
         // fps we want low also for email
-        const cmd = 'rpicam-vid ' + ' --width 800 --height 600 --framerate 20 --output ' + videoPath + ' -t ' + waitTime;
+        const cmd = `rpicam-vid --width 800 --height 600 --framerate 20 -t ${waitTime} --output ${videoPath}`;
         logger.debug('Video record command: ' + cmd);
         exec(cmd, function (errorA, stdoutA, stderrA) {
             if (stderrA) {
@@ -96,14 +96,14 @@ function watchCB(err, value) {
             // output is in stdout
             logger.debug('Video saved: ', videoPath);
 
-                // send the video
-                if (doSend) {
-                    Sendmail.sendEmail(options.user, mpegPath);
-                } else {
-                    utilities.safeUnlink(mpegPath);
-                }
-                // unlink the video now that it is converted
-                utilities.safeUnlink(videoPath);
+            // send the video
+            if (doSend) {
+                Sendmail.sendEmail(options.user, mpegPath);
+            } else {
+                utilities.safeUnlink(mpegPath);
+            }
+            // unlink the video now that it is converted
+            utilities.safeUnlink(videoPath);
         });
     }
 }
