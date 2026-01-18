@@ -105,15 +105,34 @@ async function libcameraChecks() {
         if (executable) {
             results.STILL = libcameraStill;
         }
+    } else {
+        const rpicamStill = await whichCommand('rpicam-still').catch(errorHandler);
+        if (rpicamStill) {
+            const executable = await runCommand(rpicamStill, ['--help']).catch(errorHandler);
+            if (executable) {
+                results.STILL = rpicamStill;
+            }
+        }
     }
-
+    
     const libcameraVid = await whichCommand('libcamera-vid').catch(errorHandler);
     if (libcameraVid) {
         const executable = await runCommand(libcameraVid, ['--help']).catch(errorHandler);
         if (executable) {
             results.VIDEO = libcameraVid;
         }
-        const [err, cameraDetails] = await promiseWrapper(runCommand(libcameraVid, ['--list-cameras']).catch(errorHandler));
+    } else {
+        const rpicamVid = await whichCommand('rpicam-vid').catch(errorHandler);
+        if (rpicamVid) {
+            const executable = await runCommand(rpicamVid, ['--help']).catch(errorHandler);
+            if (executable) {
+                results.VIDEO = rpicamVid;
+            }
+        }
+    }
+
+    if (results.VIDEO) {
+        const [err, cameraDetails] = await promiseWrapper(runCommand(results.VIDEO, ['--list-cameras']).catch(errorHandler));
         if (cameraDetails) {
             await writeFile('/tmp/cameraInfo.txt', cameraDetails);
             const modes = await getModes();
@@ -125,7 +144,7 @@ async function libcameraChecks() {
             logger.error(stringify(err));
         }
     }
-
+    
     const libcameraRaw = await whichCommand('libcamera-raw').catch(errorHandler);
     if (libcameraRaw) {
         const executable = await runCommand(libcameraRaw, ['--help']).catch(errorHandler);
