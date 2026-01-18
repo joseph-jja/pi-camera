@@ -154,9 +154,10 @@ async function libcameraChecks() {
     } else {
         const rpicamRaw = await whichCommand('rpicam-raw').catch(errorHandler);
         if (rpicamRaw) {
-        const executable = await runCommand(rpicamRaw, ['--help']).catch(errorHandler);
-        if (executable) {
-            results.RAW_VIDEO = rpicamRaw;
+            const executable = await runCommand(rpicamRaw, ['--help']).catch(errorHandler);
+            if (executable) {
+                results.RAW_VIDEO = rpicamRaw;
+            }
         }
     }
 }
