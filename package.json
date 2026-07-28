@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/joseph-jja/pi-camera",
   "dependencies": {
-    "body-parser": "1.20.3",
+    "body-parser": "1.20.6",
     "express": "4.21.2",
     "messenger": "0.0.9",
     "nodemailer": "7.0.11",
